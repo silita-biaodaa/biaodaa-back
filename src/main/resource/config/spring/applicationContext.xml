@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+">
+
+
+    <context:annotation-config/>
+    <!--自动扫描包中的bean-->
+    <context:component-scan base-package="com.silita">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <!-- 加载配置文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:config/biaodaa-back.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 导入数据库配置 -->
+    <import resource="applicationContext-datasource.xml"/>
+    <!-- 配置mybatis的sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 自动扫描mappers.xml文件 -->
+        <property name="mapperLocations" value="classpath*:config/mybatis/mappers/*.xml"/>
+        <property name="configLocation" value="classpath:config/mybatis/mybatis-config.xml"/>
+    </bean>
+    <!-- 扫描mapper接口(DAO），Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+          p:basePackage="com.silita.dao" p:sqlSessionFactoryBeanName="sqlSessionFactory"/>
+
+    <!--配置事务管理-->
+    <bean id="txManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 定义事务传播属性 -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="edit*" propagation="REQUIRED"/>
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="new*" propagation="REQUIRED"/>
+            <tx:method name="set*" propagation="REQUIRED"/>
+            <tx:method name="remove*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="change*" propagation="REQUIRED"/>
+            <tx:method name="check*" propagation="REQUIRED"/>
+            <tx:method name="create*" propagation="REQUIRED"/>
+            <tx:method name="get*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="find*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="load*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- 配置事务切面 -->
+    <aop:config>
+        <aop:pointcut id="testPointcut"
+                      expression="execution(* com.silita.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="testPointcut"/>
+    </aop:config>
+
+    <!-- 引入redis配置 -->
+    <import resource="applicationContext-redis.xml"/>
+</beans>
