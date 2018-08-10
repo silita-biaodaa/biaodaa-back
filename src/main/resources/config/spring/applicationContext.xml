@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jee="http://www.springframework.org/schema/jee"
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
-       http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
-       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
        http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
 ">
 
 
     <context:annotation-config/>
     <!--自动扫描包中的bean-->
-    <context:component-scan base-package="com.silita">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    <context:component-scan base-package="com.silita.*">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
     <!-- 加载配置文件 -->
@@ -40,8 +37,10 @@
         <property name="configLocation" value="classpath:config/mybatis/mybatis-config.xml"/>
     </bean>
     <!-- 扫描mapper接口(DAO），Spring会自动查找其下的类 -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
-          p:basePackage="com.silita.dao" p:sqlSessionFactoryBeanName="sqlSessionFactory"/>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.silita.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
 
     <!--配置事务管理-->
     <bean id="txManager"
@@ -78,4 +77,6 @@
 
     <!-- 引入redis配置 -->
     <import resource="applicationContext-redis.xml"/>
+    <!-- 引入shiro配置 -->
+    <import resource="applicationContext-shiro.xml"/>
 </beans>

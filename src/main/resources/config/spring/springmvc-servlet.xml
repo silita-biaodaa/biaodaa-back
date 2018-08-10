@@ -58,4 +58,11 @@
         <property name="defaultEncoding" value="UTF-8"></property>
     </bean>
 
+    <!-- 接口支持shiro注解控制权限 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"/>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
 </beans>

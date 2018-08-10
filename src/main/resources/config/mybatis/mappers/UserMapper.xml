@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silita.dao.IUserMapper">
+
+    <resultMap id="UserResult" type="com.silita.model.TbUser">
+        <id property="uid" column="uid"/>
+        <result property="userName" column="user_name"/>
+        <result property="password" column="password"/>
+        <result property="realName" column="real_name"/>
+        <result property="sflag" column="sflag"/>
+        <result property="lock" column="lock"/>
+        <result property="createDate" column="create_date"/>
+    </resultMap>
+
+    <resultMap id="RolesAndPermissions" type="com.silita.model.TbUser">
+        <id property="uid" column="uid"/>
+        <result property="userName" column="user_name"/>
+        <result property="password" column="password"/>
+        <result property="realName" column="real_name"/>
+        <result property="sflag" column="sflag"/>
+        <result property="lock" column="lock"/>
+        <result property="createDate" column="create_date"/>
+        <!--  角色 -->
+        <collection property="roles" ofType="com.silita.model.TbRole">
+            <id property="rid" column="rid"></id>
+            <result property="roleName" column="role_name"></result>
+            <result property="desc" column="desc"></result>
+            <!-- 权限 -->
+            <collection property="permissions" ofType="com.silita.model.TbPermission">
+                <id property="pid" column="pid"></id>
+                <result property="permissionName" column="permission_name"></result>
+                <result property="desc" column="desc"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <select id="getUserByUserName" parameterType="String" resultMap="UserResult">
+        SELECT *
+        FROM tb_user
+        WHERE user_name = #{userName};
+    </select>
+
+    <select id="getRolesAndPermissionsByUserName" parameterType="String" resultMap="RolesAndPermissions">
+        SELECT role_name, permission_name
+		FROM tb_user u
+		LEFT JOIN tb_user_role ur ON u.uid = ur.uid
+		LEFT JOIN tb_role r ON ur.rid = r.rid
+		LEFT JOIN tb_role_permission rp ON r.rid = rp.rid
+		LEFT JOIN tb_permission p ON rp.pid = p.pid
+		WHERE u.user_name = #{userName}
+    </select>
+
+    <select id="listUser" parameterType="Map" resultMap="UserResult">
+        SELECT *
+        FROM tb_user
+        <if test="start!=null and pageSize!=null">
+            LIMIT #{start}, #{pageSize}
+        </if>
+    </select>
+
+    <select id="getUserTotal" parameterType="Map" resultType="Integer">
+        SELECT COUNT(*) FROM tb_user
+    </select>
+
+</mapper>
