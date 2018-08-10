@@ -1,16 +1,16 @@
 package com.silita.model;
 
 
+import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.Date;
 
 
 @Getter
 @Setter
-public class TbPermission implements Serializable {
+public class TbPermission extends Pagination {
 
 	/**
 	 * 主键

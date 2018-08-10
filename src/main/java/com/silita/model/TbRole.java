@@ -1,15 +1,15 @@
 package com.silita.model;
 
+import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
-public class TbRole implements Serializable {
+public class TbRole  extends Pagination {
 
 	/**
 	 * 主键

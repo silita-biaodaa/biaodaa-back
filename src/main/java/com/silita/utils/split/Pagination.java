@@ -9,6 +9,9 @@ import java.io.Serializable;
  * Date: 2018-08-09 15:19
  */
 public class Pagination<T> implements Serializable {
+
+    private static final long serialVersionUID = 20180810L;
+
     private int pageSize = 20;// 每页大小
     private int currentPage = 1;// 当前第几页
     private int start = 0;  // 起始位置

@@ -14,4 +14,6 @@ public class InitTest extends ConfigTest {
     public void initTest() {
         System.out.println("启动成功！！！");
     }
+
+
 }

@@ -5,13 +5,12 @@ import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
-public class TbUser extends Pagination implements Serializable{
+public class TbUser extends Pagination{
 	/**
 	 * 主键
 	 */
