@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ public class DataMaintainContrroler {
     @Autowired
     IDataMaintainService dataMaintainService;
 
-    @RequestMapping(value = "/insertPbMode", produces="application/json;charset=utf-8")
+    @RequestMapping(value = "/insertPbMode", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> insertPbMode(@RequestBody DicCommon dicCommon) {
         Map result = new HashMap();
@@ -33,42 +34,43 @@ public class DataMaintainContrroler {
         result.put("data", null);
         try{
             dataMaintainService.insertPbModeBySource(dicCommon);
-            result.put("data", "添加评标办法成功！");
+            result.put("msg", "添加评标办法成功！");
         } catch (Exception e) {
             result.put("code",0);
-            result.put("data",e.getMessage());
+            result.put("msg",e.getMessage());
         }
        return result;
     }
 
     @RequestMapping(value = "/updatePbMode",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
-    public Map<String,Object> updatePbMode(DicCommon dicCommon) {
+    public Map<String,Object> updatePbMode(@RequestBody DicCommon dicCommon) {
         Map result = new HashMap();
         result.put("code", 1);
         result.put("data", null);
         try{
             dataMaintainService.updatePbModeById(dicCommon);
-            result.put("data", "更新评标办法成功！");
+            result.put("msg", "更新评标办法成功！");
         } catch (Exception e) {
             result.put("code",0);
-            result.put("data",e.getMessage());
+            result.put("msg",e.getMessage());
         }
         return result;
     }
 
     @RequestMapping(value = "/listPbMode",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
-    public Map<String,Object> listPbMode(DicCommon dicCommon) {
+    public Map<String,Object> listPbMode(@RequestBody DicCommon dicCommon) {
         Map result = new HashMap();
         result.put("code", 1);
         result.put("data", null);
         try{
-            dataMaintainService.listPbModeBySource(dicCommon);
-            result.put("data", "获取评标办法成功！");
+            List<DicCommon> list = dataMaintainService.listPbModeBySource(dicCommon);
+            result.put("msg", "获取评标办法成功！");
+            result.put("data", list);
         } catch (Exception e) {
             result.put("code",0);
-            result.put("data",e.getMessage());
+            result.put("msg",e.getMessage());
         }
         return result;
     }

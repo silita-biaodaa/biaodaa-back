@@ -8,6 +8,8 @@ import com.silita.utils.DataHandlingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Create by IntelliJ Idea 2018.1
  * Company: silita
@@ -30,12 +32,14 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     }
 
     @Override
-    public void listPbModeBySource(DicCommon dicCommon) {
-        dicCommonMapper.listDicCommonByType(dicCommon);
+    public List<DicCommon> listPbModeBySource(DicCommon dicCommon) {
+        return dicCommonMapper.listDicCommonByType(dicCommon);
     }
 
     @Override
     public void updatePbModeById(DicCommon dicCommon) {
+        String type = DataHandlingUtil.getCode(dicCommon.getType());
+        dicCommon.setType(type);
         dicCommonMapper.updateDicCommonById(dicCommon);
     }
 }

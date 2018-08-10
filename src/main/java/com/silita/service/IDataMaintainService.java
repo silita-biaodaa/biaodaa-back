@@ -2,6 +2,8 @@ package com.silita.service;
 
 import com.silita.model.DicCommon;
 
+import java.util.List;
+
 /**
  * Create by IntelliJ Idea 2018.1
  * Company: silita
@@ -18,7 +20,7 @@ public interface IDataMaintainService  {
     /**
      * 根据省份查询评标办法
      */
-    void listPbModeBySource(DicCommon dicCommon);
+    List<DicCommon> listPbModeBySource(DicCommon dicCommon);
 
     /**
      * 根据主键更新评标办法

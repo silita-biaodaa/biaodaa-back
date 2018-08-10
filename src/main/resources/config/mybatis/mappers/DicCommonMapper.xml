@@ -17,33 +17,33 @@
     </insert>
 
     <update id="updateDicCommonById" parameterType="com.silita.model.DicCommon">
-        UPDATE dic_common
+        UPDATE dic_common SET
         <if test="parentId !=null and parentId!=''">
-            `parent_id` = #{parentId}
+            `parent_id` = #{parentId},
         </if>
         <if test="name !=null and name!=''">
-            `name` = #{name}
+            `name` = #{name},
         </if>
         <if test="code !=null and code!=''">
-            `code` = #{code}
+            `code` = #{code},
         </if>
         <if test="type !=null and type!=''">
-            `type` = #{type}
+            `type` = #{type},
         </if>
         <if test="orderNo !=null and orderNo!=''">
-            `order_no` = #{orderNo}
+            `order_no` = #{orderNo},
         </if>
         <if test="isLeaf !=null and isLeaf!=''">
-            `is_leaf` = #{isLeaf}
+            `is_leaf` = #{isLeaf},
         </if>
         <if test="desc !=null and desc!=''">
-            `desc` = #{desc}
+            `desc` = #{desc},
         </if>
         <if test="remark !=null and remark!=''">
-            `remark` = #{remark}
+            `remark` = #{remark},
         </if>
         <if test="updateBy !=null and updateBy!=''">
-            `update_by` = #{updateBy}
+            `update_by` = #{updateBy},
         </if>
         `update_time` = NOW()
         WHERE id = #{id}

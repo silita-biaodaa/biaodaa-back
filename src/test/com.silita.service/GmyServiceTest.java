@@ -41,4 +41,30 @@ public class GmyServiceTest extends ConfigTest {
                 .andReturn().getResponse().getContentAsString();
         System.out.println("-----返回的json = " + responseString);
     }
+
+    @Test
+    public void testController2()throws Exception{
+        String requestBody = "{\"id\":\"2b3c603556f744ed8e221e2b6dfb10d0\", \"name\":\"综合评标法\", \"type\":\"江西省\", \"orderNo\":\"2\", \"updateBy\":\"test\"}";
+        String responseString = mockMvc.perform(post("/dataMaintain/updatePbMode").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController3()throws Exception{
+        String requestBody = "{\"type\":\"jiangx\"}";
+        String responseString = mockMvc.perform(post("/dataMaintain/listPbMode").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
 }

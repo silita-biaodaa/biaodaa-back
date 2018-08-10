@@ -1,5 +1,6 @@
 package com.silita.utils.exceptionHandler;
 
+import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,7 +26,7 @@ public class UnauthorizedExceptionHandler {
         return result;
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(UnauthenticatedException.class)
     @ResponseBody
     public Map<String, Object> authenticationException(Exception ex) {
         Map result = new HashMap();
