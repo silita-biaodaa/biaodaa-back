@@ -1,5 +1,199 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.DicQuaMapper" >
+<mapper namespace="com.silita.dao.DicQuaMapper">
 
+    <resultMap id="BaseResultMap" type="com.silita.model.DicQua">
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+        <result column="qua_name" property="quaName" jdbcType="VARCHAR" />
+        <result column="grade_type" property="gradeType" jdbcType="VARCHAR" />
+        <result column="qua_code" property="quaCode" jdbcType="VARCHAR" />
+        <result column="order_no" property="orderNo" jdbcType="INTEGER" />
+        <result column="level" property="level" jdbcType="VARCHAR" />
+        <result column="biz_type" property="bizType" jdbcType="VARCHAR" />
+        <result column="expired" property="expired" jdbcType="VARCHAR" />
+        <result column="is_leaf" property="isLeaf" jdbcType="INTEGER" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="desc" property="desc" jdbcType="VARCHAR" />
+        <!--<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />-->
+        <!--<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />-->
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insertDicQual" parameterType="com.silita.model.DicQua">
+        INSERT INTO `dic_qua`(
+        <if test="id != null and id != ''">
+            `id`,
+        </if>
+        <if test="parentId != null and parentId != ''">
+            `parent_id`,
+        </if>
+        <if test="quaName != null and quaName != ''">
+            `qua_name`,
+        </if>
+        <if test="gradeType != null and gradeType != ''">
+            `grade_type`,
+        </if>
+        <if test="quaCode != null and quaCode != ''">
+            `qua_code`,
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            `order_no`,
+        </if>
+        <if test="level != null and level != ''">
+            `level`,
+        </if>
+        <if test="bizType != null and bizType != ''">
+            `biz_type`,
+        </if>
+        <if test="expired != null and expired != ''">
+            `expired`,
+        </if>
+        <if test="isLeaf != null and isLeaf != ''">
+            `is_leaf`,
+        </if>
+        <if test="remark != null and remark != ''">
+            `remark`,
+        </if>
+        <if test="desc != null and desc != ''">
+            `desc`,
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by`,
+        </if>
+        <if test="updateTime != null">
+            `update_time`,
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            `update_by`,
+        </if>
+        <if test="createTime != null">
+            `create_time`
+        </if>
+        )
+        VALUES (
+        <if test="id != null and id != ''">
+            #{id},
+        </if>
+        <if test="parentId != null and parentId != ''">
+            #{parentId},
+        </if>
+        <if test="quaName != null and quaName != ''">
+            #{quaName},
+        </if>
+        <if test="gradeType != null and gradeType != ''">
+            #{gradeType},
+        </if>
+        <if test="quaCode != null and quaCode != ''">
+            #{quaCode},
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            #{orderNo},
+        </if>
+        <if test="level != null and level != ''">
+            #{level},
+        </if>
+        <if test="bizType != null and bizType != ''">
+            #{bizType},
+        </if>
+        <if test="expired != null and expired != ''">
+            #{expired},
+        </if>
+        <if test="isLeaf != null and isLeaf != ''">
+            #{isLeaf},
+        </if>
+        <if test="remark != null and remark != ''">
+            #{remark},
+        </if>
+        <if test="desc != null and desc != ''">
+            #{desc},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            #{createBy},
+        </if>
+        <if test="updateTime != null">
+            #{updateTime},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            #{updateBy},
+        </if>
+        <if test="createTime != null">
+            #{createTime}
+        </if>
+        )
+    </insert>
+
+    <update id="updateDicQual" parameterType="com.silita.model.DicQua">
+        update `dic_qua`
+        set
+        <if test="parentId != null and parentId != ''">
+            `parent_id` = #{parentId},
+        </if>
+        <if test="quaName != null and quaName != ''">
+            `qua_name` = #{quaName},
+        </if>
+        <if test="gradeType != null and gradeType != ''">
+            `grade_type` = #{gradeType},
+        </if>
+        <if test="quaCode != null and quaCode != ''">
+            `qua_code` = #{quaCode},
+        </if>
+        <if test="orderNo != null and orderNo != ''">
+            `order_no` = #{orderNo},
+        </if>
+        <if test="level != null and level != ''">
+            `level` = #{level},
+        </if>
+        <if test="bizType != null and bizType != ''">
+            `biz_type` = #{bizType},
+        </if>
+        <if test="expired != null and expired != ''">
+            `expired` = #{expired},
+        </if>
+        <if test="isLeaf != null and isLeaf != ''">
+            `is_leaf` = #{isLeaf},
+        </if>
+        <if test="remark != null and remark != ''">
+            `remark` = {remark},
+        </if>
+        <if test="desc != null and desc != ''">
+            `desc` = #{desc},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by` = #{createBy},
+        </if>
+        <if test="updateBy != null">
+            `update_by` = #{updateBy},
+        </if>
+        <if test="updateTime != null">
+            `update_time` = #{updateTime}
+        </if>
+        where `id` = #{id}
+    </update>
+
+    <delete id="delDicQual" parameterType="java.lang.String">
+        delete from `dic_qua` where `id` = #{id};
+    </delete>
+
+    <select id="queryDicQuaList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select *
+        from dic_qua
+        where `level` = 2
+        <if test="parentId != null and parentId != ''">
+           and  parent_id = #{parentId}
+        </if>
+        <if test="quaName != null and quaName != ''">
+            and qua_name = #{quaName}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="queryQualCateList" resultType="java.util.Map">
+        select id as id
+                ,qua_name as quaName
+        from dic_qua
+        where `level` = 1
+        order by create_time desc
+    </select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.silita.model;
 
-import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class DicQua  extends Pagination {
+public class DicQua {
     /**
      * 主键
      */
