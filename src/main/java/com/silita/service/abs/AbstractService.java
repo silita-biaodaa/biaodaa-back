@@ -11,7 +11,7 @@ import java.util.Map;
  * Author: gemingyi
  * Date: 2018-08-09 15:19
  */
-public class AbstractService {
+public abstract class AbstractService {
     /**
      * 分页
      * @param page
@@ -23,4 +23,23 @@ public class AbstractService {
         params.put("pageSize", page.getPageSize());
         return params;
     }
+
+    /**
+     * 计算共多少页
+     * @param params
+     * @param page
+     * @return
+     */
+    public Map<String, Object> handlePageCount(Map<String, Object> params, Pagination<? extends Pagination> page) {
+        int pageCount = 0;
+        int total = (int) params.get("total");
+        if(total % page.getPageSize() == 0) {
+            pageCount = total / page.getPageSize();
+        } else {
+            pageCount = total / page.getPageSize() + 1;
+        }
+        params.put("pageCount", pageCount);
+        return params;
+    }
+
 }

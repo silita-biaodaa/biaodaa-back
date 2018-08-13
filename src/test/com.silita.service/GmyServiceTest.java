@@ -31,10 +31,11 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController1()throws Exception{
-        String requestBody = "{\"name\":\"综合评标法\", \"type\":\"江西省\", \"orderNo\":\"1\", \"createBy\":\"gmy\"}";
+        String requestBody = "{\"name\":\"合理低价法\", \"type\":\"湖南省\", \"orderNo\":\"1\", \"desc\":\"这是描述\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/insertPbMode").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM0MTM0NjMxfQ.Y84sVsK7A7krMCNDGVBoOUbwe_vVgIqYQ_qzcWxvUa0")
         )
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -44,8 +45,22 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController2()throws Exception{
-        String requestBody = "{\"id\":\"2b3c603556f744ed8e221e2b6dfb10d0\", \"name\":\"综合评标法\", \"type\":\"江西省\", \"orderNo\":\"2\", \"updateBy\":\"test\"}";
+        String requestBody = "{\"id\":\"8adf1e38038c40ee9062c4ab83b13cb7\", \"name\":\"综合评标法\", \"type\":\"江西省\", \"orderNo\":\"2\", \"desc\":\"这是描述\", \"updateBy\":\"test\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/updatePbMode").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM0MTM0NjMxfQ.Y84sVsK7A7krMCNDGVBoOUbwe_vVgIqYQ_qzcWxvUa0")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController3()throws Exception{
+        String requestBody = "{\"type\":\"江西省\"}";
+        String responseString = mockMvc.perform(post("/dataMaintain/listPbMode").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
         )
@@ -56,9 +71,64 @@ public class GmyServiceTest extends ConfigTest {
     }
 
     @Test
-    public void testController3()throws Exception{
-        String requestBody = "{\"type\":\"jiangx\"}";
-        String responseString = mockMvc.perform(post("/dataMaintain/listPbMode").characterEncoding("UTF-8")
+    public void testController4()throws Exception{
+        String requestBody = "{\"idsStr\":\"8adf1e38038c40ee9062c4ab83b13cb5|8adf1e38038c40ee9062c4ab83b13cb6\"}";
+        String responseString = mockMvc.perform(post("/dataMaintain/deletePbMode").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    //-----------------------------------------------
+
+    @Test
+    public void testController5()throws Exception{
+        String requestBody = "{\"name\":\"综合评标法的别名2\", \"stdCode\":\"jiangx_pdmode_zhpbf_1534134583021\", \"desc\":\"别名描述\", \"remark\":\"备用字段\"}";
+        String responseString = mockMvc.perform(post("/dataMaintain/insertPbModeAlias").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController6()throws Exception{
+        String requestBody = "{\"name\":\"更新综合评标法的别名2\", \"id\":\"04b28793f65c4a6d9e1e9493640ea043\", \"desc\":\"别名描述更新\", \"remark\":\"备用字段更新\"}";
+        String responseString = mockMvc.perform(post("/dataMaintain/updatePbModeAlias").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM0MTM0NjMxfQ.Y84sVsK7A7krMCNDGVBoOUbwe_vVgIqYQ_qzcWxvUa0")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController7()throws Exception{
+        String requestBody = "{\"stdCode\":\"jiangx_pdmode_zhpbf_1534134583021\"}";
+        String responseString = mockMvc.perform(post("/dataMaintain/listPbModeAlias").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController8()throws Exception{
+        String requestBody = "{\"idsStr\":\"29129b19c9794e4392b72803f26bd3d7\"}";
+        String responseString = mockMvc.perform(post("/dataMaintain/deletePbModeAlias").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
         )

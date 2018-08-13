@@ -25,4 +25,17 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     public List<DicCommon> listDicCommonByType(DicCommon dicCommon);
+
+    /**
+     * 根据type获取公共数据词典表数据条数
+     * @param dicCommon
+     * @return
+     */
+    public Integer getDicCommonCountByType(DicCommon dicCommon);
+
+    /**
+     * 根据id删除公共数据词典表数据
+     * @param ids
+     */
+    public void deleteDicCommonByIds(Object[] ids);
 }

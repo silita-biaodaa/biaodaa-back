@@ -102,6 +102,15 @@ public class DataHandlingUtil {
             case "湖北省":
                 tabCode = "hubei";
                 break;
+            case "湖南省":
+                tabCode = "hunan";
+                break;
+            case "辽宁省":
+                tabCode = "liaon";
+                break;
+            case "重庆市":
+                tabCode = "chongq";
+                break;
             default:
                 tabCode = null;
                 break;

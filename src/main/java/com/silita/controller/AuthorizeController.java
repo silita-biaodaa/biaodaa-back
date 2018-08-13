@@ -37,6 +37,7 @@ public class AuthorizeController {
             subject.login(jwtToken);
             result.put("code", 1);
             result.put("data", tokenStr);
+            result.put("msg", "登录成功！");
         } catch (Exception e) {
             result.put("code",0);
             result.put("msg",e.getMessage());

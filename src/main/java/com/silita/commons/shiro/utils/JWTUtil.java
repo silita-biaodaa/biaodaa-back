@@ -5,7 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -48,6 +51,26 @@ public class JWTUtil {
         try {
             DecodedJWT jwt = JWT.decode(token);
             return jwt.getClaim("userName").asString();
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获得token中的信息无需secret解密也能获得
+     *
+     * @return token中包含的用户名
+     */
+    public static String getUsername(ServletRequest request) {
+        try {
+            HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+            String authorization = httpServletRequest.getHeader("Authorization");
+            if(!StringUtils.isEmpty(authorization)) {
+                DecodedJWT jwt = JWT.decode(authorization);
+                return jwt.getClaim("userName").asString();
+            } else {
+                return null;
+            }
         } catch (JWTDecodeException e) {
             return null;
         }

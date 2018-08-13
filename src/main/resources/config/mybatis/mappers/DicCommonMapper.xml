@@ -50,6 +50,22 @@
     </update>
 
     <select id="listDicCommonByType" parameterType="com.silita.model.DicCommon" resultType="com.silita.model.DicCommon">
-        SELECT * FROM dic_common WHERE `type` = #{type}
+        SELECT *
+        FROM dic_common WHERE `type` = #{type}
+        LIMIT #{start}, #{pageSize}
     </select>
+
+    <select id="getDicCommonCountByType" parameterType="com.silita.model.DicCommon" resultType="Integer">
+        SELECT COUNT(*) FROM dic_common WHERE `type` = #{type}
+    </select>
+
+    <delete id="deleteDicCommonByIds" parameterType="String">
+        DELETE FROM dic_common
+        <where>
+            id IN
+            <foreach collection="array" open="(" close=")" separator="," item="ele">
+                #{ele}
+            </foreach>
+        </where>
+    </delete>
 </mapper>
