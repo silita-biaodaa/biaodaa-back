@@ -3,7 +3,9 @@ package com.silita.controller;
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.model.DicAlias;
+import com.silita.model.DicCommon;
 import com.silita.model.DicQua;
+import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,4 +93,15 @@ public class QualController extends BaseController {
         return successMap(null);
     }
 
+    /**
+     * 添加资质别名
+     * @param alias
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/grade/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> gradeAdd(@RequestBody RelQuaGrade quaGrade, ServletRequest request) {
+        return successMap(null);
+    }
 }

@@ -36,4 +36,11 @@ public interface IGradeService {
      * @param alias
      */
     void addGradeAlias(DicAlias alias);
+
+    /**
+     * 资质等级
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getQualGradeList(Map<String, Object> param);
 }

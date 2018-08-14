@@ -72,4 +72,18 @@ public class GradeServiceImpl implements IGradeService {
         alias.setStdType(Constant.QUAL_LEVEL_SUB);
         dicAliasMapper.insertDicAlias(alias);
     }
+
+    @Override
+    public List<Map<String, Object>> getQualGradeList(Map<String, Object> param) {
+        //TODO: ªÒ»°∏∏¿‡
+        List<Map<String, Object>> parentList = dicCommonMapper.queryParentGrade();
+        List<Map<String, Object>> gradeList = null;
+        DicAlias alias = null;
+        for (Map<String, Object> paren : parentList) {
+            paren.put("parentId", paren.get("id"));
+            gradeList = dicCommonMapper.queryGradeList(paren);
+            paren.put("gradeList", gradeList);
+        }
+        return parentList;
+    }
 }

@@ -79,4 +79,19 @@ public class GradeController extends BaseController {
         gradeService.addGradeAlias(alias);
         return this.successMap(null);
     }
+
+    /**
+     * 添加等级别名
+     *
+     * @param alias
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/list/qual", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> listQual(@RequestBody DicAlias alias, ServletRequest request) {
+        alias.setCreateBy(JWTUtil.getUsername(request));
+        gradeService.addGradeAlias(alias);
+        return this.successMap(null);
+    }
 }

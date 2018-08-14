@@ -23,8 +23,22 @@ public class RelQuaGrade  extends Pagination {
     private String gradeType;
 
     /**
+     * 资质等级类型
+     */
+    private String gradeCode;
+
+    /**
      * 业务类型（0;全部；1：公告；2：企信）
      */
     private String bizType;
 
+    /**
+     * 非表字段:等级id
+     */
+    private String gradeId;
+
+    /**
+     * 非表字段:等级名称
+     */
+    private String name;
 }
