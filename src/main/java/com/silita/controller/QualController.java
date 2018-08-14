@@ -1,6 +1,8 @@
 package com.silita.controller;
 
+import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
+import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 import com.silita.service.IQualService;
 import org.apache.commons.collections.MapUtils;
@@ -11,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.ServletRequest;
 import java.util.Map;
 
 /**
@@ -20,7 +21,7 @@ import java.util.Map;
  * created by zhushuai
  */
 @Controller
-@RequestMapping("qual")
+@RequestMapping("/qual")
 public class QualController extends BaseController {
 
     @Autowired
@@ -58,8 +59,8 @@ public class QualController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> add(@RequestBody DicQua qua) {
-        qualService.addQual(qua);
+    public Map<String, Object> add(@RequestBody DicQua qua, ServletRequest request) {
+        qualService.addQual(qua,JWTUtil.getUsername(request));
         return successMap(null);
     }
 
@@ -75,4 +76,19 @@ public class QualController extends BaseController {
         qualService.delQual(MapUtils.getString(param,"id"));
         return successMap(null);
     }
+
+    /**
+     * 添加资质别名
+     * @param alias
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/alias/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> aliasAdd(@RequestBody DicAlias alias,ServletRequest request) {
+        alias.setCreateBy(JWTUtil.getUsername(request));
+        qualService.aliasAdd(alias);
+        return successMap(null);
+    }
+
 }

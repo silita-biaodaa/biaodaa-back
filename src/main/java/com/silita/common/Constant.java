@@ -34,4 +34,9 @@ public class Constant {
      * 标准名称类型2：公共词典
      */
     public static String PUBLIC_DICTIONARY = "2";
+
+    /**
+     * 资质等级type
+     */
+    public static String TYPE_QUA_GRADE = "qua_grade";
 }

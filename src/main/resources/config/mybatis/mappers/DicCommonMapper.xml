@@ -68,4 +68,23 @@
             </foreach>
         </where>
     </delete>
+
+    <select id="queryParentGrade" resultType="java.util.Map">
+        select id as id
+                ,`name` as `name`
+                ,`code` as `code`
+        from dic_common
+        where `type` = 'qua_grade'
+        AND (parent_id IS NULL OR parent_id = '')
+    </select>
+
+    <select id="queryGradeList" resultType="java.util.Map" parameterType="java.util.Map">
+        select id as id
+                ,`name` as `name`
+                ,`code` as `code`
+        from dic_common
+        where `type` = 'qua_grade'
+        and parent_id = #{parentId}
+        order by create_time desc
+    </select>
 </mapper>

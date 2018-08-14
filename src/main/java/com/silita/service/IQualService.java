@@ -1,7 +1,9 @@
 package com.silita.service;
 
+import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +15,9 @@ public interface IQualService {
     /**
      * 添加资质
      * @param qua
+     * @param username
      */
-    void addQual(DicQua qua);
+    void addQual(DicQua qua,String username);
 
     /**
      * 删除资质
@@ -34,4 +37,10 @@ public interface IQualService {
      * @return
      */
     List<DicQua> getDicQuaList(Map<String,Object> param);
+
+    /**
+     * 添加资质别名
+     * @param alias
+     */
+    void aliasAdd(DicAlias alias);
 }

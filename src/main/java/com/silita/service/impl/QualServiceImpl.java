@@ -1,7 +1,9 @@
 package com.silita.service.impl;
 
 import com.silita.common.Constant;
+import com.silita.dao.DicAliasMapper;
 import com.silita.dao.DicQuaMapper;
+import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 import com.silita.service.IQualService;
 import com.silita.utils.DataHandlingUtil;
@@ -21,9 +23,11 @@ public class QualServiceImpl implements IQualService {
 
     @Autowired
     DicQuaMapper dicQuaMapper;
+    @Autowired
+    DicAliasMapper dicAliasMapper;
 
     @Override
-    public void addQual(DicQua qua) {
+    public void addQual(DicQua qua, String username) {
         if (null != qua.getParentId()) {
             qua.setLevel(Constant.QUAL_LEVEL_SUB);
         } else {
@@ -31,10 +35,10 @@ public class QualServiceImpl implements IQualService {
         }
         if (null != qua.getId()) {
             qua.setUpdateTime(new Date());
-//            qua.setUpdateTime();
+            qua.setUpdateBy(username);
             dicQuaMapper.updateDicQual(qua);
         } else {
-//            qua.setCreateBy();
+            qua.setCreateBy(username);
             String qualCode = "qual" + "_" + PinYinUtil.cn2py(qua.getQuaName()) + "_" + System.currentTimeMillis();
             qua.setQuaCode(qualCode);
             qua.setBizType(Constant.BIZ_TYPE_ALL);
@@ -57,5 +61,14 @@ public class QualServiceImpl implements IQualService {
     @Override
     public List<DicQua> getDicQuaList(Map<String, Object> param) {
         return dicQuaMapper.queryDicQuaList(param);
+    }
+
+    @Override
+    public void aliasAdd(DicAlias alias) {
+        alias.setId(DataHandlingUtil.getUUID());
+        String code = "alias_qual_" + PinYinUtil.cn2py(alias.getName()) + "_" + System.currentTimeMillis();
+        alias.setCode(code);
+        alias.setStdType(Constant.QUAL_LEVEL_PARENT);
+        dicAliasMapper.insertDicAlias(alias);
     }
 }
