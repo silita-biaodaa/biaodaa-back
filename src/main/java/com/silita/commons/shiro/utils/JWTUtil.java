@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletRequest;
@@ -85,8 +86,10 @@ public class JWTUtil {
      */
     public static String sign(String username, String secret) {
         try {
+            //密码MD5加密
+            Object md5Password = new SimpleHash("MD5", secret, username, 2);
             Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            Algorithm algorithm = Algorithm.HMAC256(String.valueOf(md5Password));
             // 附带username信息
             return JWT.create()
                     .withClaim("userName", username)

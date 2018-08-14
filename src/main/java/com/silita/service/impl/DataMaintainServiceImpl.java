@@ -1,5 +1,6 @@
 package com.silita.service.impl;
 
+import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
 import com.silita.dao.DicCommonMapper;
 import com.silita.model.DicAlias;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,19 +31,23 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     @Autowired
     DicAliasMapper dicAliasMapper;
 
+
+    @Override
+    public Map<String, String> listProvince() {
+        return DataHandlingUtil.getpProvinceCode();
+    }
+
     @Override
     public void insertPbModeBySource(DicCommon dicCommon) {
         dicCommon.setId(DataHandlingUtil.getUUID());
-        String type = DataHandlingUtil.getCode(dicCommon.getType());
-        dicCommon.setType(type);
+        String type = dicCommon.getType();
+        dicCommon.setType(type + "_pdmode_");
         dicCommon.setCode(type + "_pdmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + System.currentTimeMillis());
         dicCommonMapper.insertDicCommon(dicCommon);
     }
 
     @Override
     public List<DicCommon> listPbModeBySource(DicCommon dicCommon) {
-        String type = DataHandlingUtil.getCode(dicCommon.getType());
-        dicCommon.setType(type);
 //        Map<String,Object> result = new HashMap<String, Object>();
 //        result.put("total", dicCommonMapper.getDicCommonCountByType(dicCommon));
 //        result.put("datas", dicCommonMapper.listDicCommonByType(dicCommon));
@@ -51,18 +57,18 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
 
     @Override
     public void updatePbModeById(DicCommon dicCommon) {
-        String type = DataHandlingUtil.getCode(dicCommon.getType());
-        dicCommon.setType(type);
+        String type = dicCommon.getType();
+        dicCommon.setType(type + "_pdmode_");
         dicCommon.setCode(type + "_pdmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" +  System.currentTimeMillis());
         dicCommonMapper.updateDicCommonById(dicCommon);
     }
 
     @Override
     public void deletePbModeByIds(String idStr) {
-        String[] idsStr = idStr.split("\\|");
-        Set<String> set = new HashSet<String>();
-        for (int i = 0; i < idsStr.length; i++) {
-            set.add(idsStr[i]);
+        String[] ids = idStr.split("\\|");
+        Set set = new HashSet<String>();
+        for (String id : ids) {
+            set.add(id);
         }
         if(set != null && set.size() > 0) {
             dicCommonMapper.deleteDicCommonByIds(set.toArray());
@@ -74,7 +80,7 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     @Override
     public void insertPbModeAliasByStdCode(DicAlias dicAlias) {
         dicAlias.setId(DataHandlingUtil.getUUID());
-        dicAlias.setStdType("2");
+        dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
         dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" +  System.currentTimeMillis());
         dicAliasMapper.insertDicAlias(dicAlias);
     }
@@ -86,17 +92,17 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
 
     @Override
     public void updatePbModeAliasById(DicAlias dicAlias) {
-        dicAlias.setStdType("2");
+        dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
         dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" +  System.currentTimeMillis());
         dicAliasMapper.updateDicAliasById(dicAlias);
     }
 
     @Override
     public void deletePbModeAliasByIds(String idStr) {
-        String[] idsStr = idStr.split("\\|");
-        Set<String> set = new HashSet<String>();
-        for (int i = 0; i < idsStr.length; i++) {
-            set.add(idsStr[i]);
+        String[] ids = idStr.split("\\|");
+        Set set = new HashSet<String>();
+        for (String id : ids) {
+            set.add(id);
         }
         if(set != null && set.size() > 0) {
             dicAliasMapper.deleteDicAliasByIds(set.toArray());

@@ -4,6 +4,7 @@ import com.silita.model.DicAlias;
 import com.silita.model.DicCommon;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -12,6 +13,14 @@ import java.util.List;
  * Date: 2018-08-10 15:47
  */
 public interface IDataMaintainService  {
+
+    /**
+     * 获取省份code
+     * @return
+     */
+    Map<String, String> listProvince();
+
+    //--------------------------------
 
     /**
      * 根据省份添加评标办法

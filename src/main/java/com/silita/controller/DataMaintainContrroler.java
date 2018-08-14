@@ -29,6 +29,23 @@ public class DataMaintainContrroler {
     @Autowired
     IDataMaintainService dataMaintainService;
 
+    @RequestMapping(value = "/listProvince", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> listProvince() {
+        Map result = new HashMap();
+        result.put("code", 1);
+        try{
+            Map data = dataMaintainService.listProvince();
+            result.put("data", data);
+            result.put("msg", "获取省份code成功！");
+        } catch (Exception e) {
+            result.put("code",0);
+            result.put("msg",e.getMessage());
+        }
+        return result;
+    }
+
+
     @RequestMapping(value = "/insertPbMode", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> insertPbMode(@RequestBody DicCommon dicCommon, ServletRequest request) {

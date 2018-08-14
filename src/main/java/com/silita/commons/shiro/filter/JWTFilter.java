@@ -107,7 +107,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         try {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            httpResponse.getWriter().write("无效token，请重新登录！");
+            httpResponse.getWriter().write("{\"code\":\"0\", \"msg\":\"无效token，请重新登录！\"}");
         }catch (IOException e) {
             System.out.println(e.getMessage());
         }

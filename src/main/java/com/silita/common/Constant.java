@@ -29,4 +29,9 @@ public class Constant {
      * 资质类型:0:公司
      */
     public static String BIZ_TYPE_COMPANY = "2";
+
+    /**
+     * 标准名称类型2：公共词典
+     */
+    public static String PUBLIC_DICTIONARY = "2";
 }

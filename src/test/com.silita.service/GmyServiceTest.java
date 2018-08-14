@@ -137,4 +137,29 @@ public class GmyServiceTest extends ConfigTest {
                 .andReturn().getResponse().getContentAsString();
         System.out.println("-----返回的json = " + responseString);
     }
+
+    @Test
+    public void testController9()throws Exception{
+        String responseString = mockMvc.perform(post("/dataMaintain/listProvince").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+//                .content(requestBody.getBytes())
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController10()throws Exception{
+        String requestBody = "{\"userName\":\"gemingyi\", \"password\":\"123456\"}";
+        String responseString = mockMvc.perform(post("/authorize/login").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
 }

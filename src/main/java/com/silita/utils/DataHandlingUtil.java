@@ -1,5 +1,7 @@
 package com.silita.utils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -9,6 +11,46 @@ import java.util.UUID;
  * Date: 2018-08-10 16:16
  */
 public class DataHandlingUtil {
+
+    /**
+     * 返回省份code
+     * @return
+     */
+    public static Map<String, String> getpProvinceCode() {
+        Map map = new HashMap<String, String>(40);
+        map.put("广西壮族自治区", "guangx");
+        map.put("江西省", "jiangx");
+        map.put("贵州省", "guiz");
+        map.put("吉林省", "jil");
+        map.put("河北省", "hebei");
+        map.put("四川省", "sichuan");
+        map.put("天津市", "tianj");
+        map.put("甘肃省", "gans");
+        map.put("黑龙江省", "heilj");
+        map.put("青海省", "qingh");
+        map.put("西藏自治区", "xizang");
+        map.put("安徽省", "anh");
+        map.put("北京市", "beij");
+        map.put("福建省", "fuj");
+        map.put("浙江省", "zhej");
+        map.put("河南省", "henan");
+        map.put("江苏省", "jiangs");
+        map.put("内蒙古自治区", "neimg");
+        map.put("宁夏回族自治区", "ningx");
+        map.put("山东省", "shand");
+        map.put("山西省", "sanx");
+        map.put("海南省", "hain");
+        map.put("上海市", "shangh");
+        map.put("广东省", "guangd");
+        map.put("新疆维吾尔自治区", "xinjiang");
+        map.put("云南省", "yunn");
+        map.put("陕西省", "shanxi");
+        map.put("湖北省", "hubei");
+        map.put("湖南省", "hunan");
+        map.put("辽宁省", "liaon");
+        map.put("重庆市", "chongq");
+        return map;
+    }
 
     /**
      * 根据省份生成代码
@@ -131,4 +173,5 @@ public class DataHandlingUtil {
         }
         return uuid;
     }
+
 }
