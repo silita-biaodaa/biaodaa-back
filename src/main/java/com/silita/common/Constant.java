@@ -39,4 +39,24 @@ public class Constant {
      * 资质等级type
      */
     public static String TYPE_QUA_GRADE = "qua_grade";
+
+    /**
+     * 操作成功code
+     */
+    public static Integer CODE_SUCCESS = 0;
+
+    /**
+     * 操作成功msg
+     */
+    public static String MSG_SUCCESS = "操作成功";
+
+    /**
+     * 信息已存在code
+     */
+    public static Integer CODE_WARN_400 = 400;
+
+    /**
+     * 信息已存在msg
+     */
+    public static String MSG_WARN_400 = "信息已存在!";
 }

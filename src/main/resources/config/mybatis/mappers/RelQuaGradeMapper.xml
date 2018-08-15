@@ -13,4 +13,21 @@
         </if>
     </select>
 
+    <insert id="insertQuaCrade" parameterType="com.silita.model.RelQuaGrade">
+        INSERT INTO `rel_qua_grade`(`id`,`qua_code`,`grade_type`,`biz_type`,`grade_code`)
+        VALUES (#{id},#{quaCode},#{gradeType},#{bizType},#{gradeCode})
+    </insert>
+
+    <delete id="delQuaCrade" parameterType="java.util.Map">
+        DELETE FROM `rel_qua_grade` WHERE `id` = #{id}
+    </delete>
+
+    <select id="queryQuaGradeCout" parameterType="com.silita.model.RelQuaGrade" resultType="java.lang.Integer">
+        select count(1)
+        from rel_qua_grade
+        where 1=1
+        and qua_code = #{quaCode}
+        and grade_code = #{gradeCode}
+        and biz_type = #{bizType}
+    </select>
 </mapper>

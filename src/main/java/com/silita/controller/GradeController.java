@@ -48,8 +48,7 @@ public class GradeController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/save", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> save(@RequestBody DicCommon dicCommon, ServletRequest request) {
-        gradeService.saveGrade(dicCommon, JWTUtil.getUsername(request));
-        return this.successMap(null);
+        return gradeService.saveGrade(dicCommon, JWTUtil.getUsername(request));
     }
 
     /**
@@ -76,8 +75,7 @@ public class GradeController extends BaseController {
     @RequestMapping(value = "/alias/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> aliasAdd(@RequestBody DicAlias alias, ServletRequest request) {
         alias.setCreateBy(JWTUtil.getUsername(request));
-        gradeService.addGradeAlias(alias);
-        return this.successMap(null);
+        return gradeService.addGradeAlias(alias);
     }
 
     /**
@@ -91,7 +89,6 @@ public class GradeController extends BaseController {
     @RequestMapping(value = "/list/qual", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> listQual(@RequestBody DicAlias alias, ServletRequest request) {
         alias.setCreateBy(JWTUtil.getUsername(request));
-        gradeService.addGradeAlias(alias);
-        return this.successMap(null);
+        return  gradeService.addGradeAlias(alias);
     }
 }

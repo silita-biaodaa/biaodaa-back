@@ -52,4 +52,11 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     List<Map<String,Object>> queryGradeList(Map<String,Object> param);
+
+    /**
+     * 查询名称个数
+     * @param param
+     * @return
+     */
+    Integer queryDicCommCountByName(Map<String,Object> param);
 }

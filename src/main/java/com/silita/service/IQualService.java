@@ -14,33 +14,38 @@ public interface IQualService {
 
     /**
      * 添加资质
+     *
      * @param qua
      * @param username
      */
-    void addQual(DicQua qua,String username);
+    Map<String, Object> addQual(DicQua qua, String username);
 
     /**
      * 删除资质
+     *
      * @param id
      */
     void delQual(String id);
 
     /**
      * 获取资质类别
+     *
      * @return
      */
-    List<Map<String,Object>> getQualCateList();
+    List<Map<String, Object>> getQualCateList();
 
     /**
      * 获取资质列表
+     *
      * @param param
      * @return
      */
-    List<DicQua> getDicQuaList(Map<String,Object> param);
+    List<DicQua> getDicQuaList(Map<String, Object> param);
 
     /**
      * 添加资质别名
+     *
      * @param alias
      */
-    void aliasAdd(DicAlias alias);
+    Map<String, Object> aliasAdd(DicAlias alias);
 }

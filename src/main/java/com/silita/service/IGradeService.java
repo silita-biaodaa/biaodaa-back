@@ -23,7 +23,7 @@ public interface IGradeService {
      * @param dicCommon
      * @param username
      */
-    void saveGrade(DicCommon dicCommon,String username);
+    Map<String,Object> saveGrade(DicCommon dicCommon,String username);
 
     /**
      * 删除等级
@@ -35,7 +35,7 @@ public interface IGradeService {
      * 添加等级别名
      * @param alias
      */
-    void addGradeAlias(DicAlias alias);
+    Map<String,Object> addGradeAlias(DicAlias alias);
 
     /**
      * 资质等级

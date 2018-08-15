@@ -87,4 +87,17 @@
         and parent_id = #{parentId}
         order by create_time desc
     </select>
+
+    <select id="queryDicCommCountByName" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1)
+        from dic_common
+        where `type` = #{type}
+        and `name` = #{name}
+        <if test="parentId != null and parentId != ''">
+            and parent_id = #{parentId}
+        </if>
+        <if test="id != null and id != ''">
+            and id != #{id}
+        </if>
+    </select>
 </mapper>

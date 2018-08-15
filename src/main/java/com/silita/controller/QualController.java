@@ -7,6 +7,7 @@ import com.silita.model.DicCommon;
 import com.silita.model.DicQua;
 import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
+import com.silita.service.IRelQuaGradeService;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,8 @@ public class QualController extends BaseController {
 
     @Autowired
     IQualService qualService;
+    @Autowired
+    IRelQuaGradeService relQuaGradeService;
 
 
     /**
@@ -62,8 +65,7 @@ public class QualController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> add(@RequestBody DicQua qua, ServletRequest request) {
-        qualService.addQual(qua,JWTUtil.getUsername(request));
-        return successMap(null);
+        return qualService.addQual(qua,JWTUtil.getUsername(request));
     }
 
     /**
@@ -89,19 +91,29 @@ public class QualController extends BaseController {
     @RequestMapping(value = "/alias/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> aliasAdd(@RequestBody DicAlias alias,ServletRequest request) {
         alias.setCreateBy(JWTUtil.getUsername(request));
-        qualService.aliasAdd(alias);
-        return successMap(null);
+        return qualService.aliasAdd(alias);
     }
 
     /**
-     * 添加资质别名
-     * @param alias
-     * @param request
+     * 添加资质等级
+     * @param quaGrade
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/grade/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> gradeAdd(@RequestBody RelQuaGrade quaGrade, ServletRequest request) {
+    public Map<String, Object> gradeAdd(@RequestBody RelQuaGrade quaGrade) {
+        return relQuaGradeService.addQuaGrade(quaGrade);
+    }
+
+    /**
+     * 添加资质等级
+     * @param quaGrade
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/grade/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> gradeDel(@RequestBody Map<String,Object> param) {
+        relQuaGradeService.delQuaGrade(param);
         return successMap(null);
     }
 }

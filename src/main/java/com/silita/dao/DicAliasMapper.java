@@ -5,6 +5,7 @@ import com.silita.model.DicCommon;
 import com.silita.utils.MyMapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DicAliasMapper extends MyMapper<DicAlias> {
 
@@ -39,4 +40,11 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      * @param ids
      */
     public void deleteDicAliasByIds(Object[] ids);
+
+    /**
+     * 根据名称查询
+     * @param param
+     * @return
+     */
+    Integer queryAliasByName(Map<String,Object> param);
 }

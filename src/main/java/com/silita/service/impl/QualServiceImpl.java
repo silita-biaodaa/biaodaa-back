@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,17 +28,35 @@ public class QualServiceImpl implements IQualService {
     DicAliasMapper dicAliasMapper;
 
     @Override
-    public void addQual(DicQua qua, String username) {
+    public Map<String, Object> addQual(DicQua qua, String username) {
+        Integer count = 0;
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+        param.put("quaName", qua.getQuaName());
         if (null != qua.getParentId()) {
             qua.setLevel(Constant.QUAL_LEVEL_SUB);
+            param.put("parentId", qua.getParentId());
         } else {
             qua.setLevel(Constant.QUAL_LEVEL_PARENT);
         }
         if (null != qua.getId()) {
+            param.put("id", qua.getId());
+            count = dicQuaMapper.queryQualCountByName(param);
+            if (count > 0) {
+                resultMap.put("code", Constant.CODE_WARN_400);
+                resultMap.put("msg", Constant.MSG_WARN_400);
+                return resultMap;
+            }
             qua.setUpdateTime(new Date());
             qua.setUpdateBy(username);
             dicQuaMapper.updateDicQual(qua);
         } else {
+            count = dicQuaMapper.queryQualCountByName(param);
+            if (count > 0) {
+                resultMap.put("code", Constant.CODE_WARN_400);
+                resultMap.put("msg", Constant.MSG_WARN_400);
+                return resultMap;
+            }
             qua.setCreateBy(username);
             String qualCode = "qual" + "_" + PinYinUtil.cn2py(qua.getQuaName()) + "_" + System.currentTimeMillis();
             qua.setQuaCode(qualCode);
@@ -46,6 +65,9 @@ public class QualServiceImpl implements IQualService {
             qua.setCreateTime(new Date());
             dicQuaMapper.insertDicQual(qua);
         }
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
+        return resultMap;
     }
 
     @Override
@@ -64,11 +86,24 @@ public class QualServiceImpl implements IQualService {
     }
 
     @Override
-    public void aliasAdd(DicAlias alias) {
+    public Map<String, Object> aliasAdd(DicAlias alias) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+        param.put("stdCode",alias.getStdCode());
+        param.put("name",alias.getName());
+        Integer count = dicAliasMapper.queryAliasByName(param);
+        if(count > 0){
+            resultMap.put("code", Constant.CODE_WARN_400);
+            resultMap.put("msg", Constant.MSG_WARN_400);
+            return resultMap;
+        }
         alias.setId(DataHandlingUtil.getUUID());
         String code = "alias_qual_" + PinYinUtil.cn2py(alias.getName()) + "_" + System.currentTimeMillis();
         alias.setCode(code);
         alias.setStdType(Constant.QUAL_LEVEL_PARENT);
         dicAliasMapper.insertDicAlias(alias);
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
+        return resultMap;
     }
 }

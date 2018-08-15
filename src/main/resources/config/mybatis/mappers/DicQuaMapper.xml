@@ -184,7 +184,7 @@
            and  parent_id = #{parentId}
         </if>
         <if test="quaName != null and quaName != ''">
-            and qua_name = #{quaName}
+            and qua_name like CONCAT('%',#{quaName},'%')
         </if>
         order by create_time desc
     </select>
@@ -195,5 +195,18 @@
         from dic_qua
         where `level` = 1
         order by create_time desc
+    </select>
+
+    <select id="queryQualCountByName" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1)
+        from dic_qua
+        where 1=1
+        and qua_name = #{quaName}
+        <if test="parentId != null and parentId != ''">
+            and  parent_id = #{parentId}
+        </if>
+        <if test="id != null and id != ''">
+            and  id != #{id}
+        </if>
     </select>
 </mapper>

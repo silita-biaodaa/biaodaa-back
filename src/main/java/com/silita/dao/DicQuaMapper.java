@@ -41,4 +41,11 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * @return
      */
     List<Map<String,Object>> queryQualCateList();
+
+    /**
+     * 查询资质count
+     * @param param
+     * @return
+     */
+    Integer queryQualCountByName(Map<String,Object> param);
 }
