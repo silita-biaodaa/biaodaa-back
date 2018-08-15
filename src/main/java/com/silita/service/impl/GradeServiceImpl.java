@@ -66,6 +66,7 @@ public class GradeServiceImpl implements IGradeService {
             dicCommon.setUpdateBy(username);
             dicCommonMapper.updateDicCommonById(dicCommon);
         } else {
+            count = dicCommonMapper.queryDicCommCountByName(param);
             if (count > 0) {
                 resultMap.put("code",Constant.CODE_WARN_400);
                 resultMap.put("msg",Constant.MSG_WARN_400);
