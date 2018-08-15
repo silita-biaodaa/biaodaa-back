@@ -108,7 +108,7 @@ public class QualController extends BaseController {
 
     /**
      * 添加资质等级
-     * @param quaGrade
+     * @param param
      * @return
      */
     @ResponseBody

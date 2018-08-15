@@ -4,6 +4,7 @@ import com.silita.common.Constant;
 import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.RelQuaGrade;
 import com.silita.service.IRelQuaGradeService;
+import com.silita.utils.DataHandlingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,26 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
 
     @Override
     public Map<String, Object> addQuaGrade(RelQuaGrade grade) {
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         Integer count = quaGradeMapper.queryQuaGradeCout(grade);
-        if(count > 0){
-            resultMap.put("code",Constant.CODE_WARN_400);
-            resultMap.put("msg",Constant.MSG_WARN_400);
+        if (count > 0) {
+            resultMap.put("code", Constant.CODE_WARN_400);
+            resultMap.put("msg", Constant.MSG_WARN_400);
             return resultMap;
         }
-        quaGradeMapper.insertQuaCrade(grade);
-        resultMap.put("code",Constant.CODE_SUCCESS);
-        resultMap.put("msg",Constant.MSG_SUCCESS);
+        if (grade.getGradeCode().contains("|")) {
+            String[] gradeCode = grade.getGradeCode().split("\\|");
+            for (String str : gradeCode) {
+                grade.setGradeCode(str);
+                grade.setId(DataHandlingUtil.getUUID());
+                quaGradeMapper.insertQuaCrade(grade);
+            }
+        }else {
+            grade.setId(DataHandlingUtil.getUUID());
+            quaGradeMapper.insertQuaCrade(grade);
+        }
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
     }
 
