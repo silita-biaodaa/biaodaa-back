@@ -81,16 +81,14 @@ public class GradeController extends BaseController {
     }
 
     /**
-     * 添加等级别名
+     * 等级列表
      *
-     * @param alias
-     * @param request
+     * @param param
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/list/qual", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> listQual(@RequestBody DicAlias alias, ServletRequest request) {
-        alias.setCreateBy(JWTUtil.getUsername(request));
-        return  gradeService.addGradeAlias(alias);
+    @RequestMapping(value = "/sec/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> secList(@RequestBody Map<String, Object> param) {
+        return this.successMap(gradeService.getQualGradeList(param));
     }
 }

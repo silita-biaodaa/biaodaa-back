@@ -107,7 +107,7 @@ public class QualController extends BaseController {
     }
 
     /**
-     * 添加资质等级
+     * 删除资质等级
      * @param param
      * @return
      */
@@ -116,5 +116,16 @@ public class QualController extends BaseController {
     public Map<String, Object> gradeDel(@RequestBody Map<String,Object> param) {
         relQuaGradeService.delQuaGrade(param);
         return successMap(null);
+    }
+
+    /**
+     * 资质等级列表
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/grade/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> gradeList(@RequestBody Map<String,Object> param) {
+        return successMap(relQuaGradeService.getQualGradeList(param));
     }
 }

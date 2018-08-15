@@ -59,4 +59,9 @@ public class Constant {
      * 信息已存在msg
      */
     public static String MSG_WARN_400 = "信息已存在!";
+
+    /**
+     *  标准名称类型（1：资质 2：公共词典 3: 等级）
+     */
+    public static String GRADE_STD_TYPE = "3";
 }

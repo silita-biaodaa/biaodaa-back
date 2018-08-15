@@ -52,9 +52,6 @@ public class GradeServiceImpl implements IGradeService {
         Map<String, Object> param = new HashMap<>();
         param.put("name", dicCommon.getName());
         param.put("type", Constant.TYPE_QUA_GRADE);
-        if (null != dicCommon.getParentId()) {
-            param.put("parentId", dicCommon.getParentId());
-        }
         if (null != dicCommon.getId()) {
             param.put("id", dicCommon.getId());
             count = dicCommonMapper.queryDicCommCountByName(param);
@@ -95,7 +92,7 @@ public class GradeServiceImpl implements IGradeService {
         //判断名称是否存在
         Map<String, Object> param = new HashMap<>();
         param.put("name", alias.getName());
-        param.put("stdCode", alias.getStdCode());
+        param.put("stdType", Constant.GRADE_STD_TYPE);
         Integer count = dicAliasMapper.queryAliasByName(param);
         if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
@@ -105,7 +102,7 @@ public class GradeServiceImpl implements IGradeService {
         alias.setId(DataHandlingUtil.getUUID());
         String code = "alias_grade" + PinYinUtil.cn2py(alias.getName()) + "_" + System.currentTimeMillis();
         alias.setCode(code);
-        alias.setStdType(Constant.QUAL_LEVEL_SUB);
+        alias.setStdType(Constant.GRADE_STD_TYPE);
         dicAliasMapper.insertDicAlias(alias);
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);

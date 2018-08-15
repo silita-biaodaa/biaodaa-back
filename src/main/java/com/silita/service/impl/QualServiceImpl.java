@@ -35,7 +35,6 @@ public class QualServiceImpl implements IQualService {
         param.put("quaName", qua.getQuaName());
         if (null != qua.getParentId()) {
             qua.setLevel(Constant.QUAL_LEVEL_SUB);
-            param.put("parentId", qua.getParentId());
         } else {
             qua.setLevel(Constant.QUAL_LEVEL_PARENT);
         }
@@ -89,7 +88,7 @@ public class QualServiceImpl implements IQualService {
     public Map<String, Object> aliasAdd(DicAlias alias) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>();
-        param.put("stdCode",alias.getStdCode());
+        param.put("stdType",Constant.QUAL_LEVEL_PARENT);
         param.put("name",alias.getName());
         Integer count = dicAliasMapper.queryAliasByName(param);
         if(count > 0){

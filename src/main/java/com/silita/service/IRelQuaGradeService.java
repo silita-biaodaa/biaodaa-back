@@ -2,6 +2,7 @@ package com.silita.service;
 
 import com.silita.model.RelQuaGrade;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,4 +22,11 @@ public interface IRelQuaGradeService {
      * @param param
      */
     void delQuaGrade(Map<String,Object> param);
+
+    /**
+     * 获取资质下的等级
+     * @param param
+     * @return
+     */
+    List<RelQuaGrade> getQualGradeList(Map<String,Object> param);
 }

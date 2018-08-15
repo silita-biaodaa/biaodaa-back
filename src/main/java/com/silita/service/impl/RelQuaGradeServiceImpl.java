@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -45,5 +46,10 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
     @Override
     public void delQuaGrade(Map<String, Object> param) {
         quaGradeMapper.delQuaCrade(param);
+    }
+
+    @Override
+    public List<RelQuaGrade> getQualGradeList(Map<String, Object> param) {
+        return quaGradeMapper.queryQuaGrade(param);
     }
 }
