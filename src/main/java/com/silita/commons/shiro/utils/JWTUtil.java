@@ -89,9 +89,15 @@ public class JWTUtil {
      */
     public static String sign(String username, String secret) {
         try {
+            //token过期时间
+            Date date;
+            if(tokenLifeCycle == null) {
+                date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+            } else {
+                date = new Date(System.currentTimeMillis() + Long.parseLong(tokenLifeCycle));
+            }
             //密码MD5加密
             Object md5Password = new SimpleHash("MD5", secret, username, 2);
-            Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
             Algorithm algorithm = Algorithm.HMAC256(String.valueOf(md5Password));
             // 附带username信息
             return JWT.create()

@@ -7,6 +7,7 @@ import com.silita.service.IDataMaintainService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,8 +57,12 @@ public class DataMaintainContrroler {
         try{
             String userName = JWTUtil.getUsername(request);
             dicCommon.setCreateBy(userName);
-            dataMaintainService.insertPbModeBySource(dicCommon);
-            result.put("msg", "添加评标办法成功！");
+            String msg = dataMaintainService.insertPbModeBySource(dicCommon);
+            result.put("msg", msg);
+            if(StringUtils.isEmpty(msg)) {
+                result.put("code",0);
+                result.put("msg","评标办法已存在，添加失败！");
+            }
         } catch (Exception e) {
             result.put("code",0);
             result.put("msg",e.getMessage());
@@ -73,8 +78,12 @@ public class DataMaintainContrroler {
         try{
             String userName = JWTUtil.getUsername(request);
             dicCommon.setUpdateBy(userName);
-            dataMaintainService.updatePbModeById(dicCommon);
-            result.put("msg", "更新评标办法成功！");
+            String msg = dataMaintainService.updatePbModeById(dicCommon);
+            result.put("msg", msg);
+            if(StringUtils.isEmpty(msg)) {
+                result.put("code",0);
+                result.put("msg","评标办法已存在，更新失败！");
+            }
         } catch (Exception e) {
             result.put("code",0);
             result.put("msg",e.getMessage());
@@ -124,8 +133,12 @@ public class DataMaintainContrroler {
         try{
             String userName = JWTUtil.getUsername(request);
             dicAlias.setCreateBy(userName);
-            dataMaintainService.insertPbModeAliasByStdCode(dicAlias);
-            result.put("msg", "添加评标办法别名成功！");
+            String msg = dataMaintainService.insertPbModeAliasByStdCode(dicAlias);
+            result.put("msg", msg);
+            if(StringUtils.isEmpty(msg)) {
+                result.put("code",0);
+                result.put("msg","评标办法别名已存在，添加失败！");
+            }
         } catch (Exception e) {
             result.put("code",0);
             result.put("msg",e.getMessage());
@@ -141,8 +154,12 @@ public class DataMaintainContrroler {
         try{
             String userName = JWTUtil.getUsername(request);
             dicAlias.setUpdateBy(userName);
-            dataMaintainService.updatePbModeAliasById(dicAlias);
-            result.put("msg", "更新评标办法别名成功！");
+            String msg = dataMaintainService.updatePbModeAliasById(dicAlias);
+            result.put("msg", msg);
+            if(StringUtils.isEmpty(msg)) {
+                result.put("code",0);
+                result.put("msg","评标办法别名已存在，更新失败！");
+            }
         } catch (Exception e) {
             result.put("code",0);
             result.put("msg",e.getMessage());

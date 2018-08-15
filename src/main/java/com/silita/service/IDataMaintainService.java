@@ -25,7 +25,7 @@ public interface IDataMaintainService  {
     /**
      * 根据省份添加评标办法
      */
-    void insertPbModeBySource(DicCommon dicCommon);
+    String insertPbModeBySource(DicCommon dicCommon);
 
     /**
      * 根据省份查询评标办法
@@ -35,7 +35,7 @@ public interface IDataMaintainService  {
     /**
      * 根据主键更新评标办法
      */
-    void updatePbModeById(DicCommon dicCommon);
+    String updatePbModeById(DicCommon dicCommon);
 
     /**
      * 批量删除评标办法
@@ -49,7 +49,7 @@ public interface IDataMaintainService  {
      * 添加评标办法别名
      * @param dicAlias
      */
-    void insertPbModeAliasByStdCode(DicAlias dicAlias);
+    String insertPbModeAliasByStdCode(DicAlias dicAlias);
 
     /**
      * 根据stdCode查询评标办法别名
@@ -62,7 +62,7 @@ public interface IDataMaintainService  {
      * 根据主键更新评标办法别名
      * @param dicAlias
      */
-    void updatePbModeAliasById(DicAlias dicAlias);
+    String updatePbModeAliasById(DicAlias dicAlias);
 
     /**
      *  批量删除评标办法别名

@@ -35,7 +35,8 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     }
 
     @Override
-    public void insertPbModeBySource(DicCommon dicCommon) {
+    public String insertPbModeBySource(DicCommon dicCommon) {
+        String msg = null;
         dicCommon.setId(DataHandlingUtil.getUUID());
         String type = dicCommon.getType();
         dicCommon.setType(type + "_pdmode");
@@ -49,7 +50,9 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         Integer count = dicCommonMapper.queryDicCommCountByName(params);
         if(count == 0) {
             dicCommonMapper.insertDicCommon(dicCommon);
+            msg = "添加评标办法成功！";
         }
+        return msg;
     }
 
     @Override
@@ -64,7 +67,8 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     }
 
     @Override
-    public void updatePbModeById(DicCommon dicCommon) {
+    public String updatePbModeById(DicCommon dicCommon) {
+        String msg = null;
         String type = dicCommon.getType();
         dicCommon.setType(type + "_pdmode");
         dicCommon.setCode(type + "_pdmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + System.currentTimeMillis());
@@ -76,7 +80,9 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         Integer count = dicCommonMapper.queryDicCommCountByName(params);
         if(count == 0) {
             dicCommonMapper.updateDicCommonById(dicCommon);
+            msg = "更新评标办法成功！";
         }
+        return msg;
     }
 
     @Override
@@ -94,7 +100,8 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
 
 
     @Override
-    public void insertPbModeAliasByStdCode(DicAlias dicAlias) {
+    public String insertPbModeAliasByStdCode(DicAlias dicAlias) {
+        String msg = null;
         dicAlias.setId(DataHandlingUtil.getUUID());
         dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
         dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" +  System.currentTimeMillis());
@@ -106,7 +113,9 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         Integer count = dicAliasMapper.queryAliasByName(params);
         if(count == 0) {
             dicAliasMapper.insertDicAlias(dicAlias);
+            msg = "添加评标办法别名成功！";
         }
+        return msg;
     }
 
     @Override
@@ -115,7 +124,8 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     }
 
     @Override
-    public void updatePbModeAliasById(DicAlias dicAlias) {
+    public String updatePbModeAliasById(DicAlias dicAlias) {
+        String msg = null;
         dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
         dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" +  System.currentTimeMillis());
 
@@ -125,7 +135,9 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         Integer count = dicAliasMapper.queryAliasByName(params);
         if(count == 0) {
             dicAliasMapper.updateDicAliasById(dicAlias);
+            msg = "更新评标办法别名成功！";
         }
+        return msg;
     }
 
     @Override
