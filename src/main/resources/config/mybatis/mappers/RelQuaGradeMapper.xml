@@ -10,8 +10,9 @@
         left join dic_common t1 on t.grade_code = t1.code and `type`  = 'qua_grade'
         where 1=1
         <if test="quaCode != null and quaCode != ''">
-            and qua_code = #{quaCode}
+            and t.qua_code = #{quaCode}
         </if>
+        and t.biz_type = #{bizType}
     </select>
 
     <insert id="insertQuaCrade" parameterType="com.silita.model.RelQuaGrade">
