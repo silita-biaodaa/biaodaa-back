@@ -93,20 +93,20 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setHeader("Access-control-Allow-Origin", "*");
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "accept,content-type");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers", "Authorization,Origin,X-Requested-With,Content-Type,Accept");
         // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
         if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
             httpServletResponse.setStatus(HttpStatus.OK.value());
             return false;
         }
-        return super.preHandle(request, response);
+        return super.preHandle(httpServletRequest, httpServletResponse);
     }
 
     //验证失败时默认返回401状态码
     private void onLoginFail(ServletResponse response){
         try {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            httpResponse.setStatus(HttpStatus.OK.value());
             httpResponse.getWriter().write("{\"code\":\"0\", \"msg\":\"无效token，请重新登录！\"}");
         }catch (IOException e) {
             System.out.println(e.getMessage());
