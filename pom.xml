@@ -26,7 +26,7 @@
     <name>biaodaa-back</name>
     <groupId>com.biaodaa</groupId>
     <artifactId>biaodaa-back</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.14</version>
 
     <properties>
         <spring.version>4.1.6.RELEASE</spring.version>
@@ -150,13 +150,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.32</version>
-        </dependency>
-
-        <!-- 添加连接池druid支持 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.0.16</version>
         </dependency>
 
         <!-- apache commons -->
@@ -375,18 +368,24 @@
         </dependency>
 
         <!-- 附加工具包 -->
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.10</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.code.findbugs</groupId>
-                    <artifactId>annotations</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.reflections</groupId>-->
+            <!--<artifactId>reflections</artifactId>-->
+            <!--<version>0.9.10</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>com.google.code.findbugs</groupId>-->
+                    <!--<artifactId>annotations</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
 
+        <!-- 添加连接池druid支持 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.0.16</version>
+        </dependency>
     </dependencies>
 
     <build>

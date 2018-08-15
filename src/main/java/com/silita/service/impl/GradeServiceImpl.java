@@ -25,7 +25,7 @@ public class GradeServiceImpl implements IGradeService {
 
     @Override
     public List<Map<String, Object>> getGradeList(Map<String, Object> param) {
-        //TODO: 获取父类
+        //TODO
         List<Map<String, Object>> parentList = dicCommonMapper.queryParentGrade();
         List<Map<String, Object>> gradeList = null;
         DicAlias alias = null;
@@ -75,7 +75,7 @@ public class GradeServiceImpl implements IGradeService {
 
     @Override
     public List<Map<String, Object>> getQualGradeList(Map<String, Object> param) {
-        //TODO: 获取父类
+        //TODO:
         List<Map<String, Object>> parentList = dicCommonMapper.queryParentGrade();
         List<Map<String, Object>> gradeList = null;
         DicAlias alias = null;
