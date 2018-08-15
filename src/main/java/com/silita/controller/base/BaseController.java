@@ -1,5 +1,7 @@
 package com.silita.controller.base;
 
+import com.silita.common.Constant;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,8 +15,8 @@ public class BaseController {
      */
     public Map<String, Object> successMap(Object obj) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("code", 1);
-        resultMap.put("msg", "操作成功");
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.CODE_SUCCESS);
         if (null != obj) {
             resultMap.put("data", obj);
         }

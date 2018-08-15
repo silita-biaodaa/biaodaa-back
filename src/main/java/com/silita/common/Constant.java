@@ -43,7 +43,7 @@ public class Constant {
     /**
      * 操作成功code
      */
-    public static Integer CODE_SUCCESS = 0;
+    public static Integer CODE_SUCCESS = 1;
 
     /**
      * 操作成功msg
