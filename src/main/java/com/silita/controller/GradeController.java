@@ -5,6 +5,7 @@ import com.silita.controller.base.BaseController;
 import com.silita.model.DicAlias;
 import com.silita.model.DicCommon;
 import com.silita.service.IGradeService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +21,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/grade")
+@RequiresAuthentication
 public class GradeController extends BaseController {
 
     @Autowired

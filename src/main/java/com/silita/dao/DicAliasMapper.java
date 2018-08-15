@@ -1,7 +1,6 @@
 package com.silita.dao;
 
 import com.silita.model.DicAlias;
-import com.silita.model.DicCommon;
 import com.silita.utils.MyMapper;
 
 import java.util.List;
@@ -30,10 +29,10 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
 
     /**
      * 根据stdCode获取词典别名个数
-     * @param dicCommon
+     * @param dicAlias
      * @return
      */
-    public Integer getDicAliasCountByStdCode(DicCommon dicCommon);
+    public Integer getDicAliasCountByStdCode(DicAlias dicAlias);
 
     /**
      * 批量删除词典别名

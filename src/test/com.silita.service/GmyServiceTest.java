@@ -31,7 +31,7 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController1()throws Exception{
-        String requestBody = "{\"name\":\"合理低价法\", \"type\":\"湖南省\", \"orderNo\":\"1\", \"desc\":\"这是描述\"}";
+        String requestBody = "{\"name\":\"测试低价法\", \"type\":\"hunan\", \"orderNo\":\"1\", \"desc\":\"这是描述\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/insertPbMode").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -45,7 +45,7 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController2()throws Exception{
-        String requestBody = "{\"id\":\"8adf1e38038c40ee9062c4ab83b13cb7\", \"name\":\"综合评标法\", \"type\":\"江西省\", \"orderNo\":\"2\", \"desc\":\"这是描述\", \"updateBy\":\"test\"}";
+        String requestBody = "{\"id\":\"8adf1e38038c40ee9062c4ab83b13cb7\", \"name\":\"测试低价法\", \"type\":\"hunan\", \"orderNo\":\"2\", \"desc\":\"这是描述\", \"updateBy\":\"test\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/updatePbMode").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -59,7 +59,7 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController3()throws Exception{
-        String requestBody = "{\"type\":\"江西省\"}";
+        String requestBody = "{\"type\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/listPbMode").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -87,7 +87,7 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController5()throws Exception{
-        String requestBody = "{\"name\":\"综合评标法的别名2\", \"stdCode\":\"jiangx_pdmode_zhpbf_1534134583021\", \"desc\":\"别名描述\", \"remark\":\"备用字段\"}";
+        String requestBody = "{\"name\":\"更新综合评标法的别名2\", \"stdCode\":\"jiangx_pdmode_zhpbf_1534134583021\", \"desc\":\"别名描述\", \"remark\":\"备用字段\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/insertPbModeAlias").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -100,7 +100,8 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController6()throws Exception{
-        String requestBody = "{\"name\":\"更新综合评标法的别名2\", \"id\":\"04b28793f65c4a6d9e1e9493640ea043\", \"desc\":\"别名描述更新\", \"remark\":\"备用字段更新\"}";
+        //jiangx_pdmode_zhpbf_1534134583021
+        String requestBody = "{\"name\":\"更新综合评标法的别名2\", \"id\":\"04b28793f65c4a6d9e1e9493640ea043\", \"stdCode\":\"jiangx_pdmode_zhpbf_1534134583021\", \"desc\":\"别名描述更新\", \"remark\":\"备用字段更新\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/updatePbModeAlias").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

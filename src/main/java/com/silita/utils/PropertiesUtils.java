@@ -24,7 +24,7 @@ public class PropertiesUtils {
     public void init() {
         getLifeCycle();
         getPublicKey();
-        JWTUtil.lifeCycleTemp = getLifeCycle();
+        JWTUtil.tokenLifeCycle = getLifeCycle();
     }
 
     public String getLifeCycle() {

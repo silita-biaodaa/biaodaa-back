@@ -12,10 +12,7 @@ import com.silita.utils.PinYinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -41,13 +38,24 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     public void insertPbModeBySource(DicCommon dicCommon) {
         dicCommon.setId(DataHandlingUtil.getUUID());
         String type = dicCommon.getType();
-        dicCommon.setType(type + "_pdmode_");
+        dicCommon.setType(type + "_pdmode");
         dicCommon.setCode(type + "_pdmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + System.currentTimeMillis());
-        dicCommonMapper.insertDicCommon(dicCommon);
+
+        Map params = new HashMap<String, Object>(4);
+        params.put("type", dicCommon.getType());
+        params.put("name", dicCommon.getName());
+        params.put("parentId", dicCommon.getParentId());
+        params.put("id", dicCommon.getId());
+        Integer count = dicCommonMapper.queryDicCommCountByName(params);
+        if(count == 0) {
+            dicCommonMapper.insertDicCommon(dicCommon);
+        }
     }
 
     @Override
     public List<DicCommon> listPbModeBySource(DicCommon dicCommon) {
+        String type = dicCommon.getType();
+        dicCommon.setType(type + "_pdmode");
 //        Map<String,Object> result = new HashMap<String, Object>();
 //        result.put("total", dicCommonMapper.getDicCommonCountByType(dicCommon));
 //        result.put("datas", dicCommonMapper.listDicCommonByType(dicCommon));
@@ -58,9 +66,17 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     @Override
     public void updatePbModeById(DicCommon dicCommon) {
         String type = dicCommon.getType();
-        dicCommon.setType(type + "_pdmode_");
-        dicCommon.setCode(type + "_pdmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" +  System.currentTimeMillis());
-        dicCommonMapper.updateDicCommonById(dicCommon);
+        dicCommon.setType(type + "_pdmode");
+        dicCommon.setCode(type + "_pdmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + System.currentTimeMillis());
+
+        Map params = new HashMap<String, Object>(4);
+        params.put("type", dicCommon.getType());
+        params.put("name", dicCommon.getName());
+        params.put("parentId", dicCommon.getParentId());
+        Integer count = dicCommonMapper.queryDicCommCountByName(params);
+        if(count == 0) {
+            dicCommonMapper.updateDicCommonById(dicCommon);
+        }
     }
 
     @Override
@@ -82,7 +98,15 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         dicAlias.setId(DataHandlingUtil.getUUID());
         dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
         dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" +  System.currentTimeMillis());
-        dicAliasMapper.insertDicAlias(dicAlias);
+
+        Map params = new HashMap<String, Object>(4);
+        params.put("id", dicAlias.getId());
+        params.put("name", dicAlias.getName());
+        params.put("stdCode", dicAlias.getStdCode());
+        Integer count = dicAliasMapper.queryAliasByName(params);
+        if(count == 0) {
+            dicAliasMapper.insertDicAlias(dicAlias);
+        }
     }
 
     @Override
@@ -94,7 +118,14 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     public void updatePbModeAliasById(DicAlias dicAlias) {
         dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
         dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" +  System.currentTimeMillis());
-        dicAliasMapper.updateDicAliasById(dicAlias);
+
+        Map params = new HashMap<String, Object>(4);
+        params.put("name", dicAlias.getName());
+        params.put("stdCode", dicAlias.getStdCode());
+        Integer count = dicAliasMapper.queryAliasByName(params);
+        if(count == 0) {
+            dicAliasMapper.updateDicAliasById(dicAlias);
+        }
     }
 
     @Override
