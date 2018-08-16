@@ -41,28 +41,27 @@
         <property name="realm" ref="userRealm"/>
         <property name="subjectDAO" ref="subjectDAO"/>
         <property name="sessionManager" ref="sessionManager"/>
-        <!--<property name="subjectFactory" ref="subjectFactory"/>-->
+        <property name="subjectFactory" ref="subjectFactory"/>
         <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
-    <bean id="JWTFilter" class="com.silita.commons.shiro.filter.JWTFilter">
-    </bean>
+    <!-- 自定义过滤器 -->
+    <bean id="JWTFilter" class="com.silita.commons.shiro.filter.JWTFilter" />
+    <bean id="JWTAuthenticationFilter" class="com.silita.commons.shiro.filter.JWTAuthenticationFilter" />
 
     <!-- 配置shiro过滤器freemarker跳转先要请求后台 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-        <!-- 表示现在要配置的是一个安全管理器 -->
         <property name="securityManager" ref="securityManager"/>
-        <!-- 配置shiro里面需要使用到的过滤器操作 -->
         <property name="filters">
             <map>
                 <entry key="jwt" value-ref="JWTFilter"/>
+                <entry key="jwtAuthc" value-ref="JWTAuthenticationFilter"/>
             </map>
         </property>
         <!-- shiro里面需要针对于所有的路径进行配置，所有的配置需要通过文本的形式设置 -->
         <property name="filterChainDefinitionMap">
             <map>
-                <!--<entry key="/main" value="authc"/>-->
-                <!--<entry key="/role" value="roles[admin]"/>-->
+                <entry key="/authorize/main" value="jwtAuthc"/>
                 <entry key="/manager/druid/*" value="anon"/>
                 <entry key="/**" value="jwt"/>
             </map>

@@ -15,6 +15,7 @@ import java.util.Map;
  * Company: silita
  * Author: gemingyi
  * Date: 2018-08-09 15:19
+ * controller层shiro注解拦截用户权限 异常处理类
  */
 @ControllerAdvice
 public class UnauthorizedExceptionHandler {
