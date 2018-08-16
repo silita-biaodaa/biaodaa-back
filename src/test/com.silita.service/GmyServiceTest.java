@@ -31,7 +31,7 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController1()throws Exception{
-        String requestBody = "{\"name\":\"测试低价法\", \"type\":\"hunan\", \"orderNo\":\"1\", \"desc\":\"这是描述\"}";
+        String requestBody = "{\"name\":\"开始看书法看看理论上\", \"type\":\"hunan\", \"orderNo\":\"1\", \"desc\":\"这是描述\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/insertPbMode").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

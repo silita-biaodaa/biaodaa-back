@@ -35,8 +35,8 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     }
 
     @Override
-    public String insertPbModeBySource(DicCommon dicCommon) {
-        String msg = null;
+    public Map<String, Object> insertPbModeBySource(DicCommon dicCommon) {
+        Map resultMap = null;
         dicCommon.setId(DataHandlingUtil.getUUID());
         String type = dicCommon.getType();
         dicCommon.setType(type + "_pdmode");
@@ -50,9 +50,12 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         Integer count = dicCommonMapper.queryDicCommCountByName(params);
         if(count == 0) {
             dicCommonMapper.insertDicCommon(dicCommon);
-            msg = "添加评标办法成功！";
+            resultMap = new HashMap<String, Object>(4);
+            resultMap.put("msg", "添加评标办法成功！");
+            resultMap.put("id", dicCommon.getId());
+            resultMap.put("code", dicCommon.getCode());
         }
-        return msg;
+        return resultMap;
     }
 
     @Override

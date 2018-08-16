@@ -57,11 +57,14 @@ public class DataMaintainContrroler {
         try{
             String userName = JWTUtil.getUsername(request);
             dicCommon.setCreateBy(userName);
-            String msg = dataMaintainService.insertPbModeBySource(dicCommon);
-            result.put("msg", msg);
-            if(StringUtils.isEmpty(msg)) {
+            Map params = dataMaintainService.insertPbModeBySource(dicCommon);
+            if(params == null) {
                 result.put("code",0);
                 result.put("msg","评标办法已存在，添加失败！");
+            } else {
+                result.put("msg", params.get("msg"));
+                result.put("id", params.get("id"));
+                result.put("code", params.get("code"));
             }
         } catch (Exception e) {
             result.put("code",0);

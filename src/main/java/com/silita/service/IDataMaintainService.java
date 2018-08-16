@@ -25,7 +25,7 @@ public interface IDataMaintainService  {
     /**
      * 根据省份添加评标办法
      */
-    String insertPbModeBySource(DicCommon dicCommon);
+    Map<String, Object> insertPbModeBySource(DicCommon dicCommon);
 
     /**
      * 根据省份查询评标办法
