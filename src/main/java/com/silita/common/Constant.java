@@ -94,4 +94,44 @@ public class Constant {
      * 没有权限msg
      */
     public static String MSG_WARN_403 ="没有权限!";
+
+    /**
+     * 没有找到 code
+     */
+    public static Integer CODE_WARN_404 = 404;
+
+    /**
+     * 没有找到 msg
+     */
+    public static String MSG_WARN_404 = "数据为空!";
+
+    /**
+     * 格式错误 code
+     */
+    public static Integer CODE_WARN_405 = 405;
+
+    /**
+     * 格式错误 msg
+     */
+    public static String MSG_WARN_405 = "格式错误!";
+
+    /**
+     * 参数错误 code
+     */
+    public static Integer CODE_WARN_406 =  406;
+
+    /**
+     * 参数错误 msg
+     */
+    public static String MSG_WARN_406 = "参数错误!";
+
+    /**
+     * 接口异常 code
+     */
+    public static Integer CODE_ERROR_500 = 500;
+
+    /**
+     * 接口异常 mgs
+     */
+    public static String MSG_ERROR_500 = "接口异常!";
 }

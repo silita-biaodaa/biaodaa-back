@@ -79,4 +79,11 @@
     <import resource="applicationContext-redis.xml"/>
     <!-- 引入shiro配置 -->
     <import resource="applicationContext-shiro.xml"/>
+
+    <!-- 文件上传-->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSize" value="10000000"/>
+    </bean>
 </beans>

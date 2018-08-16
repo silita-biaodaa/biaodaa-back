@@ -26,7 +26,7 @@
     <name>biaodaa-back</name>
     <groupId>com.biaodaa</groupId>
     <artifactId>biaodaa-back</artifactId>
-    <version>1.0.21</version>
+    <version>1.0.22</version>
 
     <properties>
         <spring.version>4.1.6.RELEASE</spring.version>
@@ -322,7 +322,11 @@
             <artifactId>poi</artifactId>
             <version>3.10.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.10.1</version>
+        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

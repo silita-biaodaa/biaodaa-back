@@ -105,4 +105,18 @@ public class QualServiceImpl implements IQualService {
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
     }
+
+    @Override
+    public void addQuaAlias(List<DicAlias> dicAliasList) {
+        Map<String,Object> param = new HashMap<>();
+        param.put("stdType",Constant.QUAL_LEVEL_PARENT);
+        for (DicAlias alias : dicAliasList) {
+            param.put("name",alias.getName());
+            Integer count = dicAliasMapper.queryAliasByName(param);
+            if(count > 0){
+                continue;
+            }
+            dicAliasMapper.insertDicAlias(alias);
+        }
+    }
 }
