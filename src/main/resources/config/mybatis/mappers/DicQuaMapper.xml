@@ -177,16 +177,20 @@
     </delete>
 
     <select id="queryDicQuaList" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select *
-        from dic_qua
-        where `level` = 2
+        SELECT
+            t.*
+            ,t1.`qua_name` AS parentName
+        FROM
+        dic_qua t
+        LEFT JOIN dic_qua t1 ON t.`parent_id` = t1.`id` and t1.`level` = 1
+        where t.`level` = 2
         <if test="parentId != null and parentId != ''">
-           and  parent_id = #{parentId}
+           and  t.parent_id = #{parentId}
         </if>
         <if test="quaName != null and quaName != ''">
-            and qua_name like CONCAT('%',#{quaName},'%')
+            and t.qua_name like CONCAT('%',#{quaName},'%')
         </if>
-        order by create_time desc
+        order by t.create_time desc
     </select>
 
     <select id="queryQualCateList" resultType="java.util.Map">

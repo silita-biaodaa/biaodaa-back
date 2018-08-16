@@ -64,4 +64,34 @@ public class Constant {
      *  标准名称类型（1：资质 2：公共词典 3: 等级）
      */
     public static String GRADE_STD_TYPE = "3";
+
+    /**
+     * 用户未登录code
+     */
+    public static Integer CODE_WARN_401 = 401;
+
+    /**
+     * 用户未登录msg
+     */
+    public static String MSG_WARN_401 ="用户未登录!";
+
+    /**
+     * 无效token code
+     */
+    public static Integer CODE_WARN_402 = 402;
+
+    /**
+     * 无效tokenmsg
+     */
+    public static String MSG_WARN_402 ="无效token，请重新登录!";
+
+    /**
+     * 没有权限 code
+     */
+    public static Integer CODE_WARN_403 = 403;
+
+    /**
+     * 没有权限msg
+     */
+    public static String MSG_WARN_403 ="没有权限!";
 }

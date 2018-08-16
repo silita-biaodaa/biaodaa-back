@@ -88,4 +88,8 @@ public class DicQua {
      */
     private String updateBy;
 
+    /**
+     * 父级名称
+     */
+    private String parentName;
 }

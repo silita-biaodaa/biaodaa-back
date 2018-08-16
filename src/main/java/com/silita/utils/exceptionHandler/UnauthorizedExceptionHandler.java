@@ -1,5 +1,6 @@
 package com.silita.utils.exceptionHandler;
 
+import com.silita.common.Constant;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,8 +22,8 @@ public class UnauthorizedExceptionHandler {
     @ResponseBody
     public Map<String, Object> handle401() {
         Map result = new HashMap();
-        result.put("code", 0);
-        result.put("data", "您没有权限！");
+        result.put("code", Constant.MSG_WARN_401);
+        result.put("msg", Constant.MSG_WARN_401);
         return result;
     }
 
@@ -30,8 +31,8 @@ public class UnauthorizedExceptionHandler {
     @ResponseBody
     public Map<String, Object> authenticationException(Exception ex) {
         Map result = new HashMap();
-        result.put("code", 0);
-        result.put("data", "请登录后再访问！");
+        result.put("code", Constant.CODE_WARN_403);
+        result.put("msg", Constant.MSG_WARN_403);
         return result;
     }
 }

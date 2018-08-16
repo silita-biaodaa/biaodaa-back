@@ -1,5 +1,6 @@
 package com.silita.commons.shiro.filter;
 
+import com.silita.common.Constant;
 import com.silita.commons.shiro.token.JWTToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
@@ -107,7 +108,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         try {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setStatus(HttpStatus.OK.value());
-            httpResponse.getWriter().write("{\"code\":\"0\", \"msg\":\"无效token，请重新登录！\"}");
+            httpResponse.getWriter().write("{\"code\":"+Constant.CODE_WARN_402+", \"msg\":\""+Constant.MSG_WARN_402+"\"}");
         }catch (IOException e) {
             System.out.println(e.getMessage());
         }
