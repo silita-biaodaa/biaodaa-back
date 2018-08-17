@@ -59,4 +59,11 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     Integer queryDicCommCountByName(Map<String,Object> param);
+
+    /**
+     * 根据id获取公共数据词典表数据
+     * @param ids
+     * @return
+     */
+    List<DicCommon> listDicCommonByIds(Object[] ids);
 }

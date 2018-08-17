@@ -100,4 +100,14 @@
             and id != #{id}
         </if>
     </select>
+
+    <select id="listDicCommonByIds" parameterType="String" resultType="com.silita.model.DicCommon">
+        SELECT * FROM dic_common
+        <where>
+            id IN
+            <foreach collection="array" open="(" close=")" separator="," item="ele">
+                #{ele}
+            </foreach>
+        </where>
+    </select>
 </mapper>

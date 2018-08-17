@@ -46,4 +46,9 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      * @return
      */
     Integer queryAliasByName(Map<String,Object> param);
+
+    /**
+     * 根据std_code批量删除词典别名
+     */
+    public void deleteDicAliasByStdCodes(Object[] ids);
 }

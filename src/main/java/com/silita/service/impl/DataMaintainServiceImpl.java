@@ -48,7 +48,7 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         params.put("parentId", dicCommon.getParentId());
         params.put("id", dicCommon.getId());
         Integer count = dicCommonMapper.queryDicCommCountByName(params);
-        if(count == 0) {
+        if (count == 0) {
             dicCommonMapper.insertDicCommon(dicCommon);
             resultMap = new HashMap<String, Object>(4);
             resultMap.put("msg", "添加评标办法成功！");
@@ -81,7 +81,7 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         params.put("name", dicCommon.getName());
         params.put("parentId", dicCommon.getParentId());
         Integer count = dicCommonMapper.queryDicCommCountByName(params);
-        if(count == 0) {
+        if (count == 0) {
             dicCommonMapper.updateDicCommonById(dicCommon);
             msg = "更新评标办法成功！";
         }
@@ -95,11 +95,20 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         for (String id : ids) {
             set.add(id);
         }
-        if(set != null && set.size() > 0) {
+        if (set != null && set.size() > 0) {
+            //删除子表数据
+            List<DicCommon> dicCommons = dicCommonMapper.listDicCommonByIds(set.toArray());
+            Set subSet = new HashSet<String>();
+            for (DicCommon dicCommon : dicCommons) {
+                subSet.add(dicCommon.getCode());
+            }
+            if (subSet != null && subSet.size() > 0) {
+                dicAliasMapper.deleteDicAliasByStdCodes(subSet.toArray());
+            }
+            //批量删除数据
             dicCommonMapper.deleteDicCommonByIds(set.toArray());
         }
     }
-
 
 
     @Override
@@ -107,14 +116,14 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         String msg = null;
         dicAlias.setId(DataHandlingUtil.getUUID());
         dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
-        dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" +  System.currentTimeMillis());
+        dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis());
 
         Map params = new HashMap<String, Object>(4);
         params.put("id", dicAlias.getId());
         params.put("name", dicAlias.getName());
         params.put("stdCode", dicAlias.getStdCode());
         Integer count = dicAliasMapper.queryAliasByName(params);
-        if(count == 0) {
+        if (count == 0) {
             dicAliasMapper.insertDicAlias(dicAlias);
             msg = "添加评标办法别名成功！";
         }
@@ -130,13 +139,13 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     public String updatePbModeAliasById(DicAlias dicAlias) {
         String msg = null;
         dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
-        dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" +  System.currentTimeMillis());
+        dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis());
 
         Map params = new HashMap<String, Object>(4);
         params.put("name", dicAlias.getName());
         params.put("stdCode", dicAlias.getStdCode());
         Integer count = dicAliasMapper.queryAliasByName(params);
-        if(count == 0) {
+        if (count == 0) {
             dicAliasMapper.updateDicAliasById(dicAlias);
             msg = "更新评标办法别名成功！";
         }
@@ -150,7 +159,7 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         for (String id : ids) {
             set.add(id);
         }
-        if(set != null && set.size() > 0) {
+        if (set != null && set.size() > 0) {
             dicAliasMapper.deleteDicAliasByIds(set.toArray());
         }
     }

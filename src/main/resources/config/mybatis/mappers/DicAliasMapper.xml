@@ -89,4 +89,14 @@
             and id != #{id}
         </if>
     </select>
+
+    <delete id="deleteDicAliasByStdCodes" parameterType="String">
+        DELETE FROM dic_alias
+        <where>
+            std_code IN
+            <foreach collection="array" open="(" close=")" separator="," item="ele">
+                #{ele}
+            </foreach>
+        </where>
+    </delete>
 </mapper>

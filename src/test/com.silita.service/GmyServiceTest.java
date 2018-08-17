@@ -72,7 +72,7 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController4()throws Exception{
-        String requestBody = "{\"idsStr\":\"8adf1e38038c40ee9062c4ab83b13cb5|8adf1e38038c40ee9062c4ab83b13cb6\"}";
+        String requestBody = "{\"idsStr\":\"8adf1e38038c40ee9062c4ab83b13cb1\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/deletePbMode").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
