@@ -16,7 +16,7 @@ public class BaseController {
     public Map<String, Object> successMap(Object obj) {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("code", Constant.CODE_SUCCESS);
-        resultMap.put("msg",Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.MSG_SUCCESS);
         if (null != obj) {
             resultMap.put("data", obj);
         }
