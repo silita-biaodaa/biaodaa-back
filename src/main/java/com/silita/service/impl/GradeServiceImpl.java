@@ -113,13 +113,33 @@ public class GradeServiceImpl implements IGradeService {
     public List<Map<String, Object>> getQualGradeList(Map<String, Object> param) {
         //TODO:
         List<Map<String, Object>> parentList = dicCommonMapper.queryParentGrade();
-        List<Map<String, Object>> gradeList = null;
-        DicAlias alias = null;
-        for (Map<String, Object> paren : parentList) {
-            paren.put("parentId", paren.get("id"));
-            gradeList = dicCommonMapper.queryGradeList(paren);
-            paren.put("gradeList", gradeList);
-        }
         return parentList;
+    }
+
+    @Override
+    public List<Map<String, Object>> getSecQualGradeList(Map<String,Object> param){
+        List<Map<String, Object>> gradeList = dicCommonMapper.queryGradeList(param);
+        return  gradeList;
+    }
+
+    @Override
+    public Map<String,Object> updateGradeAlias(DicAlias dicAlias) {
+        Map<String,Object> resultMap = new HashMap<>();
+        Map<String,Object> param = new HashMap<>();
+        param.put("id",dicAlias.getId());
+        param.put("name",dicAlias.getName());
+        param.put("stdType",Constant.GRADE_STD_TYPE);
+        Integer count = dicAliasMapper.queryAliasByName(param);
+        if(count > 0){
+            resultMap.put("code",Constant.CODE_WARN_400);
+            resultMap.put("msg",Constant.MSG_WARN_400);
+            return resultMap;
+        }
+        String code = "alias_grade" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis();
+        dicAlias.setCode(code);
+        dicAliasMapper.updateDicAliasById(dicAlias);
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
+        return resultMap;
     }
 }

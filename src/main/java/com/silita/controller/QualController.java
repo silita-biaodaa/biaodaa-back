@@ -96,6 +96,20 @@ public class QualController extends BaseController {
     }
 
     /**
+     * 修改等级别名
+     *
+     * @param alias
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/alias/update", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> aliasUpd(@RequestBody DicAlias alias, ServletRequest request) {
+        alias.setUpdateBy(JWTUtil.getUsername(request));
+        return qualService.updateQuaAlias(alias);
+    }
+
+    /**
      * 添加资质等级
      * @param quaGrade
      * @return

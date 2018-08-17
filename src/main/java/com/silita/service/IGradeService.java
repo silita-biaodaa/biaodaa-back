@@ -43,4 +43,17 @@ public interface IGradeService {
      * @return
      */
     List<Map<String, Object>> getQualGradeList(Map<String, Object> param);
+
+    /**
+     * 资质二等级
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> getSecQualGradeList(Map<String,Object> param);
+
+    /**
+     * 修改等级别名
+     * @param dicAlias
+     */
+    Map<String,Object> updateGradeAlias(DicAlias dicAlias);
 }

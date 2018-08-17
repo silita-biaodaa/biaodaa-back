@@ -43,7 +43,17 @@
 
     <select id="listDicAliasByStdCode" parameterType="com.silita.model.DicAlias" resultType="com.silita.model.DicAlias">
         SELECT *
-        FROM dic_alias WHERE `std_code` = #{stdCode}
+        FROM dic_alias
+        WHERE 1=1
+        <if test="stdCode != null and stdCode != ''">
+            and `std_code` = #{stdCode}
+        </if>
+        <if test="name != null and name != ''">
+            and `name` like CONCAT('%',#{name},'%')
+        </if>
+        <if test="stdType != null and stdType != ''">
+            and std_type = #{stdType}
+        </if>
         <if test="start != null and start != ''">
             LIMIT #{start}, #{pageSize}
         </if>

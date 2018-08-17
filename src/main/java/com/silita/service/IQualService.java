@@ -54,4 +54,11 @@ public interface IQualService {
      * @param dicAliasList
      */
     void addQuaAlias(List<DicAlias> dicAliasList);
+
+    /**
+     * 修改资质别名
+     * @param alias
+     * @return
+     */
+    Map<String,Object> updateQuaAlias(DicAlias alias);
 }

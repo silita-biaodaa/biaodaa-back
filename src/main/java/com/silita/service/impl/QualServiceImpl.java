@@ -119,4 +119,25 @@ public class QualServiceImpl implements IQualService {
             dicAliasMapper.insertDicAlias(alias);
         }
     }
+
+    @Override
+    public Map<String, Object> updateQuaAlias(DicAlias alias) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+        param.put("stdType",Constant.QUAL_LEVEL_PARENT);
+        param.put("name",alias.getName());
+        param.put("id",alias.getId());
+        Integer count = dicAliasMapper.queryAliasByName(param);
+        if(count > 0){
+            resultMap.put("code", Constant.CODE_WARN_400);
+            resultMap.put("msg", Constant.MSG_WARN_400);
+            return resultMap;
+        }
+        String code = "alias_qual_" + PinYinUtil.cn2py(alias.getName()) + "_" + System.currentTimeMillis();
+        alias.setCode(code);
+        dicAliasMapper.updateDicAliasById(alias);
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
+        return resultMap;
+    }
 }

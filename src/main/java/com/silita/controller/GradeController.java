@@ -81,7 +81,33 @@ public class GradeController extends BaseController {
     }
 
     /**
+     * 修改等级别名
+     *
+     * @param alias
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/alias/update", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> aliasUpd(@RequestBody DicAlias alias, ServletRequest request) {
+        alias.setUpdateBy(JWTUtil.getUsername(request));
+        return gradeService.updateGradeAlias(alias);
+    }
+
+    /**
      * 等级列表
+     *
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/cate/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> cateList(@RequestBody Map<String, Object> param) {
+        return this.successMap(gradeService.getQualGradeList(param));
+    }
+
+    /**
+     * 二级等级列表
      *
      * @param param
      * @return
@@ -89,6 +115,6 @@ public class GradeController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/sec/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> secList(@RequestBody Map<String, Object> param) {
-        return this.successMap(gradeService.getQualGradeList(param));
+        return this.successMap(gradeService.getSecQualGradeList(param));
     }
 }
