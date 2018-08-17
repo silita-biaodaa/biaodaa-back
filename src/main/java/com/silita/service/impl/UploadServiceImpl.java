@@ -49,7 +49,7 @@ public class UploadServiceImpl implements IUploadService {
         }
         if (null == workbook) {
             resultMap.put("code", Constant.CODE_WARN_404);
-            resultMap.put("mag", Constant.MSG_WARN_404);
+            resultMap.put("msg", Constant.MSG_WARN_404);
             return resultMap;
         }
         List<DicAlias> dicAliasList = new ArrayList<>();
@@ -66,7 +66,7 @@ public class UploadServiceImpl implements IUploadService {
                 celCount = row.getLastCellNum();
                 if (celCount > 1) {
                     resultMap.put("code", Constant.CODE_WARN_405);
-                    resultMap.put("mag", Constant.MSG_WARN_405);
+                    resultMap.put("msg", Constant.MSG_WARN_405);
                     return resultMap;
                 }
                 cell = row.getCell(0);
@@ -89,7 +89,7 @@ public class UploadServiceImpl implements IUploadService {
             qualService.addQuaAlias(dicAliasList);
         }
         resultMap.put("code", Constant.CODE_SUCCESS);
-        resultMap.put("mag", Constant.MSG_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
     }
 }

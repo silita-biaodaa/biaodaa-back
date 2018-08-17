@@ -41,8 +41,13 @@ public class UploadController {
     public Map<String, Object> uploadQuaAlias(HttpServletRequest request, MultipartFile file, String quaCode) {
         Map<String, Object> resultMap = new HashMap<>();
         if (null == file) {
-            resultMap.put("code", Constant.CODE_WARN_405);
-            resultMap.put("msg", Constant.MSG_WARN_405);
+            resultMap.put("code", Constant.CODE_WARN_404);
+            resultMap.put("msg", Constant.MSG_WARN_404);
+            return resultMap;
+        }
+        if(null == quaCode || "".equals(quaCode)){
+            resultMap.put("code", Constant.CODE_WARN_404);
+            resultMap.put("msg", Constant.MSG_WARN_404);
             return resultMap;
         }
         Map<String, Object> param = new HashMap<>();
