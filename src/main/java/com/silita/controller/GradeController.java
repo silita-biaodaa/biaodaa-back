@@ -30,13 +30,12 @@ public class GradeController extends BaseController {
     /**
      * 等级列表
      *
-     * @param param
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> list(@RequestBody Map<String, Object> param) {
-        return this.successMap(gradeService.getGradeList(param));
+    public Map<String, Object> list() {
+        return this.successMap(gradeService.getGradeList(null));
     }
 
 
