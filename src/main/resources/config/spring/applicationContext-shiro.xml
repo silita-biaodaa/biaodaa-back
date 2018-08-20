@@ -61,13 +61,11 @@
         <!-- shiro里面需要针对于所有的路径进行配置，所有的配置需要通过文本的形式设置 -->
         <property name="filterChainDefinitionMap">
             <map>
-                <entry key="/authorize/main" value="jwtAuthc"/>
+
+                <entry key="/authorize/login" value="anon"/>
                 <entry key="/manager/druid/*" value="anon"/>
-                <entry key="/grade/*" value="jwtAuthc"/>
-                <entry key="/alias/*" value="jwtAuthc"/>
-                <entry key="/dataMaintain/*" value="jwtAuthc"/>
-                <entry key="/qual/*" value="jwtAuthc"/>
-                <entry key="/**" value="jwt"/>
+                <entry key="/**" value="jwtAuthc"/>
+                <!--<entry key="/**" value="jwt"/>-->
             </map>
         </property>
     </bean>

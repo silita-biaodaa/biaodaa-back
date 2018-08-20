@@ -19,21 +19,30 @@ import java.util.Map;
  */
 @ControllerAdvice
 public class UnauthorizedExceptionHandler {
+
+    /**
+     * 未授权
+     * @return
+     */
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseBody
-    public Map<String, Object> handle401() {
-        Map result = new HashMap();
-        result.put("code", Constant.MSG_WARN_401);
-        result.put("msg", Constant.MSG_WARN_401);
-        return result;
-    }
-
-    @ExceptionHandler(UnauthenticatedException.class)
-    @ResponseBody
-    public Map<String, Object> authenticationException(Exception ex) {
+    public Map<String, Object> authorizationException() {
         Map result = new HashMap();
         result.put("code", Constant.CODE_WARN_403);
         result.put("msg", Constant.MSG_WARN_403);
+        return result;
+    }
+
+    /**
+     * 未认证
+     * @return
+     */
+    @ExceptionHandler(UnauthenticatedException.class)
+    @ResponseBody
+    public Map<String, Object> authenticationException() {
+        Map result = new HashMap();
+        result.put("code", Constant.CODE_WARN_401);
+        result.put("msg", Constant.MSG_WARN_401);
         return result;
     }
 }

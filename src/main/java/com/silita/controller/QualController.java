@@ -8,7 +8,6 @@ import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
 import com.silita.service.IRelQuaGradeService;
 import org.apache.commons.collections.MapUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;

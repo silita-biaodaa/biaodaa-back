@@ -2,6 +2,7 @@ package com.silita.commons.shiro.filter;
 
 import com.silita.common.Constant;
 import com.silita.commons.shiro.token.JWTToken;
+import com.silita.utils.CrossDomainHandler;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -90,11 +92,9 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader("Access-control-Allow-Origin", "*");
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "Authorization,Origin,X-Requested-With,Content-Type,Accept");
+        Map result = CrossDomainHandler.preHandle(request, response);
+        HttpServletRequest httpServletRequest = (HttpServletRequest) result.get("request");
+        HttpServletResponse httpServletResponse = (HttpServletResponse) result.get("response");
         // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
         if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
             httpServletResponse.setStatus(HttpStatus.OK.value());

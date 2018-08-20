@@ -2,10 +2,12 @@ package com.silita.commons.shiro.filter;
 
 import com.silita.common.Constant;
 import com.silita.commons.shiro.token.JWTToken;
+import com.silita.utils.CrossDomainHandler;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,6 +16,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -24,6 +27,10 @@ import java.io.IOException;
  */
 public class JWTAuthenticationFilter extends AuthenticatingFilter {
 
+    //不知道怎么获取applicationContext-shiro配置文件里面的，现在写死
+    private final String loginUrl = "/authorize/login";
+    private final String druidUrl = "/manager/druid";
+
     @Override
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -32,15 +39,31 @@ public class JWTAuthenticationFilter extends AuthenticatingFilter {
     }
 
     @Override
+    public void setLoginUrl(String loginUrl) {
+        String previous = "/authorize/login";
+        if (previous != null) {
+            this.appliedPaths.remove(previous);
+        }
+
+        super.setLoginUrl(loginUrl);
+
+        this.appliedPaths.put(this.getLoginUrl(), (Object)null);
+    }
+
+
+    @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
-        HttpServletRequest req = (HttpServletRequest) servletRequest;
-        String authorization = req.getHeader("Authorization");
-        if(org.springframework.util.StringUtils.isEmpty(authorization)) {
+        String contextPath = WebUtils.getPathWithinApplication(WebUtils.toHttp(servletRequest));
+        //登录、druid监控不拦截
+        if(contextPath.contains(loginUrl) || contextPath.contains(druidUrl)) {
+            return true;
+        }
+        AuthenticationToken token = this.createToken(servletRequest, servletResponse);
+        if(token.getPrincipal() == null) {
             unauthenticated(servletResponse);
             return false;
         } else {
             try {
-                JWTToken token = new JWTToken(authorization);
                 Subject subject = this.getSubject(servletRequest, servletResponse);
                 subject.login(token);
                 return true;
@@ -56,11 +79,9 @@ public class JWTAuthenticationFilter extends AuthenticatingFilter {
      */
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader("Access-control-Allow-Origin", "*");
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", "Authorization,Origin,X-Requested-With,Content-Type,Accept");
+        Map result = CrossDomainHandler.preHandle(request, response);
+        HttpServletRequest httpServletRequest = (HttpServletRequest) result.get("request");
+        HttpServletResponse httpServletResponse = (HttpServletResponse) result.get("response");
         // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
         if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
             httpServletResponse.setStatus(HttpStatus.OK.value());

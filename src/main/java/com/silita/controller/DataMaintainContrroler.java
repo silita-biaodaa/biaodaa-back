@@ -4,7 +4,6 @@ import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.model.DicAlias;
 import com.silita.model.DicCommon;
 import com.silita.service.IDataMaintainService;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
