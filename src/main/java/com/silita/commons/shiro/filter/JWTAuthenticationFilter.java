@@ -38,17 +38,17 @@ public class JWTAuthenticationFilter extends AuthenticatingFilter {
         return new JWTToken(token);
     }
 
-    @Override
-    public void setLoginUrl(String loginUrl) {
-        String previous = "/authorize/login";
-        if (previous != null) {
-            this.appliedPaths.remove(previous);
-        }
-
-        super.setLoginUrl(loginUrl);
-
-        this.appliedPaths.put(this.getLoginUrl(), (Object)null);
-    }
+//    @Override
+//    public void setLoginUrl(String loginUrl) {
+//        String previous = "/authorize/login";
+//        if (previous != null) {
+//            this.appliedPaths.remove(previous);
+//        }
+//
+//        super.setLoginUrl(loginUrl);
+//
+//        this.appliedPaths.put(this.getLoginUrl(), (Object)null);
+//    }
 
 
     @Override
