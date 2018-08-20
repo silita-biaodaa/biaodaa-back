@@ -26,7 +26,6 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/dataMaintain")
-@RequiresAuthentication
 public class DataMaintainContrroler {
 
     @Autowired

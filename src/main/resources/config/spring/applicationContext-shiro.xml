@@ -63,6 +63,10 @@
             <map>
                 <entry key="/authorize/main" value="jwtAuthc"/>
                 <entry key="/manager/druid/*" value="anon"/>
+                <entry key="/grade/*" value="jwtAuthc"/>
+                <entry key="/alias/*" value="jwtAuthc"/>
+                <entry key="/dataMaintain/*" value="jwtAuthc"/>
+                <entry key="/qual/*" value="jwtAuthc"/>
                 <entry key="/**" value="jwt"/>
             </map>
         </property>

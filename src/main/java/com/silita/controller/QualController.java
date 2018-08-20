@@ -25,7 +25,6 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/qual")
-@RequiresAuthentication
 public class QualController extends BaseController {
 
     @Autowired

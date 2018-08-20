@@ -21,7 +21,6 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/grade")
-@RequiresAuthentication
 public class GradeController extends BaseController {
 
     @Autowired
