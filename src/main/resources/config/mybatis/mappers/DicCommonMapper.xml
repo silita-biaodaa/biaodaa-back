@@ -110,4 +110,8 @@
             </foreach>
         </where>
     </select>
+
+    <select id="getDicCommonCodeById" parameterType="String" resultType="String">
+        SELECT `code` FROM dic_common WHERE id = #{id}
+    </select>
 </mapper>

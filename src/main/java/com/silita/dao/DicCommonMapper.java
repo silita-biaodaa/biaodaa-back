@@ -2,6 +2,7 @@ package com.silita.dao;
 
 import com.silita.model.DicCommon;
 import com.silita.utils.MyMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -66,4 +67,11 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     List<DicCommon> listDicCommonByIds(Object[] ids);
+
+    /**
+     * 根据id获取公共数据词典表code字段
+     * @param id
+     * @return
+     */
+    String getDicCommonCodeById(@Param("id") String id);
 }

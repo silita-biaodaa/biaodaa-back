@@ -45,7 +45,7 @@ public class GmyServiceTest extends ConfigTest {
 
     @Test
     public void testController2()throws Exception{
-        String requestBody = "{\"id\":\"8adf1e38038c40ee9062c4ab83b13cb7\", \"name\":\"测试低价法\", \"type\":\"hunan\", \"orderNo\":\"2\", \"desc\":\"这是描述\", \"updateBy\":\"test\"}";
+        String requestBody = "{\"id\":\"8e324d7432ca4bddaf884b15ddb8274f\", \"name\":\"测试更新\", \"type\":\"hunan\", \"orderNo\":\"1\", \"desc\":\"这是描述哈\", \"updateBy\":\"test\"}";
         String responseString = mockMvc.perform(post("/dataMaintain/updatePbMode").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
