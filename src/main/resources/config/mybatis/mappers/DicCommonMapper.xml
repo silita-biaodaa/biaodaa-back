@@ -24,9 +24,6 @@
         <if test="name !=null and name!=''">
             `name` = #{name},
         </if>
-        <if test="code !=null and code!=''">
-            `code` = #{code},
-        </if>
         <if test="type !=null and type!=''">
             `type` = #{type},
         </if>
@@ -111,7 +108,4 @@
         </where>
     </select>
 
-    <select id="getDicCommonCodeById" parameterType="String" resultType="String">
-        SELECT `code` FROM dic_common WHERE id = #{id}
-    </select>
 </mapper>

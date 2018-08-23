@@ -2,7 +2,6 @@ package com.silita.dao;
 
 import com.silita.model.DicAlias;
 import com.silita.utils.MyMapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -53,10 +52,4 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      */
     public void deleteDicAliasByStdCodes(Object[] ids);
 
-    /**
-     * 根据std_code更新DicAlias stdCode
-     * @param oldStdCode
-     * @param newStdCode
-     */
-    public void updateDicAliasStdCodeByStdCodes(@Param("oldStdCode") String oldStdCode, @Param("newStdCode") String newStdCode);
 }

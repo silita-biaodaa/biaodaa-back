@@ -100,7 +100,4 @@
         </where>
     </delete>
 
-    <update id="updateDicAliasStdCodeByStdCodes" parameterType="String">
-         UPDATE dic_alias SET `std_code` = #{newStdCode} WHERE `std_code` = #{oldStdCode}
-    </update>
 </mapper>

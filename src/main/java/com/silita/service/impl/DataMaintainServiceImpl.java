@@ -82,11 +82,6 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         params.put("parentId", dicCommon.getParentId());
         Integer count = dicCommonMapper.queryDicCommCountByName(params);
         if (count == 0) {
-            //更新别名表stdCode
-            String oldStdCode = dicCommonMapper.getDicCommonCodeById(dicCommon.getId());
-            String newStdCode = dicCommon.getCode();
-            dicAliasMapper.updateDicAliasStdCodeByStdCodes(oldStdCode, newStdCode);
-            //更新common
             dicCommonMapper.updateDicCommonById(dicCommon);
             msg = "更新评标办法成功！";
         }
