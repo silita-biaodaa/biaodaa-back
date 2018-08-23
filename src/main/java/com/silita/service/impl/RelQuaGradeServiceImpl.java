@@ -21,20 +21,31 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
     @Override
     public Map<String, Object> addQuaGrade(RelQuaGrade grade) {
         Map<String, Object> resultMap = new HashMap<>();
-        Integer count = quaGradeMapper.queryQuaGradeCout(grade);
-        if (count > 0) {
-            resultMap.put("code", Constant.CODE_WARN_400);
-            resultMap.put("msg", Constant.MSG_WARN_400);
-            return resultMap;
-        }
+        Integer count = 0;
         if (grade.getGradeCode().contains("|")) {
             String[] gradeCode = grade.getGradeCode().split("\\|");
             for (String str : gradeCode) {
                 grade.setGradeCode(str);
-                grade.setId(DataHandlingUtil.getUUID());
-                quaGradeMapper.insertQuaCrade(grade);
+                count = quaGradeMapper.queryQuaGradeCout(grade);
+                count ++;
+                if (count <= 0) {
+                    grade.setId(DataHandlingUtil.getUUID());
+                    quaGradeMapper.insertQuaCrade(grade);
+                }else if(count > 0 && count > 1){
+                    resultMap.put("code", Constant.CODE_WARN_400);
+                    resultMap.put("msg", Constant.MSG_WARN_400);
+                    return resultMap;
+                }else {
+                    continue;
+                }
             }
-        }else {
+        } else {
+            count = quaGradeMapper.queryQuaGradeCout(grade);
+            if (count > 0) {
+                resultMap.put("code", Constant.CODE_WARN_400);
+                resultMap.put("msg", Constant.MSG_WARN_400);
+                return resultMap;
+            }
             grade.setId(DataHandlingUtil.getUUID());
             quaGradeMapper.insertQuaCrade(grade);
         }
