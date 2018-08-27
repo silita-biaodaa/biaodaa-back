@@ -100,7 +100,7 @@ public class UploadServiceImpl implements IUploadService {
             }
         }
         if(null != aliasList && aliasList.size() > 0){
-            qualService.addQuaAlias(dicAliasList);
+            qualService.addQuaAlias(aliasList);
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
             return resultMap;

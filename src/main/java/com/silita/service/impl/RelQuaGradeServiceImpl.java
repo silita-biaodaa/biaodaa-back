@@ -8,6 +8,7 @@ import com.silita.utils.DataHandlingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,21 +25,27 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
         Integer count = 0;
         if (grade.getGradeCode().contains("|")) {
             String[] gradeCode = grade.getGradeCode().split("\\|");
+            List<String> codeList = new ArrayList<>();
             for (String str : gradeCode) {
                 grade.setGradeCode(str);
                 count = quaGradeMapper.queryQuaGradeCout(grade);
-                count = count ++;
                 if (count <= 0) {
-                    grade.setId(DataHandlingUtil.getUUID());
-                    quaGradeMapper.insertQuaCrade(grade);
-                }else if(count > 0 && count == gradeCode.length){
-                    resultMap.put("code", Constant.CODE_WARN_400);
-                    resultMap.put("msg", Constant.MSG_WARN_400);
-                    return resultMap;
-                }else {
-                    continue;
+                   codeList.add(str);
                 }
             }
+            if(null != codeList && codeList.size() > 0){
+                for (String str : codeList){
+                    grade.setGradeCode(str);
+                    grade.setId(DataHandlingUtil.getUUID());
+                    quaGradeMapper.insertQuaCrade(grade);
+                    resultMap.put("code", Constant.CODE_SUCCESS);
+                    resultMap.put("msg", Constant.MSG_SUCCESS);
+                    return resultMap;
+                }
+            }
+            resultMap.put("code", Constant.CODE_WARN_400);
+            resultMap.put("msg", Constant.MSG_WARN_400);
+            return resultMap;
         } else {
             count = quaGradeMapper.queryQuaGradeCout(grade);
             if (count > 0) {
