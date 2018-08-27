@@ -32,4 +32,11 @@
         and grade_code = #{gradeCode}
         and biz_type = #{bizType}
     </select>
+
+    <select id="quaryGradeCountByCode" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(1)
+        from rel_qua_grade
+        where 1=1
+        and grade_code = #{gradeCode}
+    </select>
 </mapper>

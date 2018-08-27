@@ -3,8 +3,10 @@ package com.silita.service.impl;
 import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
 import com.silita.dao.DicCommonMapper;
+import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.DicAlias;
 import com.silita.model.DicCommon;
+import com.silita.model.RelQuaGrade;
 import com.silita.service.IGradeService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.PinYinUtil;
@@ -23,6 +25,8 @@ public class GradeServiceImpl implements IGradeService {
     DicCommonMapper dicCommonMapper;
     @Autowired
     DicAliasMapper dicAliasMapper;
+    @Autowired
+    RelQuaGradeMapper relQuaGradeMapper;
 
     @Override
     public List<Map<String, Object>> getGradeList(Map<String, Object> param) {
@@ -56,8 +60,8 @@ public class GradeServiceImpl implements IGradeService {
             param.put("id", dicCommon.getId());
             count = dicCommonMapper.queryDicCommCountByName(param);
             if (count > 0) {
-                resultMap.put("code",Constant.CODE_WARN_400);
-                resultMap.put("msg",Constant.MSG_WARN_400);
+                resultMap.put("code", Constant.CODE_WARN_400);
+                resultMap.put("msg", Constant.MSG_WARN_400);
                 return resultMap;
             }
             dicCommon.setUpdateBy(username);
@@ -65,8 +69,8 @@ public class GradeServiceImpl implements IGradeService {
         } else {
             count = dicCommonMapper.queryDicCommCountByName(param);
             if (count > 0) {
-                resultMap.put("code",Constant.CODE_WARN_400);
-                resultMap.put("msg",Constant.MSG_WARN_400);
+                resultMap.put("code", Constant.CODE_WARN_400);
+                resultMap.put("msg", Constant.MSG_WARN_400);
                 return resultMap;
             }
             dicCommon.setId(DataHandlingUtil.getUUID());
@@ -75,15 +79,27 @@ public class GradeServiceImpl implements IGradeService {
             dicCommon.setCreateBy(username);
             dicCommonMapper.insertDicCommon(dicCommon);
         }
-        resultMap.put("code",Constant.CODE_SUCCESS);
-        resultMap.put("msg",Constant.MSG_SUCCESS);
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
     }
 
     @Override
-    public void delGrade(Map<String, Object> param) {
+    public Map<String, Object> delGrade(Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
         String id = MapUtils.getString(param, "id");
+        List<DicCommon> dicCommons = dicCommonMapper.listDicCommonByIds(id.split(","));
+        DicCommon dic = dicCommons.get(0);
+        Integer count = relQuaGradeMapper.quaryGradeCountByCode(dic.getCode());
+        if (count > 0) {
+            resultMap.put("code", Constant.CODE_WARN_407);
+            resultMap.put("msg", Constant.MSG_WARN_407);
+            return resultMap;
+        }
         dicCommonMapper.deleteDicCommonByIds(id.split(","));
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
+        return resultMap;
     }
 
     @Override
@@ -117,22 +133,22 @@ public class GradeServiceImpl implements IGradeService {
     }
 
     @Override
-    public List<Map<String, Object>> getSecQualGradeList(Map<String,Object> param){
+    public List<Map<String, Object>> getSecQualGradeList(Map<String, Object> param) {
         List<Map<String, Object>> gradeList = dicCommonMapper.queryGradeList(param);
-        return  gradeList;
+        return gradeList;
     }
 
     @Override
-    public Map<String,Object> updateGradeAlias(DicAlias dicAlias) {
-        Map<String,Object> resultMap = new HashMap<>();
-        Map<String,Object> param = new HashMap<>();
-        param.put("id",dicAlias.getId());
-        param.put("name",dicAlias.getName());
-        param.put("stdType",Constant.GRADE_STD_TYPE);
+    public Map<String, Object> updateGradeAlias(DicAlias dicAlias) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> param = new HashMap<>();
+        param.put("id", dicAlias.getId());
+        param.put("name", dicAlias.getName());
+        param.put("stdType", Constant.GRADE_STD_TYPE);
         Integer count = dicAliasMapper.queryAliasByName(param);
-        if(count > 0){
-            resultMap.put("code",Constant.CODE_WARN_400);
-            resultMap.put("msg",Constant.MSG_WARN_400);
+        if (count > 0) {
+            resultMap.put("code", Constant.CODE_WARN_400);
+            resultMap.put("msg", Constant.MSG_WARN_400);
             return resultMap;
         }
         String code = "alias_grade" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis();

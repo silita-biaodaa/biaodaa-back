@@ -42,4 +42,11 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      * @return
      */
     Integer delQuaCrade(Map<String,Object> param);
+
+    /**
+     * 获取等级个数
+     * @param gradeCode
+     * @return
+     */
+    Integer quaryGradeCountByCode(String gradeCode);
 }

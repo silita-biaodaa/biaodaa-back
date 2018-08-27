@@ -61,7 +61,7 @@ public class Constant {
     public static String MSG_WARN_400 = "信息已存在!";
 
     /**
-     *  标准名称类型（1：资质 2：公共词典 3: 等级）
+     * 标准名称类型（1：资质 2：公共词典 3: 等级）
      */
     public static String GRADE_STD_TYPE = "3";
 
@@ -73,7 +73,7 @@ public class Constant {
     /**
      * 用户未登录msg
      */
-    public static String MSG_WARN_401 ="用户未登录!";
+    public static String MSG_WARN_401 = "用户未登录!";
 
     /**
      * 无效token code
@@ -83,7 +83,7 @@ public class Constant {
     /**
      * 无效tokenmsg
      */
-    public static String MSG_WARN_402 ="无效token，请重新登录!";
+    public static String MSG_WARN_402 = "无效token，请重新登录!";
 
     /**
      * 没有权限 code
@@ -93,7 +93,7 @@ public class Constant {
     /**
      * 没有权限msg
      */
-    public static String MSG_WARN_403 ="没有权限!";
+    public static String MSG_WARN_403 = "没有权限!";
 
     /**
      * 没有找到 code
@@ -118,7 +118,7 @@ public class Constant {
     /**
      * 参数错误 code
      */
-    public static Integer CODE_WARN_406 =  406;
+    public static Integer CODE_WARN_406 = 406;
 
     /**
      * 参数错误 msg
@@ -131,7 +131,17 @@ public class Constant {
     public static Integer CODE_ERROR_500 = 500;
 
     /**
-     * 接口异常 mgs
+     * 接口异常 msg
      */
     public static String MSG_ERROR_500 = "接口异常!";
+
+    /**
+     * 无法删除，请检查该信息的关联关系 Code
+     */
+    public static Integer CODE_WARN_407 = 407;
+
+    /**
+     * 无法删除，请检查该信息的关联关系 msg
+     */
+    public static String MSG_WARN_407 = "无法删除，请检查该信息的关联关系!";
 }

@@ -59,8 +59,7 @@ public class GradeController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> del(@RequestBody Map<String, Object> param) {
-        gradeService.delGrade(param);
-        return this.successMap(null);
+        return gradeService.delGrade(param);
     }
 
     /**

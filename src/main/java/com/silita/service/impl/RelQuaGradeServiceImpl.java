@@ -27,11 +27,11 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
             for (String str : gradeCode) {
                 grade.setGradeCode(str);
                 count = quaGradeMapper.queryQuaGradeCout(grade);
-                count ++;
+                count = count ++;
                 if (count <= 0) {
                     grade.setId(DataHandlingUtil.getUUID());
                     quaGradeMapper.insertQuaCrade(grade);
-                }else if(count > 0 && count > 1){
+                }else if(count > 0 && count == gradeCode.length){
                     resultMap.put("code", Constant.CODE_WARN_400);
                     resultMap.put("msg", Constant.MSG_WARN_400);
                     return resultMap;
