@@ -3,6 +3,7 @@ package com.silita.service.impl;
 import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
 import com.silita.model.DicAlias;
+import com.silita.model.DicCommon;
 import com.silita.service.IQualService;
 import com.silita.service.IUploadService;
 import com.silita.utils.DataHandlingUtil;
@@ -85,7 +86,20 @@ public class UploadServiceImpl implements IUploadService {
                 }
             }
         }
+        List<DicAlias> aliasList = new ArrayList<>();
         if (null != dicAliasList && dicAliasList.size() > 0) {
+            Integer count = 0;
+            Map<String,Object> params = new HashMap<>();
+            params.put("stdType",Constant.QUAL_LEVEL_PARENT);
+            for(DicAlias alias:dicAliasList){
+                param.put("name",alias.getName());
+                count = dicAliasMapper.queryAliasByName(param);
+                if(count <= 0){
+                    aliasList.add(alias);
+                }
+            }
+        }
+        if(null != aliasList && aliasList.size() > 0){
             qualService.addQuaAlias(dicAliasList);
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
