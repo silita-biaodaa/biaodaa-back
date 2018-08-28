@@ -39,8 +39,8 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         Map resultMap = null;
         dicCommon.setId(DataHandlingUtil.getUUID());
         String type = dicCommon.getType();
-        dicCommon.setType(type + "_pdmode");
-        dicCommon.setCode(type + "_pdmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + System.currentTimeMillis());
+        dicCommon.setType(type + "_pbmode");
+        dicCommon.setCode(type + "_pbmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + System.currentTimeMillis());
 
         Map params = new HashMap<String, Object>(4);
         params.put("type", dicCommon.getType());
@@ -61,7 +61,7 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     @Override
     public List<DicCommon> listPbModeBySource(DicCommon dicCommon) {
         String type = dicCommon.getType();
-        dicCommon.setType(type + "_pdmode");
+        dicCommon.setType(type + "_pbmode");
 //        Map<String,Object> result = new HashMap<String, Object>();
 //        result.put("total", dicCommonMapper.getDicCommonCountByType(dicCommon));
 //        result.put("datas", dicCommonMapper.listDicCommonByType(dicCommon));
@@ -73,8 +73,8 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     public String updatePbModeById(DicCommon dicCommon) {
         String msg = null;
         String type = dicCommon.getType();
-        dicCommon.setType(type + "_pdmode");
-        dicCommon.setCode(type + "_pdmode_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + System.currentTimeMillis());
+        dicCommon.setType(type + "_pbmode");
+        dicCommon.setCode(type + "_pbmode" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + System.currentTimeMillis());
 
         Map params = new HashMap<String, Object>(4);
         params.put("type", dicCommon.getType());
@@ -116,7 +116,7 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         String msg = null;
         dicAlias.setId(DataHandlingUtil.getUUID());
         dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
-        dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis());
+        dicAlias.setCode("alias_pbmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis());
 
         Map params = new HashMap<String, Object>(4);
         params.put("id", dicAlias.getId());
@@ -139,7 +139,7 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     public String updatePbModeAliasById(DicAlias dicAlias) {
         String msg = null;
         dicAlias.setStdType(Constant.PUBLIC_DICTIONARY);
-        dicAlias.setCode("alias_pdmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis());
+        dicAlias.setCode("alias_pbmode_" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis());
 
         Map params = new HashMap<String, Object>(4);
         params.put("name", dicAlias.getName());

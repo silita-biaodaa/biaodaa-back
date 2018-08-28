@@ -1,8 +1,6 @@
 package com.silita.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -53,112 +51,82 @@ public class DataHandlingUtil {
     }
 
     /**
-     * 根据省份生成代码
-     * @param province
+     * 返回开标人员
      * @return
      */
-    public static String getCode(String province) {
-        String tabCode = "";
-        switch (province) {
-            case "广西壮族自治区":
-                tabCode = "guangx";
-                break;
-            case "江西省":
-                tabCode = "jiangx";
-                break;
-            case "贵州省":
-                tabCode = "guiz";
-                break;
-            case "吉林省":
-                tabCode = "jil";
-                break;
-            case "河北省":
-                tabCode = "hebei";
-                break;
-            case "四川省":
-                tabCode = "sichuan";
-                break;
-            case "天津市":
-                tabCode = "tianj";
-                break;
-            case "甘肃省":
-                tabCode = "gans";
-                break;
-            case "黑龙江省":
-                tabCode = "heilj";
-                break;
-            case "青海省":
-                tabCode = "qingh";
-                break;
-            case "西藏自治区":
-                tabCode = "xizang";
-                break;
-            case "安徽省":
-                tabCode = "anh";
-                break;
-            case "北京市":
-                tabCode = "beij";
-                break;
-            case "福建省":
-                tabCode = "fuj";
-                break;
-            case "浙江省":
-                tabCode = "zhej";
-                break;
-            case "河南省":
-                tabCode = "henan";
-                break;
-            case "江苏省":
-                tabCode = "jiangs";
-                break;
-            case "内蒙古自治区":
-                tabCode = "neimg";
-                break;
-            case "宁夏回族自治区":
-                tabCode = "ningx";
-                break;
-            case "山东省":
-                tabCode = "shand";
-                break;
-            case "山西省":
-                tabCode = "sanx";
-                break;
-            case "海南省":
-                tabCode = "hain";
-                break;
-            case "上海市":
-                tabCode = "shangh";
-                break;
-            case "广东省":
-                tabCode = "guangd";
-                break;
-            case "新疆维吾尔自治区":
-                tabCode = "xinjiang";
-                break;
-            case "云南省":
-                tabCode = "yunn";
-                break;
-            case "陕西省":
-                tabCode = "shanxi";
-                break;
-            case "湖北省":
-                tabCode = "hubei";
-                break;
-            case "湖南省":
-                tabCode = "hunan";
-                break;
-            case "辽宁省":
-                tabCode = "liaon";
-                break;
-            case "重庆市":
-                tabCode = "chongq";
-                break;
-            default:
-                tabCode = null;
-                break;
-        }
-        return tabCode;
+    public static List<String> getBidOpeningPersonnel() {
+        List result = new ArrayList<String>(10);
+        result.add("法定代表人");
+        result.add("项目负责人");
+        result.add("授权委托人");
+        result.add("法定代表人和项目负责人");
+        result.add("法定代表人和授权委托人");
+        result.add("项目负责人和授权委托人");
+        result.add("法定代表人或项目负责人");
+        result.add("法定代表人或授权委托人");
+        result.add("项目负责人或授权委托人");
+        return result;
     }
+
+    /**
+     * 返回项目类型
+     * @return
+     */
+    public static List<String> getProjectType() {
+        List result = new ArrayList<String>(10);
+        result.add("建筑工程");
+        result.add("市政公用工程");
+        result.add("水利水电工程");
+        result.add("公路工程");
+        return result;
+    }
+
+    /**
+     * 返回招标类型
+     * @return
+     */
+    public static List<String> getBiddingType() {
+        List result = new ArrayList<String>(10);
+        result.add("施工");
+        result.add("设计");
+        result.add("监理");
+        result.add("设计");
+        result.add("勘察");
+        return result;
+    }
+
+    /**
+     * 返回平台备案要求
+     * @return
+     */
+    public static List<String> getFilingRequirements() {
+        List result = new ArrayList<String>(10);
+        result.add("无");
+        result.add("长沙公共资源交易电子服务平台");
+        result.add("湖南省水利建设市场信用信息平台");
+        result.add("全国水利建设市场信用信息平台");
+        result.add("湘潭市公共资源交易中心");
+        result.add("湘西州公共资源交易网");
+        result.add("湖南省交通运输厅公路建设市场信用信息管理系统");
+        result.add("全国公路建设市场信用信息管理系统");
+        return result;
+    }
+
+    /**
+     * 返回招标状态
+     * @return
+     */
+    public static List<String> getBiddingStatus() {
+        List result = new ArrayList<String>(10);
+        result.add("流标");
+        result.add("暂停");
+        result.add("中止");
+        result.add("终止");
+        result.add("废标");
+        result.add("延期");
+        return result;
+    }
+
 
     /**
      * 生成uuid

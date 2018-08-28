@@ -67,4 +67,11 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      */
     List<DicCommon> listDicCommonByIds(Object[] ids);
 
+    /**
+     * 根据type获取公共数据词典表name字段（）
+     * @param dicCommon
+     * @return
+     */
+    List<String> listDicCommonNameByType(DicCommon dicCommon);
+
 }
