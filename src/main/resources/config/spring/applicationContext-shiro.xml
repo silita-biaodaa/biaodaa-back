@@ -4,9 +4,9 @@
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
 
-    <!-- 配置ehcache 二级缓存-->
-    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManagerConfigFile" value="classpath:config/cache/shiro-ehcache.xml"></property>
+    <!-- 配置shiroEhcache缓存 -->
+    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManager" ref="ehcacheManagerFactoryBean"/>
     </bean>
 
     <!-- 注入自己定义Realm-->
@@ -42,7 +42,7 @@
         <property name="subjectDAO" ref="subjectDAO"/>
         <property name="sessionManager" ref="sessionManager"/>
         <property name="subjectFactory" ref="subjectFactory"/>
-        <property name="cacheManager" ref="cacheManager"/>
+        <property name="cacheManager" ref="shiroCacheManager"/>
     </bean>
 
     <!-- 自定义过滤器 -->

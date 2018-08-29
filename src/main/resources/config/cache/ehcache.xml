@@ -1,6 +1,5 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<ehcache name="shirocache">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
     <diskStore path="java.io.tmpdir"/>
 
     <defaultCache
@@ -19,6 +18,7 @@
                statistics="true">
         </cache> -->
 
+    <!-- shiro授权缓存 -->
     <cache name="authorizationCache"
            maxElementsInMemory="2000"
            eternal="false"
@@ -27,7 +27,17 @@
            overflowToDisk="false">
     </cache>
 
+    <!-- shiro认证缓存 -->
     <cache name="authenticationCache"
+           maxElementsInMemory="2000"
+           eternal="false"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="0"
+           overflowToDisk="false">
+    </cache>
+
+    <!-- 公告编辑死数据缓存 -->
+    <cache name="TwfDictNameCache"  maxEntriesLocalHeap="1000"
            maxElementsInMemory="2000"
            eternal="false"
            timeToIdleSeconds="1800"

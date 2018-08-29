@@ -1,10 +1,11 @@
 package com.silita.service.impl;
 
 import com.silita.dao.DicCommonMapper;
+import com.silita.dao.TwfDictMapper;
 import com.silita.model.DicCommon;
 import com.silita.service.IBulletinService;
-import com.silita.utils.DataHandlingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,15 +23,18 @@ public class BulletinServiceImpl implements IBulletinService {
 
     @Autowired
     DicCommonMapper dicCommonMapper;
+    @Autowired
+    TwfDictMapper twfDictMapper;
 
     @Override
+    @Cacheable(value="TwfDictNameCache")
     public Map<String, String> listFixedEditData() {
         Map result = new HashMap<String, Object>();
-        result.put("bidOpeningPersonnel", DataHandlingUtil.getBidOpeningPersonnel());
-        result.put("projectType", DataHandlingUtil.getProjectType());
-        result.put("biddingType", DataHandlingUtil.getBiddingType());
-        result.put("filingRequirements", DataHandlingUtil.getFilingRequirements());
-        result.put("biddingStatus", DataHandlingUtil.getBiddingStatus());
+        result.put("bidOpeningPersonnel", twfDictMapper.listTwfDictNameByType(3));
+        result.put("projectType", twfDictMapper.listTwfDictNameByType(4));
+        result.put("biddingType", twfDictMapper.listTwfDictNameByType(5));
+        result.put("filingRequirements", twfDictMapper.listTwfDictNameByType(6));
+        result.put("biddingStatus", twfDictMapper.listTwfDictNameByType(7));
         return result;
     }
 
