@@ -1,9 +1,15 @@
 package com.silita.service.impl;
 
 import com.silita.dao.DicCommonMapper;
+import com.silita.dao.SysAreaMapper;
+import com.silita.dao.TbNtMianMapper;
 import com.silita.dao.TwfDictMapper;
 import com.silita.model.DicCommon;
-import com.silita.service.IBulletinService;
+import com.silita.model.SysArea;
+import com.silita.model.TbNtMian;
+import com.silita.service.INoticeZhaoBiaoService;
+import com.silita.service.abs.AbstractService;
+import com.silita.utils.DataHandlingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,13 +24,17 @@ import java.util.Map;
  * Author: gemingyi
  * Date: 2018-08-27 16:52
  */
-@Service("bulletinService")
-public class BulletinServiceImpl implements IBulletinService {
+@Service("noticeZhaoBiaoService")
+public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INoticeZhaoBiaoService {
 
     @Autowired
     DicCommonMapper dicCommonMapper;
     @Autowired
     TwfDictMapper twfDictMapper;
+    @Autowired
+    TbNtMianMapper tbNtMianMapper;
+    @Autowired
+    SysAreaMapper sysAreaMapper;
 
     @Override
     @Cacheable(value="TwfDictNameCache")
@@ -39,10 +49,29 @@ public class BulletinServiceImpl implements IBulletinService {
     }
 
     @Override
+    public Map<String, Object> listBulletinStatus() {
+        return DataHandlingUtil.getBulletinStatus();
+    }
+
+    @Override
     public List<String> listDicCommonNameByType(DicCommon dicCommon) {
         String type = dicCommon.getType();
         dicCommon.setType(type + "_pbmode");
         return dicCommonMapper.listDicCommonNameByType(dicCommon);
+    }
+
+    @Override
+    public List<Map<String, Object>> listSysAreaByParentId(SysArea sysArea) {
+        return sysAreaMapper.listSysAreaByParentId(sysArea);
+    }
+
+    @Override
+    public Map<String, Object> listNtMain(TbNtMian tbNtMian) {
+        tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+        Map result = new HashMap<String, Object>();
+        result.put("datas", tbNtMianMapper.listNtMain(tbNtMian));
+        result.put("total", tbNtMianMapper.countNtMian(tbNtMian));
+        return super.handlePageCount(result, tbNtMian);
     }
 
 }

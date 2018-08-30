@@ -1,5 +1,7 @@
 package com.silita.utils;
 
+import com.silita.model.TbNtMian;
+
 import java.util.*;
 
 /**
@@ -140,6 +142,35 @@ public class DataHandlingUtil {
             e.printStackTrace();
         }
         return uuid;
+    }
+
+    /**
+     * 拼接表名称
+     * @param model
+     * @param source
+     * @return
+     */
+    public static String SplicingTable(Class<?> model, String source) {
+        String tableName = null;
+        if(model.getClass().isInstance(TbNtMian.class)) {
+            tableName = "tb_nt_mian_" + source;
+        }
+        return tableName;
+    }
+
+    /**
+     * 公告状态
+     * @return
+     */
+    public static Map<String, Object> getBulletinStatus() {
+        Map map = new HashMap<String, String>(10);
+        map.put("all", "");
+        map.put("edited", "1");
+        map.put("unedited", "0");
+        map.put("audited", "2");
+        map.put("unaudited", "3");
+        map.put("notAudited", "4");
+        return map;
     }
 
 }

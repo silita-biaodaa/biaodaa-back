@@ -39,6 +39,8 @@ public abstract class AbstractService {
             pageCount = total / page.getPageSize() + 1;
         }
         params.put("pageCount", pageCount);
+        params.put("pageSize", page.getPageSize());
+        params.put("currentPage", page.getCurrentPage());
         return params;
     }
 
