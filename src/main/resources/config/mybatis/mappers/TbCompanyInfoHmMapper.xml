@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbCompanyInfoHmMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyInfoHm">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="com_name" property="comName" jdbcType="VARCHAR"/>
+        <result column="data_status" property="dataStatus" jdbcType="VARCHAR"/>
+        <result column="com_address" property="comAddress" jdbcType="VARCHAR"/>
+        <result column="credit_code" property="creditCode" jdbcType="VARCHAR"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryCompanyCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbCompanyInfoHm">
+        select count(1)
+        from tb_company_info_hm
+        where 1=1
+        <if test="comName != null and comName != ''">
+            and com_name = #{comName}
+        </if>
+        <if test="creditCode != null and creditCode != ''">
+            and credit_code = #{creditCode}
+        </if>
+        <if test="pkid != null and pkid != ''">
+            and pkid != #{pkid}
+        </if>
+        order by created desc
+    </select>
+
+    <select id="queryCompanyInfoHmList" resultMap="BaseResultMap" parameterType="com.silita.model.TbCompanyInfoHm">
+    select *
+    from tb_company_info_hm
+    order by created desc
+    limit #{start},#{pageSize}
+  </select>
+
+    <insert id="insertCompanyInfo" parameterType="com.silita.model.TbCompanyInfoHm">
+        INSERT INTO `tb_company_info_hm`
+        (
+        <if test="pkid != null and pkid != ''">
+            `pkid`,
+        </if>
+        <if test="comName != null and comName != ''">
+            `com_name`,
+        </if>
+        <if test="dataStatus != null and dataStatus != ''">
+            `data_status`,
+        </if>
+        <if test="comAddress != null and comAddress != ''">
+            `com_address`,
+        </if>
+        <if test="creditCode != null and creditCode != ''">
+            `credit_code`,
+        </if>
+        <if test="updated != null">
+            `updated`,
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            `update_by`
+        </if>
+        <if test="created != null">
+            `created`,
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by`
+        </if>
+        )
+        VALUES (
+        <if test="pkid != null and pkid != ''">
+            #{pkid},
+        </if>
+        <if test="comName != null and comName != ''">
+            #{comName},
+        </if>
+        <if test="dataStatus != null and dataStatus != ''">
+            #{dataStatus},
+        </if>
+        <if test="comAddress != null and comAddress != ''">
+            #{comAddress},
+        </if>
+        <if test="creditCode != null and creditCode != ''">
+            #{creditCode},
+        </if>
+        <if test="updated != null">
+            #{updated},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            #{updateBy},
+        </if>
+        <if test="created != null">
+            #{created},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            #{createBy}
+        </if>
+        )
+    </insert>
+
+    <update id="updateCompanyInfo" parameterType="com.silita.model.TbCompanyInfoHm">
+        UPDATE `tb_company_info_hm`
+        SET
+        <if test="comName != null and comName != ''">
+            `com_name` = #{comName},
+        </if>
+        <if test="dataStatus != null and dataStatus != ''">
+            `data_status` = #{dataStatus},
+        </if>
+        <if test="comAddress != null and comAddress != ''">
+            `com_address` = #{comAddress},
+        </if>
+        <if test="creditCode != null and creditCode != ''">
+            `credit_code` = #{creditCode},
+        </if>
+        <if test="created != null">
+            `created` = #{created},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by` = #{createBy},
+        </if>
+        <if test="updated != null">
+            `updated` = #{updated},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            `update_by` = #{updateBy}
+        </if>
+        WHERE `pkid` = #{pkid}
+    </update>
+
+    <delete id="deleteCompanyInfo" parameterType="java.lang.String">
+        DELETE
+        FROM `tb_company_info_hm`
+        WHERE `pkid` = #{pkid}
+    </delete>
+</mapper>

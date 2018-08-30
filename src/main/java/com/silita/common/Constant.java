@@ -144,4 +144,14 @@ public class Constant {
      * 无法删除，请检查该信息的关联关系 msg
      */
     public static String MSG_WARN_407 = "无法删除，请检查该信息的关联关系!";
+
+    /**
+     * 数据状态 0:未抓取
+     */
+    public static String DATA_STATUS_0 = "0";
+
+    /**
+     * 数据状态 1:已抓取
+     */
+    public static String DATA_STATUS_1 = "1";
 }

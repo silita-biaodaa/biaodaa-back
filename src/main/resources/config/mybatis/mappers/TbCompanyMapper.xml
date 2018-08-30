@@ -63,4 +63,16 @@
         order by created desc
         limit #{start}, #{pageSize}
     </select>
+
+    <select id="queryComCount" parameterType="com.silita.model.TbCompanyInfoHm" resultType="java.lang.Integer">
+        select count(1)
+        from tb_company
+        where 1=1
+        <if test="comName != null and comName != ''">
+            and com_name =  #{comName}
+        </if>
+        <if test="creditCode != null and creditCode != ''">
+            and credit_code = #{creditCode}
+        </if>
+    </select>
 </mapper>
