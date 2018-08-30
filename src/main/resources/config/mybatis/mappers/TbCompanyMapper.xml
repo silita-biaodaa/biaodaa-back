@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbCompanyMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.TbCompany">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="com_id" property="comId" jdbcType="VARCHAR"/>
+        <result column="md5" property="md5" jdbcType="VARCHAR"/>
+        <result column="com_name_py" property="comNamePy" jdbcType="VARCHAR"/>
+        <result column="com_name" property="comName" jdbcType="VARCHAR"/>
+        <result column="credit_code" property="creditCode" jdbcType="VARCHAR"/>
+        <result column="org_code" property="orgCode" jdbcType="VARCHAR"/>
+        <result column="business_num" property="businessNum" jdbcType="VARCHAR"/>
+        <result column="regis_address" property="regisAddress" jdbcType="VARCHAR"/>
+        <result column="com_address" property="comAddress" jdbcType="VARCHAR"/>
+        <result column="legal_person" property="legalPerson" jdbcType="VARCHAR"/>
+        <result column="economic_type" property="economicType" jdbcType="VARCHAR"/>
+        <result column="regis_capital" property="regisCapital" jdbcType="VARCHAR"/>
+        <result column="skill_leader" property="skillLeader" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="px" property="px" jdbcType="INTEGER"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="range" property="range" jdbcType="LONGVARCHAR"/>
+        <result column="logo" property="logo" jdbcType="LONGVARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="VARCHAR"/>
+        <result column="update_date" property="updateDate" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryCompanyCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbCompany">
+        select count(1)
+        from tb_company
+        where 1=1
+        <if test="comName != null and comName != ''">
+            and com_name like CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="regisAddress != null and regisAddress != ''">
+            and regis_address = #{regisAddress}
+        </if>
+        <if test="city != null and city != ''">
+            and city like CONCAT('%', #{city}, '%')
+        </if>
+        order by created desc
+    </select>
+
+    <select id="queryCompanyList" parameterType="com.silita.model.TbCompany" resultMap="BaseResultMap">
+        select *
+              ,DATE_FORMAT(created, '%Y年%m月%h日') as create_date
+              ,DATE_FORMAT(updated, '%Y年%m月%h日') as update_date
+        from tb_company
+        where 1=1
+        <if test="comName != null and comName != ''">
+            and com_name like CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="regisAddress != null and regisAddress != ''">
+            and regis_address = #{regisAddress}
+        </if>
+        <if test="city != null and city != ''">
+            and city like CONCAT('%', #{city}, '%')
+        </if>
+        order by created desc
+        limit #{start}, #{pageSize}
+    </select>
+</mapper>
