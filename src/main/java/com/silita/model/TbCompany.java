@@ -118,4 +118,14 @@ public class TbCompany extends Pagination {
      * 修改时间
      */
     private String updateDate;
+
+    /**
+     * 变更后企业名称
+     */
+    private String changeComName;
+
+    /**
+     * 变更后统一信用代码
+     */
+    private String changeCreditCode;
 }

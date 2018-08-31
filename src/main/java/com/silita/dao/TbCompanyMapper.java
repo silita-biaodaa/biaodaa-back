@@ -5,6 +5,7 @@ import com.silita.model.TbCompanyInfoHm;
 import com.silita.utils.MyMapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbCompanyMapper extends MyMapper<TbCompany> {
 
@@ -29,5 +30,10 @@ public interface TbCompanyMapper extends MyMapper<TbCompany> {
      */
     Integer queryComCount(TbCompanyInfoHm companyInfoHm);
 
-
+    /**
+     * 根据企业id获取变更信息
+     * @param param
+     * @return
+     */
+    List<TbCompany> queryCompanyDetail(Map<String,Object> param);
 }

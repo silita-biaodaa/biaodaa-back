@@ -4,6 +4,7 @@ import com.silita.model.TbCompanyInfoHm;
 import com.silita.utils.MyMapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbCompanyInfoHmMapper extends MyMapper<TbCompanyInfoHm> {
 

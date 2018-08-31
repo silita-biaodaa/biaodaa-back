@@ -16,6 +16,11 @@ public class TbCompanyInfoHm extends Pagination {
     private String pkid;
 
     /**
+     * 关联企业ID
+     */
+    private String comId;
+
+    /**
      * 企业名称
      */
     private String comName;
@@ -64,4 +69,5 @@ public class TbCompanyInfoHm extends Pagination {
      * 更新时间
      */
     private String updateDate;
+
 }

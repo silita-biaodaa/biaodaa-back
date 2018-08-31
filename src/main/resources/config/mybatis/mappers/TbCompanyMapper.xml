@@ -27,6 +27,8 @@
         <result column="logo" property="logo" jdbcType="LONGVARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="VARCHAR"/>
         <result column="update_date" property="updateDate" jdbcType="VARCHAR"/>
+        <result column="change_com_name" property="changeComName" jdbcType="VARCHAR"/>
+        <result column="change_credit_code" property="changeCreditCode" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryCompanyCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbCompany">
@@ -74,5 +76,17 @@
         <if test="creditCode != null and creditCode != ''">
             and credit_code = #{creditCode}
         </if>
+    </select>
+
+    <select id="queryCompanyDetailHm" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select t.*
+                ,DATE_FORMAT(t1.created, '%Y-%m-%h') as create_date
+                ,DATE_FORMAT(t1.updated, '%Y-%m-%h') as update_date
+                ,t1.com_name as change_com_name
+                ,t1.credit_code as change_credit_code
+                ,t1.pkid as changePkid
+        from tb_company t
+        left join tb_company_info_hm t1 on t1.com_id = t.com_id
+        where t.com_id = #{comId}
     </select>
 </mapper>

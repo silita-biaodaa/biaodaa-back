@@ -6,6 +6,7 @@
           WARNING - @mbg.generated
         -->
         <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="com_id" property="comId" jdbcType="VARCHAR"/>
         <result column="com_name" property="comName" jdbcType="VARCHAR"/>
         <result column="data_status" property="dataStatus" jdbcType="VARCHAR"/>
         <result column="com_address" property="comAddress" jdbcType="VARCHAR"/>
@@ -49,6 +50,9 @@
         <if test="pkid != null and pkid != ''">
             `pkid`,
         </if>
+        <if test="comId != null and comId != ''">
+            `com_id`,
+        </if>
         <if test="comName != null and comName != ''">
             `com_name`,
         </if>
@@ -77,6 +81,9 @@
         VALUES (
         <if test="pkid != null and pkid != ''">
             #{pkid},
+        </if>
+        <if test="comId != null and comId != ''">
+            #{comId},
         </if>
         <if test="comName != null and comName != ''">
             #{comName},
@@ -108,6 +115,9 @@
     <update id="updateCompanyInfo" parameterType="com.silita.model.TbCompanyInfoHm">
         UPDATE `tb_company_info_hm`
         SET
+        <if test="comId != null and comId != ''">
+            `com_id` = #{comId},
+        </if>
         <if test="comName != null and comName != ''">
             `com_name` = #{comName},
         </if>
@@ -140,4 +150,5 @@
         FROM `tb_company_info_hm`
         WHERE `pkid` = #{pkid}
     </delete>
+
 </mapper>
