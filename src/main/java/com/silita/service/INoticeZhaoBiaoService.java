@@ -34,7 +34,7 @@ public interface INoticeZhaoBiaoService {
      * @param dicCommon
      * @return
      */
-    List<String> listDicCommonNameByType(DicCommon dicCommon);
+    List<Map<String, Object>> listDicCommonNameByType(DicCommon dicCommon);
 
     /**
      * 根据area_parent_id获取地区数据

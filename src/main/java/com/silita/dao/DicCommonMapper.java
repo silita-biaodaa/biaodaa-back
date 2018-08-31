@@ -72,6 +72,6 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @param dicCommon
      * @return
      */
-    List<String> listDicCommonNameByType(DicCommon dicCommon);
+    List<Map<String, Object>> listDicCommonNameByType(DicCommon dicCommon);
 
 }

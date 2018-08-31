@@ -108,8 +108,8 @@
         </where>
     </select>
 
-    <select id="listDicCommonNameByType" parameterType="com.silita.model.DicCommon" resultType="String">
-        SELECT name
+    <select id="listDicCommonNameByType" parameterType="com.silita.model.DicCommon" resultType="Map">
+        SELECT `name`, `code`
         FROM dic_common WHERE `type` = #{type}
         LIMIT #{start}, #{pageSize}
     </select>

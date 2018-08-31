@@ -153,9 +153,9 @@ public class DataHandlingUtil {
      */
     public static String SplicingTable(Class<?> model, String source) {
         String tableName = null;
-        if(model.getClass().isInstance(TbNtMian.class)) {
+        if(model.getName().equals(TbNtMian.class.getName())) {
             tableName = "tb_nt_mian_" + source;
-        } else if(model.getClass().isInstance(TbNtTenders.class)) {
+        } else if(model.getName().equals(TbNtTenders.class.getName())) {
             tableName = "tb_nt_tenders_" + source;
         }
         return tableName;

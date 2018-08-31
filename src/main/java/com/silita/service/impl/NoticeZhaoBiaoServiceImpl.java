@@ -54,7 +54,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     }
 
     @Override
-    public List<String> listDicCommonNameByType(DicCommon dicCommon) {
+    public List<Map<String, Object>> listDicCommonNameByType(DicCommon dicCommon) {
         String type = dicCommon.getType();
         dicCommon.setType(type + "_pbmode");
         return dicCommonMapper.listDicCommonNameByType(dicCommon);
@@ -86,6 +86,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
         if(count == 0) {
+            tbNtTenders.setPkid(DataHandlingUtil.getUUID());
             tbNtTendersMapper.insertNtTenders(tbNtTenders);
             msg = "添加标段成功！";
         }

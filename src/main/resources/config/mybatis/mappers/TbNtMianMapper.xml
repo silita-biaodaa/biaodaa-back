@@ -3,7 +3,7 @@
 <mapper namespace="com.silita.dao.TbNtMianMapper">
 
     <select id="listNtMain" parameterType="com.silita.model.TbNtMian" resultType="Map">
-        SELECT `pkid`, `title`, `pub_date`, `src_site`, `nt_status`
+        SELECT `pkid`, `title`, `pub_date` AS pubDate, `src_site` AS srcSite, `nt_status` AS ntStatus
         FROM ${tableName}
         WHERE 1=1
         <if test="proviceCode !=null and proviceCode!=''">
@@ -28,7 +28,7 @@
             AND nt_category = #{ntCategory}
         </if>
         <choose>
-            <when test="ntStatus =='3'">
+            <when test="ntStatus =='3' or ntStatus ==3">
                 AND nt_status != 2
             </when>
             <when test="ntStatus !=null and ntStatus!=''">
@@ -67,7 +67,7 @@
             AND nt_category = #{ntCategory}
         </if>
         <choose>
-            <when test="ntStatus =='3'">
+            <when test="ntStatus =='3' or ntStatus ==3">
                 AND nt_status != 2
             </when>
             <when test="ntStatus !=null and ntStatus!=''">
