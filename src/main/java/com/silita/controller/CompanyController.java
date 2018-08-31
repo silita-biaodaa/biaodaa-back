@@ -93,13 +93,26 @@ public class CompanyController extends BaseController {
     /**
      * 保存统一信用代码
      *
-     * @param param
+     * @param companyInfoHm
      * @return
      */
     @RequestMapping(value = "/creditCode/save", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String, Object> creditCodeSave(@RequestBody Map<String, Object> param) {
-        return successMap(companyService.getCreditCode(param));
+    public Map<String, Object> creditCodeSave(@RequestBody TbCompanyInfoHm companyInfoHm, ServletRequest request) {
+        return companyInfoHmService.saveCreditCode(companyInfoHm,JWTUtil.getUsername(request));
+    }
+
+    /**
+     * 删除统一信用代码
+     *
+     * @param companyInfoHm
+     * @return
+     */
+    @RequestMapping(value = "/creditCode/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> creditCodeDel(@RequestBody TbCompanyInfoHm companyInfoHm, ServletRequest request) {
+        companyInfoHmService.delCreditCode(companyInfoHm);
+        return successMap(null);
     }
 
     /**
@@ -112,5 +125,30 @@ public class CompanyController extends BaseController {
     @ResponseBody
     public Map<String, Object> comNameCodeDetail(@RequestBody Map<String, Object> param) {
         return successMap(companyService.getComNameList(param));
+    }
+
+    /**
+     * 保存企业名称
+     *
+     * @param companyInfoHm
+     * @return
+     */
+    @RequestMapping(value = "/comName/save", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> comNameSave(@RequestBody TbCompanyInfoHm companyInfoHm, ServletRequest request) {
+        return companyInfoHmService.saveComName(companyInfoHm,JWTUtil.getUsername(request));
+    }
+
+    /**
+     * 删除企业名称
+     *
+     * @param pkid
+     * @return
+     */
+    @RequestMapping(value = "/comName/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> comNameDel(@RequestBody String pkid) {
+        companyInfoHmService.delCompanyInfo(pkid);
+        return successMap(null);
     }
 }

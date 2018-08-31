@@ -45,6 +45,7 @@ public class CompanyServiceImpl extends AbstractService implements ICompanyServi
 
     @Override
     public List<TbCompany> getComNameList(Map<String, Object> param) {
+        param.put("type","comName");
         return tbCompanyMapper.queryCompanyDetail(param);
     }
 }

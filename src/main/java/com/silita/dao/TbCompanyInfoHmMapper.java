@@ -42,4 +42,32 @@ public interface TbCompanyInfoHmMapper extends MyMapper<TbCompanyInfoHm> {
      * @return
      */
     Integer deleteCompanyInfo(String pkid);
+
+    /**
+     * 查询企业个数根据comid
+     * @param param
+     * @return
+     */
+    Integer queryCompanyCountByComId(Map<String,Object> param);
+
+    /**
+     * 修改企业信息根据comid
+     * @param companyInfoHm
+     * @return
+     */
+    int updateCompanyByComId(TbCompanyInfoHm companyInfoHm);
+
+    /**
+     * 删除统一信用代码(逻辑删除)
+     * @param comId
+     * @return
+     */
+    int delCompanyCreditCode(String comId);
+
+    /**
+     * 查询统一信用代码
+     * @param companyInfoHm
+     * @return
+     */
+    TbCompanyInfoHm queryCompanyCreditCode(TbCompanyInfoHm companyInfoHm);
 }

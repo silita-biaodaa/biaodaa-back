@@ -36,6 +36,11 @@ public class TbCompanyInfoHm extends Pagination {
     private String comAddress;
 
     /**
+     * 变更时间
+     */
+    private String changeTime;
+
+    /**
      * 信用代码
      */
     private String creditCode;

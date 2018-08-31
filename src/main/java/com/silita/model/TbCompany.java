@@ -128,4 +128,14 @@ public class TbCompany extends Pagination {
      * 变更后统一信用代码
      */
     private String changeCreditCode;
+
+    /**
+     * 变更时间
+     */
+    private String changeTime;
+
+    /**
+     * 来源
+     */
+    private String source;
 }

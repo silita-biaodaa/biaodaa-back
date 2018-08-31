@@ -72,6 +72,83 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
         companyInfoHmMapper.deleteCompanyInfo(pkid);
     }
 
+    @Override
+    public Map<String, Object> saveCreditCode(TbCompanyInfoHm companyInfoHm,String username) {
+        //校验信用代码是否存在
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap = checkCompany(companyInfoHm, "add");
+        if (MapUtils.isNotEmpty(resultMap)) {
+            return resultMap;
+        }
+        //查询是否存在该企业的记录
+        Map<String,Object> param = new HashMap<>();
+        param.put("comId",companyInfoHm.getComId());
+        param.put("changeCreditCode",companyInfoHm.getCreditCode());
+        Integer count = companyInfoHmMapper.queryCompanyCountByComId(param);
+        if(count > 0){
+            companyInfoHm.setUpdateBy(username);
+            companyInfoHm.setUpdated(new Date());
+            companyInfoHmMapper.updateCompanyByComId(companyInfoHm);
+            resultMap.put("code",Constant.CODE_SUCCESS);
+            resultMap.put("msg",Constant.MSG_SUCCESS);
+            resultMap.put("data",param);
+            return resultMap;
+        }
+        companyInfoHm.setCreateBy(username);
+        companyInfoHm.setCreated(new Date());
+        companyInfoHm.setDataStatus(Constant.DATA_STATUS_0);
+        companyInfoHm.setPkid(DataHandlingUtil.getUUID());
+        companyInfoHmMapper.insertCompanyInfo(companyInfoHm);
+        resultMap.put("code",Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.MSG_SUCCESS);
+        resultMap.put("data",param);
+        return null;
+    }
+
+    @Override
+    public void delCreditCode(TbCompanyInfoHm companyInfoHm) {
+        companyInfoHmMapper.delCompanyCreditCode(companyInfoHm.getComId());
+    }
+
+    @Override
+    public Map<String, Object> saveComName(TbCompanyInfoHm companyInfoHm, String username) {
+        //校验名称
+        Map<String,Object> resultMap = checkCompany(companyInfoHm,"add");
+        if(MapUtils.isNotEmpty(resultMap)){
+            return resultMap;
+        }
+        TbCompanyInfoHm companyInfo = companyInfoHmMapper.queryCompanyCreditCode(companyInfoHm);
+        if(null != companyInfo){
+            companyInfoHm.setPkid(companyInfo.getPkid());
+            companyInfoHm.setUpdateBy(username);
+            companyInfoHm.setUpdated(new Date());
+            companyInfoHmMapper.updateCompanyInfo(companyInfoHm);
+            resultMap = new HashMap<>();
+            resultMap.put("code",Constant.CODE_SUCCESS);
+            resultMap.put("msg",Constant.MSG_SUCCESS);
+            return  resultMap;
+        }
+        //查询统一信用代码
+        TbCompanyInfoHm comInfo = new TbCompanyInfoHm();
+        comInfo.setComName(companyInfoHm.getComName());
+        comInfo.setCreateBy(username);
+        comInfo.setCreated(new Date());
+        comInfo.setDataStatus(Constant.DATA_STATUS_0);
+        comInfo.setPkid(DataHandlingUtil.getUUID());
+        comInfo.setComId(companyInfoHm.getComId());
+        comInfo.setChangeTime(companyInfoHm.getChangeTime());
+        companyInfoHm.setComName(null);
+        companyInfo = companyInfoHmMapper.queryCompanyCreditCode(companyInfoHm);
+        if(null != companyInfo){
+            comInfo.setCreditCode(companyInfo.getCreditCode());
+        }
+        companyInfoHmMapper.insertCompanyInfo(comInfo);
+        resultMap = new HashMap<>();
+        resultMap.put("code",Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.MSG_SUCCESS);
+        return  resultMap;
+    }
+
     /**
      * 校验企业名称
      *

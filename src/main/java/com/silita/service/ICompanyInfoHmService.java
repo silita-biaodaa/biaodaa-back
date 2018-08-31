@@ -31,4 +31,26 @@ public interface ICompanyInfoHmService {
      * @param pkid
      */
     void delCompanyInfo(String pkid);
+
+    /**
+     * 保存统一信用代码
+     * @param companyInfoHm
+     * @return
+     */
+    Map<String,Object> saveCreditCode(TbCompanyInfoHm companyInfoHm,String username);
+
+    /**
+     * 删除统一信用代码
+     * @param companyInfoHm
+     */
+    void delCreditCode(TbCompanyInfoHm companyInfoHm);
+
+    /**
+     * 保存企业名称
+     *
+     * @param companyInfoHm
+     * @return
+     */
+    Map<String, Object> saveComName(TbCompanyInfoHm companyInfoHm, String username);
+
 }

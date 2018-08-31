@@ -17,6 +17,7 @@
         <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="VARCHAR"/>
         <result column="update_date" property="updateDate" jdbcType="VARCHAR"/>
+        <result column="change_time" property="changeTime" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryCompanyCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbCompanyInfoHm">
@@ -56,6 +57,9 @@
         <if test="comName != null and comName != ''">
             `com_name`,
         </if>
+        <if test="changeTime != null and changeTime != ''">
+            `change_time`,
+        </if>
         <if test="dataStatus != null and dataStatus != ''">
             `data_status`,
         </if>
@@ -87,6 +91,9 @@
         </if>
         <if test="comName != null and comName != ''">
             #{comName},
+        </if>
+        <if test="changeTime != null and changeTime != ''">
+            #{changeTime},
         </if>
         <if test="dataStatus != null and dataStatus != ''">
             #{dataStatus},
@@ -121,6 +128,9 @@
         <if test="comName != null and comName != ''">
             `com_name` = #{comName},
         </if>
+        <if test="changeTime != null and changeTime != ''">
+            `change_time` = #{changeTime},
+        </if>
         <if test="dataStatus != null and dataStatus != ''">
             `data_status` = #{dataStatus},
         </if>
@@ -151,4 +161,57 @@
         WHERE `pkid` = #{pkid}
     </delete>
 
+    <update id="updateCompanyByComId" parameterType="com.silita.model.TbCompanyInfoHm">
+        UPDATE `tb_company_info_hm`
+        SET
+        <if test="comName != null and comName != ''">
+            `com_name` = #{comName},
+        </if>
+        <if test="dataStatus != null and dataStatus != ''">
+            `data_status` = #{dataStatus},
+        </if>
+        <if test="changeTime != null and changeTime != ''">
+            `change_time` = #{changeTime},
+        </if>
+        <if test="comAddress != null and comAddress != ''">
+            `com_address` = #{comAddress},
+        </if>
+        <if test="creditCode != null and creditCode != ''">
+            `credit_code` = #{creditCode},
+        </if>
+        <if test="created != null">
+            `created` = #{created},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by` = #{createBy},
+        </if>
+        <if test="updated != null">
+            `updated` = #{updated},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            `update_by` = #{updateBy}
+        </if>
+        WHERE  `com_id` = #{comId}
+    </update>
+
+    <select id="queryCompanyCountByComId" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1)
+        from tb_company_info_hm
+        WHERE  `com_id` = #{comId}
+    </select>
+
+    <update id="delCompanyCreditCode" parameterType="java.lang.String">
+        UPDATE tb_company_info_hm SET `credit_code` = NULL WHERE  `com_id` = #{comId}
+    </update>
+
+    <select id="queryCompanyCreditCode" parameterType="com.silita.model.TbCompanyInfoHm" resultMap="BaseResultMap">
+        select *
+        from tb_company_info_hm
+        where com_id = #{comId}
+        <if test="comName != null and comName != ''">
+            and com_name is null
+        </if>
+        order by created desc
+        limit 1
+    </select>
 </mapper>
