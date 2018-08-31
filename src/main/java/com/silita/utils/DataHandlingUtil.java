@@ -1,6 +1,7 @@
 package com.silita.utils;
 
 import com.silita.model.TbNtMian;
+import com.silita.model.TbNtTenders;
 
 import java.util.*;
 
@@ -154,6 +155,8 @@ public class DataHandlingUtil {
         String tableName = null;
         if(model.getClass().isInstance(TbNtMian.class)) {
             tableName = "tb_nt_mian_" + source;
+        } else if(model.getClass().isInstance(TbNtTenders.class)) {
+            tableName = "tb_nt_tenders_" + source;
         }
         return tableName;
     }

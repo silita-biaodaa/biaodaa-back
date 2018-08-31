@@ -1,12 +1,10 @@
 package com.silita.service.impl;
 
-import com.silita.dao.DicCommonMapper;
-import com.silita.dao.SysAreaMapper;
-import com.silita.dao.TbNtMianMapper;
-import com.silita.dao.TwfDictMapper;
+import com.silita.dao.*;
 import com.silita.model.DicCommon;
 import com.silita.model.SysArea;
 import com.silita.model.TbNtMian;
+import com.silita.model.TbNtTenders;
 import com.silita.service.INoticeZhaoBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
@@ -35,6 +33,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtMianMapper tbNtMianMapper;
     @Autowired
     SysAreaMapper sysAreaMapper;
+    @Autowired
+    TbNtTendersMapper tbNtTendersMapper;
 
     @Override
     @Cacheable(value="TwfDictNameCache")
@@ -62,7 +62,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public List<Map<String, Object>> listSysAreaByParentId(SysArea sysArea) {
-        return sysAreaMapper.listSysAreaByParentId(sysArea);
+        return sysAreaMapper.listSysAreaByParentId(sysArea.getAreaParentId());
     }
 
     @Override
@@ -72,6 +72,30 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         result.put("datas", tbNtMianMapper.listNtMain(tbNtMian));
         result.put("total", tbNtMianMapper.countNtMian(tbNtMian));
         return super.handlePageCount(result, tbNtMian);
+    }
+
+    @Override
+    public void updateNtMainStatus(TbNtMian tbNtMian) {
+        tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+        tbNtMianMapper.updateNtMainCategoryAndStatusByPkId(tbNtMian);
+    }
+
+    @Override
+    public String insertNtTenders(TbNtTenders tbNtTenders) {
+        String msg = "";
+        tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+        Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
+        if(count == 0) {
+            tbNtTendersMapper.insertNtTenders(tbNtTenders);
+            msg = "添加标段成功！";
+        }
+        return msg;
+    }
+
+    @Override
+    public void updateNtTenders(TbNtTenders tbNtTenders) {
+        tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+        tbNtTendersMapper.updateNtTendersByPkId(tbNtTenders);
     }
 
 }

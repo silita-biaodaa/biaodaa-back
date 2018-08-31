@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbNtTendersMapper" >
+
+    <select id="countNtTendersByNtIdAndSegment">
+        SELECT COUNT(*) FROM ${tableName}
+        WHERE 1=1
+        <if test="ntId !=null and ntId!=''">
+            AND nt_id = #{ntId}
+        </if>
+        <if test="segment !=null and segment!=''">
+            AND segment = #{segment}
+        </if>
+    </select>
+
+    <insert id="insertNtTenders" parameterType="com.silita.model.TbNtTenders">
+        INSERT INTO ${tableName} (
+          `nt_id`, `edit_code`, `segment`, `pro_sum`, `enroll_addr`,
+          `opening_addr`, `enroll_end_time`, `bid_end_time`, `pb_mode`, `bid_bonds`,
+          `bid_bonds_end_time`, `keep_bonds`, `other_bonds`, `audit_time`, `opening_person`,
+          `opening_file_fee`, `other_fee`, `tenderee`, `tender_contact_person`, `tender_contact_info`,
+          `proxy_contact_person`, `proxy_contact_info`, `pro_person`, `social_security`, `achievement`,
+          `enroll_method`, `pro_duration`, `completion_time`, `is_flow`, `funds_provid`,
+          `created`, `create_by`
+        )
+        values (
+          #{ntId}, #{editCode}, #{segment}, #{proSum}, #{enrollAddr},
+          #{openingAddr}, #{enrollEndTime}, #{bidEndTime}, #{pbMode}, #{bidBonds},
+          #{bidBondsEndTime}, #{keepBonds}, #{otherBonds}, #{auditTime}, #{openingPerson}
+          #{openingFileFee}, #{otherFee}, #{tenderee}, #{tenderContactPerson}, #{tenderContactInfo}
+          #{proxyContactPerson}, #{proxyContactInfo}, #{proPerson}, #{socialSecurity}, #{achievement},
+          #{enrollMethod}, #{proDuration}, #{completionTime}, #{isFlow}, #{fundsProvid},
+          NOW(), #{createBy}
+        )
+    </insert>
+
+    <update id="updateNtTendersByPkId" parameterType="com.silita.model.TbNtTenders">
+      UPDATE ${tableName} SET
+        <if test="editCode !=null and editCode!=''">
+            `name` = #{name},
+        </if>
+        <if test="segment !=null and segment!=''">
+            `name` = #{name},
+        </if>
+        <if test="proSum !=null and proSum!=''">
+            `name` = #{name},
+        </if>
+        <if test="enrollAddr !=null and enrollAddr!=''">
+            `name` = #{name},
+        </if>
+        <if test="openingAddr !=null and openingAddr!=''">
+            `name` = #{name},
+        </if>
+        <if test="enrollEndTime !=null and enrollEndTime!=''">
+            `name` = #{name},
+        </if>
+        <if test="bidEndTime !=null and bidEndTime!=''">
+            `name` = #{name},
+        </if>
+        <if test="pbMode !=null and pbMode!=''">
+            `name` = #{name},
+        </if>
+        <if test="bidBonds !=null and bidBonds!=''">
+            `name` = #{name},
+        </if>
+        <if test="bidBondsEndTime !=null and bidBondsEndTime!=''">
+            `name` = #{name},
+        </if>
+        <if test="keepBonds !=null and keepBonds!=''">
+            `name` = #{name},
+        </if>
+        <if test="otherBonds !=null and otherBonds!=''">
+            `name` = #{name},
+        </if>
+        <if test="auditTime !=null and auditTime!=''">
+            `name` = #{name},
+        </if>
+        <if test="openingPerson !=null and openingPerson!=''">
+            `name` = #{name},
+        </if>
+        <if test="openingFileFee !=null and openingFileFee!=''">
+            `name` = #{name},
+        </if>
+        <if test="otherFee !=null and otherFee!=''">
+            `name` = #{name},
+        </if>
+        <if test="tenderee !=null and tenderee!=''">
+            `name` = #{name},
+        </if>
+        <if test="tenderContactPerson !=null and tenderContactPerson!=''">
+            `name` = #{name},
+        </if>
+        <if test="tenderContactInfo !=null and tenderContactInfo!=''">
+            `name` = #{name},
+        </if>
+        <if test="proxyContactPerson !=null and proxyContactPerson!=''">
+            `name` = #{name},
+        </if>
+        <if test="proxyContactInfo !=null and proxyContactInfo!=''">
+            `name` = #{name},
+        </if>
+        <if test="proPerson !=null and proPerson!=''">
+            `name` = #{name},
+        </if>
+        <if test="socialSecurity !=null and socialSecurity!=''">
+            `name` = #{name},
+        </if>
+        <if test="achievement !=null and achievement!=''">
+            `name` = #{name},
+        </if>
+        <if test="enrollMethod !=null and enrollMethod!=''">
+            `name` = #{name},
+        </if>
+        <if test="proDuration !=null and proDuration!=''">
+            `name` = #{name},
+        </if>
+        <if test="completionTime !=null and completionTime!=''">
+            `name` = #{name},
+        </if>
+        <if test="isFlow !=null and isFlow!=''">
+            `name` = #{name},
+        </if>
+        <if test="fundsProvid !=null and fundsProvid!=''">
+            `name` = #{name},
+        </if>
+        <if test="updateBy !=null and updateBy!=''">
+            `name` = #{name},
+        </if>
+        updated = NOW()
+    </update>
+</mapper>

@@ -3,41 +3,41 @@
 <mapper namespace="com.silita.dao.TbNtMianMapper">
 
     <select id="listNtMain" parameterType="com.silita.model.TbNtMian" resultType="Map">
-        SELECT `title`, `pub_date`, `src_site`, `nt_status`
+        SELECT `pkid`, `title`, `pub_date`, `src_site`, `nt_status`
         FROM ${tableName}
         WHERE 1=1
         <if test="proviceCode !=null and proviceCode!=''">
-          AND provice_code = #{proviceCode}
+            AND provice_code = #{proviceCode}
         </if>
         <if test="cityCode !=null and cityCode!=''">
-          AND city_code = #{cityCode}
+            AND city_code = #{cityCode}
         </if>
         <if test="countyCode !=null and countyCode!=''">
-          AND county_code = #{countyCode}
+            AND county_code = #{countyCode}
         </if>
         <if test="pubDate !=null and pubDate!=''">
-          AND pub_date &gt;= #{pubDate}
+            AND pub_date &gt;= #{pubDate}
         </if>
         <if test="pubEndDate !=null and pubEndDate!=''">
-          AND pub_date &lt;= #{pubEndDate}
+            AND pub_date &lt;= #{pubEndDate}
         </if>
         <if test="title !=null and title!=''">
-          AND title LIKE CONCAT('%', #{title}, '%')
+            AND title LIKE CONCAT('%', #{title}, '%')
         </if>
         <if test="ntCategory !=null and ntCategory!=''">
-          AND nt_category = #{ntCategory}
+            AND nt_category = #{ntCategory}
         </if>
         <choose>
-            <when test="ntStatus =3 or ntStatus!='3'">
+            <when test="ntStatus =='3'">
                 AND nt_status != 2
-            </when>
-            <when test="ntStatus =4 or ntStatus!='4'">
-                AND nt_status = #{ntStatus}
             </when>
             <when test="ntStatus !=null and ntStatus!=''">
                 AND nt_status = #{ntStatus}
             </when>
+            <otherwise>
+            </otherwise>
         </choose>
+        ORDER BY pub_date DESC
         LIMIT #{start}, #{pageSize}
     </select>
 
@@ -67,15 +67,14 @@
             AND nt_category = #{ntCategory}
         </if>
         <choose>
-            <when test="ntStatus =3 or ntStatus!='3'">
+            <when test="ntStatus =='3'">
                 AND nt_status != 2
-            </when>
-            <when test="ntStatus =4 or ntStatus!='4'">
-                AND nt_status = #{ntStatus}
             </when>
             <when test="ntStatus !=null and ntStatus!=''">
                 AND nt_status = #{ntStatus}
             </when>
+            <otherwise>
+            </otherwise>
         </choose>
     </select>
 

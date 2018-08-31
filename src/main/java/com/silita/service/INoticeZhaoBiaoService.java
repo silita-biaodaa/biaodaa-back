@@ -3,6 +3,7 @@ package com.silita.service;
 import com.silita.model.DicCommon;
 import com.silita.model.SysArea;
 import com.silita.model.TbNtMian;
+import com.silita.model.TbNtTenders;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  * Company: silita
  * Author: gemingyi
  * Date: 2018-08-27 16:52
- * 公告service
+ * 招标公告service
  */
 public interface INoticeZhaoBiaoService {
 
@@ -47,4 +48,22 @@ public interface INoticeZhaoBiaoService {
      * @return
      */
     Map<String, Object> listNtMain(TbNtMian tbNtMian);
+
+    /**
+     * 更新公告状态
+     * @param tbNtMian
+     */
+    void updateNtMainStatus(TbNtMian tbNtMian);
+
+    /**
+     * 添加招标公告标段
+     * @param tbNtTenders
+     */
+    String insertNtTenders(TbNtTenders tbNtTenders);
+
+    /**
+     * 更新招标公告标段
+     * @param tbNtTenders
+     */
+    void updateNtTenders(TbNtTenders tbNtTenders);
 }
