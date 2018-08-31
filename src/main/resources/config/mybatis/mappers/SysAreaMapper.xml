@@ -3,6 +3,18 @@
 <mapper namespace="com.silita.dao.SysAreaMapper" >
 
   <select id="listSysAreaByParentId" parameterType="String" resultType="Map">
-    SELECT * FROM sys_area WHERE area_parent_id = #{areaParentId}
+    SELECT
+      pkid as pkid
+      ,area_name as areaName
+      ,area_short_name as areaShortName
+      ,area_code as areaCode
+      ,area_level as areaLevel
+      ,area_parent_id as areaParentId
+      ,phone_code as phoneCode
+      ,created as created
+      ,create_by as createBy
+      ,updated as updated
+      ,update_by as updateBy
+    FROM sys_area WHERE area_parent_id = #{areaParentId}
   </select>
 </mapper>
