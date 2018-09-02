@@ -12,4 +12,10 @@ public interface SysAreaMapper {
      */
     List<Map<String, Object>> listSysAreaByParentId(String areaParentId);
 
+    /**
+     * 查询名称根据地区code
+     * @param code
+     * @return
+     */
+    String queryAreaName(String code);
 }

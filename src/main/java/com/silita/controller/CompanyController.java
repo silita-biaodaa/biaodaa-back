@@ -4,7 +4,11 @@ import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.model.TbCompany;
 import com.silita.model.TbCompanyInfoHm;
+import com.silita.model.TbCompanyQualification;
+import com.silita.model.TbCompanySecurityCert;
 import com.silita.service.ICompanyInfoHmService;
+import com.silita.service.ICompanyQualificationService;
+import com.silita.service.ICompanySecurityCertService;
 import com.silita.service.ICompanyService;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,10 @@ public class CompanyController extends BaseController {
     ICompanyService companyService;
     @Autowired
     ICompanyInfoHmService companyInfoHmService;
+    @Autowired
+    ICompanySecurityCertService companySecurityCertService;
+    @Autowired
+    ICompanyQualificationService companyQualificationService;
 
     /**
      * 企业列表
@@ -96,9 +104,9 @@ public class CompanyController extends BaseController {
      * @param companyInfoHm
      * @return
      */
-    @RequestMapping(value = "/creditCode/save", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/creditCode/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String, Object> creditCodeSave(@RequestBody TbCompanyInfoHm companyInfoHm, ServletRequest request) {
+    public Map<String, Object> creditCodeAdd(@RequestBody TbCompanyInfoHm companyInfoHm, ServletRequest request) {
         return companyInfoHmService.saveCreditCode(companyInfoHm,JWTUtil.getUsername(request));
     }
 
@@ -123,7 +131,7 @@ public class CompanyController extends BaseController {
      */
     @RequestMapping(value = "/comName/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String, Object> comNameCodeDetail(@RequestBody Map<String, Object> param) {
+    public Map<String, Object> comNameDetail(@RequestBody Map<String, Object> param) {
         return successMap(companyService.getComNameList(param));
     }
 
@@ -133,9 +141,9 @@ public class CompanyController extends BaseController {
      * @param companyInfoHm
      * @return
      */
-    @RequestMapping(value = "/comName/save", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/comName/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String, Object> comNameSave(@RequestBody TbCompanyInfoHm companyInfoHm, ServletRequest request) {
+    public Map<String, Object> comNameAdd(@RequestBody TbCompanyInfoHm companyInfoHm, ServletRequest request) {
         return companyInfoHmService.saveComName(companyInfoHm,JWTUtil.getUsername(request));
     }
 
@@ -149,6 +157,105 @@ public class CompanyController extends BaseController {
     @ResponseBody
     public Map<String, Object> comNameDel(@RequestBody String pkid) {
         companyInfoHmService.delCompanyInfo(pkid);
+        return successMap(null);
+    }
+
+    /**
+     * 安许证号
+     *
+     * @param companySecurityCert
+     * @return
+     */
+    @RequestMapping(value = "/certNo/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> certNoDetail(@RequestBody TbCompanySecurityCert companySecurityCert) {
+        companySecurityCert.setCertNo("certNo");
+        return successMap(companySecurityCertService.getCompanySecurity(companySecurityCert));
+    }
+
+    /**
+     * 添加安许证号
+     *
+     * @param companySecurityCert
+     * @return
+     */
+    @RequestMapping(value = "/certNo/Add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> certNoAdd(@RequestBody TbCompanySecurityCert companySecurityCert, ServletRequest request) {
+        return companySecurityCertService.addCertNo(companySecurityCert,JWTUtil.getUsername(request));
+    }
+
+    /**
+     * 添加安许证号
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/security/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> securityNoDel(@RequestBody Map<String,Object> param) {
+        companySecurityCertService.delCompanySeu(MapUtils.getString(param,"pkid"));
+        return successMap(null);
+    }
+
+    /**
+     * 安全认证
+     *
+     * @param companySecurityCert
+     * @return
+     */
+    @RequestMapping(value = "/security/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> securityDetail(@RequestBody TbCompanySecurityCert companySecurityCert) {
+        return successMap(companySecurityCertService.getCompanySecurity(companySecurityCert));
+    }
+
+    /**
+     * 添加安全认证
+     *
+     * @param companySecurityCert
+     * @return
+     */
+    @RequestMapping(value = "/security/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> securityAdd(@RequestBody TbCompanySecurityCert companySecurityCert) {
+        return successMap(companySecurityCertService.getCompanySecurity(companySecurityCert));
+    }
+
+    /**
+     * 企业资质
+     *
+     * @param companyQualification
+     * @return
+     */
+    @RequestMapping(value = "/qual/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> qualDetail(@RequestBody TbCompanyQualification companyQualification) {
+        return successMap(companyQualificationService.getCompanyQualList(companyQualification));
+    }
+
+    /**
+     * 添加企业资质
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/qual/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> qualAdd(@RequestBody Map<String,Object> param,ServletRequest request) {
+        return companyQualificationService.addCompanyQual(param,JWTUtil.getUsername(request));
+    }
+
+    /**
+     * 添加企业资质
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/qual/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> qualDel(@RequestBody Map<String,Object> param) {
+        companyQualificationService.delCompanyQual(MapUtils.getString(param,"pkid"));
         return successMap(null);
     }
 }

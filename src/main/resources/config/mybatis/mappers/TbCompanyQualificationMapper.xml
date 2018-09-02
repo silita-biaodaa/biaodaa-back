@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbCompanyQualificationMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyQualification">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="md5" property="md5" jdbcType="VARCHAR"/>
+        <result column="corpid" property="corpid" jdbcType="VARCHAR"/>
+        <result column="tab" property="tab" jdbcType="VARCHAR"/>
+        <result column="qual_type" property="qualType" jdbcType="VARCHAR"/>
+        <result column="cert_no" property="certNo" jdbcType="VARCHAR"/>
+        <result column="cert_org" property="certOrg" jdbcType="VARCHAR"/>
+        <result column="cert_date" property="certDate" jdbcType="VARCHAR"/>
+        <result column="valid_date" property="validDate" jdbcType="VARCHAR"/>
+        <result column="com_id" property="comId" jdbcType="VARCHAR"/>
+        <result column="com_name" property="comName" jdbcType="VARCHAR"/>
+        <result column="qual_id" property="qualId" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="channel" property="channel" jdbcType="INTEGER"/>
+        <result column="qual_name" property="qualName" jdbcType="LONGVARCHAR"/>
+        <result column="range" property="range" jdbcType="LONGVARCHAR"/>
+        <result column="url" property="url" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <select id="queryCompanyQual" resultMap="BaseResultMap" parameterType="com.silita.model.TbCompanyQualification">
+    select *
+    from tb_company_qualification
+    where com_id = #{comId}
+  </select>
+
+    <select id="queryCompanyQualCount" parameterType="com.silita.model.TbCompanyQualification"
+            resultType="java.lang.Integer">
+    select count(1)
+    from tb_company_qualification
+    where com_id = #{comId}
+    and qual_name like CONCAT('%', #{qualName}, '%')
+  </select>
+
+    <select id="insertCompanyQual" parameterType="com.silita.model.TbCompanyQualification">
+        INSERT INTO `tb_company_qualification`(
+        <if test="pkid != null and pkid != ''">
+            `pkid`,
+        </if>
+        <if test="md5 != null and md5 != ''">
+            `md5`,
+        </if>
+        <if test="corpid != null and corpid != ''">
+            `corpid`,
+        </if>
+        <if test="tab != null and tab != ''">
+            `tab`,
+        </if>
+        <if test="qualType != null and qualType != ''">
+            `qual_type`,
+        </if>
+        <if test="certNo != null and certNo != ''">
+            `cert_no`,
+        </if>
+        <if test="certOrg != null and certOrg != ''">
+            `cert_org`,
+        </if>
+        <if test="certDate != null and certDate != ''">
+            `cert_date`,
+        </if>
+        <if test="validDate != null and validDate != ''">
+            `valid_date`,
+        </if>
+        <if test="qualName != null and qualName != ''">
+            `qual_name`,
+        </if>
+        <if test="range != null and range != ''">
+            `range`,
+        </if>
+        <if test="url != null and url != ''">
+            `url`,
+        </if>
+        <if test="comId != null and comId != ''">
+            `com_id`,
+        </if>
+        <if test="comName != null and comName != ''">
+            `com_name`,
+        </if>
+        <if test="qualId != null and qualId != ''">
+            `qual_id`,
+        </if>
+        <if test="created != null and created != ''">
+            `created`,
+        </if>
+        <if test="updated != null and updated != ''">
+            `updated`,
+        </if>
+        <if test="channel != null and channel != ''">
+            `channel`
+        </if>
+        )
+        VALUES (
+        <if test="pkid != null and pkid != ''">
+            #{pkid},
+        </if>
+        <if test="md5 != null and md5 != ''">
+            #{md5},
+        </if>
+        <if test="corpid != null and corpid != ''">
+            #{corpid},
+        </if>
+        <if test="tab != null and tab != ''">
+            #{tab},
+        </if>
+        <if test="qualType != null and qualType != ''">
+            #{qualType},
+        </if>
+        <if test="certNo != null and certNo != ''">
+            #{certNo},
+        </if>
+        <if test="certOrg != null and certOrg != ''">
+            #{certOrg},
+        </if>
+        <if test="certDate != null and certDate != ''">
+            #{certDate},
+        </if>
+        <if test="validDate != null and validDate != ''">
+            #{validDate},
+        </if>
+        <if test="qualName != null and qualName != ''">
+            #{qualName},
+        </if>
+        <if test="range != null and range != ''">
+            #{range},
+        </if>
+        <if test="url != null and url != ''">
+            #{url},
+        </if>
+        <if test="comId != null and comId != ''">
+            #{comId},
+        </if>
+        <if test="comName != null and comName != ''">
+            #{comName},
+        </if>
+        <if test="qualId != null and qualId != ''">
+            #{qualId},
+        </if>
+        <if test="created != null and created != ''">
+            #{created},
+        </if>
+        <if test="updated != null and updated != ''">
+            #{updated},
+        </if>
+        <if test="channel != null and channel != ''">
+            #{channel}
+        </if>
+        )
+    </select>
+
+    <update id="updateCompanyQual" parameterType="com.silita.model.TbCompanyQualification">
+        UPDATE `tb_company_qualification`
+        SET
+        <if test="md5 != null and md5 != ''">
+            `md5` = #{md5},
+        </if>
+        <if test="corpid != null and corpid != ''">
+            `corpid` = #{corpid},
+        </if>
+        <if test="tab != null and tab != ''">
+            `tab` = #{tab},
+        </if>
+        <if test="qualType != null and qualType != ''">
+            `qual_type` = #{qualType},
+        </if>
+        <if test="certNo != null and certNo != ''">
+            `cert_no` = #{certNo},
+        </if>
+        <if test="certOrg != null and certOrg != ''">
+            `cert_org` = #{certOrg},
+        </if>
+        <if test="certDate != null and certDate != ''">
+            `cert_date` = #{certDate},
+        </if>
+        <if test="validDate != null and validDate != ''">
+            `valid_date` = #{validDate},
+        </if>
+        <if test="qualName != null and qualName != ''">
+            `qual_name` = #{qualName},
+        </if>
+        <if test="range != null and range != ''">
+            `range` = #{range},
+        </if>
+        <if test="url != null and url != ''">
+            `url` = #{url},
+        </if>
+        <if test="comId != null and comId != ''">
+            `com_id` = #{comId},
+        </if>
+        <if test="comName != null and comName != ''">
+            `com_name` = #{comName},
+        </if>
+        <if test="qualId != null and qualId != ''">
+            `qual_id` = #{qualId},
+        </if>
+        <if test="created != null and created != ''">
+            `created` = #{created},
+        </if>
+        <if test="channel != null and channel != ''">
+            `channel` = #{channel},
+        </if>
+        <if test="updated != null and updated != ''">
+            `updated` = #{updated}
+        </if>
+        WHERE `pkid` = #{pkid};
+    </update>
+
+    <delete id="deleteCompanyQual" parameterType="java.lang.String">
+        DELETE
+        FROM `tb_company_qualification`
+        WHERE `pkid` = #{pkid}
+    </delete>
+</mapper>

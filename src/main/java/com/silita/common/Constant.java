@@ -154,4 +154,14 @@ public class Constant {
      * 数据状态 1:已抓取
      */
     public static String DATA_STATUS_1 = "1";
+
+    /**
+     * 来源(程序)
+     */
+    public static String SOURCE_PRO = "1";
+
+    /**
+     * 来源(人工)
+     */
+    public static String SOURCE_LAB = "2";
 }

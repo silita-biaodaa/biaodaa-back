@@ -17,4 +17,10 @@
       ,update_by as updateBy
     FROM sys_area WHERE area_parent_id = #{areaParentId}
   </select>
+
+  <select id="queryAreaName" parameterType="java.lang.String" resultType="java.lang.String">
+     SELECT
+        area_name as areaName
+      FROM sys_area WHERE area_code = #{code}
+  </select>
 </mapper>
