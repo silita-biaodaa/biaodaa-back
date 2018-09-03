@@ -2,6 +2,7 @@ package com.silita.dao;
 
 import com.silita.model.TbNtMian;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,13 @@ public interface TbNtMianMapper {
      * @param tbNtMian
      */
     public List<Map<String, Object>> listNtMain(TbNtMian tbNtMian);
+
+    /**
+     * 根据查询条件获取公告列表及标段
+     * @param tbNtMian
+     * @return
+     */
+    public List<LinkedHashMap<String, Object>> listTendersDetail(TbNtMian tbNtMian);
 
     /**
      * 根据查询条件获取公告条数

@@ -78,6 +78,49 @@
         </choose>
     </select>
 
+    <select id="listTendersDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
+        SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date, main.city_code,
+        main.county_code, main.biness_type, main.nt_type, '资质', '控制价',
+        tenders.pro_sum, tenders.pro_duration, tenders.pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
+        tenders.enroll_end_time,tenders.enroll_addr, tenders.audit_time, tenders.bid_end_time, tenders.opening_addr,
+        '平台备案要求', '招标状态', tenders.opening_person, '变更信息', main.url
+        FROM tb_nt_mian_hunan AS main
+        LEFT JOIN tb_nt_tenders_hunan AS tenders ON main.pkid = tenders.nt_id
+        WHERE 1=1
+        <if test="proviceCode !=null and proviceCode!=''">
+            AND main.provice_code = #{proviceCode}
+        </if>
+        <if test="cityCode !=null and cityCode!=''">
+            AND main.city_code = #{cityCode}
+        </if>
+        <if test="countyCode !=null and countyCode!=''">
+            AND main.county_code = #{countyCode}
+        </if>
+        <if test="pubDate !=null and pubDate!=''">
+            AND main.pub_date &gt;= #{pubDate}
+        </if>
+        <if test="pubEndDate !=null and pubEndDate!=''">
+            AND main.pub_date &lt;= #{pubEndDate}
+        </if>
+        <if test="title !=null and title!=''">
+            AND main.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="ntCategory !=null and ntCategory!=''">
+            AND main.nt_category = #{ntCategory}
+        </if>
+        <choose>
+            <when test="ntStatus =='3' or ntStatus ==3">
+                AND main.nt_status != 2
+            </when>
+            <when test="ntStatus !=null and ntStatus!=''">
+                AND main.nt_status = #{ntStatus}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        ORDER BY pub_date DESC
+    </select>
+
     <delete id="deleteNtMainByPkId" parameterType="com.silita.model.TbNtMian">
         DELETE FROM ${tableName} WHERE pkid = #{pkid}
     </delete>

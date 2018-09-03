@@ -2,6 +2,8 @@ package com.silita.dao;
 
 import com.silita.model.TbNtTenders;
 
+import java.util.List;
+
 public interface TbNtTendersMapper {
 
     /**
@@ -21,4 +23,11 @@ public interface TbNtTendersMapper {
      * @param tbNtTenders
      */
     void updateNtTendersByPkId(TbNtTenders tbNtTenders);
+
+    /**
+     * 根据公告id获取标段信息
+     * @param tbNtTenders
+     * @return
+     */
+    List<TbNtTenders> listNtTendersByNtId(TbNtTenders tbNtTenders);
 }

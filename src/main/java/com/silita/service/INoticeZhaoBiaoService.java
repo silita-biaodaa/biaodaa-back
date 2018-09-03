@@ -4,6 +4,7 @@ import com.silita.model.DicCommon;
 import com.silita.model.SysArea;
 import com.silita.model.TbNtMian;
 import com.silita.model.TbNtTenders;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.util.List;
 import java.util.Map;
@@ -50,10 +51,18 @@ public interface INoticeZhaoBiaoService {
     Map<String, Object> listNtMain(TbNtMian tbNtMian);
 
     /**
+     * 根据查询条件生成excel
+     * @param tbNtMian
+     * @return
+     */
+    HSSFWorkbook listTendersDetail(TbNtMian tbNtMian);
+
+    /**
      * 更新公告状态
      * @param tbNtMian
      */
     void updateNtMainStatus(TbNtMian tbNtMian);
+
 
     /**
      * 添加招标公告标段
@@ -66,4 +75,11 @@ public interface INoticeZhaoBiaoService {
      * @param tbNtTenders
      */
     void updateNtTenders(TbNtTenders tbNtTenders);
+
+    /**
+     * 根据公告id获取标段信息
+     * @param tbNtTenders
+     * @return
+     */
+    List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders);
 }

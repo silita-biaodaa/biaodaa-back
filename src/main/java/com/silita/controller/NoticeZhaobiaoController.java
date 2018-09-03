@@ -2,8 +2,12 @@ package com.silita.controller;
 
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
-import com.silita.model.*;
+import com.silita.model.DicCommon;
+import com.silita.model.SysArea;
+import com.silita.model.TbNtMian;
+import com.silita.model.TbNtTenders;
 import com.silita.service.INoticeZhaoBiaoService;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -13,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,12 +69,27 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(noticeZhaoBiaoService.listNtMain(tbNtMian));
     }
 
+    @RequestMapping(value = "/exportTendersExcel",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public void listTendersDetail(@RequestBody TbNtMian tbNtMian, HttpServletResponse response) throws IOException {
+        HSSFWorkbook work = noticeZhaoBiaoService.listTendersDetail(tbNtMian);
+        response.setContentType("application/octet-stream;charset=ISO8859-1");
+        response.setHeader("Content-Disposition", "attachment;filename="+ System.currentTimeMillis());
+        response.addHeader("Pargam", "no-cache");
+        response.addHeader("Cache-Control", "no-cache");
+        OutputStream out=response.getOutputStream();
+        work.write(out);
+        out.flush();
+        out.close();
+    }
+
     @RequestMapping(value = "/updateNtMainStatus",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> updateNtMainStatus(@RequestBody TbNtMian tbNtMian) {
         noticeZhaoBiaoService.updateNtMainStatus(tbNtMian);
         return successMap(null);
     }
+
 
     @RequestMapping(value = "/insertNtTenders", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
@@ -98,4 +120,11 @@ public class NoticeZhaobiaoController extends BaseController {
         noticeZhaoBiaoService.updateNtTenders(tbNtTenders);
         return successMap(null);
     }
+
+    @RequestMapping(value = "/listNtTenders",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> listNtTenders(@RequestBody TbNtTenders tbNtTenders) {
+        return super.successMap(noticeZhaoBiaoService.listNtTenders(tbNtTenders));
+    }
+
 }

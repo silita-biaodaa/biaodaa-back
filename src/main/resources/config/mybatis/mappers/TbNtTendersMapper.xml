@@ -2,7 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.TbNtTendersMapper" >
 
-
+    <resultMap id="BaseResultMap" type="com.silita.model.TbNtTenders" >
+        <id column="pkid" property="pkid" jdbcType="VARCHAR" />
+        <result column="nt_id" property="ntId" jdbcType="VARCHAR" />
+        <result column="edit_code" property="editCode" jdbcType="VARCHAR" />
+        <result column="segment" property="segment" jdbcType="INTEGER" />
+        <result column="pro_sum" property="proSum" jdbcType="DOUBLE" />
+        <result column="enroll_addr" property="enrollAddr" jdbcType="VARCHAR" />
+        <result column="opening_addr" property="openingAddr" jdbcType="VARCHAR" />
+        <result column="enroll_end_time" property="enrollEndTime" jdbcType="TIMESTAMP" />
+        <result column="bid_end_time" property="bidEndTime" jdbcType="TIMESTAMP" />
+        <result column="pb_mode" property="pbMode" jdbcType="VARCHAR" />
+        <result column="bid_bonds" property="bidBonds" jdbcType="VARCHAR" />
+        <result column="bid_bonds_end_time" property="bidBondsEndTime" jdbcType="TIMESTAMP" />
+        <result column="keep_bonds" property="keepBonds" jdbcType="DOUBLE" />
+        <result column="other_bonds" property="otherBonds" jdbcType="DOUBLE" />
+        <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+        <result column="opening_person" property="openingPerson" jdbcType="VARCHAR" />
+        <result column="opening_file_fee" property="openingFileFee" jdbcType="DOUBLE" />
+        <result column="other_fee" property="otherFee" jdbcType="DOUBLE" />
+        <result column="tenderee" property="tenderee" jdbcType="VARCHAR" />
+        <result column="tender_contact_person" property="tenderContactPerson" jdbcType="VARCHAR" />
+        <result column="tender_contact_info" property="tenderContactInfo" jdbcType="VARCHAR" />
+        <result column="proxy_contact_person" property="proxyContactPerson" jdbcType="VARCHAR" />
+        <result column="proxy_contact_info" property="proxyContactInfo" jdbcType="VARCHAR" />
+        <result column="pro_person" property="proPerson" jdbcType="VARCHAR" />
+        <result column="social_security" property="socialSecurity" jdbcType="VARCHAR" />
+        <result column="achievement" property="achievement" jdbcType="VARCHAR" />
+        <result column="enroll_method" property="enrollMethod" jdbcType="VARCHAR" />
+        <result column="pro_duration" property="proDuration" jdbcType="VARCHAR" />
+        <result column="completion_time" property="completionTime" jdbcType="TIMESTAMP" />
+        <result column="is_flow" property="isFlow" jdbcType="BIT" />
+        <result column="funds_provid" property="fundsProvid" jdbcType="VARCHAR" />
+        <result column="created" property="created" jdbcType="TIMESTAMP" />
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+        <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    </resultMap>
 
     <select id="countNtTendersByNtIdAndSegment" parameterType="com.silita.model.TbNtTenders" resultType="Integer">
         SELECT COUNT(*) FROM ${tableName}
@@ -131,4 +167,10 @@
         updated = NOW()
         WHERE pkid = #{pkid}
     </update>
+
+    <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
+        SELECT *
+        FROM ${tableName}
+        WHERE nt_id = #{ntId}
+    </select>
 </mapper>
