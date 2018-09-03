@@ -145,7 +145,8 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
                 "\"otherFee\":\"444.2\", \"tenderee\":\"6666\", \"tenderContactPerson\":\"测试修改\", \"tenderContactInfo\":\"1876666\", \"proxyContactPerson\":\"修改代理联系人\", " +
                 "\"proxyContactInfo\":\"1674444\", \"proPerson\":\"修改项目人要求\", \"socialSecurity\":\"社保有修改要球\", \"achievement\":\"修改业绩要求\", \"enrollMethod\":\"1\", " +
                 "\"proDuration\":\"180\", \"completionTime\":\"2018-08-12\", \"isFlow\":\"true\", \"fundsProvid\":\"修改资金来源\", \"enrollMethod\":\"1\", " +
-                "\"source\":\"hunan\", \"pkid\":\"9b83f3ca231c4375a5fc2972c43a53d8\"}";
+                "\"source\":\"hunan\", \"pkid\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"ntId\":\"1\", \"binessType\":\"2\", " +
+                "\"ntCategory\":\"2\", \"ntType\":\"2\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/updateNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

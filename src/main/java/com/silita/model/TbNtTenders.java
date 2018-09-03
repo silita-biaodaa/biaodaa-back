@@ -26,7 +26,7 @@ public class TbNtTenders {
     /**
      * 标段
      */
-    private Integer segment;
+    private String segment;
 
     /**
      * 项目金额
@@ -182,6 +182,21 @@ public class TbNtTenders {
      * 更新人
      */
     private String updateBy;
+
+    /**
+     * 业务 业务类别(1:建筑工程；2：政府采购；)
+     */
+    private String binessType;
+
+    /**
+     * 业务 公告类目（大类）：1：招标；2：中标
+     */
+    private String ntCategory;
+
+    /**
+     * 业务 公告类型（小类）
+     */
+    private String ntType;
 
     /**
      * 省份来源

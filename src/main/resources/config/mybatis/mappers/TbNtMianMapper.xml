@@ -37,7 +37,7 @@
             <otherwise>
             </otherwise>
         </choose>
-        ORDER BY pub_date DESC
+        ORDER BY `pub_date` DESC, `nt_status` ASC
         LIMIT #{start}, #{pageSize}
     </select>
 
@@ -134,6 +134,21 @@
             `nt_status` = #{ntStatus},
         </if>
         `updated` = NOW()
+        WHERE pkid = #{pkid}
+    </update>
+
+    <update id="updateNtMainAllTypeByPkId" parameterType="com.silita.model.TbNtMian">
+        UPDATE ${tableName} SET
+        <if test="binessType !=null and binessType!=''">
+            `biness_type` = #{binessType},
+        </if>
+        <if test="ntCategory !=null and ntCategory!=''">
+            `nt_category` = #{ntCategory},
+        </if>
+        <if test="ntType !=null and ntType!=''">
+            `nt_type` = #{ntType}
+        </if>
+        <!-- `updated` = NOW()  -->
         WHERE pkid = #{pkid}
     </update>
 </mapper>

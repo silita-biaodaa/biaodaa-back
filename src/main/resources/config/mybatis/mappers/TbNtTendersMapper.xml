@@ -169,9 +169,7 @@
     </update>
 
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
-        SELECT *
-        FROM ${tableName}
-        WHERE nt_id = #{ntId}
+        SELECT * FROM ${tableName} WHERE nt_id = #{ntId} ORDER BY `segment` asc
     </select>
 
     <delete id="deleteNtTendersByPkId" parameterType="com.silita.model.TbNtTenders">

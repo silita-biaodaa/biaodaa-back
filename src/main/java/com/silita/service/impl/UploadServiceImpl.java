@@ -124,6 +124,7 @@ public class UploadServiceImpl implements IUploadService {
             String fileName = zhaobiaoFile.getOriginalFilename();
             File uploadFile = new File(propertiesUtils.getFilePath() + fileName);
             zhaobiaoFile.transferTo(uploadFile);
+            sysFiles.setPkid(DataHandlingUtil.getUUID());
             sysFiles.setType("1");
 //                sysFiles.setOssObj("");
             sysFiles.setFileName(fileName);

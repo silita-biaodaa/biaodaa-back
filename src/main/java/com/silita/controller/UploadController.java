@@ -66,8 +66,8 @@ public class UploadController {
 
     @ResponseBody
     @RequestMapping(value = "/uploadZhaoBiaoFile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> uploadZhaoBiaoFile(HttpServletRequest request, @RequestParam("zhaoBiaoFiles") MultipartFile[] files, String bizId) {
-        Map<String, Object> resultMap = new HashMap<>();
+    public Map<String, Object> uploadZhaoBiaoFile(HttpServletRequest request, @RequestParam() MultipartFile[] files, String bizId) {
+        Map resultMap = new HashMap<String, Object>();
         String userName = JWTUtil.getUsername(request);
 
         SysFiles sysFiles = new SysFiles();

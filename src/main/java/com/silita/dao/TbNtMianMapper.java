@@ -40,6 +40,10 @@ public interface TbNtMianMapper {
      */
     public void updateNtMainCategoryAndStatusByPkId(TbNtMian tbNtMian);
 
-
+    /**
+     * 根据主键更新 公告类型（0：新建；1：已编辑；2：已审核）、类型（公告类目（大类）：1：招标；2：中标） 公告类型（小类）
+     * @param tbNtMian
+     */
+    public void updateNtMainAllTypeByPkId(TbNtMian tbNtMian);
 
 }

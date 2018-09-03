@@ -74,6 +74,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public Map<String, Object> listNtMain(TbNtMian tbNtMian) {
         tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+        //去除标题中的特殊字符
+        tbNtMian.setTitle(tbNtMian.getTitle().replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", "%"));
         Map result = new HashMap<String, Object>();
         result.put("areaCode", sysAreaMapper.getPkIdByAreaCode(tbNtMian.getSource()));
         result.put("datas", tbNtMianMapper.listNtMain(tbNtMian));
@@ -129,6 +131,15 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public String insertNtTenders(TbNtTenders tbNtTenders) {
         String msg = "";
+        //更新招标主表状态
+        TbNtMian tbNtMian = new TbNtMian();
+        tbNtMian.setPkid(tbNtTenders.getNtId());
+        tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtTenders.getSource()));
+        tbNtMian.setBinessType(tbNtTenders.getBinessType());
+        tbNtMian.setNtCategory(tbNtTenders.getNtCategory());
+        tbNtMian.setNtType(tbNtTenders.getNtType());
+        tbNtMianMapper.updateNtMainAllTypeByPkId(tbNtMian);
+        //添加标段
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
         if (count == 0) {
@@ -141,6 +152,15 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public void updateNtTenders(TbNtTenders tbNtTenders) {
+        //更新招标主表状态
+        TbNtMian tbNtMian = new TbNtMian();
+        tbNtMian.setPkid(tbNtTenders.getNtId());
+        tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtTenders.getSource()));
+        tbNtMian.setBinessType(tbNtTenders.getBinessType());
+        tbNtMian.setNtCategory(tbNtTenders.getNtCategory());
+        tbNtMian.setNtType(tbNtTenders.getNtType());
+        tbNtMianMapper.updateNtMainAllTypeByPkId(tbNtMian);
+        //更新标段
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         tbNtTendersMapper.updateNtTendersByPkId(tbNtTenders);
     }
