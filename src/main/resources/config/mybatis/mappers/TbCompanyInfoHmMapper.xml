@@ -38,8 +38,8 @@
 
     <select id="queryCompanyInfoHmList" resultMap="BaseResultMap" parameterType="com.silita.model.TbCompanyInfoHm">
     select *
-          ,DATE_FORMAT(created, '%Y-%m-%h') as create_date
-          ,DATE_FORMAT(updated, '%Y-%m-%h') as update_date
+          ,DATE_FORMAT(created, '%Y-%m-%d') as create_date
+          ,DATE_FORMAT(updated, '%Y-%m-%d') as update_date
     from tb_company_info_hm
     order by created desc
     limit #{start},#{pageSize}

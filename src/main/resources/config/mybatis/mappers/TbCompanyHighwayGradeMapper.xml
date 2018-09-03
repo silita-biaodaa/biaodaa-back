@@ -1,19 +1,169 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.TbCompanyHighwayGradeMapper" >
-  <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyHighwayGrade" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
-    <result column="com_id" property="comId" jdbcType="VARCHAR" />
-    <result column="assess_year" property="assessYear" jdbcType="INTEGER" />
-    <result column="assess_level" property="assessLevel" jdbcType="VARCHAR" />
-    <result column="assess_prov_code" property="assessProvCode" jdbcType="VARCHAR" />
-    <result column="assess_origin" property="assessOrigin" jdbcType="VARCHAR" />
-    <result column="created" property="created" jdbcType="TIMESTAMP" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-  </resultMap>
+<mapper namespace="com.silita.dao.TbCompanyHighwayGradeMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyHighwayGrade">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="com_id" property="comId" jdbcType="VARCHAR"/>
+        <result column="assess_year" property="assessYear" jdbcType="INTEGER"/>
+        <result column="assess_level" property="assessLevel" jdbcType="VARCHAR"/>
+        <result column="assess_prov_code" property="assessProvCode" jdbcType="VARCHAR"/>
+        <result column="assess_origin" property="assessOrigin" jdbcType="VARCHAR"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryCompanyHigway" parameterType="com.silita.model.TbCompanyHighwayGrade" resultType="java.util.Map">
+        SELECT
+        t.`com_id` as comId,
+        GROUP_CONCAT(t.`assess_level`) as assessLevel,
+        GROUP_CONCAT(t.`assess_origin`) as assessOrigin,
+        t.`assess_prov_code`as assessProvCode,
+        t.`assess_year` as assessYear
+        FROM `tb_company_highway_grade` t
+        WHERE t.`com_id` = #{comId}
+        <if test="assessProvCode != null and assessProvCode != ''">
+            and t.`assess_prov_code` = #{assessProvCode}
+        </if>
+        GROUP BY t.`assess_year`
+        ORDER BY t.`assess_origin` asc , t.`assess_year` desc
+    </select>
+
+    <insert id="insertCompanyHigway" parameterType="com.silita.model.TbCompanyHighwayGrade">
+        INSERT INTO `tb_company_highway_grade`
+        (
+        <if test="pkid != null and pkid != ''">
+            `pkid`,
+        </if>
+        <if test="comId != null and comId != ''">
+            `com_id`,
+        </if>
+        <if test="assessYear != null and assessYear != ''">
+            `assess_year`,
+        </if>
+        <if test="assessLevel != null and assessLevel != ''">
+            `assess_level`,
+        </if>
+        <if test="assessProvCode != null and assessProvCode != ''">
+            `assess_prov_code`,
+        </if>
+        <if test="assessOrigin != null and assessOrigin != ''">
+            `assess_origin`,
+        </if>
+        <if test="updated != null">
+            `updated`,
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            `update_by`,
+        </if>
+        <if test="created != null">
+            `created`,
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by`
+        </if>
+        )
+        VALUES (
+        <if test="pkid != null and pkid != ''">
+            #{pkid},
+        </if>
+        <if test="comId != null and comId != ''">
+            #{comId},
+        </if>
+        <if test="assessYear != null and assessYear != ''">
+            #{assessYear},
+        </if>
+        <if test="assessLevel != null and assessLevel != ''">
+            #{assessLevel},
+        </if>
+        <if test="assessProvCode != null and assessProvCode != ''">
+            #{assessProvCode},
+        </if>
+        <if test="assessOrigin != null and assessOrigin != ''">
+            #{assessOrigin},
+        </if>
+        <if test="updated != null">
+            #{updated},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            #{updateBy},
+        </if>
+        <if test="created != null">
+            #{created},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            #{createBy}
+        </if>
+        )
+    </insert>
+
+    <update id="updateCompanyHigway" parameterType="com.silita.model.TbCompanyHighwayGrade">
+        UPDATE `tb_company_highway_grade`
+        SET
+        <if test="comId != null and comId != ''">
+            `com_id` = #{comId},
+        </if>
+        <if test="assessYear != null and assessYear != ''">
+            `assess_year` = #{assessYear},
+        </if>
+        <if test="assessLevel != null and assessLevel != ''">
+            `assess_level` = #{assessLevel},
+        </if>
+        <if test="assessProvCode != null and assessProvCode != ''">
+            `assess_prov_code` = #{assessProvCode},
+        </if>
+        <if test="assessOrigin != null and assessOrigin != ''">
+            `assess_origin` = #{assessOrigin},
+        </if>
+        <if test="created != null">
+            `created` = #{created},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by` = #{createBy},
+        </if>
+        <if test="updated != null">
+            `updated` = #{updated},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            `update_by` = #{updateBy}
+        </if>
+        WHERE `pkid` = #{pkid}
+    </update>
+
+    <delete id="deleteCompanyHigway" parameterType="java.lang.String">
+        delete from tb_company_highway_grade where pkid = #{pkid}
+    </delete>
+
+    <select id="queryAssessPro" resultType="java.util.Map" parameterType="java.lang.String">
+        SELECT
+               t.`assess_prov_code` AS assessProvCode
+               ,t1.`area_name` AS areaName
+        FROM `tb_company_highway_grade` t
+        LEFT JOIN sys_area t1 ON t.`assess_prov_code` = t1.`area_code`
+        WHERE t.`com_id` = #{comId}
+        GROUP BY t.`assess_prov_code`
+    </select>
+
+    <select id="queryCompanyHighwanGradeDetail" parameterType="com.silita.model.TbCompanyHighwayGrade"
+            resultMap="BaseResultMap">
+        select *
+        from tb_company_highway_grade
+        where 1=1
+        <if test="assessProvCode != null and assessProvCode != ''">
+            and `assess_prov_code` = #{assessProvCode}
+        </if>
+        <if test="assessOrigin != null and assessOrigin != ''">
+            and `assess_origin` = #{assessOrigin}
+        </if>
+        <if test="assessYear != null and assessYear != ''">
+            and`assess_year` = #{assessYear}
+        </if>
+        <if test="comId != null and comId != ''">
+            and `com_id` = #{comId}
+        </if>
+    </select>
 </mapper>
