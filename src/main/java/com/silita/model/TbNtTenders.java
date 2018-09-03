@@ -199,6 +199,16 @@ public class TbNtTenders {
     private String ntType;
 
     /**
+     * 标题
+     */
+    private String title;
+
+    /**
+     * 公示时间
+     */
+    private String pubDate;
+
+    /**
      * 省份来源
      */
     private String source;

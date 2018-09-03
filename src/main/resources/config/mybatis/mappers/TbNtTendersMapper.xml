@@ -38,6 +38,11 @@
         <result column="create_by" property="createBy" jdbcType="VARCHAR" />
         <result column="updated" property="updated" jdbcType="TIMESTAMP" />
         <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+        <result column="biness_type" property="binessType" jdbcType="VARCHAR" />
+        <result column="nt_category" property="ntCategory" jdbcType="VARCHAR" />
+        <result column="nt_type" property="ntType" jdbcType="VARCHAR" />
+        <result column="pub_date" property="pubDate" jdbcType="VARCHAR" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="countNtTendersByNtIdAndSegment" parameterType="com.silita.model.TbNtTenders" resultType="Integer">
@@ -169,7 +174,15 @@
     </update>
 
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
-        SELECT * FROM ${tableName} WHERE nt_id = #{ntId} ORDER BY `segment` asc
+        SELECT t1.*
+                ,t.biness_type
+                ,t.nt_category
+                ,t.nt_type
+                ,t.title
+                ,t.pub_date
+        FROM ${tableName} t1
+        left join tb_nt_mian_${source} t on t1.nt_id = t.pkid
+        WHERE nt_id = #{ntId} ORDER BY `segment` asc
     </select>
 
     <delete id="deleteNtTendersByPkId" parameterType="com.silita.model.TbNtTenders">
