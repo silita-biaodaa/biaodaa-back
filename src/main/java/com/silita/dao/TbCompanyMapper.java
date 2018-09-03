@@ -35,5 +35,5 @@ public interface TbCompanyMapper extends MyMapper<TbCompany> {
      * @param param
      * @return
      */
-    List<TbCompany> queryCompanyDetail(Map<String,Object> param);
+    List<TbCompany> queryCompanyDetailHm(Map<String,Object> param);
 }

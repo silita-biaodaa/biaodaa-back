@@ -201,7 +201,7 @@
     </select>
 
     <update id="delCompanyCreditCode" parameterType="java.lang.String">
-        UPDATE tb_company_info_hm SET `credit_code` = NULL WHERE  `com_id` = #{comId}
+        UPDATE tb_company_info_hm SET `credit_code` = NULL WHERE `com_id` = #{comId}
     </update>
 
     <select id="queryCompanyCreditCode" parameterType="com.silita.model.TbCompanyInfoHm" resultMap="BaseResultMap">

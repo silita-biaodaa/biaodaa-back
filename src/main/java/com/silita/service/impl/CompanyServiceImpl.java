@@ -36,7 +36,7 @@ public class CompanyServiceImpl extends AbstractService implements ICompanyServi
     @Override
     public TbCompany getCreditCode(Map<String, Object> param) {
         TbCompany company = new TbCompany();
-        List<TbCompany> companyList = tbCompanyMapper.queryCompanyDetail(param);
+        List<TbCompany> companyList = tbCompanyMapper.queryCompanyDetailHm(param);
         if(null != companyList && companyList.size() > 0){
             company = companyList.get(0);
         }
@@ -46,6 +46,6 @@ public class CompanyServiceImpl extends AbstractService implements ICompanyServi
     @Override
     public List<TbCompany> getComNameList(Map<String, Object> param) {
         param.put("type","comName");
-        return tbCompanyMapper.queryCompanyDetail(param);
+        return tbCompanyMapper.queryCompanyDetailHm(param);
     }
 }

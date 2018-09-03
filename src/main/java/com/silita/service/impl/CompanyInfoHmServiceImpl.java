@@ -89,6 +89,7 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
             companyInfoHm.setUpdateBy(username);
             companyInfoHm.setUpdated(new Date());
             companyInfoHmMapper.updateCompanyByComId(companyInfoHm);
+            resultMap = new HashMap<>();
             resultMap.put("code",Constant.CODE_SUCCESS);
             resultMap.put("msg",Constant.MSG_SUCCESS);
             resultMap.put("data",param);
@@ -99,10 +100,11 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
         companyInfoHm.setDataStatus(Constant.DATA_STATUS_0);
         companyInfoHm.setPkid(DataHandlingUtil.getUUID());
         companyInfoHmMapper.insertCompanyInfo(companyInfoHm);
+        resultMap = new HashMap<>();
         resultMap.put("code",Constant.CODE_SUCCESS);
         resultMap.put("msg",Constant.MSG_SUCCESS);
         resultMap.put("data",param);
-        return null;
+        return resultMap;
     }
 
     @Override

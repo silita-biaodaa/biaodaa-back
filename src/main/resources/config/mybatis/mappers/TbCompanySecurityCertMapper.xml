@@ -175,7 +175,7 @@
         WHERE `pkid` =#{pkid}
     </update>
 
-    <select id="queryCompanySecurityDetail" resultMap="TbCompanySecurityCertMapper"
+    <select id="queryCompanySecurityDetail" resultMap="BaseResultMap"
             parameterType="com.silita.model.TbCompanySecurityCert">
         select *
         from tb_company_security_cert
