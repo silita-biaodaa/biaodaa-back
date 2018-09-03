@@ -20,11 +20,16 @@ public class PropertiesUtils {
     @Value("${token.publicKey}")
     private String publicKey;
 
+    @Value("${upload.filePath}")
+    private String filePath;
+
     @PostConstruct
     public void init() {
         getLifeCycle();
         getPublicKey();
         JWTUtil.tokenLifeCycle = getLifeCycle();
+
+        getFilePath();
     }
 
     public String getLifeCycle() {
@@ -33,5 +38,9 @@ public class PropertiesUtils {
 
     public String getPublicKey() {
         return publicKey;
+    }
+
+    public String getFilePath() {
+        return filePath;
     }
 }

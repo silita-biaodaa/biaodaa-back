@@ -173,4 +173,8 @@
         FROM ${tableName}
         WHERE nt_id = #{ntId}
     </select>
+
+    <delete id="deleteNtTendersByPkId" parameterType="com.silita.model.TbNtTenders">
+        DELETE FROM ${tableName} WHERE `pkid` = #{pkid}
+    </delete>
 </mapper>

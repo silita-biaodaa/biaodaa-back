@@ -2,10 +2,7 @@ package com.silita.controller;
 
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
-import com.silita.model.DicCommon;
-import com.silita.model.SysArea;
-import com.silita.model.TbNtMian;
-import com.silita.model.TbNtTenders;
+import com.silita.model.*;
 import com.silita.service.INoticeZhaoBiaoService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +60,8 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(noticeZhaoBiaoService.listSysAreaByParentId(sysArea));
     }
 
+    //
+
     @RequestMapping(value = "/listNtMain",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> listNtMain(@RequestBody TbNtMian tbNtMian) {
@@ -90,11 +89,12 @@ public class NoticeZhaobiaoController extends BaseController {
         return successMap(null);
     }
 
+    //#####################招标标段信息######################
 
     @RequestMapping(value = "/insertNtTenders", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> insertNtTenders(@RequestBody TbNtTenders tbNtTenders, ServletRequest request) {
-        Map result = new HashMap();
+        Map result = new HashMap<String,Object>();
         result.put("code", 1);
         try{
             String userName = JWTUtil.getUsername(request);
@@ -127,4 +127,54 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(noticeZhaoBiaoService.listNtTenders(tbNtTenders));
     }
 
+    @RequestMapping(value = "/deleteNtTendersByPkId",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> deleteNtTendersByPkId(@RequestBody TbNtTenders tbNtTenders) {
+        noticeZhaoBiaoService.deleteNtTendersByPkId(tbNtTenders);
+        return super.successMap(null);
+    }
+
+    //#####################变更标段########################
+
+    @RequestMapping(value = "/insertTbNtChange", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> insertTbNtChange(@RequestBody TbNtChange tbNtChange, ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        tbNtChange.setCreateBy(userName);
+        noticeZhaoBiaoService.insertTbNtChange(tbNtChange);
+        return successMap(null);
+    }
+
+    @RequestMapping(value = "/updateTbNtChange", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> updateTbNtChange(@RequestBody TbNtChange tbNtChange, ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        tbNtChange.setUpdateBy(userName);
+        noticeZhaoBiaoService.updateTbNtChangeByPkId(tbNtChange);
+        return successMap(null);
+    }
+
+    //#####################招标文件######################
+
+    @RequestMapping(value = "/insertZhaoBiaoFilePath", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> insertZhaoBiaoFilePath(@RequestBody SysFiles sysFiles, ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        sysFiles.setCreateBy(userName);
+        noticeZhaoBiaoService.insertZhaoBiaoFiles(sysFiles);
+        return successMap(null);
+    }
+
+    @RequestMapping(value = "/listZhaoBiaoFiles",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> listSysFilesByPkid(@RequestBody SysFiles sysFiles) {
+        return super.successMap(noticeZhaoBiaoService.listZhaoBiaoFilesByPkid(sysFiles));
+    }
+
+    @RequestMapping(value = "/deleteZhaoBiaoFile",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> deleteSysFilesByPkid(@RequestBody SysFiles sysFiles) {
+        noticeZhaoBiaoService.deleteZhaoBiaoFilesByPkid(sysFiles);
+        return super.successMap(null);
+    }
 }

@@ -23,4 +23,8 @@
         area_name as areaName
       FROM sys_area WHERE area_code = #{code}
   </select>
+
+  <select id="getPkIdByAreaCode" parameterType="String" resultType="String">
+    SELECT `pkid` FROM sys_area WHERE area_code = #{areaCode}
+  </select>
 </mapper>

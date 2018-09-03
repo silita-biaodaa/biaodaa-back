@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.TwfDictMapper" >
 
-  <select id="listTwfDictNameByType" parameterType="Integer" resultType="String">
-    SELECT `name` FROM twf_dict WHERE `type` = #{type}
+  <select id="listTwfDictNameByType" parameterType="Integer" resultType="Map">
+    SELECT `name`, `code` AS `value` FROM twf_dict WHERE `type` = #{type}
   </select>
 </mapper>

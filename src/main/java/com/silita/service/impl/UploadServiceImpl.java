@@ -2,12 +2,14 @@ package com.silita.service.impl;
 
 import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
+import com.silita.dao.SysFilesMapper;
 import com.silita.model.DicAlias;
-import com.silita.model.DicCommon;
+import com.silita.model.SysFiles;
 import com.silita.service.IQualService;
 import com.silita.service.IUploadService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.PinYinUtil;
+import com.silita.utils.PropertiesUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +35,10 @@ public class UploadServiceImpl implements IUploadService {
     DicAliasMapper dicAliasMapper;
     @Autowired
     IQualService qualService;
+    @Autowired
+    SysFilesMapper sysFilesMapper;
+    @Autowired
+    PropertiesUtils propertiesUtils;
 
     @Override
     public Map<String, Object> analysisQuaGrade(MultipartFile file, Map<String, Object> param) throws Exception {
@@ -108,5 +115,21 @@ public class UploadServiceImpl implements IUploadService {
         resultMap.put("code", Constant.CODE_WARN_400);
         resultMap.put("msg", Constant.MSG_WARN_400);
         return resultMap;
+    }
+
+    @Override
+    public void insertZhaoBiaoFiles(MultipartFile[] files, SysFiles sysFiles) throws Exception{
+        for (int i = 0; i < files.length; i++) {
+            MultipartFile zhaobiaoFile = files[i];
+            String fileName = zhaobiaoFile.getOriginalFilename();
+            File uploadFile = new File(propertiesUtils.getFilePath() + fileName);
+            zhaobiaoFile.transferTo(uploadFile);
+            sysFiles.setType("1");
+//                sysFiles.setOssObj("");
+            sysFiles.setFileName(fileName);
+            sysFiles.setOrderNo(String.valueOf(i));
+            sysFiles.setFilePath(propertiesUtils.getFilePath() + fileName);
+            sysFilesMapper.insertSysFiles(sysFiles);
+        }
     }
 }

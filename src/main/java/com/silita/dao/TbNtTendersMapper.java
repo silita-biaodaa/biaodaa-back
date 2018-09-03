@@ -30,4 +30,10 @@ public interface TbNtTendersMapper {
      * @return
      */
     List<TbNtTenders> listNtTendersByNtId(TbNtTenders tbNtTenders);
+
+    /**
+     * 根据pkid删除招标公告标段
+     * @param tbNtTenders
+     */
+    void deleteNtTendersByPkId(TbNtTenders tbNtTenders);
 }

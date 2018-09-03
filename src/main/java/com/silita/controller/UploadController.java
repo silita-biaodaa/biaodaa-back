@@ -2,13 +2,16 @@ package com.silita.controller;
 
 import com.silita.common.Constant;
 import com.silita.commons.shiro.utils.JWTUtil;
+import com.silita.model.SysFiles;
 import com.silita.service.IUploadService;
+import com.silita.utils.PropertiesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +27,9 @@ public class UploadController {
 
     @Autowired
     IUploadService uploadService;
+    @Autowired
+    PropertiesUtils propertiesUtils;
+
 
     /**
      * 解析excel资质别名
@@ -56,5 +62,25 @@ public class UploadController {
             resultMap.put("msg", Constant.MSG_ERROR_500);
             return resultMap;
         }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/uploadZhaoBiaoFile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> uploadZhaoBiaoFile(HttpServletRequest request, @RequestParam("zhaoBiaoFiles") MultipartFile[] files, String bizId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String userName = JWTUtil.getUsername(request);
+
+        SysFiles sysFiles = new SysFiles();
+        sysFiles.setBizId(bizId);
+        sysFiles.setCreateBy(userName);
+        try {
+            uploadService.insertZhaoBiaoFiles(files, sysFiles);
+            resultMap.put("code", Constant.CODE_SUCCESS);
+            resultMap.put("msg",Constant.MSG_SUCCESS);
+        } catch (Exception e) {
+            resultMap.put("code", Constant.CODE_ERROR_500);
+            resultMap.put("msg", Constant.MSG_ERROR_500);
+        }
+       return resultMap;
     }
 }

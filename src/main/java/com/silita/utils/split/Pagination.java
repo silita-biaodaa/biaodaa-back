@@ -12,13 +12,16 @@ public class Pagination<T> implements Serializable {
 
     private static final long serialVersionUID = 20180810L;
 
-    private int pageSize = 20;// 每页大小
+    private int pageSize = 15;// 每页大小
     private int currentPage = 1;// 当前第几页
     private int start = 0;  // 起始位置
 
     public int getPageSize() {
-        if (pageSize > 20 || pageSize <= 0) {
-            pageSize = 20;
+        if (pageSize > 60) {
+            pageSize = 60;
+        }
+        if (pageSize <= 0) {
+            pageSize = 15;
         }
         return pageSize;
     }

@@ -4,11 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -183,5 +185,117 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
         System.out.println("-----返回的json = " + responseString);
     }
 
+    @Test
+    public void testController11()throws Exception{
+        String requestBody = "{\"pkid\":\"9b83f3ca231c4375a5fc2972c43a53d0\", \"source\":\"hunan\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/deleteNtTendersByPkId").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController12()throws Exception{
+        String requestBody = "{\"ntId\":\"1\", \"ntEditId\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"ntCategory\":\"1\", \"source\":\"hunan\", \"fieldFrom\":\"测试评标办法\", " +
+                "\"fieldName\":\"pb_mode\", \"fieldValue\":\"修改评标办法\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/insertTbNtChange").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController13()throws Exception{
+        String requestBody = "{\"ntId\":\"1\", \"ntEditId\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"ntCategory\":\"1\", \"source\":\"hunan\", \"fieldFrom\":\"测试评标办法\", " +
+                "\"fieldName\":\"pb_mode\", \"fieldValue\":\"再次修改评标办法\", \"pkid\":\"f592d72506094d399d95e06547f3e512\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/updateTbNtChange").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController14()throws Exception{
+        String requestBody = "{\"bizId\":\"1\", \"type\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"fileName\":\"1\", \"source\":\"hunan\", \"fieldFrom\":\"测试评标办法\", " +
+                "\"fieldName\":\"pb_mode\", \"fieldValue\":\"再次修改评标办法\", \"pkid\":\"f592d72506094d399d95e06547f3e512\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/insertSysFiles").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController15()throws Exception{
+        String requestBody = "{\"bizId\":\"1\", \"type\":\"1\", \"fileName\":\"测试上传招标文件路径2\", \"filePath\":\"www.baidu.com\", \"ossObj\":\"不知道是什么\", \"orderNo\":\"2\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/insertZhaoBiaoFilePath").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController16()throws Exception{
+        String requestBody = "{\"bizId\":\"1\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/listZhaoBiaoFiles").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController17()throws Exception{
+        String requestBody = "{\"pkid\":\"d2ad2f95a60d460d89040cecee14b915\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/deleteZhaoBiaoFile").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController18()throws Exception{
+        MockMultipartFile firstFile = new MockMultipartFile("files", "filename.txt", "text/plain", "some xml".getBytes());
+
+        String responseString = mockMvc.perform(fileUpload("/upload/uploadZhaoBiaoFile").file(firstFile)
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
 
 }

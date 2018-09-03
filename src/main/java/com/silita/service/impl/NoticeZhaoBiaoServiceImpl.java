@@ -1,10 +1,7 @@
 package com.silita.service.impl;
 
 import com.silita.dao.*;
-import com.silita.model.DicCommon;
-import com.silita.model.SysArea;
-import com.silita.model.TbNtMian;
-import com.silita.model.TbNtTenders;
+import com.silita.model.*;
 import com.silita.service.INoticeZhaoBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
@@ -40,10 +37,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     SysAreaMapper sysAreaMapper;
     @Autowired
     TbNtTendersMapper tbNtTendersMapper;
+    @Autowired
+    TbNtChangeMapper tbNtChangeMapper;
+    @Autowired
+    SysFilesMapper sysFilesMapper;
 
     @Override
     @Cacheable(value = "TwfDictNameCache")
-    public Map<String, String> listFixedEditData() {
+    public Map<String, Object> listFixedEditData() {
         Map result = new HashMap<String, Object>();
         result.put("bidOpeningPersonnel", twfDictMapper.listTwfDictNameByType(3));
         result.put("projectType", twfDictMapper.listTwfDictNameByType(4));
@@ -74,6 +75,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     public Map<String, Object> listNtMain(TbNtMian tbNtMian) {
         tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
         Map result = new HashMap<String, Object>();
+        result.put("areaCode", sysAreaMapper.getPkIdByAreaCode(tbNtMian.getSource()));
         result.put("datas", tbNtMianMapper.listNtMain(tbNtMian));
         result.put("total", tbNtMianMapper.countNtMian(tbNtMian));
         return super.handlePageCount(result, tbNtMian);
@@ -147,6 +149,41 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     public List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders) {
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         return tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
+    }
+
+    @Override
+    public void deleteNtTendersByPkId(TbNtTenders tbNtTenders) {
+        tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+        tbNtTendersMapper.deleteNtTendersByPkId(tbNtTenders);
+    }
+
+
+    @Override
+    public void insertTbNtChange(TbNtChange tbNtChange) {
+        tbNtChange.setPkid(DataHandlingUtil.getUUID());
+        tbNtChangeMapper.insertTbNtChange(tbNtChange);
+    }
+
+    @Override
+    public void updateTbNtChangeByPkId(TbNtChange tbNtChange) {
+        tbNtChangeMapper.updateTbNtChangeByPkId(tbNtChange);
+    }
+
+
+    @Override
+    public List<SysFiles> listZhaoBiaoFilesByPkid(SysFiles sysFiles) {
+        return sysFilesMapper.listSysFilesByBizId(sysFiles);
+    }
+
+    @Override
+    public void insertZhaoBiaoFiles(SysFiles sysFiles) {
+        sysFiles.setPkid(DataHandlingUtil.getUUID());
+        sysFilesMapper.insertSysFiles(sysFiles);
+    }
+
+    @Override
+    public void deleteZhaoBiaoFilesByPkid(SysFiles sysFiles) {
+        sysFilesMapper.deleteSysFilesByPkid(sysFiles);
     }
 
 }

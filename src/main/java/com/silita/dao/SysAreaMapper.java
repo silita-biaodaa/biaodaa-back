@@ -18,4 +18,11 @@ public interface SysAreaMapper {
      * @return
      */
     String queryAreaName(String code);
+
+    /**
+     * 根据地区code查询pkid
+     * @param areaCode
+     * @return
+     */
+    String getPkIdByAreaCode(String areaCode);
 }

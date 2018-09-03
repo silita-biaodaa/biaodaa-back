@@ -40,4 +40,6 @@ public interface TbNtMianMapper {
      */
     public void updateNtMainCategoryAndStatusByPkId(TbNtMian tbNtMian);
 
+
+
 }

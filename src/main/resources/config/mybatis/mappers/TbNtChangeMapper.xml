@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbNtChangeMapper">
+
+    <resultMap id="BaseResultMap" type="com.silita.model.TbNtChange">
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="nt_id" property="ntId" jdbcType="VARCHAR"/>
+        <result column="nt_edit_id" property="ntEditId" jdbcType="VARCHAR"/>
+        <result column="nt_category" property="ntCategory" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="VARCHAR"/>
+        <result column="field_from" property="fieldFrom" jdbcType="VARCHAR"/>
+        <result column="field_name" property="fieldName" jdbcType="VARCHAR"/>
+        <result column="field_value" property="fieldValue" jdbcType="VARCHAR"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <insert id="insertTbNtChange" parameterType="com.silita.model.TbNtChange">
+        INSERT INTO
+        tb_nt_change (
+          `pkid`, `nt_id`, `nt_edit_id`, `nt_category`, `source`,
+          `field_from`, `field_name`, `field_value`, `create_by`, `created`
+        )
+        VALUES (
+          #{pkid}, #{ntId}, #{ntEditId}, #{ntCategory}, #{source},
+          #{fieldFrom}, #{fieldName}, #{fieldValue}, #{createBy}, NOW()
+        )
+    </insert>
+
+    <update id="updateTbNtChangeByPkId" parameterType="com.silita.model.TbNtChange">
+        UPDATE tb_nt_change SET
+        <if test="ntId !=null and ntId!=''">
+            `nt_id` = #{ntId},
+        </if>
+        <if test="ntEditId !=null and ntEditId!=''">
+            `nt_edit_id` = #{ntEditId},
+        </if>
+        <if test="ntCategory !=null and ntCategory!=''">
+            `nt_category` = #{ntCategory},
+        </if>
+        <if test="source !=null and source!=''">
+            `source` = #{source},
+        </if>
+        <if test="fieldFrom !=null and fieldFrom!=''">
+            `field_from` = #{fieldFrom},
+        </if>
+        <if test="fieldName !=null and fieldName!=''">
+            `field_name` = #{fieldName},
+        </if>
+        <if test="fieldValue !=null and fieldValue!=''">
+            `field_value` = #{fieldValue},
+        </if>
+        <if test="updateBy !=null and updateBy!=''">
+            `update_by` = #{updateBy},
+        </if>
+        updated = NOW()
+        WHERE pkid = #{pkid}
+    </update>
+</mapper>
