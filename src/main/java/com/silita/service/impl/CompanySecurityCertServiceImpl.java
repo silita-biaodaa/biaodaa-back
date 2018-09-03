@@ -58,11 +58,11 @@ public class CompanySecurityCertServiceImpl implements ICompanySecurityCertServi
             resultMap.put("msg",Constant.MSG_WARN_400);
             return resultMap;
         }
+        companySecurityCert.setCertOrigin(Constant.SOURCE_LAB);
         TbCompanySecurityCert cert = tbCompanySecurityCertMapper.queryCompanySecurityDetail(companySecurityCert);
         if(null != cert){
             tbCompanySecurityCertMapper.deleteCompanySecurity(cert.getPkid());
         }
-        companySecurityCert.setCertOrigin(Constant.SOURCE_LAB);
         companySecurityCert.setPkid(DataHandlingUtil.getUUID());
         companySecurityCert.setCreateBy(username);
         companySecurityCert.setCreated(new Date());
@@ -81,6 +81,7 @@ public class CompanySecurityCertServiceImpl implements ICompanySecurityCertServi
     @Override
     public Map<String, Object> addSecurity(TbCompanySecurityCert companySecurityCert, String username) {
         Map<String,Object> resultMap = new HashMap<>();
+        companySecurityCert.setCertOrigin(Constant.SOURCE_LAB);
         TbCompanySecurityCert cert = tbCompanySecurityCertMapper.queryCompanySecurityDetail(companySecurityCert);
         if(null != cert){
             tbCompanySecurityCertMapper.deleteCompanySecurity(cert.getPkid());

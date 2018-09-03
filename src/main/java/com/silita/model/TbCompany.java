@@ -130,6 +130,11 @@ public class TbCompany extends Pagination {
     private String changeCreditCode;
 
     /**
+     * 变更记录id
+     */
+    private String changePkid;
+
+    /**
      * 变更时间
      */
     private String changeTime;

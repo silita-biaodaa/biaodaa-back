@@ -150,13 +150,13 @@ public class CompanyController extends BaseController {
     /**
      * 删除企业名称
      *
-     * @param pkid
+     * @param param
      * @return
      */
     @RequestMapping(value = "/comName/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String, Object> comNameDel(@RequestBody String pkid) {
-        companyInfoHmService.delCompanyInfo(pkid);
+    public Map<String, Object> comNameDel(@RequestBody Map<String,Object> param) {
+        companyInfoHmService.delCompanyInfo(MapUtils.getString(param,"pkid"));
         return successMap(null);
     }
 
@@ -218,8 +218,8 @@ public class CompanyController extends BaseController {
      */
     @RequestMapping(value = "/security/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String, Object> securityAdd(@RequestBody TbCompanySecurityCert companySecurityCert) {
-        return successMap(companySecurityCertService.getCompanySecurity(companySecurityCert));
+    public Map<String, Object> securityAdd(@RequestBody TbCompanySecurityCert companySecurityCert, ServletRequest request) {
+        return companySecurityCertService.addSecurity(companySecurityCert,JWTUtil.getUsername(request));
     }
 
     /**
