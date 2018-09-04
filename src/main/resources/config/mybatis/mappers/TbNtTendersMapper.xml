@@ -50,6 +50,9 @@
         <result column="pro_sum" property="proSum" jdbcType="DOUBLE" />
         <result column="pb_mode" property="pbMode" jdbcType="VARCHAR" />
         <result column="pro_duration" property="proDuration" jdbcType="VARCHAR" />
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+        <result column="county_code" property="countyCode" jdbcType="VARCHAR" />
+        <result column="source" property="source" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="countNtTendersByNtIdAndSegment" parameterType="com.silita.model.TbNtTenders" resultType="Integer">
@@ -180,7 +183,8 @@
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
         SELECT t1.*,
         t.biness_type, t.nt_category, t.nt_type, t.title, t.pub_date,
-        t.controll_sum, t.pro_sum, t.pro_duration, t.pb_mode, t.url
+        t.controll_sum, t.pro_sum, t.pro_duration, t.pb_mode, t.url,
+        (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
         WHERE t1.nt_id = #{ntId}

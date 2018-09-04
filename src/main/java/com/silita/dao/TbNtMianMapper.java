@@ -47,4 +47,10 @@ public interface TbNtMianMapper {
      */
     public void updateNtMainByPkId(TbNtMian tbNtMian);
 
+    /**
+     * 根据公告类目（大类）：1：招标；2：中标 获取pkid
+     * @param tbNtMian
+     * @return
+     */
+    public String getNtCategoryByPkId(TbNtMian tbNtMian);
 }

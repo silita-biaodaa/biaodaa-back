@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -43,6 +40,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     SysFilesMapper sysFilesMapper;
     @Autowired
     TbNtRecycleHunanMapper recycleHunanMapper;
+    @Autowired
+    TbNtAssociateGpMapper tbNtAssociateGpMapper;
 
     @Override
     @Cacheable(value = "TwfDictNameCache")
@@ -92,9 +91,9 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         HSSFSheet sheet = wb.createSheet();
         Row row = sheet.createRow(indexRow++);
         String[] headers = {
-                "项目名称", "公告状态", "标段", "公式日期","项目地区",
-                "项目县市", "招标类型", "项目类型", "资质","招标控制价",
-                "项目金额", "项目工期", "评标办法", "保证金金额","保证金截至时间",
+                "项目名称", "公告状态", "标段", "公式日期", "项目地区",
+                "项目县市", "招标类型", "项目类型", "资质", "招标控制价",
+                "项目金额", "项目工期", "评标办法", "保证金金额", "保证金截至时间",
                 "报名截止时间", "报名地点", "资格审查截止时间", "投标截止时间",
                 "开标地点", "平台备案要求", "招标状态", "开标人员要求", "变更信息"
         };
@@ -111,14 +110,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             Map<String, Object> detail = details.get(i);
             //一列数据
             for (Map.Entry<String, Object> entry : detail.entrySet()) {
-                if(!entry.getKey().equals("url")) {
+                if (!entry.getKey().equals("url")) {
                     row.createCell(indexCell++).setCellValue(String.valueOf(entry.getValue()));
                 }
             }
             //标题设置超链接
             link.setAddress(String.valueOf(detail.get("url")));
             row.getCell(0).setHyperlink(link);
-            System.out.println( row.getCell(0).getHyperlink().getAddress());
+            System.out.println(row.getCell(0).getHyperlink().getAddress());
         }
         return wb;
     }
@@ -147,6 +146,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setTitle(tbNtTenders.getTitle());
         tbNtMian.setPubDate(tbNtTenders.getPubDate());
         tbNtMian.setUrl(tbNtTenders.getUrl());
+        tbNtMian.setCityCode(tbNtTenders.getCityCode());
+        tbNtMian.setCountyCode(tbNtTenders.getCountyCode());
         tbNtMianMapper.updateNtMainByPkId(tbNtMian);
         //添加标段
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
@@ -175,6 +176,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setTitle(tbNtTenders.getTitle());
         tbNtMian.setPubDate(tbNtTenders.getPubDate());
         tbNtMian.setUrl(tbNtTenders.getUrl());
+        tbNtMian.setCityCode(tbNtTenders.getCityCode());
+        tbNtMian.setCountyCode(tbNtTenders.getCountyCode());
         tbNtMianMapper.updateNtMainByPkId(tbNtMian);
         //更新标段
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
@@ -218,13 +221,20 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     }
 
     @Override
-    public void deleteZhaoBiaoFilesByPkid(SysFiles sysFiles) {
-        sysFilesMapper.deleteSysFilesByPkid(sysFiles);
+    public void deleteZhaoBiaoFilesByPkid(String idStr) {
+        String[] ids = idStr.split("\\|");
+        Set set = new HashSet<String>();
+        for (String id : ids) {
+            set.add(id);
+        }
+        if (set != null && set.size() > 0) {
+            sysFilesMapper.deleteSysFilesByPkid(set.toArray());
+        }
     }
 
     @Override
     public void delNtMainInfo(TbNtMian main, String username) {
-        main.setTableName(DataHandlingUtil.SplicingTable(main.getClass(),main.getSource()));
+        main.setTableName(DataHandlingUtil.SplicingTable(main.getClass(), main.getSource()));
         main.setUpdateBy(username);
         TbNtRecycle recycle = new TbNtRecycle();
         recycle.setPkid(DataHandlingUtil.getUUID());
@@ -235,6 +245,54 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         //将公告数据填进回收站
         recycleHunanMapper.inertRecycleForNtMain(recycle);
         tbNtMianMapper.deleteNtMainByPkId(main);
+    }
+
+    @Override
+    public void insertNtAssociateGp(Map params) {
+        String idsStr = (String) params.get("idsStr");
+        String createBy = (String) params.get("createBy");
+        String source = (String) params.get("source");
+        String[] ids = idsStr.split("\\|");
+        TbNtAssociateGp tbNtAssociateGp;
+        TbNtMian tbNtMian;
+        List tbNtAssociateGpList = new ArrayList<TbNtAssociateGp>(ids.length);
+        for (int i = 0; i < ids.length; i++) {
+            //获取项目类型
+            tbNtMian = new TbNtMian();
+            tbNtMian.setPkid(String.valueOf(ids[i]));
+            tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), source));
+            String ntCategory = tbNtMianMapper.getNtCategoryByPkId(tbNtMian);
+            //
+            tbNtAssociateGp = new TbNtAssociateGp();
+            tbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
+            tbNtAssociateGp.setNtId(ids[i]);
+            tbNtAssociateGp.setRelType(ntCategory);
+            //时间戳 +  随机数
+            tbNtAssociateGp.setRelGp(DataHandlingUtil.getTimeStamp() + "_" + DataHandlingUtil.getNumberRandom(4));
+            tbNtAssociateGp.setPx(String.valueOf(i));
+            tbNtAssociateGp.setCreateBy(createBy);
+            tbNtAssociateGpList.add(tbNtAssociateGp);
+        }
+        String tableName = DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, source);
+        tbNtAssociateGpMapper.batchInsertNtAssociateGp(tbNtAssociateGpList, tableName);
+    }
+
+    @Override
+    public void deleteNtAssociateGp(List<TbNtAssociateGp> tbNtAssociateGps) {
+        for (int i = 0; i < tbNtAssociateGps.size(); i++) {
+            TbNtAssociateGp TbNtAssociateGp = tbNtAssociateGps.get(i);
+            TbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, TbNtAssociateGp.getSource()));
+            tbNtAssociateGpMapper.deleteNtAssociateGpByNtIdAndRelGp(TbNtAssociateGp);
+        }
+    }
+
+    @Override
+    public Map<String, Object> listNtAssociateGp(TbNtAssociateGp tbNtAssociateGp) {
+        tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, tbNtAssociateGp.getSource()));
+        Map result = new HashMap<String, Object>();
+        result.put("datas", tbNtAssociateGpMapper.listNtAssociateGp(tbNtAssociateGp));
+        result.put("total", tbNtAssociateGpMapper.countNtAssociateGp(tbNtAssociateGp));
+        return super.handlePageCount(result, tbNtAssociateGp);
     }
 
 }

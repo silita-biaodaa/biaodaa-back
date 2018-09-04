@@ -1,5 +1,6 @@
 package com.silita.utils;
 
+import com.silita.model.TbNtAssociateGp;
 import com.silita.model.TbNtMian;
 import com.silita.model.TbNtTenders;
 
@@ -146,6 +147,29 @@ public class DataHandlingUtil {
     }
 
     /**
+     * 获取时间戳
+     * @return
+     */
+    public static String getTimeStamp() {
+        return String.valueOf(System.currentTimeMillis());
+    }
+
+    /**
+     * 生成随机数
+     * @param length
+     * @return
+     */
+    public static String getNumberRandom(int length) {
+        StringBuilder val = new StringBuilder();
+        Random random = new Random();
+        //参数length，表示生成几位随机数
+        for (int i = 0; i < length; i++) {
+            val.append(String.valueOf(random.nextInt(10)));
+        }
+        return val.toString();
+    }
+
+    /**
      * 拼接表名称
      * @param model
      * @param source
@@ -157,6 +181,8 @@ public class DataHandlingUtil {
             tableName = "tb_nt_mian_" + source;
         } else if(model.getName().equals(TbNtTenders.class.getName())) {
             tableName = "tb_nt_tenders_" + source;
+        } else if(model.getName().equals(TbNtAssociateGp.class.getName())) {
+            tableName = "tb_nt_associate_gp_" + source;
         }
         return tableName;
     }

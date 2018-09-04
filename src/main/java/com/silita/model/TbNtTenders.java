@@ -229,6 +229,16 @@ public class TbNtTenders {
     private String pubDate;
 
     /**
+     * 业务 市编码
+     */
+    private String cityCode;
+
+    /**
+     * 业务 县编码
+     */
+    private String countyCode;
+
+    /**
      * 省份来源
      */
     private String source;

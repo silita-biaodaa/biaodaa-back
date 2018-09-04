@@ -39,8 +39,14 @@
     WHERE pkid = #{pkid}
   </update>
 
-  <delete id="deleteSysFilesByPkid" parameterType="com.silita.model.SysFiles">
-    DELETE FROM sys_files WHERE pkid = #{pkid}
+  <delete id="deleteSysFilesByPkid" parameterType="String">
+    DELETE FROM sys_files
+    <where>
+      pkid IN
+      <foreach collection="array" open="(" close=")" separator="," item="ele">
+        #{ele}
+      </foreach>
+    </where>
   </delete>
 
 </mapper>

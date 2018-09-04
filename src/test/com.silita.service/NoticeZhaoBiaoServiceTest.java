@@ -1,5 +1,7 @@
 package com.silita.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,7 +151,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
                 "\"proDuration\":\"180\", \"completionTime\":\"2018-08-12\", \"isFlow\":\"true\", \"fundsProvid\":\"修改资金来源\", \"enrollMethod\":\"1\", " +
                 "\"source\":\"hunan\", \"pkid\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"ntId\":\"1\", \"binessType\":\"2\", " +
                 "\"ntCategory\":\"2\", \"ntType\":\"2\", \"certAuditAddr\":\"资格审查地点\", \"filingPfm\":\"备案平台\", \"controllSum\":\"678\", " +
-                "\"title\":\"我要更新\", \"pubDate\":\"2018-09-04\"}";
+                "\"title\":\"我要更新\", \"pubDate\":\"2018-09-04\", \"cityCode\":\"hengyang\", \"countyCode\":\"hengyangxian\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/updateNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -278,7 +280,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController17()throws Exception{
-        String requestBody = "{\"pkid\":\"d2ad2f95a60d460d89040cecee14b915\"}";
+        String requestBody = "{\"idsStr\":\"02321b3e2fd740b4a2d408eb120918fc|09695d60a0aa4ab8af79115cb946ac2e\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/deleteZhaoBiaoFile").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -295,6 +297,71 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
         MockMultipartFile firstFile = new MockMultipartFile("files", "filename.txt", "text/plain", "some xml".getBytes());
 
         String responseString = mockMvc.perform(fileUpload("/upload/uploadZhaoBiaoFile").file(firstFile)
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController19()throws Exception{
+        String requestBody = "{\"idsStr\":\"02321b3e2fd740b4a2d408eb120918fc|09695d60a0aa4ab8af79115cb946ac2e\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/deleteZhaoBiaoFile").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController20()throws Exception{
+        String requestBody = "{\"idsStr\":\"1|2\", \"source\":\"hunan\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/insertNtAssociateGp").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController21()throws Exception{
+        JSONArray array = new JSONArray(2);
+        JSONObject object;
+        for (int i = 0; i < 2; i++) {
+            object = new JSONObject();
+            object.put("ntId", String.valueOf(i));
+            object.put("relGp", "时间戳");
+            object.put("source", "hunan");
+            array.add(object);
+        }
+        String requestBody = array.toJSONString();
+        String responseString = mockMvc.perform(post("/zhaobiao/deleteNtAssociateGp").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController22()throws Exception{
+        String requestBody = "{\"title\":\"测试\", \"source\":\"hunan\", \"pubDate\":\"2018-08-10\", \"pubEndDate\":\"2018-08-30\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/listNtAssociateGp").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
         )
                 .andExpect(status().isOk())
                 .andDo(print())

@@ -26,8 +26,8 @@ public interface SysFilesMapper {
     void updateSysFilesByPkId(SysFiles sysFiles);
 
     /**
-     * 根据BizId删除系统文件记录
-     * @param sysFiles
+     * 根据Pkid删除系统文件记录
+     * @param ids
      */
-    void deleteSysFilesByPkid(SysFiles sysFiles);
+    void deleteSysFilesByPkid(Object[] ids);
 }

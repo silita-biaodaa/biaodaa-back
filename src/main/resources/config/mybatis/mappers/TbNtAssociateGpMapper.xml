@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbNtAssociateGpMapper">
+
+    <resultMap id="BaseResultMap" type="com.silita.model.TbNtAssociateGp">
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="nt_id" property="ntId" jdbcType="VARCHAR"/>
+        <result column="rel_gp" property="relGp" jdbcType="VARCHAR"/>
+        <result column="rel_type" property="relType" jdbcType="VARCHAR"/>
+        <result column="px" property="px" jdbcType="VARCHAR"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="pub_date" property="pubDate" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <insert id="batchInsertNtAssociateGp" parameterType="Map">
+        INSERT INTO ${tableName} (
+        `pkid`, `nt_id`, `rel_gp`, `rel_type`, `px`,
+        `created`, `create_by`
+        )
+        VALUES
+        <foreach collection="lists" item="tbNtAssociateGp" separator=",">
+            (#{tbNtAssociateGp.pkid}, #{tbNtAssociateGp.ntId}, #{tbNtAssociateGp.relGp}, #{tbNtAssociateGp.relType},
+            #{tbNtAssociateGp.px},
+            NOW(), #{tbNtAssociateGp.createBy}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteNtAssociateGpByNtIdAndRelGp" parameterType="com.silita.model.TbNtAssociateGp">
+        DELETE FROM ${tableName}
+        WHERE 1=1
+        <if test="ntId != null and ntId != ''">
+            AND nt_id = #{ntId}
+        </if>
+        <if test="relGp != null and relGp != ''">
+            AND rel_gp = #{relGp}
+        </if>
+    </delete>
+
+    <select id="listNtAssociateGp" parameterType="com.silita.model.TbNtAssociateGp" resultType="Map">
+        SELECT gp.pkid, gp.nt_id AS ntId, gp.rel_gp AS relGp, gp.rel_type AS relType, gp.px,
+        gp.created, gp.create_by AS createBy, gp.updated, gp.update_by AS updateBy, main.title,
+        main.pub_date AS pubDate
+        FROM ${tableName} gp
+        LEFT JOIN tb_nt_mian_${source} main ON gp.nt_id = main.pkid
+        WHERE 1 = 1
+        <if test="title != null and title != ''">
+            AND main.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="pubDate !=null and pubDate!=''">
+            AND main.pub_date &gt;= #{pubDate}
+        </if>
+        <if test="pubEndDate !=null and pubEndDate!=''">
+            AND main.pub_date &lt;= #{pubEndDate}
+        </if>
+    </select>
+
+    <select id="countNtAssociateGp" parameterType="com.silita.model.TbNtAssociateGp" resultType="Integer">
+        SELECT COUNT(*)
+        FROM ${tableName} gp
+        LEFT JOIN tb_nt_mian_${source} main ON gp.nt_id = main.pkid
+        WHERE 1 = 1
+        <if test="title != null and title != ''">
+            AND main.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="pubDate !=null and pubDate!=''">
+            AND main.pub_date &gt;= #{pubDate}
+        </if>
+        <if test="pubEndDate !=null and pubEndDate!=''">
+            AND main.pub_date &lt;= #{pubEndDate}
+        </if>
+    </select>
+</mapper>

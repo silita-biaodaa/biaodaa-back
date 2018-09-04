@@ -116,9 +116,33 @@ public interface INoticeZhaoBiaoService {
 
     /**
      * 根据公告pkid删除文件列表
-     * @param sysFiles
+     * * @param idStr
      */
-    void deleteZhaoBiaoFilesByPkid(SysFiles sysFiles);
+    void deleteZhaoBiaoFilesByPkid(String idStr);
 
+    /**
+     *
+     * @param main
+     * @param username
+     */
     void delNtMainInfo(TbNtMian main,String username);
+
+    /**
+     * 添加公告关联关系
+     * @param params
+     */
+    void insertNtAssociateGp(Map params);
+
+    /**
+     * 删除公告关联关系
+     * @param tbNtAssociateGps
+     */
+    void deleteNtAssociateGp(List<TbNtAssociateGp> tbNtAssociateGps);
+
+    /**
+     * 获取公告关联关系数据
+     * @param tbNtAssociateGp
+     * @return
+     */
+    Map<String, Object> listNtAssociateGp(TbNtAssociateGp tbNtAssociateGp);
 }
