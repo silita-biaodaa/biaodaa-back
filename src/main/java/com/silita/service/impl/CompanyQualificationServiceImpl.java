@@ -35,7 +35,29 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
     @Override
     public List getCompanyQualList(TbCompanyQualification companyQualification) {
         List list = new ArrayList();
-        list = tbCompanyQualificationMapper.queryCompanyQual(companyQualification);
+        List<TbCompanyQualification> qualList = tbCompanyQualificationMapper.queryCompanyQual(companyQualification);
+        List companyQualList = new ArrayList();
+        TbCompanyQualification comQual = null;
+        if (null != qualList && qualList.size() > 0) {
+            for (TbCompanyQualification qual : qualList) {
+                comQual = new TbCompanyQualification();
+                comQual.setComId(qual.getComId());
+                comQual.setCertDate(qual.getCertDate());
+                comQual.setCertNo(qual.getCertNo());
+                comQual.setCertOrg(qual.getCertOrg());
+                comQual.setChannel(qual.getChannel());
+                comQual.setQualType(qual.getQualType());
+                comQual.setValidDate(qual.getValidDate());
+                if (null != qual.getRange()) {
+                    String[] rages = qual.getRange().split(",");
+                    for (String str : rages) {
+                        comQual.setQualName(str);
+                        companyQualList.add(comQual);
+                    }
+                }
+            }
+            list.addAll(companyQualList);
+        }
         TbCompanyQualificationHm qualHm = new TbCompanyQualificationHm();
         qualHm.setComId(companyQualification.getComId());
         List<TbCompanyQualificationHm> companyQualificationHmList = tbCompanyQualificationHmMapper.queryCompanyQualHm(qualHm);
@@ -48,7 +70,7 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
                 dicQua = dicQuaMapper.queryQualDetail(hm.getQuaCode());
                 hm.setQualType(dicQuaMapper.queryQualDetailById(dicQua.getParentId()).getQuaName());
                 common = dicCommonMapper.queryDicComm(hm.getRange().split("/")[1]);
-                hm.setQualName(dicQua.getQuaName()+common.getName());
+                hm.setQualName(dicQua.getQuaName() + common.getName());
                 hm.setChannel(Constant.SOURCE_LAB);
             }
             list.addAll(companyQualificationHmList);
@@ -58,34 +80,34 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
 
     @Override
     public Map<String, Object> addCompanyQual(Map<String, Object> param, String username) {
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         //判断资质名称是否存在
-        String quaCode = MapUtils.getString(param,"quaCode");
+        String quaCode = MapUtils.getString(param, "quaCode");
         DicQua qua = dicQuaMapper.queryQualDetail(quaCode);
         Integer count = tbCompanyQualificationHmMapper.queryCompanyQualCountByQual(param);
         TbCompanyQualification qualification = new TbCompanyQualification();
-        qualification.setComId(MapUtils.getString(param,"comId"));
+        qualification.setComId(MapUtils.getString(param, "comId"));
         qualification.setQualName(qua.getQuaName());
         Integer quaCount = tbCompanyQualificationMapper.queryCompanyQualCount(qualification);
-        if(count > 0 || quaCount > 0){
-            resultMap.put("code",Constant.CODE_WARN_400);
-            resultMap.put("msg",Constant.MSG_WARN_400);
+        if (count > 0 || quaCount > 0) {
+            resultMap.put("code", Constant.CODE_WARN_400);
+            resultMap.put("msg", Constant.MSG_WARN_400);
             return resultMap;
         }
         TbCompanyQualificationHm companyQualificationHm = new TbCompanyQualificationHm();
         companyQualificationHm.setPkid(DataHandlingUtil.getUUID());
-        companyQualificationHm.setComId(MapUtils.getString(param,"comId"));
-        companyQualificationHm.setCertDate(MapUtils.getString(param,"certDate"));
-        companyQualificationHm.setCertNo(MapUtils.getString(param,"certNo"));
-        companyQualificationHm.setCertOrg(MapUtils.getString(param,"certOrg"));
+        companyQualificationHm.setComId(MapUtils.getString(param, "comId"));
+        companyQualificationHm.setCertDate(MapUtils.getString(param, "certDate"));
+        companyQualificationHm.setCertNo(MapUtils.getString(param, "certNo"));
+        companyQualificationHm.setCertOrg(MapUtils.getString(param, "certOrg"));
         companyQualificationHm.setQuaCode(quaCode);
-        companyQualificationHm.setRange(quaCode+"/"+MapUtils.getString(param,"gradeCode"));
-        companyQualificationHm.setValidDate(MapUtils.getString(param,"validDate"));
+        companyQualificationHm.setRange(quaCode + "/" + MapUtils.getString(param, "gradeCode"));
+        companyQualificationHm.setValidDate(MapUtils.getString(param, "validDate"));
         companyQualificationHm.setCreateBy(username);
         companyQualificationHm.setCreated(new Date());
         tbCompanyQualificationHmMapper.insertCompanyQual(companyQualificationHm);
-        resultMap.put("code",Constant.CODE_SUCCESS);
-        resultMap.put("msg",Constant.MSG_SUCCESS);
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
     }
 
