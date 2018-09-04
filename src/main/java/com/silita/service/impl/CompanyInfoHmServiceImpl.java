@@ -163,11 +163,11 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
         TbCompanyInfoHm companyInfo = new TbCompanyInfoHm();
         Integer count = 0;
         Integer comCount = 0;
+        if ("update".equals(operate)) {
+            companyInfo.setPkid(companyInfoHm.getPkid());
+        }
         if (null != companyInfoHm.getComName()) {
             companyInfo.setComName(companyInfoHm.getComName());
-            if ("update".equals(operate)) {
-                companyInfo.setPkid(companyInfoHm.getPkid());
-            }
             count = companyInfoHmMapper.queryCompanyCount(companyInfo);
             comCount = companyMapper.queryComCount(companyInfo);
             if (count > 0 || comCount > 0) {

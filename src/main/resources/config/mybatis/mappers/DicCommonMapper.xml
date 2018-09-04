@@ -114,4 +114,9 @@
         LIMIT #{start}, #{pageSize}
     </select>
 
+    <select id="queryDicComm" resultType="com.silita.model.DicCommon" parameterType="java.lang.String">
+        select *
+        from dic_common
+        where `code` = #{code}
+    </select>
 </mapper>

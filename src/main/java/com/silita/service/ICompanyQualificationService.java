@@ -15,7 +15,7 @@ public interface ICompanyQualificationService {
      * @param companyQualification
      * @return
      */
-    List<TbCompanyQualification> getCompanyQualList(TbCompanyQualification companyQualification);
+    List getCompanyQualList(TbCompanyQualification companyQualification);
 
     /**
      * 添加企业资质

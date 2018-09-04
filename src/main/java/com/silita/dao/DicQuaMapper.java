@@ -48,4 +48,18 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * @return
      */
     Integer queryQualCountByName(Map<String,Object> param);
+
+    /**
+     * 根据资质code查询详情
+     * @param quaCode
+     * @return
+     */
+    DicQua queryQualDetail(String quaCode);
+
+    /**
+     * 根据主键查询详情
+     * @param pkid
+     * @return
+     */
+    DicQua queryQualDetailById(String pkid);
 }

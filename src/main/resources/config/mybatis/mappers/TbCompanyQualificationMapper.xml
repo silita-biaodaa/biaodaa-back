@@ -26,7 +26,8 @@
     </resultMap>
 
     <select id="queryCompanyQual" resultMap="BaseResultMap" parameterType="com.silita.model.TbCompanyQualification">
-    select *
+    select *,
+            '1' as channel
     from tb_company_qualification
     where com_id = #{comId}
   </select>

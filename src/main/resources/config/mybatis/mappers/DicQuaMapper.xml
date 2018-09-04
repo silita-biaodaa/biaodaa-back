@@ -213,4 +213,16 @@
             and  id != #{id}
         </if>
     </select>
+
+    <select id="queryQualDetail" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from dic_qua
+        where qua_code = #{quaCode}
+    </select>
+
+    <select id="queryQualDetailById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from dic_qua
+        where id = #{pkid}
+    </select>
 </mapper>

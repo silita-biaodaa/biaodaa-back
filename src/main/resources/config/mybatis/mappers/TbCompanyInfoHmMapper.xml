@@ -24,6 +24,7 @@
         select count(1)
         from tb_company_info_hm
         where 1=1
+        and com_id is null
         <if test="comName != null and comName != ''">
             and com_name = #{comName}
         </if>
@@ -41,6 +42,7 @@
           ,DATE_FORMAT(created, '%Y-%m-%d') as create_date
           ,DATE_FORMAT(updated, '%Y-%m-%d') as update_date
     from tb_company_info_hm
+    where com_id is null
     order by created desc
     limit #{start},#{pageSize}
   </select>
