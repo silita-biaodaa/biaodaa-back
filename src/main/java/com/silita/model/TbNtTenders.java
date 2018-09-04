@@ -29,11 +29,6 @@ public class TbNtTenders {
     private String segment;
 
     /**
-     * 项目金额
-     */
-    private Double proSum;
-
-    /**
      * 报名地址
      */
     private String enrollAddr;
@@ -52,11 +47,6 @@ public class TbNtTenders {
      * 投标截止时间
      */
     private String bidEndTime;
-
-    /**
-     * 评标办法(code)
-     */
-    private String pbMode;
 
     /**
      * 投标保证金
@@ -144,11 +134,6 @@ public class TbNtTenders {
     private String enrollMethod;
 
     /**
-     * 项目工期
-     */
-    private String proDuration;
-
-    /**
      * 计划竣工时间
      */
     private String completionTime;
@@ -184,27 +169,62 @@ public class TbNtTenders {
     private String updateBy;
 
     /**
-     * 业务 业务类别(1:建筑工程；2：政府采购；)
+     * 新增 资格审查地点
+     */
+    private String certAuditAddr;
+
+    /**
+     * 新增 备案平台(编码)
+     */
+    private String filingPfm;
+
+    /**
+     * 业务更新 业务类别(1:建筑工程；2：政府采购；)
      */
     private String binessType;
 
     /**
-     * 业务 公告类目（大类）：1：招标；2：中标
+     * 业务更新 公告类目（大类）：1：招标；2：中标
      */
     private String ntCategory;
 
     /**
-     * 业务 公告类型（小类）
+     * 业务更新 公告类型（小类）
      */
     private String ntType;
 
     /**
-     * 标题
+     * 业务更新 招标控制价
+     */
+    private Double controllSum;
+
+    /**
+     * 业务更新 项目金额
+     */
+    private Double proSum;
+
+    /**
+     * 业务更新 项目工期
+     */
+    private String proDuration;
+
+    /**
+     * 业务更新 评标办法(code)
+     */
+    private String pbMode;
+
+    /**
+     * 业务更新 公告url
+     */
+    private String url;
+
+    /**
+     * 业务 标题
      */
     private String title;
 
     /**
-     * 公示时间
+     * 业务 公示时间
      */
     private String pubDate;
 

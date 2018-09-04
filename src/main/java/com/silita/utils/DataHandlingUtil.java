@@ -173,6 +173,7 @@ public class DataHandlingUtil {
         map.put("audited", "2");
         map.put("unaudited", "3");
         map.put("notAudited", "4");
+        map.put("Handled", "5");
         return map;
     }
 

@@ -7,12 +7,12 @@
         <result column="nt_id" property="ntId" jdbcType="VARCHAR" />
         <result column="edit_code" property="editCode" jdbcType="VARCHAR" />
         <result column="segment" property="segment" jdbcType="INTEGER" />
-        <result column="pro_sum" property="proSum" jdbcType="DOUBLE" />
+        <!--<result column="pro_sum" property="proSum" jdbcType="DOUBLE" />-->
         <result column="enroll_addr" property="enrollAddr" jdbcType="VARCHAR" />
         <result column="opening_addr" property="openingAddr" jdbcType="VARCHAR" />
         <result column="enroll_end_time" property="enrollEndTime" jdbcType="TIMESTAMP" />
         <result column="bid_end_time" property="bidEndTime" jdbcType="TIMESTAMP" />
-        <result column="pb_mode" property="pbMode" jdbcType="VARCHAR" />
+        <!--<result column="pb_mode" property="pbMode" jdbcType="VARCHAR" />-->
         <result column="bid_bonds" property="bidBonds" jdbcType="VARCHAR" />
         <result column="bid_bonds_end_time" property="bidBondsEndTime" jdbcType="TIMESTAMP" />
         <result column="keep_bonds" property="keepBonds" jdbcType="DOUBLE" />
@@ -30,7 +30,7 @@
         <result column="social_security" property="socialSecurity" jdbcType="VARCHAR" />
         <result column="achievement" property="achievement" jdbcType="VARCHAR" />
         <result column="enroll_method" property="enrollMethod" jdbcType="VARCHAR" />
-        <result column="pro_duration" property="proDuration" jdbcType="VARCHAR" />
+        <!--<result column="pro_duration" property="proDuration" jdbcType="VARCHAR" />-->
         <result column="completion_time" property="completionTime" jdbcType="TIMESTAMP" />
         <result column="is_flow" property="isFlow" jdbcType="BIT" />
         <result column="funds_provid" property="fundsProvid" jdbcType="VARCHAR" />
@@ -43,6 +43,13 @@
         <result column="nt_type" property="ntType" jdbcType="VARCHAR" />
         <result column="pub_date" property="pubDate" jdbcType="VARCHAR" />
         <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="cert_audit_addr" property="certAuditAddr" jdbcType="VARCHAR" />
+        <result column="filing_pfm" property="filingPfm" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="controll_sum" property="controllSum" jdbcType="DOUBLE" />
+        <result column="pro_sum" property="proSum" jdbcType="DOUBLE" />
+        <result column="pb_mode" property="pbMode" jdbcType="VARCHAR" />
+        <result column="pro_duration" property="proDuration" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="countNtTendersByNtIdAndSegment" parameterType="com.silita.model.TbNtTenders" resultType="Integer">
@@ -58,22 +65,22 @@
 
     <insert id="insertNtTenders" parameterType="com.silita.model.TbNtTenders">
         INSERT INTO ${tableName} (
-          `nt_id`, `edit_code`, `segment`, `pro_sum`, `enroll_addr`,
-          `opening_addr`, `enroll_end_time`, `bid_end_time`, `pb_mode`, `bid_bonds`,
+          `nt_id`, `edit_code`, `segment`, `enroll_addr`, `cert_audit_addr`,
+          `opening_addr`, `enroll_end_time`, `bid_end_time`, `bid_bonds`,
           `bid_bonds_end_time`, `keep_bonds`, `other_bonds`, `audit_time`, `opening_person`,
           `opening_file_fee`, `other_fee`, `tenderee`, `tender_contact_person`, `tender_contact_info`,
           `proxy_contact_person`, `proxy_contact_info`, `pro_person`, `social_security`, `achievement`,
-          `enroll_method`, `pro_duration`, `completion_time`, `is_flow`, `funds_provid`,
-          `created`, `create_by`, `pkid`
+          `enroll_method`, `completion_time`, `is_flow`, `funds_provid`,
+          `filing_pfm`, `created`, `create_by`, `pkid`
         )
         values (
-          #{ntId}, #{editCode}, #{segment}, #{proSum}, #{enrollAddr},
-          #{openingAddr}, #{enrollEndTime}, #{bidEndTime}, #{pbMode}, #{bidBonds},
+          #{ntId}, #{editCode}, #{segment}, #{enrollAddr}, #{certAuditAddr},
+          #{openingAddr}, #{enrollEndTime}, #{bidEndTime}, #{bidBonds},
           #{bidBondsEndTime}, #{keepBonds}, #{otherBonds}, #{auditTime}, #{openingPerson},
           #{openingFileFee}, #{otherFee}, #{tenderee}, #{tenderContactPerson}, #{tenderContactInfo},
           #{proxyContactPerson}, #{proxyContactInfo}, #{proPerson}, #{socialSecurity}, #{achievement},
-          #{enrollMethod}, #{proDuration}, #{completionTime}, #{isFlow}, #{fundsProvid},
-          NOW(), #{createBy}, #{pkid}
+          #{enrollMethod}, #{completionTime}, #{isFlow}, #{fundsProvid},
+          #{filingPfm}, NOW(), #{createBy}, #{pkid}
         )
     </insert>
 
@@ -84,9 +91,6 @@
         </if>
         <if test="segment !=null and segment!=''">
             `segment` = #{segment},
-        </if>
-        <if test="proSum !=null and proSum!=''">
-            `pro_sum` = #{proSum},
         </if>
         <if test="enrollAddr !=null and enrollAddr!=''">
             `enroll_addr` = #{enrollAddr},
@@ -99,9 +103,6 @@
         </if>
         <if test="bidEndTime !=null and bidEndTime!=''">
             `bid_end_time` = #{bidEndTime},
-        </if>
-        <if test="pbMode !=null and pbMode!=''">
-            `pb_mode` = #{pbMode},
         </if>
         <if test="bidBonds !=null and bidBonds!=''">
             `bid_bonds` = #{bidBonds},
@@ -154,9 +155,6 @@
         <if test="enrollMethod !=null and enrollMethod!=''">
             `enroll_method` = #{enrollMethod},
         </if>
-        <if test="proDuration !=null and proDuration!=''">
-            `pro_duration` = #{proDuration},
-        </if>
         <if test="completionTime !=null and completionTime!=''">
             `completion_time` = #{completionTime},
         </if>
@@ -166,6 +164,12 @@
         <if test="fundsProvid !=null and fundsProvid!=''">
             `funds_provid` = #{fundsProvid},
         </if>
+        <if test="certAuditAddr !=null and certAuditAddr!=''">
+            `cert_audit_addr` = #{certAuditAddr},
+        </if>
+        <if test="filingPfm !=null and filingPfm!=''">
+            `filing_pfm` = #{filingPfm},
+        </if>
         <if test="updateBy !=null and updateBy!=''">
             `update_by` = #{updateBy},
         </if>
@@ -174,15 +178,13 @@
     </update>
 
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
-        SELECT t1.*
-                ,t.biness_type
-                ,t.nt_category
-                ,t.nt_type
-                ,t.title
-                ,t.pub_date
+        SELECT t1.*,
+        t.biness_type, t.nt_category, t.nt_type, t.title, t.pub_date,
+        t.controll_sum, t.pro_sum, t.pro_duration, t.pb_mode, t.url
         FROM ${tableName} t1
-        left join tb_nt_mian_${source} t on t1.nt_id = t.pkid
-        WHERE nt_id = #{ntId} ORDER BY `segment` asc
+        LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
+        WHERE t1.nt_id = #{ntId}
+        ORDER BY LENGTH(t1.`segment`) ASC, t1.`segment` ASC
     </select>
 
     <delete id="deleteNtTendersByPkId" parameterType="com.silita.model.TbNtTenders">

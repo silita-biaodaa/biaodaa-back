@@ -125,6 +125,26 @@ public class TbNtMian extends Pagination{
     private Date analysisTime;
 
     /**
+     * 新增 招标控制价
+     */
+    private Double controllSum;
+
+    /**
+     * 转移 项目金额
+     */
+    private Double proSum;
+
+    /**
+     * 转移 项目工期
+     */
+    private String proDuration;
+
+    /**
+     * 转移 评标办法(code)
+     */
+    private String pbMode;
+
+    /**
      * 创建时间
      */
     private Date created;
