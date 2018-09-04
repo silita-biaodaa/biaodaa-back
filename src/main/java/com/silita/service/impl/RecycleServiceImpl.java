@@ -1,9 +1,12 @@
 package com.silita.service.impl;
 
+import com.silita.dao.TbNtMianMapper;
 import com.silita.dao.TbNtRecycleHunanMapper;
+import com.silita.model.TbNtMian;
 import com.silita.model.TbNtRecycle;
 import com.silita.service.IRecycleService;
 import com.silita.service.abs.AbstractService;
+import com.silita.utils.DataHandlingUtil;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,8 @@ public class RecycleServiceImpl extends AbstractService implements IRecycleServi
 
     @Autowired
     TbNtRecycleHunanMapper tbNtRecycleHunanMapper;
+    @Autowired
+    TbNtMianMapper tbNtMianMapper;
 
     @Override
     public Map<String, Object> getRecycleList(TbNtRecycle recycle) {
@@ -45,10 +50,17 @@ public class RecycleServiceImpl extends AbstractService implements IRecycleServi
         TbNtRecycle recycle = new TbNtRecycle();
         TbNtRecycle ntRecycle = null;
         recycle.setSource(MapUtils.getString(param,"source"));
+        TbNtMian mian;
         for (String id :pkids){
             recycle.setPkid(id);
             ntRecycle = tbNtRecycleHunanMapper.queryNtRecycleDetail(recycle);
-            tbNtRecycleHunanMapper.deleteRecyleLogic(recycle);
+            tbNtRecycleHunanMapper.deleteRecyleLogic(ntRecycle);
+            mian = new TbNtMian();
+            mian.setTableName(DataHandlingUtil.SplicingTable(mian.getClass(),ntRecycle.getSource()));
+            mian.setPkid(ntRecycle.getNtId());
+            mian.setUpdateBy(MapUtils.getString(param,"username"));
+            mian.setIsEnable("1");
+            tbNtMianMapper.deleteNtMainByPkId(mian);
         }
     }
 }
