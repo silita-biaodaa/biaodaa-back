@@ -41,6 +41,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtChangeMapper tbNtChangeMapper;
     @Autowired
     SysFilesMapper sysFilesMapper;
+    @Autowired
+    TbNtRecycleHunanMapper recycleHunanMapper;
 
     @Override
     @Cacheable(value = "TwfDictNameCache")
@@ -218,6 +220,21 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public void deleteZhaoBiaoFilesByPkid(SysFiles sysFiles) {
         sysFilesMapper.deleteSysFilesByPkid(sysFiles);
+    }
+
+    @Override
+    public void delNtMainInfo(TbNtMian main, String username) {
+        main.setTableName(DataHandlingUtil.SplicingTable(main.getClass(),main.getSource()));
+        main.setUpdateBy(username);
+        TbNtRecycle recycle = new TbNtRecycle();
+        recycle.setPkid(DataHandlingUtil.getUUID());
+        recycle.setNtId(main.getPkid());
+        recycle.setSource(main.getSource());
+        recycle.setCreateBy(username);
+        recycle.setDelType("4");
+        //将公告数据填进回收站
+        recycleHunanMapper.inertRecycleForNtMain(recycle);
+        tbNtMianMapper.deleteNtMainByPkId(main);
     }
 
 }

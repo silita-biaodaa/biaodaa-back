@@ -5,7 +5,7 @@
     <select id="listNtMain" parameterType="com.silita.model.TbNtMian" resultType="Map">
         SELECT `pkid`, `title`, `pub_date` AS pubDate, `src_site` AS srcSite, `nt_status` AS ntStatus
         FROM ${tableName}
-        WHERE 1=1
+        WHERE 1=1 and is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
             AND provice_code = #{proviceCode}
         </if>
@@ -44,7 +44,7 @@
     <select id="countNtMian" parameterType="com.silita.model.TbNtMian" resultType="Integer">
         SELECT COUNT(*)
         FROM ${tableName}
-        WHERE 1=1
+        WHERE 1=1 and is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
             AND provice_code = #{proviceCode}
         </if>
@@ -121,9 +121,25 @@
         ORDER BY pub_date DESC
     </select>
 
-    <delete id="deleteNtMainByPkId" parameterType="com.silita.model.TbNtMian">
-        DELETE FROM ${tableName} WHERE pkid = #{pkid}
-    </delete>
+    <!--<delete id="deleteNtMainByPkId" parameterType="com.silita.model.TbNtMian">-->
+        <!--DELETE FROM ${tableName} WHERE pkid = #{pkid}-->
+    <!--</delete>-->
+
+    <update id="deleteNtMainByPkId" parameterType="com.silita.model.TbNtMian">
+       update ${tableName}
+       set
+        <choose>
+            <when test="isEnable != null and isEnable != ''">
+                is_enable = #{isEnable},
+            </when>
+            <otherwise>
+                is_enable = 0,
+            </otherwise>
+        </choose>
+        `updated` = NOW(),
+        `update_by` = #{updateBy}
+       WHERE pkid = #{pkid}
+    </update>
 
     <update id="updateNtMainCategoryAndStatusByPkId" parameterType="com.silita.model.TbNtMian">
         UPDATE ${tableName} SET

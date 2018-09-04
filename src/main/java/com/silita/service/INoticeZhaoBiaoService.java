@@ -119,4 +119,6 @@ public interface INoticeZhaoBiaoService {
      * @param sysFiles
      */
     void deleteZhaoBiaoFilesByPkid(SysFiles sysFiles);
+
+    void delNtMainInfo(TbNtMian main,String username);
 }

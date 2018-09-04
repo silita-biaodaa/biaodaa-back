@@ -13,6 +13,7 @@
         <result column="cert_date" property="certDate" jdbcType="VARCHAR"/>
         <result column="valid_date" property="validDate" jdbcType="VARCHAR"/>
         <result column="range" property="range" jdbcType="VARCHAR"/>
+        <result column="issue_date" property="issueDate" jdbcType="VARCHAR"/>
         <result column="qua_code" property="quaCode" jdbcType="VARCHAR"/>
         <result column="created" property="created" jdbcType="TIMESTAMP"/>
         <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
@@ -50,6 +51,9 @@
         </if>
         <if test="certOrg != null and certOrg != ''">
             `cert_org`,
+        </if>
+        <if test="issueDate != null and issueDate != ''">
+            `issue_date`,
         </if>
         <if test="certDate != null and certDate != ''">
             `cert_date`,
@@ -91,6 +95,9 @@
         </if>
         <if test="certOrg != null and certOrg != ''">
             #{certOrg},
+        </if>
+        <if test="issueDate != null and issueDate != ''">
+            #{issueDate},
         </if>
         <if test="certDate != null and certDate != ''">
             #{certDate},

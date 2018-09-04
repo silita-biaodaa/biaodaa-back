@@ -27,7 +27,7 @@
         <javaClientGenerator targetPackage="com.silita.dao" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="sys_files">
+        <table tableName="tb_nt_text_hunan">
             <!--mysql 配置-->
             <generatedKey column="pkid" sqlStatement="Mysql" identity="true"/>
             <!--oracle 配置-->

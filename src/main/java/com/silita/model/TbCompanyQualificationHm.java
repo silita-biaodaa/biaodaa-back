@@ -74,6 +74,11 @@ public class TbCompanyQualificationHm {
     private String updateBy;
 
     /**
+     * 发文日期
+     */
+    private String issueDate;
+
+    /**
      * 资质类别
      */
     private String qualType;

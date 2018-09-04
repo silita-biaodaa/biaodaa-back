@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbNtRecycleHunanMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.TbNtRecycle">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="del_type" property="delType" jdbcType="VARCHAR"/>
+        <result column="nt_id" property="ntId" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="controll_sum" property="controllSum" jdbcType="DOUBLE"/>
+        <result column="pro_sum" property="proSum" jdbcType="DOUBLE"/>
+        <result column="pro_duration" property="proDuration" jdbcType="VARCHAR"/>
+        <result column="pb_mode" property="pbMode" jdbcType="VARCHAR"/>
+        <result column="seg_count" property="segCount" jdbcType="INTEGER"/>
+        <result column="provice_code" property="proviceCode" jdbcType="VARCHAR"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="county_code" property="countyCode" jdbcType="VARCHAR"/>
+        <result column="biness_type" property="binessType" jdbcType="VARCHAR"/>
+        <result column="nt_category" property="ntCategory" jdbcType="VARCHAR"/>
+        <result column="nt_type" property="ntType" jdbcType="VARCHAR"/>
+        <result column="year" property="year" jdbcType="CHAR"/>
+        <result column="pub_date" property="pubDate" jdbcType="DATE"/>
+        <result column="src_site" property="srcSite" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="VARCHAR"/>
+        <result column="is_enable" property="isEnable" jdbcType="VARCHAR"/>
+        <result column="nt_status" property="ntStatus" jdbcType="VARCHAR"/>
+        <result column="px" property="px" jdbcType="INTEGER"/>
+        <result column="snatch_id" property="snatchId" jdbcType="VARCHAR"/>
+        <result column="snatch_batch" property="snatchBatch" jdbcType="VARCHAR"/>
+        <result column="snatch_time" property="snatchTime" jdbcType="TIMESTAMP"/>
+        <result column="analysis_id" property="analysisId" jdbcType="VARCHAR"/>
+        <result column="analysis_time" property="analysisTime" jdbcType="TIMESTAMP"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryNtRecycleList" parameterType="com.silita.model.TbNtRecycle" resultMap="BaseResultMap">
+        select *
+        from tb_nt_recycle_${source}
+        where 1=1 and is_enable = 1
+        <if test="title != null and title != ''">
+            and title like CONCAT('%', #{title}, '%')
+        </if>
+        ORDER BY `pub_date` DESC, `nt_status` ASC
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="queryNtRecycleTotal" parameterType="com.silita.model.TbNtRecycle" resultType="java.lang.Integer">
+        select count(1)
+        from tb_nt_recycle_${source}
+        where 1=1 and is_enable = 1
+        <if test="title != null and title != ''">
+            and title like CONCAT('%', #{title}, '%')
+        </if>
+        ORDER BY `pub_date` DESC, `nt_status` ASC
+    </select>
+
+    <select id="queryNtRecycleDetail" parameterType="com.silita.model.TbNtRecycle" resultMap="BaseResultMap">
+     select *
+    from tb_nt_recycle_${source}
+    where 1=1
+    and pkid = #{pkid}
+  </select>
+
+    <update id="deleteRecyleLogic" parameterType="com.silita.model.TbNtRecycle">
+    update tb_nt_recycle_${source} set is_enable = 0 where pkid = #{pkid}
+  </update>
+
+    <insert id="inertRecycleForNtMain" parameterType="com.silita.model.TbNtRecycle">
+    INSERT INTO `tb_nt_recycle_${source}` (
+          `pkid`,
+          `del_type`,
+          `nt_id`,
+          `title`,
+          `url`,
+          `controll_sum`,
+          `pro_sum`,
+          `pro_duration`,
+          `pb_mode`,
+          `seg_count`,
+          `provice_code`,
+          `city_code`,
+          `county_code`,
+          `biness_type`,
+          `nt_category`,
+          `nt_type`,
+          `year`,
+          `pub_date`,
+          `src_site`,
+          `source`,
+          `is_enable`,
+          `nt_status`,
+          `px`,
+          `snatch_id`,
+          `snatch_batch`,
+          `snatch_time`,
+          `analysis_id`,
+          `analysis_time`,
+          `created`,
+          `create_by`
+        )
+SELECT #{pkid},#{delType},t.`pkid`,t.`title`,t.`url`,t.`controll_sum`,t.pro_sum,t.pro_duration,t.pb_mode,t.`seg_count`,t.`provice_code`,t.`city_code`
+,t.`county_code`,t.`biness_type`,t.`nt_category`,t.`nt_type`,t.`year`,t.`pub_date`,t.`src_site`,t.`source`,t.`is_enable`,t.`nt_status`
+,t.`px`,t.`snatch_id`,t.`snatch_batch`,t.`snatch_time`,t.`analysis_id`,t.`analysis_time`,NOW(),#{createBy}
+FROM tb_nt_mian_${source} t WHERE t.`pkid` = #{ntId}
+  </insert>
+</mapper>
