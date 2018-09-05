@@ -179,14 +179,23 @@ public class NoticeZhaobiaoController extends BaseController {
     @RequestMapping(value = "/insertNtAssociateGp",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> insertNtAssociateGp(@RequestBody Map<String,Object> param, ServletRequest request) {
-        param.put("createBy", JWTUtil.getUsername(request));
-        noticeZhaoBiaoService.insertNtAssociateGp(param);
-        return super.successMap(null);
+        Map result = new HashMap<String,Object>();
+        result.put("code", 1);
+        try{
+            param.put("createBy", JWTUtil.getUsername(request));
+            String msg =  noticeZhaoBiaoService.insertNtAssociateGp(param);
+            result.put("msg", msg);
+        } catch (Exception e) {
+            result.put("code",0);
+            result.put("msg",e.getMessage());
+        }
+        return result;
     }
 
     @RequestMapping(value = "/deleteNtAssociateGp",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
-    public Map<String,Object> deleteNtAssociateGp(@RequestBody List<TbNtAssociateGp> tbNtAssociateGps) {
+    public Map<String,Object> deleteNtAssociateGp(@RequestBody Map params) {
+        List<Map<String, Object>> tbNtAssociateGps = (List<Map<String, Object>>) params.get("list");
         noticeZhaoBiaoService.deleteNtAssociateGp(tbNtAssociateGps);
         return super.successMap(null);
     }

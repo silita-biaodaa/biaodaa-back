@@ -127,13 +127,13 @@ public interface INoticeZhaoBiaoService {
      * 添加公告关联关系
      * @param params
      */
-    void insertNtAssociateGp(Map params);
+    String insertNtAssociateGp(Map params);
 
     /**
      * 删除公告关联关系
      * @param tbNtAssociateGps
      */
-    void deleteNtAssociateGp(List<TbNtAssociateGp> tbNtAssociateGps);
+    void deleteNtAssociateGp(List<Map<String, Object>> tbNtAssociateGps);
 
     /**
      * 获取公告关联关系数据

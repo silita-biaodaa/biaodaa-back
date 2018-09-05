@@ -34,4 +34,10 @@ public interface TbNtAssociateGpMapper {
      */
     Integer countNtAssociateGpByNtId(TbNtAssociateGp tbNtAssociateGp);
 
+    /**
+     *
+     * @return
+     */
+    List<TbNtAssociateGp> getRelGpByNtIds(@Param("array")Object[] array, @Param("tableName")String tableName);
+
 }

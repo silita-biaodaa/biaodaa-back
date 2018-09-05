@@ -251,40 +251,79 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     }
 
     @Override
-    public void insertNtAssociateGp(Map params) {
+    public String insertNtAssociateGp(Map params) {
+        String msg = "关联成功！";
         String idsStr = (String) params.get("idsStr");
         String createBy = (String) params.get("createBy");
         String source = (String) params.get("source");
         String[] ids = idsStr.split("\\|");
+        //数据库中已存在的
+        List<TbNtAssociateGp> TbNtAssociateGps  = tbNtAssociateGpMapper.getRelGpByNtIds(ids, DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, source));
+        Set set = new HashSet<String>();
+        for (TbNtAssociateGp tbNtAssociateGp : TbNtAssociateGps) {
+            set.add(tbNtAssociateGp.getNtId());
+        }
+
         TbNtMian tbNtMian;
         TbNtAssociateGp tbNtAssociateGp;
-        //时间戳 + 随机数
-        String relGp = DataHandlingUtil.getTimeStamp() + "_" + DataHandlingUtil.getNumberRandom(4);
         List tbNtAssociateGpList = new ArrayList<TbNtAssociateGp>(ids.length);
-        for (int i = 0; i < ids.length; i++) {
-            //获取项目类型
-            tbNtMian = new TbNtMian();
-            tbNtMian.setPkid(String.valueOf(ids[i]));
-            tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), source));
-            String ntCategory = tbNtMianMapper.getNtCategoryByPkId(tbNtMian);
-            //
-            tbNtAssociateGp = new TbNtAssociateGp();
-            tbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
-            tbNtAssociateGp.setNtId(ids[i]);
-            tbNtAssociateGp.setRelType(ntCategory);
-            tbNtAssociateGp.setRelGp(relGp);
-            tbNtAssociateGp.setPx(String.valueOf(i));
-            tbNtAssociateGp.setCreateBy(createBy);
-            tbNtAssociateGpList.add(tbNtAssociateGp);
+        if(set.size() > 0) {
+            //数据库中已经存在，则新来的关联公告与已经存在的公告同属一个组
+            String relGp = TbNtAssociateGps.get(0).getRelGp();
+            for (int i = 0; i < ids.length; i++) {
+                if(!set.contains(ids[i])) {
+                    //获取项目类型
+                    tbNtMian = new TbNtMian();
+                    tbNtMian.setPkid(String.valueOf(ids[i]));
+                    tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), source));
+                    String ntCategory = tbNtMianMapper.getNtCategoryByPkId(tbNtMian);
+                    //
+                    tbNtAssociateGp = new TbNtAssociateGp();
+                    tbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
+                    tbNtAssociateGp.setNtId(ids[i]);
+                    tbNtAssociateGp.setRelType(ntCategory);
+                    tbNtAssociateGp.setRelGp(relGp);
+                    tbNtAssociateGp.setPx(String.valueOf(i));
+                    tbNtAssociateGp.setCreateBy(createBy);
+                    tbNtAssociateGpList.add(tbNtAssociateGp);
+                } else {
+                    System.out.println("11");
+                }
+            }
+        } else {
+            //时间戳 + 随机数
+            String relGp = DataHandlingUtil.getTimeStamp() + "_" + DataHandlingUtil.getNumberRandom(6);
+            for (int i = 0; i < ids.length; i++) {
+                //获取项目类型
+                tbNtMian = new TbNtMian();
+                tbNtMian.setPkid(String.valueOf(ids[i]));
+                tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), source));
+                String ntCategory = tbNtMianMapper.getNtCategoryByPkId(tbNtMian);
+                //
+                tbNtAssociateGp = new TbNtAssociateGp();
+                tbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
+                tbNtAssociateGp.setNtId(ids[i]);
+                tbNtAssociateGp.setRelType(ntCategory);
+                tbNtAssociateGp.setRelGp(relGp);
+                tbNtAssociateGp.setPx(String.valueOf(i));
+                tbNtAssociateGp.setCreateBy(createBy);
+                tbNtAssociateGpList.add(tbNtAssociateGp);
+            }
         }
         String tableName = DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, source);
-        tbNtAssociateGpMapper.batchInsertNtAssociateGp(tbNtAssociateGpList, tableName);
+        if(tbNtAssociateGpList.size() != 0) {
+            tbNtAssociateGpMapper.batchInsertNtAssociateGp(tbNtAssociateGpList, tableName);
+        }
+        return msg;
     }
 
     @Override
-    public void deleteNtAssociateGp(List<TbNtAssociateGp> tbNtAssociateGps) {
+    public void deleteNtAssociateGp(List<Map<String, Object>> tbNtAssociateGps) {
         for (int i = 0; i < tbNtAssociateGps.size(); i++) {
-            TbNtAssociateGp TbNtAssociateGp = tbNtAssociateGps.get(i);
+            TbNtAssociateGp TbNtAssociateGp = new TbNtAssociateGp();
+            TbNtAssociateGp.setNtId((String) tbNtAssociateGps.get(i).get("ntId"));
+            TbNtAssociateGp.setRelGp((String) tbNtAssociateGps.get(i).get("relGp"));
+            TbNtAssociateGp.setSource((String) tbNtAssociateGps.get(i).get("source"));
             TbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, TbNtAssociateGp.getSource()));
             tbNtAssociateGpMapper.deleteNtAssociateGpByNtIdAndRelGp(TbNtAssociateGp);
         }

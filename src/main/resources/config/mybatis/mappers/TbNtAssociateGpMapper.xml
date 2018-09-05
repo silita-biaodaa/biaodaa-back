@@ -60,4 +60,14 @@
         WHERE rel_gp = (SELECT rel_gp FROM ${tableName} WHERE nt_id = #{ntId})
     </select>
 
+    <select id="getRelGpByNtIds" parameterType="Map" resultMap="BaseResultMap">
+        SELECT `nt_id`, `rel_gp` FROM ${tableName}
+        <where>
+            `nt_id` IN
+            <foreach collection="array" open="(" close=")" separator="," item="ele">
+                #{ele}
+            </foreach>
+        </where>
+    </select>
+
 </mapper>
