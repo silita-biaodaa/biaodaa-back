@@ -43,7 +43,7 @@
         </if>
     </delete>
 
-    <select id="listNtAssociateGp" parameterType="com.silita.model.TbNtAssociateGp" resultType="Map">
+    <select id="listNtAssociateGpByNtId" parameterType="com.silita.model.TbNtAssociateGp" resultType="Map">
         SELECT gp.pkid, gp.nt_id AS ntId, gp.rel_gp AS relGp, gp.rel_type AS relType, gp.px,
         gp.created, gp.create_by AS createBy, gp.updated, gp.update_by AS updateBy, main.title,
         main.pub_date AS pubDate, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' WHEN 5 then '已处理' ELSE '未审核' END AS ntStatus
@@ -53,7 +53,7 @@
         LIMIT #{start}, #{pageSize}
     </select>
 
-    <select id="countNtAssociateGp" parameterType="com.silita.model.TbNtAssociateGp" resultType="Integer">
+    <select id="countNtAssociateGpByNtId" parameterType="com.silita.model.TbNtAssociateGp" resultType="Integer">
         SELECT COUNT(*)
         FROM ${tableName} gp
         LEFT JOIN tb_nt_mian_${source} main ON gp.nt_id = main.pkid

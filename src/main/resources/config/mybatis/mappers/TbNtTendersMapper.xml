@@ -73,8 +73,9 @@
           `bid_bonds_end_time`, `keep_bonds`, `other_bonds`, `audit_time`, `opening_person`,
           `opening_file_fee`, `other_fee`, `tenderee`, `tender_contact_person`, `tender_contact_info`,
           `proxy_contact_person`, `proxy_contact_info`, `pro_person`, `social_security`, `achievement`,
-          `enroll_method`, `completion_time`, `is_flow`, `funds_provid`,
-          `filing_pfm`, `created`, `create_by`, `pkid`
+          `enroll_method`, `completion_time`, `is_flow`, `funds_provid`, `filing_pfm`,
+          `controll_sum`, `pro_sum`, `pro_duration`,`pb_mode`, `created`,
+          `create_by`, `pkid`
         )
         values (
           #{ntId}, #{editCode}, #{segment}, #{enrollAddr}, #{certAuditAddr},
@@ -82,8 +83,9 @@
           #{bidBondsEndTime}, #{keepBonds}, #{otherBonds}, #{auditTime}, #{openingPerson},
           #{openingFileFee}, #{otherFee}, #{tenderee}, #{tenderContactPerson}, #{tenderContactInfo},
           #{proxyContactPerson}, #{proxyContactInfo}, #{proPerson}, #{socialSecurity}, #{achievement},
-          #{enrollMethod}, #{completionTime}, #{isFlow}, #{fundsProvid},
-          #{filingPfm}, NOW(), #{createBy}, #{pkid}
+          #{enrollMethod}, #{completionTime}, #{isFlow}, #{fundsProvid}, #{filingPfm},
+          #{controllSum}, #{proSum}, #{proDuration}, #{pbMode}, NOW(),
+          #{createBy}, #{pkid}
         )
     </insert>
 
@@ -173,6 +175,18 @@
         <if test="filingPfm !=null and filingPfm!=''">
             `filing_pfm` = #{filingPfm},
         </if>
+        <if test="controllSum !=null and controllSum!=''">
+            `controll_sum` = #{controllSum},
+        </if>
+        <if test="proSum !=null and proSum!=''">
+            `pro_sum` = #{proSum},
+        </if>
+        <if test="proDuration !=null and proDuration!=''">
+            `pro_duration` = #{proDuration},
+        </if>
+        <if test="pbMode !=null and pbMode!=''">
+            `pb_mode` = #{pbMode},
+        </if>
         <if test="updateBy !=null and updateBy!=''">
             `update_by` = #{updateBy},
         </if>
@@ -183,7 +197,7 @@
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
         SELECT t1.*,
         t.biness_type, t.nt_category, t.nt_type, t.title, t.pub_date,
-        t.controll_sum, t.pro_sum, t.pro_duration, t.pb_mode, t.url,
+        t.url,
         (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid

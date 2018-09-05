@@ -145,4 +145,5 @@ public interface INoticeZhaoBiaoService {
      * @return
      */
     Map<String, Object> listNtAssociateGp(TbNtAssociateGp tbNtAssociateGp);
+
 }

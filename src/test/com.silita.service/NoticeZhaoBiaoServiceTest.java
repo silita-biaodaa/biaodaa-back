@@ -193,7 +193,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController11()throws Exception{
-        String requestBody = "{\"idsStr\":\"9b83f3ca231c4375a5fc2972c43a5999|9b83f3ca231c4375a5fc2972c43a5add\", \"source\":\"hunan\"}";
+        String requestBody = "{\"idsStr\":\"9b83f3ca231c4375a5fc2972c43agggg\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/deleteNtTendersByPkId").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -358,8 +358,23 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
     @Test
     public void testController22()throws Exception{
 //        String requestBody = "{\"title\":\"测试\", \"source\":\"hunan\", \"pubDate\":\"2018-08-10\", \"pubEndDate\":\"2018-08-30\"}";
-        String requestBody = "{\"ntId\":\"1\", \"source\":\"hunan\"}";
+        String requestBody = "{\"ntId\":\"1\", \"source\":\"hunan\", \"currentPage\":\"1\", \"pageSize\":\"30\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/listNtAssociateGp").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController23()throws Exception{
+//        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"cityCode\":\"changsha\", \"ntStatus\":\"\", \"ntCategory\":\"1\", \"title\":\"测试\", \"pubDate\":\"2018-08-10\", \"pubEndDate\":\"2018-08-20\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
+        String requestBody = "{\"source\":\"hunan\", \"title\":\"测试\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
+        String responseString = mockMvc.perform(post("/common/listRelevantNotice").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
                 .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")

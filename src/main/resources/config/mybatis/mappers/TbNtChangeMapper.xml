@@ -59,4 +59,14 @@
         updated = NOW()
         WHERE pkid = #{pkid}
     </update>
+
+    <delete id="deleteTbNtChangeByNtEditId" parameterType="String">
+      DELETE FROM tb_nt_change
+        <where>
+            nt_edit_id IN
+            <foreach collection="array" open="(" close=")" separator="," item="ele">
+                #{ele}
+            </foreach>
+        </where>
+    </delete>
 </mapper>

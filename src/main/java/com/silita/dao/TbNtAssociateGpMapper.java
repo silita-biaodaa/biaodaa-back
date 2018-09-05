@@ -21,17 +21,17 @@ public interface TbNtAssociateGpMapper {
     void deleteNtAssociateGpByNtIdAndRelGp(TbNtAssociateGp tbNtAssociateGp);
 
     /**
-     * 根据条件获取关联关系列表
+     * 根据公告id获取关联关系列表
      * @param tbNtAssociateGp
      * @return
      */
-    List<Map<String, Object>> listNtAssociateGp(TbNtAssociateGp tbNtAssociateGp);
+    List<Map<String, Object>> listNtAssociateGpByNtId(TbNtAssociateGp tbNtAssociateGp);
 
     /**
-     * 根据条件获取关联关系个数
+     * 根据公告id获取关联关系个数
      * @param tbNtAssociateGp
      * @return
      */
-    Integer countNtAssociateGp(TbNtAssociateGp tbNtAssociateGp);
+    Integer countNtAssociateGpByNtId(TbNtAssociateGp tbNtAssociateGp);
 
 }

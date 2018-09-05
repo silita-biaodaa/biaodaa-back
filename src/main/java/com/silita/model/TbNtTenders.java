@@ -194,22 +194,22 @@ public class TbNtTenders {
     private String ntType;
 
     /**
-     * 业务更新 招标控制价
+     * 招标控制价
      */
     private Double controllSum;
 
     /**
-     * 业务更新 项目金额
+     * 项目金额
      */
     private Double proSum;
 
     /**
-     * 业务更新 项目工期
+     * 项目工期
      */
     private String proDuration;
 
     /**
-     * 业务更新 评标办法(code)
+     * 评标办法(code)
      */
     private String pbMode;
 

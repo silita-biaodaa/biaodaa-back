@@ -15,4 +15,10 @@ public interface TbNtChangeMapper {
      * @param tbNtChange
      */
     void updateTbNtChangeByPkId(TbNtChange tbNtChange);
+
+    /**
+     * 根据标段id删除变更信息
+     * @param ids
+     */
+    void deleteTbNtChangeByNtEditId(Object[] ids);
 }

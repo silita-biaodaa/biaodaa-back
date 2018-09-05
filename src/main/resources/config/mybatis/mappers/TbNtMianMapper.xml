@@ -79,13 +79,14 @@
     </select>
 
     <select id="listTendersDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
-        SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' WHEN 5 then '已处理' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date, main.city_code,
-        main.county_code, main.biness_type, main.nt_type, '资质', '控制价',
-        main.pro_sum, main.pro_duration, main.pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
+        SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' WHEN 5 then '已处理' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date,
+        (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code,
+        main.biness_type, main.nt_category, '资质', tenders.controll_sum,
+        tenders.pro_sum, tenders.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = tenders.pb_mode) AS pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
         tenders.enroll_end_time,tenders.enroll_addr, tenders.audit_time, tenders.bid_end_time, tenders.opening_addr,
-        '平台备案要求', '招标状态', tenders.opening_person, '变更信息', main.url
-        FROM tb_nt_mian_hunan AS main
-        LEFT JOIN tb_nt_tenders_hunan AS tenders ON main.pkid = tenders.nt_id
+        tenders.filing_pfm, main.nt_type, tenders.opening_person, (SELECT field_value FROM tb_nt_change WHERE nt_id = main.pkid) AS field_value, main.url
+        FROM tb_nt_mian_${source} AS main
+        LEFT JOIN tb_nt_tenders_${source} AS tenders ON main.pkid = tenders.nt_id
         WHERE 1=1 AND main.is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
             AND main.provice_code = #{proviceCode}
@@ -163,18 +164,6 @@
         </if>
         <if test="ntType !=null and ntType!=''">
             `nt_type` = #{ntType},
-        </if>
-        <if test="controllSum !=null and controllSum!=''">
-            `controll_sum` = #{controllSum},
-        </if>
-        <if test="proSum !=null and proSum!=''">
-            `pro_sum` = #{proSum},
-        </if>
-        <if test="proDuration !=null and proDuration!=''">
-            `pro_duration` = #{proDuration},
-        </if>
-        <if test="pbMode !=null and pbMode!=''">
-            `pb_mode` = #{pbMode},
         </if>
         <if test="title !=null and title!=''">
             `title` = #{title},

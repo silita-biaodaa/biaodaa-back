@@ -207,4 +207,5 @@ public class NoticeZhaobiaoController extends BaseController {
     public Map<String,Object> listNtAssociateGp(@RequestBody TbNtAssociateGp tbNtAssociateGp) {
         return super.successMap(noticeZhaoBiaoService.listNtAssociateGp(tbNtAssociateGp));
     }
+
 }

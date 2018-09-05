@@ -139,10 +139,6 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setBinessType(tbNtTenders.getBinessType());
         tbNtMian.setNtCategory(tbNtTenders.getNtCategory());
         tbNtMian.setNtType(tbNtTenders.getNtType());
-        tbNtMian.setControllSum(tbNtTenders.getControllSum());
-        tbNtMian.setProSum(tbNtTenders.getProSum());
-        tbNtMian.setProDuration(tbNtTenders.getProDuration());
-        tbNtMian.setPbMode(tbNtTenders.getPbMode());
         tbNtMian.setTitle(tbNtTenders.getTitle());
         tbNtMian.setPubDate(tbNtTenders.getPubDate());
         tbNtMian.setUrl(tbNtTenders.getUrl());
@@ -169,10 +165,6 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setBinessType(tbNtTenders.getBinessType());
         tbNtMian.setNtCategory(tbNtTenders.getNtCategory());
         tbNtMian.setNtType(tbNtTenders.getNtType());
-        tbNtMian.setControllSum(tbNtTenders.getControllSum());
-        tbNtMian.setProSum(tbNtTenders.getProSum());
-        tbNtMian.setProDuration(tbNtTenders.getProDuration());
-        tbNtMian.setPbMode(tbNtTenders.getPbMode());
         tbNtMian.setTitle(tbNtTenders.getTitle());
         tbNtMian.setPubDate(tbNtTenders.getPubDate());
         tbNtMian.setUrl(tbNtTenders.getUrl());
@@ -201,6 +193,9 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             set.add(id);
         }
         if (set != null && set.size() > 0) {
+            //删除变更信息
+            tbNtChangeMapper.deleteTbNtChangeByNtEditId(set.toArray());
+            //删除编辑明细
             tbNtTendersMapper.deleteNtTendersByPkId(tableName, set.toArray());
         }
     }
@@ -302,8 +297,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 //        String relGp = tbNtAssociateGpMapper.getRelGpByNtId(tbNtAssociateGp);
         Map result = new HashMap<String, Object>();
 //        tbNtAssociateGp.setRelGp(relGp);
-        result.put("datas", tbNtAssociateGpMapper.listNtAssociateGp(tbNtAssociateGp));
-        result.put("total", tbNtAssociateGpMapper.countNtAssociateGp(tbNtAssociateGp));
+        result.put("datas", tbNtAssociateGpMapper.listNtAssociateGpByNtId(tbNtAssociateGp));
+        result.put("total", tbNtAssociateGpMapper.countNtAssociateGpByNtId(tbNtAssociateGp));
         return super.handlePageCount(result, tbNtAssociateGp);
     }
 
