@@ -89,11 +89,12 @@ public class TbCompanySecurityCert {
     private String updateBy;
 
     /**
-     * 获取主键
-     *
-     * @return pkid - 主键
+     * 认证级别str
      */
-    public String getPkid() {
-        return pkid;
-    }
+    private String certLevelStr;
+
+    /**
+     * 认证结果str
+     */
+    private String certResultStr;
 }

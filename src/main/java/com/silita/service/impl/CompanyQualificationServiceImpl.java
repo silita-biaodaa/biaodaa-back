@@ -36,35 +36,27 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
     public List getCompanyQualList(TbCompanyQualification companyQualification) {
         List list = new ArrayList();
         List<TbCompanyQualification> qualList = tbCompanyQualificationMapper.queryCompanyQual(companyQualification);
-        List companyQualList = new ArrayList();
-        TbCompanyQualification comQual = null;
+        List<TbCompanyQualification> companyQualList = new ArrayList();
         String[] rages = null;
         if (null != qualList && qualList.size() > 0) {
             for (TbCompanyQualification qual : qualList) {
-                comQual = new TbCompanyQualification();
-                comQual.setComId(qual.getComId());
-                comQual.setCertDate(qual.getCertDate());
-                comQual.setCertNo(qual.getCertNo());
-                comQual.setCertOrg(qual.getCertOrg());
-                comQual.setChannel(qual.getChannel());
-                comQual.setQualType(qual.getQualType());
-                comQual.setValidDate(qual.getValidDate());
                 if (null != qual.getRange()) {
                     if(qual.getRange().contains(",")) {
                         rages = qual.getRange().split(",");
                         for (String str : rages) {
-                            comQual.setQualName(str);
-                            companyQualList.add(comQual);
+                            qual.setQualName(str);
+                            companyQualList.add(creatQual(qual));
                         }
-                    }else if(qual.getRange().contains(";")){
+                    }
+                    if(qual.getRange().contains(";")){
                         rages = qual.getRange().split(";");
                         for (String str : rages) {
-                            comQual.setQualName(str);
-                            companyQualList.add(comQual);
+                            qual.setQualName(str);
+                            companyQualList.add(creatQual(qual));
                         }
                     }
                 }else {
-                    companyQualList.add(comQual);
+                    companyQualList.add(creatQual(qual));
                 }
             }
             list.addAll(companyQualList);
@@ -125,5 +117,23 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
     @Override
     public void delCompanyQual(String pkid) {
         tbCompanyQualificationHmMapper.deleteCompanyQual(pkid);
+    }
+
+    /**
+     * 创建资质对象
+     * @param qualification
+     * @return
+     */
+    private TbCompanyQualification creatQual(TbCompanyQualification qualification){
+        TbCompanyQualification qual = new TbCompanyQualification();
+        qual.setComId(qualification.getComId());
+        qual.setCertDate(qualification.getCertDate());
+        qual.setCertNo(qualification.getCertNo());
+        qual.setCertOrg(qualification.getCertOrg());
+        qual.setChannel(qualification.getChannel());
+        qual.setQualType(qualification.getQualType());
+        qual.setValidDate(qualification.getValidDate());
+        qual.setQualName(qualification.getQualName());
+        return qual;
     }
 }
