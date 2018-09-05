@@ -70,6 +70,7 @@ public class CompanyHighwayGradeServiceImpl implements ICompanyHighwayGradeServi
         grade.setPkid(DataHandlingUtil.getUUID());
         grade.setCreateBy(username);
         grade.setCreated(new Date());
+        grade.setAssessOrigin(Constant.SOURCE_LAB);
         tbCompanyHighwayGradeMapper.insertCompanyHigway(grade);
         Map<String,Object> resultMap = new HashMap<>();
         resultMap.put("code",Constant.CODE_SUCCESS);
