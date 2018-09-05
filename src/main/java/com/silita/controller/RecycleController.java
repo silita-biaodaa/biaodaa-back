@@ -42,4 +42,16 @@ public class RecycleController extends BaseController {
         recycleService.delRecycel(param);
         return successMap(null);
     }
+
+    /**
+     * 批量恢复公告
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/recover", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> recoverRecycle(@RequestBody Map<String,Object> param){
+        recycleService.recoverRecycle(param);
+        return successMap(null);
+    }
 }

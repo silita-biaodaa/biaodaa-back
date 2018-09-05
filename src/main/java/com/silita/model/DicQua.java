@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -92,4 +93,9 @@ public class DicQua {
      * 父级名称
      */
     private String parentName;
+
+    /**
+     * 等级list
+     */
+    private List gradeList;
 }

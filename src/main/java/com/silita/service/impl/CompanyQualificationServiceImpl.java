@@ -49,10 +49,18 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
                 comQual.setQualType(qual.getQualType());
                 comQual.setValidDate(qual.getValidDate());
                 if (null != qual.getRange()) {
-                    String[] rages = qual.getRange().split(",");
-                    for (String str : rages) {
-                        comQual.setQualName(str);
-                        companyQualList.add(comQual);
+                    if(qual.getRange().contains(",")) {
+                        String[] rages = qual.getRange().split(",");
+                        for (String str : rages) {
+                            comQual.setQualName(str);
+                            companyQualList.add(comQual);
+                        }
+                    }else if(qual.getRange().contains(";")){
+                        String[] rages = qual.getRange().split(";");
+                        for (String str : rages) {
+                            comQual.setQualName(str);
+                            companyQualList.add(comQual);
+                        }
                     }
                 }
             }

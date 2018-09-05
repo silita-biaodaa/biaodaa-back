@@ -12,7 +12,7 @@
         <if test="quaCode != null and quaCode != ''">
             and t.qua_code = #{quaCode}
         </if>
-        and t.biz_type = #{bizType}
+        and (t.biz_type = '0' or t.biz_type = #{bizType})
     </select>
 
     <insert id="insertQuaCrade" parameterType="com.silita.model.RelQuaGrade">

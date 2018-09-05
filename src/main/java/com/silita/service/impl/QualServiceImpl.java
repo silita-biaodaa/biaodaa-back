@@ -2,7 +2,9 @@ package com.silita.service.impl;
 
 import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
+import com.silita.dao.DicCommonMapper;
 import com.silita.dao.DicQuaMapper;
+import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 import com.silita.service.IQualService;
@@ -11,10 +13,7 @@ import com.silita.utils.PinYinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 资质实现类
@@ -26,6 +25,8 @@ public class QualServiceImpl implements IQualService {
     DicQuaMapper dicQuaMapper;
     @Autowired
     DicAliasMapper dicAliasMapper;
+    @Autowired
+    RelQuaGradeMapper relQuaGradeMapper;
 
     @Override
     public Map<String, Object> addQual(DicQua qua, String username) {
@@ -88,10 +89,10 @@ public class QualServiceImpl implements IQualService {
     public Map<String, Object> aliasAdd(DicAlias alias) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>();
-        param.put("stdType",Constant.QUAL_LEVEL_PARENT);
-        param.put("name",alias.getName());
+        param.put("stdType", Constant.QUAL_LEVEL_PARENT);
+        param.put("name", alias.getName());
         Integer count = dicAliasMapper.queryAliasByName(param);
-        if(count > 0){
+        if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
             resultMap.put("msg", Constant.MSG_WARN_400);
             return resultMap;
@@ -108,8 +109,8 @@ public class QualServiceImpl implements IQualService {
 
     @Override
     public void addQuaAlias(List<DicAlias> dicAliasList) {
-        Map<String,Object> param = new HashMap<>();
-        param.put("stdType",Constant.QUAL_LEVEL_PARENT);
+        Map<String, Object> param = new HashMap<>();
+        param.put("stdType", Constant.QUAL_LEVEL_PARENT);
         for (DicAlias alias : dicAliasList) {
             dicAliasMapper.insertDicAlias(alias);
         }
@@ -119,11 +120,11 @@ public class QualServiceImpl implements IQualService {
     public Map<String, Object> updateQuaAlias(DicAlias alias) {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>();
-        param.put("stdType",Constant.QUAL_LEVEL_PARENT);
-        param.put("name",alias.getName());
-        param.put("id",alias.getId());
+        param.put("stdType", Constant.QUAL_LEVEL_PARENT);
+        param.put("name", alias.getName());
+        param.put("id", alias.getId());
         Integer count = dicAliasMapper.queryAliasByName(param);
-        if(count > 0){
+        if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
             resultMap.put("msg", Constant.MSG_WARN_400);
             return resultMap;
@@ -134,5 +135,27 @@ public class QualServiceImpl implements IQualService {
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
+    }
+
+    @Override
+    public List<Map<String, Object>> qualGradeList() {
+        List<Map<String, Object>> qualCradeList = dicQuaMapper.queryQualCateList();
+        List<DicQua> qualList = new ArrayList<>();
+        if (null != qualCradeList && qualCradeList.size() > 0) {
+            Map<String, Object> qualMap = new HashMap<>();
+            for (Map<String, Object> qual : qualCradeList) {
+                qualMap.put("parentId", qual.get("id"));
+                qualList = dicQuaMapper.queryDicQuaList(qualMap);
+                if (null != qualList && qualList.size() > 0) {
+                    for (DicQua qua : qualList) {
+                        qualMap.put("quaCode",qua.getQuaCode());
+                        qualMap.put("bizType",Constant.BIZ_TYPE_COMPANY);
+                        qua.setGradeList(relQuaGradeMapper.queryQuaGrade(qualMap));
+                    }
+                }
+                qual.put("qualList",qualList);
+            }
+        }
+        return qualCradeList;
     }
 }

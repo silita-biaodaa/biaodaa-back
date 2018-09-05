@@ -61,4 +61,10 @@ public interface IQualService {
      * @return
      */
     Map<String,Object> updateQuaAlias(DicAlias alias);
+
+    /**
+     * 获取全部资质等级
+     * @return
+     */
+    List<Map<String,Object>> qualGradeList();
 }

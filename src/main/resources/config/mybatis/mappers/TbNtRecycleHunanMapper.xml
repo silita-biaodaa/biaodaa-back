@@ -78,10 +78,6 @@
           `nt_id`,
           `title`,
           `url`,
-          `controll_sum`,
-          `pro_sum`,
-          `pro_duration`,
-          `pb_mode`,
           `seg_count`,
           `provice_code`,
           `city_code`,
@@ -104,7 +100,7 @@
           `created`,
           `create_by`
         )
-SELECT #{pkid},#{delType},t.`pkid`,t.`title`,t.`url`,t.`controll_sum`,t.pro_sum,t.pro_duration,t.pb_mode,t.`seg_count`,t.`provice_code`,t.`city_code`
+SELECT #{pkid},#{delType},t.`pkid`,t.`title`,t.`url`,t.`seg_count`,t.`provice_code`,t.`city_code`
 ,t.`county_code`,t.`biness_type`,t.`nt_category`,t.`nt_type`,t.`year`,t.`pub_date`,t.`src_site`,t.`source`,t.`is_enable`,t.`nt_status`
 ,t.`px`,t.`snatch_id`,t.`snatch_batch`,t.`snatch_time`,t.`analysis_id`,t.`analysis_time`,NOW(),#{createBy}
 FROM tb_nt_mian_${source} t WHERE t.`pkid` = #{ntId}

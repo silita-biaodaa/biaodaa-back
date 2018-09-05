@@ -140,4 +140,14 @@ public class QualController extends BaseController {
     public Map<String, Object> gradeList(@RequestBody Map<String,Object> param) {
         return successMap(relQuaGradeService.getQualGradeList(param));
     }
+
+    /**
+     * 全部资质等级列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/qualGrade/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String,Object> qualGradeList(){
+        return successMap(qualService.qualGradeList());
+    }
 }
