@@ -27,11 +27,7 @@
         <result column="logo" property="logo" jdbcType="LONGVARCHAR"/>
         <result column="create_date" property="createDate" jdbcType="VARCHAR"/>
         <result column="update_date" property="updateDate" jdbcType="VARCHAR"/>
-        <result column="change_com_name" property="changeComName" jdbcType="VARCHAR"/>
         <result column="change_credit_code" property="changeCreditCode" jdbcType="VARCHAR"/>
-        <result column="change_time" property="changeTime" jdbcType="VARCHAR"/>
-        <result column="source" property="source" jdbcType="VARCHAR"/>
-        <result column="change_pkid" property="changePkid" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryCompanyCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbCompany">
@@ -79,21 +75,5 @@
         <if test="creditCode != null and creditCode != ''">
             and credit_code = #{creditCode}
         </if>
-    </select>
-
-    <select id="queryCompanyDetailHm" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select t.*
-                ,t1.change_time AS change_time
-                ,t1.com_name as change_com_name
-                ,t1.credit_code as change_credit_code
-                ,t1.pkid as change_pkid
-                ,'2' as source
-        from tb_company t
-        left join tb_company_info_hm t1 on t1.com_id = t.com_id
-        where t.com_id = #{comId}
-        <if test="type != null and type == 'comName'">
-            AND t1.`com_name` IS NOT NULL
-        </if>
-        order by t1.created desc,t1.change_time desc
     </select>
 </mapper>

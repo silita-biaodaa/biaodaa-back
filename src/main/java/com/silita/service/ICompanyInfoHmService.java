@@ -2,6 +2,7 @@ package com.silita.service;
 
 import com.silita.model.TbCompanyInfoHm;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,4 +54,11 @@ public interface ICompanyInfoHmService {
      */
     Map<String, Object> saveComName(TbCompanyInfoHm companyInfoHm, String username);
 
+    /**
+     * 获取企业变更
+     *
+     * @param param
+     * @return
+     */
+    List<TbCompanyInfoHm> getComNameList(Map<String, Object> param);
 }

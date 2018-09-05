@@ -24,12 +24,4 @@ public interface ICompanyService {
      * @return
      */
     TbCompany getCreditCode(Map<String, Object> param);
-
-    /**
-     * 获取统一信用代码
-     *
-     * @param param
-     * @return
-     */
-    List<TbCompany> getComNameList(Map<String, Object> param);
 }

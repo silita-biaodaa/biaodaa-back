@@ -70,4 +70,11 @@ public interface TbCompanyInfoHmMapper extends MyMapper<TbCompanyInfoHm> {
      * @return
      */
     TbCompanyInfoHm queryCompanyCreditCode(TbCompanyInfoHm companyInfoHm);
+
+    /**
+     * 查询变更企业名称
+     * @param param
+     * @return
+     */
+    List<TbCompanyInfoHm> queryCompanyDetailHm(Map<String,Object> param);
 }

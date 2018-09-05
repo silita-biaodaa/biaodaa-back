@@ -3,7 +3,6 @@ package com.silita.service.impl;
 import com.silita.common.Constant;
 import com.silita.dao.TbCompanyInfoHmMapper;
 import com.silita.dao.TbCompanyMapper;
-import com.silita.model.TbCompany;
 import com.silita.model.TbCompanyInfoHm;
 import com.silita.service.ICompanyInfoHmService;
 import com.silita.service.abs.AbstractService;
@@ -149,6 +148,11 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
         resultMap.put("code",Constant.CODE_SUCCESS);
         resultMap.put("msg",Constant.MSG_SUCCESS);
         return  resultMap;
+    }
+
+    @Override
+    public List<TbCompanyInfoHm> getComNameList(Map<String, Object> param) {
+        return companyInfoHmMapper.queryCompanyDetailHm(param);
     }
 
     /**

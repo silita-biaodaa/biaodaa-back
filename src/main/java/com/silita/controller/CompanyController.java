@@ -128,7 +128,7 @@ public class CompanyController extends BaseController {
     @RequestMapping(value = "/comName/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public Map<String, Object> comNameDetail(@RequestBody Map<String, Object> param) {
-        return successMap(companyService.getComNameList(param));
+        return successMap(companyInfoHmService.getComNameList(param));
     }
 
     /**

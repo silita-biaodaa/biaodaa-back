@@ -38,6 +38,7 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
         List<TbCompanyQualification> qualList = tbCompanyQualificationMapper.queryCompanyQual(companyQualification);
         List companyQualList = new ArrayList();
         TbCompanyQualification comQual = null;
+        String[] rages = null;
         if (null != qualList && qualList.size() > 0) {
             for (TbCompanyQualification qual : qualList) {
                 comQual = new TbCompanyQualification();
@@ -50,18 +51,20 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
                 comQual.setValidDate(qual.getValidDate());
                 if (null != qual.getRange()) {
                     if(qual.getRange().contains(",")) {
-                        String[] rages = qual.getRange().split(",");
+                        rages = qual.getRange().split(",");
                         for (String str : rages) {
                             comQual.setQualName(str);
                             companyQualList.add(comQual);
                         }
                     }else if(qual.getRange().contains(";")){
-                        String[] rages = qual.getRange().split(";");
+                        rages = qual.getRange().split(";");
                         for (String str : rages) {
                             comQual.setQualName(str);
                             companyQualList.add(comQual);
                         }
                     }
+                }else {
+                    companyQualList.add(comQual);
                 }
             }
             list.addAll(companyQualList);

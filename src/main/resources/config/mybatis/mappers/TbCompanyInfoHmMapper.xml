@@ -18,6 +18,7 @@
         <result column="create_date" property="createDate" jdbcType="VARCHAR"/>
         <result column="update_date" property="updateDate" jdbcType="VARCHAR"/>
         <result column="change_time" property="changeTime" jdbcType="VARCHAR"/>
+        <result column="com_name_ex" property="comNameEx" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryCompanyCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbCompanyInfoHm">
@@ -59,6 +60,9 @@
         <if test="comName != null and comName != ''">
             `com_name`,
         </if>
+        <if test="comNameEx != null and comNameEx != ''">
+            `com_name_ex`,
+        </if>
         <if test="changeTime != null and changeTime != ''">
             `change_time`,
         </if>
@@ -93,6 +97,9 @@
         </if>
         <if test="comName != null and comName != ''">
             #{comName},
+        </if>
+        <if test="comNameEx != null and comNameEx != ''">
+            #{comNameEx},
         </if>
         <if test="changeTime != null and changeTime != ''">
             #{changeTime},
@@ -139,6 +146,9 @@
         <if test="comAddress != null and comAddress != ''">
             `com_address` = #{comAddress},
         </if>
+        <if test="comNameEx != null and comNameEx != ''">
+            `com_name_ex` = #{comNameEx},
+        </if>
         <if test="creditCode != null and creditCode != ''">
             `credit_code` = #{creditCode},
         </if>
@@ -178,6 +188,9 @@
         <if test="comAddress != null and comAddress != ''">
             `com_address` = #{comAddress},
         </if>
+        <if test="comNameEx != null and comNameEx != ''">
+            `com_name_ex` = #{comNameEx},
+        </if>
         <if test="creditCode != null and creditCode != ''">
             `credit_code` = #{creditCode},
         </if>
@@ -215,5 +228,15 @@
         </if>
         order by created desc
         limit 1
+    </select>
+
+    <select id="queryCompanyDetailHm" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+            t.*
+            ,'2' as source
+        from tb_company_info_hm t
+        where t.com_id = #{comId}
+        and t.com_name is not null
+        order by t.created desc,t.change_time desc
     </select>
 </mapper>

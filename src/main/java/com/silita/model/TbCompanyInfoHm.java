@@ -75,4 +75,13 @@ public class TbCompanyInfoHm extends Pagination {
      */
     private String updateDate;
 
+    /**
+     * 来源
+     */
+    private String source;
+
+    /**
+     * 变更前名称
+     */
+    private String comNameEx;
 }
