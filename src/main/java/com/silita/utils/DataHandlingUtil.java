@@ -3,6 +3,7 @@ package com.silita.utils;
 import com.silita.model.TbNtAssociateGp;
 import com.silita.model.TbNtMian;
 import com.silita.model.TbNtTenders;
+import com.silita.model.TbNtText;
 
 import java.util.*;
 
@@ -55,88 +56,26 @@ public class DataHandlingUtil {
     }
 
     /**
-     * 返回开标人员
+     * 公告状态
      * @return
      */
-    public static List<String> getBidOpeningPersonnel() {
-        List result = new ArrayList<String>(10);
-        result.add("法定代表人");
-        result.add("项目负责人");
-        result.add("授权委托人");
-        result.add("法定代表人和项目负责人");
-        result.add("法定代表人和授权委托人");
-        result.add("项目负责人和授权委托人");
-        result.add("法定代表人或项目负责人");
-        result.add("法定代表人或授权委托人");
-        result.add("项目负责人或授权委托人");
-        return result;
+    public static Map<String, Object> getBulletinStatus() {
+        Map map = new HashMap<String, String>(10);
+        map.put("all", "");
+        map.put("edited", "1");
+        map.put("unedited", "0");
+        map.put("audited", "2");
+        map.put("unaudited", "3");
+        map.put("notAudited", "4");
+        map.put("Handled", "5");
+        return map;
     }
-
-    /**
-     * 返回项目类型
-     * @return
-     */
-    public static List<String> getProjectType() {
-        List result = new ArrayList<String>(10);
-        result.add("建筑工程");
-        result.add("市政公用工程");
-        result.add("水利水电工程");
-        result.add("公路工程");
-        return result;
-    }
-
-    /**
-     * 返回招标类型
-     * @return
-     */
-    public static List<String> getBiddingType() {
-        List result = new ArrayList<String>(10);
-        result.add("施工");
-        result.add("设计");
-        result.add("监理");
-        result.add("设计");
-        result.add("勘察");
-        return result;
-    }
-
-    /**
-     * 返回平台备案要求
-     * @return
-     */
-    public static List<String> getFilingRequirements() {
-        List result = new ArrayList<String>(10);
-        result.add("无");
-        result.add("长沙公共资源交易电子服务平台");
-        result.add("湖南省水利建设市场信用信息平台");
-        result.add("全国水利建设市场信用信息平台");
-        result.add("湘潭市公共资源交易中心");
-        result.add("湘西州公共资源交易网");
-        result.add("湖南省交通运输厅公路建设市场信用信息管理系统");
-        result.add("全国公路建设市场信用信息管理系统");
-        return result;
-    }
-
-    /**
-     * 返回招标状态
-     * @return
-     */
-    public static List<String> getBiddingStatus() {
-        List result = new ArrayList<String>(10);
-        result.add("流标");
-        result.add("暂停");
-        result.add("中止");
-        result.add("终止");
-        result.add("废标");
-        result.add("延期");
-        return result;
-    }
-
 
     /**
      * 生成uuid
      * @return
      */
-    public static String getUUID() {
+    public synchronized static String getUUID() {
         String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
         try {
             Thread.sleep(1);
@@ -183,24 +122,10 @@ public class DataHandlingUtil {
             tableName = "tb_nt_tenders_" + source;
         } else if(model.getName().equals(TbNtAssociateGp.class.getName())) {
             tableName = "tb_nt_associate_gp_" + source;
+        } else if(model.getName().equals(TbNtText.class.getName())) {
+            tableName = "tb_nt_text_" + source;
         }
         return tableName;
-    }
-
-    /**
-     * 公告状态
-     * @return
-     */
-    public static Map<String, Object> getBulletinStatus() {
-        Map map = new HashMap<String, String>(10);
-        map.put("all", "");
-        map.put("edited", "1");
-        map.put("unedited", "0");
-        map.put("audited", "2");
-        map.put("unaudited", "3");
-        map.put("notAudited", "4");
-        map.put("Handled", "5");
-        return map;
     }
 
 }

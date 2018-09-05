@@ -12,14 +12,13 @@
     </resultMap>
 
     <select id="queryNtTextDetail" resultMap="BaseResultMap" parameterType="com.silita.model.TbNtText">
-    select *
-    from tb_nt_text_${source}
-    where nt_id = #{ntId}
-  </select>
+      select *
+      from tb_nt_text_${source}
+      where nt_id = #{ntId}
+    </select>
 
     <update id="updateNtText" parameterType="com.silita.model.TbNtText">
-        UPDATE `tb_nt_text_hunan`
-        SET
+        UPDATE ${tableName} SET
         <if test="ntId != null and ntId != ''">
             `nt_id` = #{ntId},
         </if>

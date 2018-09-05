@@ -130,7 +130,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
                 "\"source\":\"hunan\", \"binessType\":\"2\", " +
                 "\"ntCategory\":\"2\", \"ntType\":\"2\", \"certAuditAddr\":\"资格审查地点\", \"filingPfm\":\"备案平台\", \"controllSum\":\"678\", " +
                 "\"title\":\"我要更新\", \"pubDate\":\"2018-09-04\"}";
-        String responseString = mockMvc.perform(post("/zhaobiao/insertNtTenders").characterEncoding("UTF-8")
+        String responseString = mockMvc.perform(post("/zhaobiao/saveNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
                 .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
@@ -152,7 +152,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
                 "\"source\":\"hunan\", \"pkid\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"ntId\":\"1\", \"binessType\":\"2\", " +
                 "\"ntCategory\":\"2\", \"ntType\":\"2\", \"certAuditAddr\":\"资格审查地点\", \"filingPfm\":\"备案平台\", \"controllSum\":\"678\", " +
                 "\"title\":\"我要更新\", \"pubDate\":\"2018-09-04\", \"cityCode\":\"hengyang\", \"countyCode\":\"hengyangxian\"}";
-        String responseString = mockMvc.perform(post("/zhaobiao/updateNtTenders").characterEncoding("UTF-8")
+        String responseString = mockMvc.perform(post("/zhaobiao/saveNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
                 .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
@@ -375,6 +375,20 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 //        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"cityCode\":\"changsha\", \"ntStatus\":\"\", \"ntCategory\":\"1\", \"title\":\"测试\", \"pubDate\":\"2018-08-10\", \"pubEndDate\":\"2018-08-20\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
         String requestBody = "{\"source\":\"hunan\", \"title\":\"测试\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
         String responseString = mockMvc.perform(post("/common/listRelevantNotice").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController24()throws Exception{
+        String requestBody = "{\"source\":\"hunan\", \"pkid\":\"1\", \"content\":\"哈哈哈哈哈哈哈哈\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/updateNtText").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
                 .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")

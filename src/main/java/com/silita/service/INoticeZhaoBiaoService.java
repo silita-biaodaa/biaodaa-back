@@ -63,16 +63,10 @@ public interface INoticeZhaoBiaoService {
 
     //#####################招标标段信息######################
     /**
-     * 添加招标公告标段
+     * 添加或者更新招标公告标段
      * @param tbNtTenders
      */
-    String insertNtTenders(TbNtTenders tbNtTenders);
-
-    /**
-     * 更新招标公告标段
-     * @param tbNtTenders
-     */
-    void updateNtTenders(TbNtTenders tbNtTenders);
+    String saveNtTenders(TbNtTenders tbNtTenders);
 
     /**
      * 根据公告id获取标段信息
@@ -89,16 +83,11 @@ public interface INoticeZhaoBiaoService {
 
     //#####################变更标段########################
     /**
-     * 添加标段变更信息
+     * 添加或者更新标段变更信息
      * @param tbNtChange
      */
-    void insertTbNtChange(TbNtChange tbNtChange);
+    void saveTbNtChange(TbNtChange tbNtChange);
 
-    /**
-     * 修改标段变更信息
-     * @param tbNtChange
-     */
-    void updateTbNtChangeByPkId(TbNtChange tbNtChange);
 
     //#####################招标文件######################
     /**
@@ -121,12 +110,19 @@ public interface INoticeZhaoBiaoService {
     void deleteZhaoBiaoFilesByPkid(String idStr);
 
     /**
-     *
+     * 逻辑删除公告
      * @param main
      * @param username
      */
     void delNtMainInfo(TbNtMian main,String username);
 
+    /**
+     * 更新公告内容
+     * @param tbNtText
+     */
+    void updateNtText(TbNtText tbNtText);
+
+    //#################公告关联####################
     /**
      * 添加公告关联关系
      * @param params

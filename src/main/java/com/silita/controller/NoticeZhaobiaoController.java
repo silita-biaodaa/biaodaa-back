@@ -92,15 +92,15 @@ public class NoticeZhaobiaoController extends BaseController {
 
     //#####################招标标段信息######################
 
-    @RequestMapping(value = "/insertNtTenders", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @RequestMapping(value = "/saveNtTenders", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
-    public Map<String,Object> insertNtTenders(@RequestBody TbNtTenders tbNtTenders, ServletRequest request) {
+    public Map<String,Object> saveNtTenders(@RequestBody TbNtTenders tbNtTenders, ServletRequest request) {
         Map result = new HashMap<String,Object>();
         result.put("code", 1);
         try{
             String userName = JWTUtil.getUsername(request);
             tbNtTenders.setCreateBy(userName);
-            String msg = noticeZhaoBiaoService.insertNtTenders(tbNtTenders);
+            String msg = noticeZhaoBiaoService.saveNtTenders(tbNtTenders);
             result.put("msg", msg);
             if(StringUtils.isEmpty(msg)) {
                 result.put("code",0);
@@ -111,15 +111,6 @@ public class NoticeZhaobiaoController extends BaseController {
             result.put("msg",e.getMessage());
         }
         return result;
-    }
-
-    @RequestMapping(value = "/updateNtTenders",method = RequestMethod.POST,produces="application/json;charset=utf-8")
-    @ResponseBody
-    public Map<String,Object> updateNtTenders(@RequestBody TbNtTenders tbNtTenders, ServletRequest request) {
-        String userName = JWTUtil.getUsername(request);
-        tbNtTenders.setUpdateBy(userName);
-        noticeZhaoBiaoService.updateNtTenders(tbNtTenders);
-        return successMap(null);
     }
 
     @RequestMapping(value = "/listNtTenders",method = RequestMethod.POST,produces="application/json;charset=utf-8")
@@ -142,16 +133,7 @@ public class NoticeZhaobiaoController extends BaseController {
     public Map<String,Object> insertTbNtChange(@RequestBody TbNtChange tbNtChange, ServletRequest request) {
         String userName = JWTUtil.getUsername(request);
         tbNtChange.setCreateBy(userName);
-        noticeZhaoBiaoService.insertTbNtChange(tbNtChange);
-        return successMap(null);
-    }
-
-    @RequestMapping(value = "/updateTbNtChange", method = RequestMethod.POST, produces="application/json;charset=utf-8")
-    @ResponseBody
-    public Map<String,Object> updateTbNtChange(@RequestBody TbNtChange tbNtChange, ServletRequest request) {
-        String userName = JWTUtil.getUsername(request);
-        tbNtChange.setUpdateBy(userName);
-        noticeZhaoBiaoService.updateTbNtChangeByPkId(tbNtChange);
+        noticeZhaoBiaoService.saveTbNtChange(tbNtChange);
         return successMap(null);
     }
 
@@ -185,6 +167,13 @@ public class NoticeZhaobiaoController extends BaseController {
     public Map<String, Object> del(@RequestBody TbNtMian tbNtMian,ServletRequest request) {
         noticeZhaoBiaoService.delNtMainInfo(tbNtMian,JWTUtil.getUsername(request));
         return super.successMap(null);
+    }
+
+    @RequestMapping(value = "/updateNtText", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> updateNtText(@RequestBody TbNtText tbNtText) {
+        noticeZhaoBiaoService.updateNtText(tbNtText);
+        return successMap(null);
     }
 
     @RequestMapping(value = "/insertNtAssociateGp",method = RequestMethod.POST,produces="application/json;charset=utf-8")

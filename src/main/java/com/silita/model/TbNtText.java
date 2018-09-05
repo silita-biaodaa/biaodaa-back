@@ -30,4 +30,9 @@ public class TbNtText {
      * 来源
      */
     private String source;
+
+    /**
+     * 拼接表名称
+     */
+    private String tableName;
 }

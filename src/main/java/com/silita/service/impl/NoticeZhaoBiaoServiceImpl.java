@@ -5,6 +5,7 @@ import com.silita.model.*;
 import com.silita.service.INoticeZhaoBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
+import com.silita.utils.WordProcessingUtil;
 import org.apache.poi.hssf.usermodel.HSSFHyperlink;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -12,6 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -42,6 +44,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtRecycleHunanMapper recycleHunanMapper;
     @Autowired
     TbNtAssociateGpMapper tbNtAssociateGpMapper;
+    @Autowired
+    TbNtTextHunanMapper tbNtTextHunanMapper;
 
     @Override
     @Cacheable(value = "TwfDictNameCache")
@@ -130,7 +134,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
 
     @Override
-    public String insertNtTenders(TbNtTenders tbNtTenders) {
+    public String saveNtTenders(TbNtTenders tbNtTenders) {
         String msg = "";
         //更新招标主表状态
         TbNtMian tbNtMian = new TbNtMian();
@@ -145,36 +149,24 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setCityCode(tbNtTenders.getCityCode());
         tbNtMian.setCountyCode(tbNtTenders.getCountyCode());
         tbNtMianMapper.updateNtMainByPkId(tbNtMian);
-        //添加标段
-        tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
-        Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
-        if (count == 0) {
-            tbNtTenders.setPkid(DataHandlingUtil.getUUID());
-            tbNtTendersMapper.insertNtTenders(tbNtTenders);
-            msg = "添加标段成功！";
+        if(StringUtils.isEmpty(tbNtTenders.getPkid())) {
+            //添加标段
+            tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+            Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
+            if (count == 0) {
+                tbNtTenders.setPkid(DataHandlingUtil.getUUID());
+                tbNtTendersMapper.insertNtTenders(tbNtTenders);
+                msg = "添加标段信息成功！";
+            }
+        } else {
+            //更新标段
+            tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+            tbNtTendersMapper.updateNtTendersByPkId(tbNtTenders);
+            msg = "更新标段信息成功！";
         }
         return msg;
     }
 
-    @Override
-    public void updateNtTenders(TbNtTenders tbNtTenders) {
-        //更新招标主表状态
-        TbNtMian tbNtMian = new TbNtMian();
-        tbNtMian.setPkid(tbNtTenders.getNtId());
-        tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtTenders.getSource()));
-        tbNtMian.setBinessType(tbNtTenders.getBinessType());
-        tbNtMian.setNtCategory(tbNtTenders.getNtCategory());
-        tbNtMian.setNtType(tbNtTenders.getNtType());
-        tbNtMian.setTitle(tbNtTenders.getTitle());
-        tbNtMian.setPubDate(tbNtTenders.getPubDate());
-        tbNtMian.setUrl(tbNtTenders.getUrl());
-        tbNtMian.setCityCode(tbNtTenders.getCityCode());
-        tbNtMian.setCountyCode(tbNtTenders.getCountyCode());
-        tbNtMianMapper.updateNtMainByPkId(tbNtMian);
-        //更新标段
-        tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
-        tbNtTendersMapper.updateNtTendersByPkId(tbNtTenders);
-    }
 
     @Override
     public List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders) {
@@ -202,14 +194,13 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
 
     @Override
-    public void insertTbNtChange(TbNtChange tbNtChange) {
-        tbNtChange.setPkid(DataHandlingUtil.getUUID());
-        tbNtChangeMapper.insertTbNtChange(tbNtChange);
-    }
-
-    @Override
-    public void updateTbNtChangeByPkId(TbNtChange tbNtChange) {
-        tbNtChangeMapper.updateTbNtChangeByPkId(tbNtChange);
+    public void saveTbNtChange(TbNtChange tbNtChange) {
+        if(StringUtils.isEmpty(tbNtChange.getPkid())) {
+            tbNtChange.setPkid(DataHandlingUtil.getUUID());
+            tbNtChangeMapper.insertTbNtChange(tbNtChange);
+        } else {
+            tbNtChangeMapper.updateTbNtChangeByPkId(tbNtChange);
+        }
     }
 
 
@@ -249,6 +240,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         //将公告数据填进回收站
         recycleHunanMapper.inertRecycleForNtMain(recycle);
         tbNtMianMapper.deleteNtMainByPkId(main);
+    }
+
+    @Override
+    public void updateNtText(TbNtText tbNtText) {
+        tbNtText.setTableName(DataHandlingUtil.SplicingTable(TbNtText.class, tbNtText.getSource()));
+        String compress = WordProcessingUtil.getTextFromHtml(tbNtText.getContent());
+        tbNtText.setCompress(compress);
+        tbNtTextHunanMapper.updateNtText(tbNtText);
     }
 
     @Override
