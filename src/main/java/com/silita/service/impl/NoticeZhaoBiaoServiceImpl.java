@@ -191,9 +191,18 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     }
 
     @Override
-    public void deleteNtTendersByPkId(TbNtTenders tbNtTenders) {
-        tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
-        tbNtTendersMapper.deleteNtTendersByPkId(tbNtTenders);
+    public void deleteNtTendersByPkId(Map params) {
+        String idStr = (String) params.get("idsStr");
+        String source = (String) params.get("source");
+        String tableName = DataHandlingUtil.SplicingTable(TbNtTenders.class, source);
+        String[] ids = idStr.split("\\|");
+        Set set = new HashSet<String>();
+        for (String id : ids) {
+            set.add(id);
+        }
+        if (set != null && set.size() > 0) {
+            tbNtTendersMapper.deleteNtTendersByPkId(tableName, set.toArray());
+        }
     }
 
 
@@ -253,8 +262,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         String createBy = (String) params.get("createBy");
         String source = (String) params.get("source");
         String[] ids = idsStr.split("\\|");
-        TbNtAssociateGp tbNtAssociateGp;
         TbNtMian tbNtMian;
+        TbNtAssociateGp tbNtAssociateGp;
+        //时间戳 + 随机数
+        String relGp = DataHandlingUtil.getTimeStamp() + "_" + DataHandlingUtil.getNumberRandom(4);
         List tbNtAssociateGpList = new ArrayList<TbNtAssociateGp>(ids.length);
         for (int i = 0; i < ids.length; i++) {
             //获取项目类型
@@ -267,8 +278,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             tbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
             tbNtAssociateGp.setNtId(ids[i]);
             tbNtAssociateGp.setRelType(ntCategory);
-            //时间戳 +  随机数
-            tbNtAssociateGp.setRelGp(DataHandlingUtil.getTimeStamp() + "_" + DataHandlingUtil.getNumberRandom(4));
+            tbNtAssociateGp.setRelGp(relGp);
             tbNtAssociateGp.setPx(String.valueOf(i));
             tbNtAssociateGp.setCreateBy(createBy);
             tbNtAssociateGpList.add(tbNtAssociateGp);
@@ -289,7 +299,9 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public Map<String, Object> listNtAssociateGp(TbNtAssociateGp tbNtAssociateGp) {
         tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, tbNtAssociateGp.getSource()));
+//        String relGp = tbNtAssociateGpMapper.getRelGpByNtId(tbNtAssociateGp);
         Map result = new HashMap<String, Object>();
+//        tbNtAssociateGp.setRelGp(relGp);
         result.put("datas", tbNtAssociateGpMapper.listNtAssociateGp(tbNtAssociateGp));
         result.put("total", tbNtAssociateGpMapper.countNtAssociateGp(tbNtAssociateGp));
         return super.handlePageCount(result, tbNtAssociateGp);

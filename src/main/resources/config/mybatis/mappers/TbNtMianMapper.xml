@@ -79,7 +79,7 @@
     </select>
 
     <select id="listTendersDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
-        SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date, main.city_code,
+        SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' WHEN 5 then '已处理' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date, main.city_code,
         main.county_code, main.biness_type, main.nt_type, '资质', '控制价',
         main.pro_sum, main.pro_duration, main.pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
         tenders.enroll_end_time,tenders.enroll_addr, tenders.audit_time, tenders.bid_end_time, tenders.opening_addr,

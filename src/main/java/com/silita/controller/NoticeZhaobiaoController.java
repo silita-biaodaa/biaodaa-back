@@ -130,8 +130,8 @@ public class NoticeZhaobiaoController extends BaseController {
 
     @RequestMapping(value = "/deleteNtTendersByPkId",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
-    public Map<String,Object> deleteNtTendersByPkId(@RequestBody TbNtTenders tbNtTenders) {
-        noticeZhaoBiaoService.deleteNtTendersByPkId(tbNtTenders);
+    public Map<String,Object> deleteNtTendersByPkId(@RequestBody Map<String,Object> param) {
+        noticeZhaoBiaoService.deleteNtTendersByPkId(param);
         return super.successMap(null);
     }
 

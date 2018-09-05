@@ -191,7 +191,13 @@
         ORDER BY LENGTH(t1.`segment`) ASC, t1.`segment` ASC
     </select>
 
-    <delete id="deleteNtTendersByPkId" parameterType="com.silita.model.TbNtTenders">
-        DELETE FROM ${tableName} WHERE `pkid` = #{pkid}
+    <delete id="deleteNtTendersByPkId" parameterType="Map">
+        DELETE FROM ${tableName}
+        <where>
+            pkid IN
+            <foreach collection="array" open="(" close=")" separator="," item="ele">
+                #{ele}
+            </foreach>
+        </where>
     </delete>
 </mapper>

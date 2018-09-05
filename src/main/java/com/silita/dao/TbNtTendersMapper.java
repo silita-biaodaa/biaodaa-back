@@ -1,6 +1,7 @@
 package com.silita.dao;
 
 import com.silita.model.TbNtTenders;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -33,7 +34,8 @@ public interface TbNtTendersMapper {
 
     /**
      * 根据pkid删除招标公告标段
-     * @param tbNtTenders
+     * @param tableName
+     * @param array
      */
-    void deleteNtTendersByPkId(TbNtTenders tbNtTenders);
+    void deleteNtTendersByPkId(@Param("tableName") String tableName, @Param("array") Object[] array);
 }

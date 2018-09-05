@@ -83,9 +83,9 @@ public interface INoticeZhaoBiaoService {
 
     /**
      * 根据pkid删除标段信息
-     * @param tbNtTenders
+     * @param params
      */
-    void deleteNtTendersByPkId(TbNtTenders tbNtTenders);
+    void deleteNtTendersByPkId(Map params);
 
     //#####################变更标段########################
     /**

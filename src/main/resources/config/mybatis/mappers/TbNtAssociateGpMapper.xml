@@ -14,6 +14,7 @@
         <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
         <result column="title" property="title" jdbcType="VARCHAR"/>
         <result column="pub_date" property="pubDate" jdbcType="VARCHAR"/>
+        <result column="nt_status" property="ntStatus" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -45,34 +46,18 @@
     <select id="listNtAssociateGp" parameterType="com.silita.model.TbNtAssociateGp" resultType="Map">
         SELECT gp.pkid, gp.nt_id AS ntId, gp.rel_gp AS relGp, gp.rel_type AS relType, gp.px,
         gp.created, gp.create_by AS createBy, gp.updated, gp.update_by AS updateBy, main.title,
-        main.pub_date AS pubDate
+        main.pub_date AS pubDate, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' WHEN 5 then '已处理' ELSE '未审核' END AS ntStatus
         FROM ${tableName} gp
         LEFT JOIN tb_nt_mian_${source} main ON gp.nt_id = main.pkid
-        WHERE 1 = 1
-        <if test="title != null and title != ''">
-            AND main.title LIKE CONCAT('%', #{title}, '%')
-        </if>
-        <if test="pubDate !=null and pubDate!=''">
-            AND main.pub_date &gt;= #{pubDate}
-        </if>
-        <if test="pubEndDate !=null and pubEndDate!=''">
-            AND main.pub_date &lt;= #{pubEndDate}
-        </if>
+        WHERE rel_gp = (SELECT rel_gp FROM ${tableName} WHERE nt_id = #{ntId})
+        LIMIT #{start}, #{pageSize}
     </select>
 
     <select id="countNtAssociateGp" parameterType="com.silita.model.TbNtAssociateGp" resultType="Integer">
         SELECT COUNT(*)
         FROM ${tableName} gp
         LEFT JOIN tb_nt_mian_${source} main ON gp.nt_id = main.pkid
-        WHERE 1 = 1
-        <if test="title != null and title != ''">
-            AND main.title LIKE CONCAT('%', #{title}, '%')
-        </if>
-        <if test="pubDate !=null and pubDate!=''">
-            AND main.pub_date &gt;= #{pubDate}
-        </if>
-        <if test="pubEndDate !=null and pubEndDate!=''">
-            AND main.pub_date &lt;= #{pubEndDate}
-        </if>
+        WHERE rel_gp = (SELECT rel_gp FROM ${tableName} WHERE nt_id = #{ntId})
     </select>
+
 </mapper>

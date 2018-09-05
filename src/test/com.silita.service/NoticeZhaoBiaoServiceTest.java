@@ -193,7 +193,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController11()throws Exception{
-        String requestBody = "{\"pkid\":\"9b83f3ca231c4375a5fc2972c43a53d0\", \"source\":\"hunan\"}";
+        String requestBody = "{\"idsStr\":\"9b83f3ca231c4375a5fc2972c43a5999|9b83f3ca231c4375a5fc2972c43a5add\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/deleteNtTendersByPkId").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -357,7 +357,8 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController22()throws Exception{
-        String requestBody = "{\"title\":\"测试\", \"source\":\"hunan\", \"pubDate\":\"2018-08-10\", \"pubEndDate\":\"2018-08-30\"}";
+//        String requestBody = "{\"title\":\"测试\", \"source\":\"hunan\", \"pubDate\":\"2018-08-10\", \"pubEndDate\":\"2018-08-30\"}";
+        String requestBody = "{\"ntId\":\"1\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/listNtAssociateGp").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
