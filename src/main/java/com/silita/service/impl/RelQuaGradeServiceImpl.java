@@ -30,32 +30,28 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
                 grade.setGradeCode(str);
                 count = quaGradeMapper.queryQuaGradeCout(grade);
                 if (count <= 0) {
-                   codeList.add(str);
+                    codeList.add(str);
                 }
             }
-            if(null != codeList && codeList.size() > 0){
-                for (String str : codeList){
+            if (null != codeList && codeList.size() > 0) {
+                for (String str : codeList) {
                     grade.setGradeCode(str);
                     grade.setId(DataHandlingUtil.getUUID());
                     quaGradeMapper.insertQuaCrade(grade);
-                    resultMap.put("code", Constant.CODE_SUCCESS);
-                    resultMap.put("msg", Constant.MSG_SUCCESS);
-                    return resultMap;
                 }
             }
+            resultMap.put("code", Constant.CODE_SUCCESS);
+            resultMap.put("msg", Constant.MSG_SUCCESS);
+            return resultMap;
+        }
+        count = quaGradeMapper.queryQuaGradeCout(grade);
+        if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
             resultMap.put("msg", Constant.MSG_WARN_400);
             return resultMap;
-        } else {
-            count = quaGradeMapper.queryQuaGradeCout(grade);
-            if (count > 0) {
-                resultMap.put("code", Constant.CODE_WARN_400);
-                resultMap.put("msg", Constant.MSG_WARN_400);
-                return resultMap;
-            }
-            grade.setId(DataHandlingUtil.getUUID());
-            quaGradeMapper.insertQuaCrade(grade);
         }
+        grade.setId(DataHandlingUtil.getUUID());
+        quaGradeMapper.insertQuaCrade(grade);
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
