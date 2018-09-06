@@ -252,7 +252,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController15()throws Exception{
-        String requestBody = "{\"bizId\":\"1\", \"type\":\"1\", \"fileName\":\"测试上传招标文件路径2\", \"filePath\":\"www.baidu.com\", \"ossObj\":\"不知道是什么\", \"orderNo\":\"2\"}";
+        String requestBody = "{\"bizId\":\"1\", \"type\":\"4\", \"fileName\":\"测试上传招标文件路径2\", \"filePath\":\"www.baidu.com\", \"ossObj\":\"不知道是什么\", \"orderNo\":\"2\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/insertZhaoBiaoFilePath").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -266,7 +266,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController16()throws Exception{
-        String requestBody = "{\"bizId\":\"1\"}";
+        String requestBody = "{\"bizId\":\"1\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/listZhaoBiaoFiles").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -280,7 +280,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController17()throws Exception{
-        String requestBody = "{\"idsStr\":\"02321b3e2fd740b4a2d408eb120918fc|09695d60a0aa4ab8af79115cb946ac2e\"}";
+        String requestBody = "{\"idsStr\":\"1c931b141b9341448cf1c7f8ca9ded13|1c931b141b9341448cf1c7f8ca9ded14\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/deleteZhaoBiaoFile").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -320,7 +320,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController20()throws Exception{
-        String requestBody = "{\"idsStr\":\"1|4|6\", \"source\":\"hunan\"}";
+        String requestBody = "{\"idsStr\":\"1|2|3\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/insertNtAssociateGp").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

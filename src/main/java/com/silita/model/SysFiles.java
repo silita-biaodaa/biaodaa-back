@@ -19,7 +19,7 @@ public class SysFiles {
     private String bizId;
 
     /**
-     * 对象类型(1:公告文件；2：图片；3：app附件)
+     * 对象类型(1:公告文件；2：图片；3：app附件；4长传文件路径)
      */
     private String type;
 
@@ -42,6 +42,11 @@ public class SysFiles {
      * 关系排序编号
      */
     private String orderNo;
+
+    /**
+     * 省份来源
+     */
+    private String source;
 
     /**
      * 创建时间

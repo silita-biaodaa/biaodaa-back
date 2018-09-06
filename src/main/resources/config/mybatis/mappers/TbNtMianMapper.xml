@@ -81,10 +81,10 @@
     <select id="listTendersDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
         SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' WHEN 5 then '已处理' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date,
         (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code,
-        main.biness_type, main.nt_category, '资质', tenders.controll_sum,
+        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type, (SELECT `name` FROM twf_dict WHERE `type` = 3 AND code = main.nt_category) AS nt_category, '资质', tenders.controll_sum,
         tenders.pro_sum, tenders.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = tenders.pb_mode) AS pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
         tenders.enroll_end_time,tenders.enroll_addr, tenders.audit_time, tenders.bid_end_time, tenders.opening_addr,
-        tenders.filing_pfm, main.nt_type, tenders.opening_person, (SELECT field_value FROM tb_nt_change WHERE nt_id = main.pkid) AS field_value, main.url
+        (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = tenders.filing_pfm) AS filing_pfm, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = main.nt_type) AS nt_type, tenders.opening_person, (SELECT field_value FROM tb_nt_change WHERE nt_id = main.pkid) AS field_value, main.url
         FROM tb_nt_mian_${source} AS main
         LEFT JOIN tb_nt_tenders_${source} AS tenders ON main.pkid = tenders.nt_id
         WHERE 1=1 AND main.is_enable = 1

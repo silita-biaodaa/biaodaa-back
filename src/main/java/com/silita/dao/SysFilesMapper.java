@@ -1,6 +1,7 @@
 package com.silita.dao;
 
 import com.silita.model.SysFiles;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -26,8 +27,9 @@ public interface SysFilesMapper {
     void updateSysFilesByPkId(SysFiles sysFiles);
 
     /**
-     * 根据Pkid删除系统文件记录
-     * @param ids
+     * 根据Pkid、省份来源删除系统文件记录
+     * @param array
+     * @param source
      */
-    void deleteSysFilesByPkid(Object[] ids);
+    void deleteSysFilesByPkid(@Param("array") Object[] array, @Param("source") String source);
 }

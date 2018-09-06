@@ -107,7 +107,7 @@ public interface INoticeZhaoBiaoService {
      * 根据公告pkid删除文件列表
      * * @param idStr
      */
-    void deleteZhaoBiaoFilesByPkid(String idStr);
+    void deleteZhaoBiaoFilesByPkid(Map<String,Object> param);
 
     /**
      * 逻辑删除公告

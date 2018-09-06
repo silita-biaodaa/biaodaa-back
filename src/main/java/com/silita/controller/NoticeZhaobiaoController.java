@@ -157,8 +157,7 @@ public class NoticeZhaobiaoController extends BaseController {
     @RequestMapping(value = "/deleteZhaoBiaoFile",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> deleteSysFilesByPkid(@RequestBody Map<String,Object> param) {
-        String idsStr = (String) param.get("idsStr");
-        noticeZhaoBiaoService.deleteZhaoBiaoFilesByPkid(idsStr);
+        noticeZhaoBiaoService.deleteZhaoBiaoFilesByPkid(param);
         return super.successMap(null);
     }
 

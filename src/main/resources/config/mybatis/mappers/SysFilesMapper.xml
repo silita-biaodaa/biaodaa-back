@@ -9,6 +9,7 @@
     <result column="file_name" property="fileName" jdbcType="VARCHAR" />
     <result column="file_path" property="filePath" jdbcType="VARCHAR" />
     <result column="oss_obj" property="ossObj" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
     <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
     <result column="created" property="created" jdbcType="TIMESTAMP" />
     <result column="create_by" property="createBy" jdbcType="VARCHAR" />
@@ -18,30 +19,32 @@
 
 
   <select id="listSysFilesByBizId" parameterType="com.silita.model.SysFiles" resultMap="BaseResultMap">
-    SELECT * FROM sys_files WHERE biz_id = #{bizId}
+    SELECT `pkid`, `biz_id`, `type`, `file_name`, `file_path`,
+    `source`, `oss_obj`, `order_no`, `created`, `create_by`,
+    `updated`, `update_by`, if(TIMESTAMPDIFF(DAY,`created`, now()) > 90,'无效', '有效') AS status
+    FROM sys_files WHERE biz_id = #{bizId} AND source = #{source}
+    ORDER BY order_no DESC
   </select>
 
   <insert id="insertSysFiles" parameterType="com.silita.model.SysFiles">
     INSERT INTO
     sys_files (
       `biz_id`, `type`, `file_name`, `file_path`, `oss_obj`,
-      `order_no`, `create_by`, `created`, `pkid`
+      `order_no`, `create_by`, `source`, `created`, `pkid`
     )
     VALUES (
       #{bizId}, #{type}, #{fileName}, #{filePath}, #{ossObj},
-      #{orderNo}, #{createBy}, NOW(), #{pkid}
+      #{orderNo}, #{createBy}, #{source}, NOW(), #{pkid}
     )
   </insert>
 
   <update id="updateSysFilesByPkId" parameterType="com.silita.model.TbNtChange">
-    UPDATE sys_files SET
-    updated = NOW()
-    WHERE pkid = #{pkid}
   </update>
 
-  <delete id="deleteSysFilesByPkid" parameterType="String">
+  <delete id="deleteSysFilesByPkid" parameterType="Map">
     DELETE FROM sys_files
     <where>
+      `source` = #{source} AND
       pkid IN
       <foreach collection="array" open="(" close=")" separator="," item="ele">
         #{ele}

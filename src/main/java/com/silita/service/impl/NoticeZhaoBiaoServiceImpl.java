@@ -216,14 +216,16 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     }
 
     @Override
-    public void deleteZhaoBiaoFilesByPkid(String idStr) {
-        String[] ids = idStr.split("\\|");
+    public void deleteZhaoBiaoFilesByPkid(Map<String,Object> param) {
+        String idsStr = (String) param.get("idsStr");
+        String source = (String) param.get("source");
+        String[] ids = idsStr.split("\\|");
         Set set = new HashSet<String>();
         for (String id : ids) {
             set.add(id);
         }
         if (set != null && set.size() > 0) {
-            sysFilesMapper.deleteSysFilesByPkid(set.toArray());
+            sysFilesMapper.deleteSysFilesByPkid(set.toArray(), source);
         }
     }
 
