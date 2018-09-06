@@ -15,7 +15,17 @@
       ,create_by as createBy
       ,updated as updated
       ,update_by as updateBy
-    FROM sys_area WHERE area_parent_id = #{areaParentId}
+    FROM sys_area
+    WHERE
+    <choose>
+        <when test="_parameter != null and _parameter = '0'">
+            area_level = 1
+        </when>
+        <otherwise>
+            area_parent_id = #{areaParentId}
+        </otherwise>
+    </choose>
+
   </select>
 
   <select id="queryAreaName" parameterType="java.lang.String" resultType="java.lang.String">

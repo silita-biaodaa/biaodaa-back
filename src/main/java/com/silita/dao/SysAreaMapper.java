@@ -1,5 +1,7 @@
 package com.silita.dao;
 
+import com.silita.model.SysArea;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,13 @@ public interface SysAreaMapper {
      * @return
      */
     String queryAreaName(String code);
+
+    /**
+     * 添加地区
+     * @param area
+     * @return
+     */
+    Integer insertArea(SysArea area);
 
     /**
      * 根据地区code查询pkid
