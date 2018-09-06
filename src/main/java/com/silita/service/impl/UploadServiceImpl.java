@@ -96,17 +96,17 @@ public class UploadServiceImpl implements IUploadService {
         List<DicAlias> aliasList = new ArrayList<>();
         if (null != dicAliasList && dicAliasList.size() > 0) {
             Integer count = 0;
-            Map<String,Object> params = new HashMap<>();
-            params.put("stdType",Constant.QUAL_LEVEL_PARENT);
-            for(DicAlias alias:dicAliasList){
-                param.put("name",alias.getName());
+            Map<String, Object> params = new HashMap<>();
+            params.put("stdType", Constant.QUAL_LEVEL_PARENT);
+            for (DicAlias alias : dicAliasList) {
+                param.put("name", alias.getName());
                 count = dicAliasMapper.queryAliasByName(param);
-                if(count <= 0){
+                if (count <= 0) {
                     aliasList.add(alias);
                 }
             }
         }
-        if(null != aliasList && aliasList.size() > 0){
+        if (null != aliasList && aliasList.size() > 0) {
             qualService.addQuaAlias(aliasList);
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -118,11 +118,11 @@ public class UploadServiceImpl implements IUploadService {
     }
 
     @Override
-    public void insertZhaoBiaoFiles(MultipartFile[] files, SysFiles sysFiles) throws Exception{
+    public void insertZhaoBiaoFiles(MultipartFile[] files, SysFiles sysFiles) throws Exception {
         for (int i = 0; i < files.length; i++) {
             MultipartFile zhaobiaoFile = files[i];
             String fileName = zhaobiaoFile.getOriginalFilename();
-            File uploadFile = new File(propertiesUtils.getFilePath() + fileName);
+            File uploadFile = new File(propertiesUtils.getFilePath() + File.separatorChar + fileName);
             zhaobiaoFile.transferTo(uploadFile);
             sysFiles.setPkid(DataHandlingUtil.getUUID());
             sysFiles.setType("1");

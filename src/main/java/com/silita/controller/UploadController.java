@@ -78,9 +78,9 @@ public class UploadController {
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg",Constant.MSG_SUCCESS);
         } catch (Exception e) {
+            LOGGER.error("上传文件异常",e);
             resultMap.put("code", Constant.CODE_ERROR_500);
             resultMap.put("msg", Constant.MSG_ERROR_500);
-            LOGGER.error(e.getMessage());
         }
        return resultMap;
     }
