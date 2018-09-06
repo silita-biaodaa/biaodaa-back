@@ -40,9 +40,11 @@ public class CompanySecurityCertServiceImpl implements ICompanySecurityCertServi
                 }
                 if(Constant.SOURCE_PRO.equals(companySecurity.getCertOrigin())){
                     resultMap.put("pro",companySecurity);
+                    resultMap.put("lab",new TbCompanySecurityCert());
                     continue;
                 }
                 resultMap.put("lab",companySecurity);
+                resultMap.put("pro",new TbCompanySecurityCert());
             }
         }
         return resultMap;
