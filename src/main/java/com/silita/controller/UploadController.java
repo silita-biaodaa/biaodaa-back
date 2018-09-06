@@ -80,6 +80,7 @@ public class UploadController {
         } catch (Exception e) {
             resultMap.put("code", Constant.CODE_ERROR_500);
             resultMap.put("msg", Constant.MSG_ERROR_500);
+            LOGGER.error(e.getMessage());
         }
        return resultMap;
     }
