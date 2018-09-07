@@ -133,6 +133,7 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
         TbCompanyInfoHm comInfo = new TbCompanyInfoHm();
         comInfo.setComName(companyInfoHm.getComName());
         comInfo.setCreateBy(username);
+        comInfo.setComNameEx(companyInfoHm.getComNameEx());
         comInfo.setCreated(new Date());
         comInfo.setDataStatus(Constant.DATA_STATUS_0);
         comInfo.setPkid(DataHandlingUtil.getUUID());

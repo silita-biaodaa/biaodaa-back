@@ -25,7 +25,7 @@ public class ExcelAnalysis extends ConfigTest {
     @Test
     public void test() throws IOException {
         {
-            File file = new File("F:\\Company\\import\\areas1.xls");
+            File file = new File("E:\\Download\\sqlå\u0092\u008Cexcel\\sql和excel\\2017年最新行政区划数据库-旗舰版.xls");
             FileInputStream inputStream = new FileInputStream(file);
             String fileName = file.getName();
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook(inputStream);
@@ -41,11 +41,16 @@ public class ExcelAnalysis extends ConfigTest {
                     area = new SysArea();
                     row = null;
                     row = sheet.getRow(i);
-                    cell = row.getCell(0);
+                    cell = row.getCell(3);
+                    String areaStr = cell.getStringCellValue();
+                    String[] areas = areaStr.split(",");
+                    if(areas.length != 3){
+                        continue;
+                    }
                     area.setPkid(DataHandlingUtil.getUUID());
                     area.setAreaName(cell.getStringCellValue());
                     cell = row.getCell(1);
-                    area.setAreaShortName(getShortName(area.getAreaName()));
+//                    area.setAreaShortName(getShortName(area.getAreaName()));
                     area.setAreaCode(cell.getStringCellValue());
                     area.setAreaLevel(1);
                     area.setCreateBy("gemingyi");
@@ -59,30 +64,6 @@ public class ExcelAnalysis extends ConfigTest {
         }
     }
 
-    private String getShortName(String name) {
-        String shortName = null;
-        switch (name){
-            case "广西壮族自治区":
-                shortName = "广西";
-                break;
-            case "西藏自治区":
-                shortName = "西藏";
-                break;
-            case "内蒙古自治区":
-                shortName = "内蒙古";
-                break;
-            case "宁夏回族自治区":
-                shortName = "宁夏";
-                break;
-            case "新疆维吾尔自治区":
-                shortName = "新疆";
-                break;
-                default:
-                    shortName = name;
-                    break;
-        }
-        return shortName;
-    }
 
     private void add(List<SysArea> areaList){
         for (SysArea area : areaList){

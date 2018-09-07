@@ -18,7 +18,7 @@
     FROM sys_area
     WHERE
     <choose>
-        <when test="_parameter != null and _parameter = '0'">
+        <when test='_parameter != null and _parameter == "0"'>
             area_level = 1
         </when>
         <otherwise>
