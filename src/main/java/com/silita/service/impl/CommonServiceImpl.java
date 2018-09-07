@@ -22,15 +22,15 @@ public class CommonServiceImpl implements ICommonService {
     @Override
     public List<Map<String, Object>> getArea() {
         List<Map<String, Object>> parentArea = sysAreaMapper.listSysAreaByParentId("0");
-//        List<Map<String, Object>> cityList = null;
-//        if (null != parentArea && parentArea.size() > 0) {
-//            for (Map<String, Object> map : parentArea) {
-//                cityList = sysAreaMapper.listSysAreaByParentId(MapUtils.getString(map, "pkid"));
-//                if(null != cityList && cityList.size() > 0){
-//                    map.put("citys", cityList);
-//                }
-//            }
-//        }
+        List<Map<String, Object>> cityList = null;
+        if (null != parentArea && parentArea.size() > 0) {
+            for (Map<String, Object> map : parentArea) {
+                cityList = sysAreaMapper.listSysAreaByParentId(MapUtils.getString(map, "pkid"));
+                if(null != cityList && cityList.size() > 0){
+                    map.put("citys", cityList);
+                }
+            }
+        }
         return parentArea;
     }
 }

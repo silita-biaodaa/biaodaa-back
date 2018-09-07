@@ -44,29 +44,37 @@ public class ExcelAnalysis extends ConfigTest {
                     cell = row.getCell(3);
                     String areaStr = cell.getStringCellValue();
                     String[] areas = areaStr.split(",");
-                    if(areas.length != 3){
+                    if (areas.length != 3) {
                         continue;
                     }
+                    if ("北京市".equals(areas[2]) || "天津市".equals(areas[2]) || "上海市".equals(areas[2]) || "重庆市".equals(areas[2])) {
+                        continue;
+                    }
+                    SysArea sysArea = sysAreaMapper.queryAreaByName(areas[1]);
+                    if (null == sysArea) {
+                        continue;
+                    }
+                    area.setAreaParentId(sysArea.getPkid());
                     area.setPkid(DataHandlingUtil.getUUID());
-                    area.setAreaName(cell.getStringCellValue());
-                    cell = row.getCell(1);
-//                    area.setAreaShortName(getShortName(area.getAreaName()));
-                    area.setAreaCode(cell.getStringCellValue());
-                    area.setAreaLevel(1);
+                    area.setAreaName(areas[2]);
+                    cell = row.getCell(9);
+                    area.setAreaShortName(area.getAreaName());
+                    area.setAreaCode(cell.getStringCellValue().toLowerCase());
+                    area.setAreaLevel(2);
                     area.setCreateBy("gemingyi");
                     area.setCreated(new Date());
                     areaList.add(area);
                 }
             }
-            if(null != areaList && areaList.size() > 0){
+            if (null != areaList && areaList.size() > 0) {
                 add(areaList);
             }
         }
     }
 
 
-    private void add(List<SysArea> areaList){
-        for (SysArea area : areaList){
+    private void add(List<SysArea> areaList) {
+        for (SysArea area : areaList) {
             sysAreaMapper.insertArea(area);
         }
     }

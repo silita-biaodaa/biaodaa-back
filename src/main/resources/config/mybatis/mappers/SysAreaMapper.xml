@@ -1,40 +1,131 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.SysAreaMapper" >
+<mapper namespace="com.silita.dao.SysAreaMapper">
 
-  <select id="listSysAreaByParentId" parameterType="String" resultType="Map">
-    SELECT
-      pkid as pkid
-      ,area_name as areaName
-      ,area_short_name as areaShortName
-      ,area_code as areaCode
-      ,area_level as areaLevel
-      ,area_parent_id as areaParentId
-      ,phone_code as phoneCode
-      ,created as created
-      ,create_by as createBy
-      ,updated as updated
-      ,update_by as updateBy
-    FROM sys_area
-    WHERE
-    <choose>
-        <when test='_parameter != null and _parameter == "0"'>
-            area_level = 1
-        </when>
-        <otherwise>
-            area_parent_id = #{areaParentId}
-        </otherwise>
-    </choose>
+    <select id="listSysAreaByParentId" parameterType="String" resultType="Map">
+        SELECT
+        pkid as pkid
+        ,area_name as areaName
+        ,area_short_name as areaShortName
+        ,area_code as areaCode
+        ,area_level as areaLevel
+        ,area_parent_id as areaParentId
+        ,phone_code as phoneCode
+        ,created as created
+        ,create_by as createBy
+        ,updated as updated
+        ,update_by as updateBy
+        FROM sys_area
+        WHERE
+        <choose>
+            <when test='_parameter != null and _parameter == "0"'>
+                area_level = 1
+            </when>
+            <otherwise>
+                area_parent_id = #{areaParentId}
+            </otherwise>
+        </choose>
 
-  </select>
+    </select>
 
-  <select id="queryAreaName" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="queryAreaName" parameterType="java.lang.String" resultType="java.lang.String">
      SELECT
         area_name as areaName
       FROM sys_area WHERE area_code = #{code}
   </select>
 
-  <select id="getPkIdByAreaCode" parameterType="String" resultType="String">
+    <select id="getPkIdByAreaCode" parameterType="String" resultType="String">
     SELECT `pkid` FROM sys_area WHERE area_code = #{areaCode}
   </select>
+
+    <select id="queryAreaByName" parameterType="java.lang.String" resultType="com.silita.model.SysArea">
+        SELECT
+          pkid as pkid
+          ,area_name as areaName
+          ,area_short_name as areaShortName
+          ,area_code as areaCode
+          ,area_level as areaLevel
+          ,area_parent_id as areaParentId
+          ,phone_code as phoneCode
+          ,created as created
+          ,create_by as createBy
+          ,updated as updated
+          ,update_by as updateBy
+    FROM sys_area
+    WHERE  area_name = #{areaName}
+    </select>
+
+    <insert id="insertArea" parameterType="com.silita.model.SysArea">
+        INSERT INTO `sys_area`
+        (
+        <if test="pkid != null and pkid != ''">
+            `pkid`,
+        </if>
+        <if test="areaName != null and  areaName != ''">
+            `area_name`,
+        </if>
+        <if test="areaShortName != null and areaShortName != ''">
+            `area_short_name`,
+        </if>
+        <if test="areaCode != null and areaCode != ''">
+            `area_code`,
+        </if>
+        <if test="areaLevel != null and areaLevel != ''">
+            `area_level`,
+        </if>
+        <if test="areaParentId != null and areaParentId != ''">
+            `area_parent_id`,
+        </if>
+        <if test="phoneCode != null and phoneCode != ''">
+            `phone_code`,
+        </if>
+        <if test="updated != null">
+            `updated`,
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            `update_by`,
+        </if>
+        <if test="created != null">
+            `created`,
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by`
+        </if>
+        )
+        VALUES (
+        <if test="pkid != null and pkid != ''">
+            #{pkid},
+        </if>
+        <if test="areaName != null and  areaName != ''">
+            #{areaName},
+        </if>
+        <if test="areaShortName != null and areaShortName != ''">
+            #{areaShortName},
+        </if>
+        <if test="areaCode != null and areaCode != ''">
+            #{areaCode},
+        </if>
+        <if test="areaLevel != null and areaLevel != ''">
+            #{areaLevel},
+        </if>
+        <if test="areaParentId != null and areaParentId != ''">
+            #{areaParentId},
+        </if>
+        <if test="phoneCode != null and phoneCode != ''">
+            #{phoneCode},
+        </if>
+        <if test="updated != null">
+            #{updated},
+        </if>
+        <if test="updateBy != null and updateBy != ''">
+            #{updateBy},
+        </if>
+        <if test="created != null">
+            #{created},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            #{createBy}
+        </if>
+        )
+    </insert>
 </mapper>

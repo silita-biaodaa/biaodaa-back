@@ -34,4 +34,11 @@ public interface SysAreaMapper {
      * @return
      */
     String getPkIdByAreaCode(String areaCode);
+
+    /**
+     * 查询详情根据名称
+     * @param areaName
+     * @return
+     */
+    SysArea queryAreaByName(String areaName);
 }
