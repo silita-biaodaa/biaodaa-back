@@ -119,6 +119,12 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(noticeZhaoBiaoService.listNtTenders(tbNtTenders));
     }
 
+    @RequestMapping(value = "/getNtTenders",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> getNtTenders(@RequestBody TbNtTenders tbNtTenders) {
+        return super.successMap(noticeZhaoBiaoService.getNtTendersByNtIdByPkId(tbNtTenders));
+    }
+
     @RequestMapping(value = "/deleteNtTendersByPkId",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> deleteNtTendersByPkId(@RequestBody Map<String,Object> param) {

@@ -53,6 +53,7 @@
         <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
         <result column="county_code" property="countyCode" jdbcType="VARCHAR" />
         <result column="source" property="source" jdbcType="VARCHAR" />
+        <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
     </resultMap>
 
     <select id="countNtTendersByNtIdAndSegment" parameterType="com.silita.model.TbNtTenders" resultType="Integer">
@@ -205,6 +206,17 @@
         ORDER BY LENGTH(t1.`segment`) ASC, t1.`segment` ASC
     </select>
 
+    <select id="getNtTendersByNtIdByPkId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
+        SELECT t1.*,
+        t.biness_type, t.nt_category, t.nt_type, t.title, t.pub_date,
+        t.url, (SELECT GROUP_CONCAT(field_name) FROM `tb_nt_change` WHERE nt_edit_id = #{pkid}) AS fieldName,
+        (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source
+        FROM ${tableName} t1
+        LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
+        WHERE t1.nt_id = #{ntId}
+        ORDER BY LENGTH(t1.`segment`) ASC, t1.`segment` ASC
+    </select>
+
     <delete id="deleteNtTendersByPkId" parameterType="Map">
         DELETE FROM ${tableName}
         <where>
@@ -214,4 +226,13 @@
             </foreach>
         </where>
     </delete>
+
+    <update id="updateChangeFieldValue" parameterType="Map">
+        UPDATE ${tableName} SET
+        <if test="fieldName !=null and fieldName!='' and fieldValue !=null and fieldValue!=''">
+            ${fieldName} = #{fieldValue},
+        </if>
+        updated = NOW()
+        WHERE pkid = #{pkid}
+    </update>
 </mapper>

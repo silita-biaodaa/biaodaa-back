@@ -175,6 +175,13 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     }
 
     @Override
+    public TbNtTenders getNtTendersByNtIdByPkId(TbNtTenders tbNtTenders) {
+        tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+        return tbNtTendersMapper.getNtTendersByNtIdByPkId(tbNtTenders);
+    }
+
+
+    @Override
     public void deleteNtTendersByPkId(Map params) {
         String idStr = (String) params.get("idsStr");
         String source = (String) params.get("source");
@@ -201,6 +208,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         } else {
             tbNtChangeMapper.updateTbNtChangeByPkId(tbNtChange);
         }
+        Map map = new HashMap<String, Object>(5);
+        map.put("tableName", DataHandlingUtil.SplicingTable(TbNtTenders.class, tbNtChange.getSource()));
+        //把下划线命名转为驼峰命名
+        map.put("fieldName", com.silita.utils.StringUtils.HumpToUnderline(tbNtChange.getFieldName()));
+        map.put("fieldValue", tbNtChange.getFieldValue());
+        map.put("pkid", tbNtChange.getNtEditId());
+        //添加变更信息时，同时标段表对应字段一起改变
+        tbNtTendersMapper.updateChangeFieldValue(map);
     }
 
 

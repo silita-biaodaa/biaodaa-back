@@ -121,7 +121,7 @@ public class UploadServiceImpl implements IUploadService {
     public void insertZhaoBiaoFiles(MultipartFile[] files, SysFiles sysFiles) throws Exception {
         for (int i = 0; i < files.length; i++) {
             MultipartFile zhaobiaoFile = files[i];
-            String fileName = zhaobiaoFile.getOriginalFilename();
+            String fileName = System.currentTimeMillis() + zhaobiaoFile.getOriginalFilename();
             File uploadFile = new File(propertiesUtils.getFilePath() + File.separatorChar + fileName);
             zhaobiaoFile.transferTo(uploadFile);
             sysFiles.setPkid(DataHandlingUtil.getUUID());

@@ -76,6 +76,13 @@ public interface INoticeZhaoBiaoService {
     List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders);
 
     /**
+     * 根据公告id、标段id获取标段信息
+     * @param tbNtTenders
+     * @return
+     */
+    TbNtTenders getNtTendersByNtIdByPkId(TbNtTenders tbNtTenders);
+
+    /**
      * 根据pkid删除标段信息
      * @param params
      */

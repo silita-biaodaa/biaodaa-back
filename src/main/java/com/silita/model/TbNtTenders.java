@@ -239,6 +239,11 @@ public class TbNtTenders {
     private String countyCode;
 
     /**
+     * 标段变更的字段
+     */
+    private String fieldName;
+
+    /**
      * 省份来源
      */
     private String source;

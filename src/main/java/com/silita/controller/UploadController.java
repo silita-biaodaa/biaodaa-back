@@ -66,13 +66,14 @@ public class UploadController {
 
     @ResponseBody
     @RequestMapping(value = "/uploadZhaoBiaoFile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> uploadZhaoBiaoFile(HttpServletRequest request, @RequestParam() MultipartFile[] files, String bizId) {
+    public Map<String, Object> uploadZhaoBiaoFile(HttpServletRequest request, @RequestParam() MultipartFile[] files, String bizId, String source) {
         Map resultMap = new HashMap<String, Object>();
         String userName = JWTUtil.getUsername(request);
 
         SysFiles sysFiles = new SysFiles();
         sysFiles.setBizId(bizId);
         sysFiles.setCreateBy(userName);
+        sysFiles.setSource(source);
         try {
             uploadService.insertZhaoBiaoFiles(files, sysFiles);
             resultMap.put("code", Constant.CODE_SUCCESS);
