@@ -121,15 +121,17 @@ public class UploadServiceImpl implements IUploadService {
     public void insertZhaoBiaoFiles(MultipartFile[] files, SysFiles sysFiles) throws Exception {
         for (int i = 0; i < files.length; i++) {
             MultipartFile zhaobiaoFile = files[i];
-            String fileName = System.currentTimeMillis() + zhaobiaoFile.getOriginalFilename();
-            File uploadFile = new File(propertiesUtils.getFilePath() + File.separatorChar + fileName);
+            String fileName = zhaobiaoFile.getOriginalFilename();
+            String savePathStr = System.currentTimeMillis() + fileName;
+            File uploadFile = new File(propertiesUtils.getFilePath() + File.separatorChar + savePathStr);
             zhaobiaoFile.transferTo(uploadFile);
+            //数据库保存上传记录
             sysFiles.setPkid(DataHandlingUtil.getUUID());
             sysFiles.setType("1");
 //                sysFiles.setOssObj("");
             sysFiles.setFileName(fileName);
             sysFiles.setOrderNo(String.valueOf(i));
-            sysFiles.setFilePath(propertiesUtils.getFilePath() + fileName);
+            sysFiles.setFilePath(propertiesUtils.getFilePath() + savePathStr);
             sysFilesMapper.insertSysFiles(sysFiles);
         }
     }

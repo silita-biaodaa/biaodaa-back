@@ -107,7 +107,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController6()throws Exception{
-        String requestBody = "{\"ntCategory\":\"2\", \"ntStatus\":\"1\", \"pkid\":\"9\", \"source\":\"hunan\"}";
+        String requestBody = "{\"ntCategory\":\"2\", \"ntStatus\":\"1\", \"pkid\":\"1\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/updateNtMainStatus").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -333,7 +333,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController20()throws Exception{
-        String requestBody = "{\"idsStr\":\"1|2|3\", \"source\":\"hunan\"}";
+        String requestBody = "{\"idsStr\":\"1|2\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/insertNtAssociateGp").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

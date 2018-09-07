@@ -68,4 +68,9 @@ public class SysFiles {
      */
     private String updateBy;
 
+    /**
+     * 文件是否失效
+     */
+    private String status;
+
 }

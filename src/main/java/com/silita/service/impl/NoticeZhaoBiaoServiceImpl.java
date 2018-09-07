@@ -136,7 +136,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public void updateNtMainStatus(TbNtMian tbNtMian) {
         tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+        //更新公共状态
         tbNtMianMapper.updateNtMainCategoryAndStatusByPkId(tbNtMian);
+        TbNtAssociateGp tbNtAssociateGp = new TbNtAssociateGp();
+        tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(tbNtAssociateGp.getClass(), tbNtMian.getSource()));
+        tbNtAssociateGp.setNtId(tbNtMian.getPkid());
+        tbNtAssociateGp.setRelType(tbNtMian.getNtCategory());
+        //更新关联状态
+        tbNtAssociateGpMapper.updateRelTypeByBtId(tbNtAssociateGp);
     }
 
 

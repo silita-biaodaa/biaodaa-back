@@ -40,4 +40,10 @@ public interface TbNtAssociateGpMapper {
      */
     List<TbNtAssociateGp> getRelGpByNtIds(@Param("array")Object[] array, @Param("tableName")String tableName);
 
+    /**
+     * 根据公告id更新公告状态
+     * @param tbNtAssociateGp
+     */
+    void updateRelTypeByBtId(TbNtAssociateGp tbNtAssociateGp);
+
 }

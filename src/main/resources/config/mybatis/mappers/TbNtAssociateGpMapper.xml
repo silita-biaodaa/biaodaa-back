@@ -70,4 +70,8 @@
         </where>
     </select>
 
+    <update id="updateRelTypeByBtId" parameterType="com.silita.model.TbNtAssociateGp">
+        UPDATE ${tableName} SET rel_type = #{relType} WHERE nt_id = #{ntId}
+    </update>
+
 </mapper>
