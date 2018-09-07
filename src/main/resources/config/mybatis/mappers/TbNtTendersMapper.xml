@@ -1,60 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.TbNtTendersMapper" >
+<mapper namespace="com.silita.dao.TbNtTendersMapper">
 
-    <resultMap id="BaseResultMap" type="com.silita.model.TbNtTenders" >
-        <id column="pkid" property="pkid" jdbcType="VARCHAR" />
-        <result column="nt_id" property="ntId" jdbcType="VARCHAR" />
-        <result column="edit_code" property="editCode" jdbcType="VARCHAR" />
-        <result column="segment" property="segment" jdbcType="INTEGER" />
-        <!--<result column="pro_sum" property="proSum" jdbcType="DOUBLE" />-->
-        <result column="enroll_addr" property="enrollAddr" jdbcType="VARCHAR" />
-        <result column="opening_addr" property="openingAddr" jdbcType="VARCHAR" />
-        <result column="enroll_end_time" property="enrollEndTime" jdbcType="TIMESTAMP" />
-        <result column="bid_end_time" property="bidEndTime" jdbcType="TIMESTAMP" />
-        <!--<result column="pb_mode" property="pbMode" jdbcType="VARCHAR" />-->
-        <result column="bid_bonds" property="bidBonds" jdbcType="VARCHAR" />
-        <result column="bid_bonds_end_time" property="bidBondsEndTime" jdbcType="TIMESTAMP" />
-        <result column="keep_bonds" property="keepBonds" jdbcType="DOUBLE" />
-        <result column="other_bonds" property="otherBonds" jdbcType="DOUBLE" />
-        <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
-        <result column="opening_person" property="openingPerson" jdbcType="VARCHAR" />
-        <result column="opening_file_fee" property="openingFileFee" jdbcType="DOUBLE" />
-        <result column="other_fee" property="otherFee" jdbcType="DOUBLE" />
-        <result column="tenderee" property="tenderee" jdbcType="VARCHAR" />
-        <result column="tender_contact_person" property="tenderContactPerson" jdbcType="VARCHAR" />
-        <result column="tender_contact_info" property="tenderContactInfo" jdbcType="VARCHAR" />
-        <result column="proxy_contact_person" property="proxyContactPerson" jdbcType="VARCHAR" />
-        <result column="proxy_contact_info" property="proxyContactInfo" jdbcType="VARCHAR" />
-        <result column="pro_person" property="proPerson" jdbcType="VARCHAR" />
-        <result column="social_security" property="socialSecurity" jdbcType="VARCHAR" />
-        <result column="achievement" property="achievement" jdbcType="VARCHAR" />
-        <result column="enroll_method" property="enrollMethod" jdbcType="VARCHAR" />
-        <!--<result column="pro_duration" property="proDuration" jdbcType="VARCHAR" />-->
-        <result column="completion_time" property="completionTime" jdbcType="TIMESTAMP" />
-        <result column="is_flow" property="isFlow" jdbcType="BIT" />
-        <result column="funds_provid" property="fundsProvid" jdbcType="VARCHAR" />
-        <result column="created" property="created" jdbcType="TIMESTAMP" />
-        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-        <result column="updated" property="updated" jdbcType="TIMESTAMP" />
-        <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-        <result column="biness_type" property="binessType" jdbcType="VARCHAR" />
-        <result column="nt_category" property="ntCategory" jdbcType="VARCHAR" />
-        <result column="nt_type" property="ntType" jdbcType="VARCHAR" />
-        <result column="pub_date" property="pubDate" jdbcType="VARCHAR" />
-        <result column="title" property="title" jdbcType="VARCHAR" />
-        <result column="cert_audit_addr" property="certAuditAddr" jdbcType="VARCHAR" />
-        <result column="filing_pfm" property="filingPfm" jdbcType="VARCHAR" />
-        <result column="url" property="url" jdbcType="VARCHAR" />
-        <result column="controll_sum" property="controllSum" jdbcType="DOUBLE" />
-        <result column="pro_sum" property="proSum" jdbcType="DOUBLE" />
-        <result column="pb_mode" property="pbMode" jdbcType="VARCHAR" />
-        <result column="pro_duration" property="proDuration" jdbcType="VARCHAR" />
-        <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
-        <result column="county_code" property="countyCode" jdbcType="VARCHAR" />
-        <result column="source" property="source" jdbcType="VARCHAR" />
-        <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+    <resultMap id="BaseResultMap" type="com.silita.model.TbNtTenders">
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="nt_id" property="ntId" jdbcType="VARCHAR"/>
+        <result column="edit_code" property="editCode" jdbcType="VARCHAR"/>
+        <result column="segment" property="segment" jdbcType="VARCHAR"/>
+        <result column="controll_sum" property="controllSum" jdbcType="DOUBLE"/>
+        <result column="pro_sum" property="proSum" jdbcType="DOUBLE"/>
+        <result column="nt_td_status" property="ntTdStatus" jdbcType="VARCHAR"/>
+        <result column="pro_type" property="proType" jdbcType="VARCHAR"/>
+        <result column="pro_duration" property="proDuration" jdbcType="VARCHAR"/>
+        <result column="pb_mode" property="pbMode" jdbcType="VARCHAR"/>
+        <result column="cert_audit_addr" property="certAuditAddr" jdbcType="VARCHAR"/>
+        <result column="filing_pfm" property="filingPfm" jdbcType="VARCHAR"/>
+        <result column="enroll_addr" property="enrollAddr" jdbcType="VARCHAR"/>
+        <result column="opening_addr" property="openingAddr" jdbcType="VARCHAR"/>
+        <result column="enroll_end_time" property="enrollEndTime" jdbcType="TIMESTAMP"/>
+        <result column="bid_end_time" property="bidEndTime" jdbcType="TIMESTAMP"/>
+        <result column="bid_bonds" property="bidBonds" jdbcType="VARCHAR"/>
+        <result column="bid_bonds_end_time" property="bidBondsEndTime" jdbcType="TIMESTAMP"/>
+        <result column="keep_bonds" property="keepBonds" jdbcType="DOUBLE"/>
+        <result column="other_bonds" property="otherBonds" jdbcType="DOUBLE"/>
+        <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP"/>
+        <result column="opening_person" property="openingPerson" jdbcType="VARCHAR"/>
+        <result column="opening_file_fee" property="openingFileFee" jdbcType="DOUBLE"/>
+        <result column="other_fee" property="otherFee" jdbcType="DOUBLE"/>
+        <result column="tenderee" property="tenderee" jdbcType="VARCHAR"/>
+        <result column="tender_contact_person" property="tenderContactPerson" jdbcType="VARCHAR"/>
+        <result column="tender_contact_info" property="tenderContactInfo" jdbcType="VARCHAR"/>
+        <result column="proxy_contact_person" property="proxyContactPerson" jdbcType="VARCHAR"/>
+        <result column="proxy_contact_info" property="proxyContactInfo" jdbcType="VARCHAR"/>
+        <result column="pro_person" property="proPerson" jdbcType="VARCHAR"/>
+        <result column="social_security" property="socialSecurity" jdbcType="VARCHAR"/>
+        <result column="achievement" property="achievement" jdbcType="VARCHAR"/>
+        <result column="enroll_method" property="enrollMethod" jdbcType="VARCHAR"/>
+        <result column="completion_time" property="completionTime" jdbcType="TIMESTAMP"/>
+        <result column="is_flow" property="isFlow" jdbcType="BIT"/>
+        <result column="funds_provid" property="fundsProvid" jdbcType="VARCHAR"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+
+        <result column="biness_type" property="binessType" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="pub_date" property="pubDate" jdbcType="VARCHAR"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="county_code" property="countyCode" jdbcType="VARCHAR"/>
+        <result column="field_name" property="fieldName" jdbcType="VARCHAR"/>
     </resultMap>
+
 
     <select id="countNtTendersByNtIdAndSegment" parameterType="com.silita.model.TbNtTenders" resultType="Integer">
         SELECT COUNT(*) FROM ${tableName}
@@ -76,7 +74,7 @@
           `proxy_contact_person`, `proxy_contact_info`, `pro_person`, `social_security`, `achievement`,
           `enroll_method`, `completion_time`, `is_flow`, `funds_provid`, `filing_pfm`,
           `controll_sum`, `pro_sum`, `pro_duration`,`pb_mode`, `created`,
-          `create_by`, `pkid`
+          `nt_td_status`, `pro_type`, `create_by`, `pkid`
         )
         values (
           #{ntId}, #{editCode}, #{segment}, #{enrollAddr}, #{certAuditAddr},
@@ -86,12 +84,12 @@
           #{proxyContactPerson}, #{proxyContactInfo}, #{proPerson}, #{socialSecurity}, #{achievement},
           #{enrollMethod}, #{completionTime}, #{isFlow}, #{fundsProvid}, #{filingPfm},
           #{controllSum}, #{proSum}, #{proDuration}, #{pbMode}, NOW(),
-          #{createBy}, #{pkid}
+          #{ntTdStatus}, #{proType}, #{createBy}, #{pkid}
         )
     </insert>
 
     <update id="updateNtTendersByPkId" parameterType="com.silita.model.TbNtTenders">
-      UPDATE ${tableName} SET
+        UPDATE ${tableName} SET
         <if test="editCode !=null and editCode!=''">
             `edit_code` = #{editCode},
         </if>
@@ -188,6 +186,12 @@
         <if test="pbMode !=null and pbMode!=''">
             `pb_mode` = #{pbMode},
         </if>
+        <if test="ntTdStatus !=null and ntTdStatus!=''">
+            `nt_td_status` = #{ntTdStatus},
+        </if>
+        <if test="proType !=null and proType!=''">
+            `pro_type` = #{proType},
+        </if>
         <if test="updateBy !=null and updateBy!=''">
             `update_by` = #{updateBy},
         </if>
@@ -196,9 +200,15 @@
     </update>
 
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
-        SELECT t1.*,
-        t.biness_type, t.nt_category, t.nt_type, t.title, t.pub_date,
-        t.url,
+        SELECT t1.pkid, t1.nt_id, t1.edit_code, t1.segment, t1.controll_sum,
+        t1.pro_sum, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = t1.nt_td_status) AS nt_td_status, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = t1.pro_type) AS pro_type, t1.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = t1.pb_mode) AS pb_mode,
+        t1.cert_audit_addr, (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = t1.filing_pfm) AS filing_pfm, t1.enroll_addr, t1.opening_addr, t1.enroll_end_time,
+        t1.bid_end_time, t1.bid_bonds, t1.bid_bonds_end_time, t1.keep_bonds, t1.other_bonds,
+        t1.audit_time, t1.opening_person, t1.opening_file_fee, t1.other_fee, t1.tenderee,
+        t1.tender_contact_person, t1.tender_contact_info, t1.proxy_contact_person, t1.proxy_contact_info, t1.pro_person,
+        t1.social_security, t1.achievement, CASE t1.enroll_method WHEN '1' THEN '线上报名' WHEN '2' then '线下报名' ELSE '其他' END AS enroll_method, t1.completion_time, t1.is_flow,
+        t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
+        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = t.biness_type) as biness_type, t.url,  t.title,  t.pub_date, t.source,
         (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
@@ -207,13 +217,20 @@
     </select>
 
     <select id="getNtTendersByNtIdByPkId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
-        SELECT t1.*,
-        t.biness_type, t.nt_category, t.nt_type, t.title, t.pub_date,
-        t.url, (SELECT GROUP_CONCAT(field_name) FROM `tb_nt_change` WHERE nt_edit_id = #{pkid}) AS fieldName,
+        SELECT t1.pkid, t1.nt_id, t1.edit_code, t1.segment, t1.controll_sum,
+        t1.pro_sum, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = t1.nt_td_status) AS nt_td_status, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = t1.pro_type) AS pro_type, t1.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = t1.pb_mode) AS pb_mode,
+        t1.cert_audit_addr, (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = t1.filing_pfm) AS filing_pfm, t1.enroll_addr, t1.opening_addr, t1.enroll_end_time,
+        t1.bid_end_time, t1.bid_bonds, t1.bid_bonds_end_time, t1.keep_bonds, t1.other_bonds,
+        t1.audit_time, t1.opening_person, t1.opening_file_fee, t1.other_fee, t1.tenderee,
+        t1.tender_contact_person, t1.tender_contact_info, t1.proxy_contact_person, t1.proxy_contact_info, t1.pro_person,
+        t1.social_security, t1.achievement, CASE t1.enroll_method WHEN '1' THEN '线上报名' WHEN '2' then '线下报名' ELSE '其他' END AS enroll_method, t1.completion_time, t1.is_flow,
+        t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
+        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = t.biness_type) as biness_type, t.url,  t.title,  t.pub_date, t.source,
+        (SELECT GROUP_CONCAT(field_name) FROM `tb_nt_change` WHERE nt_edit_id = #{pkid}) AS field_name,
         (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
-        WHERE t1.nt_id = #{ntId}
+        WHERE t1.nt_id = #{ntId} AND t1.pkid = #{pkid}
         ORDER BY LENGTH(t1.`segment`) ASC, t1.`segment` ASC
     </select>
 

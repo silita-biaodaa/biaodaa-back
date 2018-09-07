@@ -51,11 +51,18 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Cacheable(value = "TwfDictNameCache")
     public Map<String, Object> listFixedEditData() {
         Map result = new HashMap<String, Object>();
-        result.put("bidOpeningPersonnel", twfDictMapper.listTwfDictNameByType(3));
+        //开标人员
+        result.put("bidOpeningPersonnel", twfDictMapper.listTwfDictNameByType(5));
+        //项目类型
         result.put("projectType", twfDictMapper.listTwfDictNameByType(4));
-        result.put("biddingType", twfDictMapper.listTwfDictNameByType(5));
+        //招标类型
+        result.put("biddingType", twfDictMapper.listTwfDictNameByType(1));
+        //平台备案要求
         result.put("filingRequirements", twfDictMapper.listTwfDictNameByType(6));
-        result.put("biddingStatus", twfDictMapper.listTwfDictNameByType(7));
+        //招标状态
+        result.put("biddingStatus", twfDictMapper.listTwfDictNameByType(2));
+        //公告类目
+        result.put("categoryType", twfDictMapper.listTwfDictNameByType(3));
         return result;
     }
 
@@ -141,8 +148,6 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setPkid(tbNtTenders.getNtId());
         tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtTenders.getSource()));
         tbNtMian.setBinessType(tbNtTenders.getBinessType());
-        tbNtMian.setNtCategory(tbNtTenders.getNtCategory());
-        tbNtMian.setNtType(tbNtTenders.getNtType());
         tbNtMian.setTitle(tbNtTenders.getTitle());
         tbNtMian.setPubDate(tbNtTenders.getPubDate());
         tbNtMian.setUrl(tbNtTenders.getUrl());
@@ -155,6 +160,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
             if (count == 0) {
                 tbNtTenders.setPkid(DataHandlingUtil.getUUID());
+                //编辑明细编码（''td''+yyyymmddHH24MMss+随机数2位）
+                tbNtTenders.setEditCode("td" + System.currentTimeMillis() + DataHandlingUtil.getNumberRandom(2));
                 tbNtTendersMapper.insertNtTenders(tbNtTenders);
                 msg = "添加标段信息成功！";
             }

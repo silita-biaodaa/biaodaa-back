@@ -29,6 +29,53 @@ public class TbNtTenders {
     private String segment;
 
     /**
+     * 招标控制价
+     */
+    private Double controllSum;
+
+    /**
+     * 项目金额
+     */
+    private Double proSum;
+
+    /**
+     * 招标状态（1:未开标
+     2:流标
+     3:重新招标
+     4:终止
+     5:中止
+     6:废标
+     7:延期
+     8:已开标）
+     */
+    private String ntTdStatus;
+
+    /**
+     * 项目类型（code）
+     */
+    private String proType;
+
+    /**
+     * 项目工期
+     */
+    private String proDuration;
+
+    /**
+     * 评标办法(code)
+     */
+    private String pbMode;
+
+    /**
+     * 资格审查地点
+     */
+    private String certAuditAddr;
+
+    /**
+     * 备案平台(编码)：对应数据词典
+     */
+    private String filingPfm;
+
+    /**
      * 报名地址
      */
     private String enrollAddr;
@@ -168,53 +215,26 @@ public class TbNtTenders {
      */
     private String updateBy;
 
-    /**
-     * 新增 资格审查地点
-     */
-    private String certAuditAddr;
 
     /**
-     * 新增 备案平台(编码)
-     */
-    private String filingPfm;
-
-    /**
-     * 业务更新 业务类别(1:建筑工程；2：政府采购；)
+     * 业务 业务类别(01:施工
+     02:监理
+     03:设计
+     04:勘察
+     05:采购
+     06:其他
+     07:PPP
+     08:设计施工
+     09:EPC
+     10:检测
+     11:施工采购
+     12:造价咨询
+     13:招标代理）
      */
     private String binessType;
 
     /**
-     * 业务更新 公告类目（大类）：1：招标；2：中标
-     */
-    private String ntCategory;
-
-    /**
-     * 业务更新 公告类型（小类）
-     */
-    private String ntType;
-
-    /**
-     * 招标控制价
-     */
-    private Double controllSum;
-
-    /**
-     * 项目金额
-     */
-    private Double proSum;
-
-    /**
-     * 项目工期
-     */
-    private String proDuration;
-
-    /**
-     * 评标办法(code)
-     */
-    private String pbMode;
-
-    /**
-     * 业务更新 公告url
+     * 业务 公告url
      */
     private String url;
 
