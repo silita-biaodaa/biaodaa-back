@@ -1,4 +1,4 @@
-package com.silita.utils;
+package com.silita.utils.stringUtils;
 
 /**
  * 拼音工具类

@@ -1,4 +1,4 @@
-package com.silita.utils;
+package com.silita.utils.dateUtils;
 
 /**
  *

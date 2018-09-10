@@ -8,7 +8,7 @@ import com.silita.model.SysFiles;
 import com.silita.service.IQualService;
 import com.silita.service.IUploadService;
 import com.silita.utils.DataHandlingUtil;
-import com.silita.utils.PinYinUtil;
+import com.silita.utils.stringUtils.PinYinUtil;
 import com.silita.utils.PropertiesUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;

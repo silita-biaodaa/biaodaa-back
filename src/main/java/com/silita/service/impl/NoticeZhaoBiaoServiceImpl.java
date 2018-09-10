@@ -5,7 +5,7 @@ import com.silita.model.*;
 import com.silita.service.INoticeZhaoBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
-import com.silita.utils.WordProcessingUtil;
+import com.silita.utils.stringUtils.WordProcessingUtil;
 import org.apache.poi.hssf.usermodel.HSSFHyperlink;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -232,7 +232,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         Map map = new HashMap<String, Object>(5);
         map.put("tableName", DataHandlingUtil.SplicingTable(TbNtTenders.class, tbNtChange.getSource()));
         //把下划线命名转为驼峰命名
-        map.put("fieldName", com.silita.utils.StringUtils.HumpToUnderline(tbNtChange.getFieldName()));
+        map.put("fieldName", com.silita.utils.stringUtils.StringUtils.HumpToUnderline(tbNtChange.getFieldName()));
         map.put("fieldValue", tbNtChange.getFieldValue());
         map.put("pkid", tbNtChange.getNtEditId());
         //添加变更信息时，同时标段表对应字段一起改变

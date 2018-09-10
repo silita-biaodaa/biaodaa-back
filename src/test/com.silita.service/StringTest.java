@@ -1,6 +1,6 @@
 package com.silita.service;
 
-import com.silita.utils.StringUtils;
+import com.silita.utils.stringUtils.StringUtils;
 
 /**
  * Create by IntelliJ Idea 2018.1
