@@ -27,6 +27,12 @@ public interface TbNtTendersMapper {
     void updateNtTendersByPkId(TbNtTenders tbNtTenders);
 
     /**
+     * 根据公告id\标段编号更新招标公告标段
+     * @param tbNtTenders
+     */
+    void updateNtTendersByNtIdAndSegment(TbNtTenders tbNtTenders);
+
+    /**
      * 根据公告id获取标段信息
      * @param tbNtTenders
      * @return

@@ -199,6 +199,111 @@
         WHERE pkid = #{pkid}
     </update>
 
+    <update id="updateNtTendersByNtIdAndSegment" parameterType="com.silita.model.TbNtTenders">
+        UPDATE ${tableName} SET
+        <if test="enrollAddr !=null and enrollAddr!=''">
+            `enroll_addr` = #{enrollAddr},
+        </if>
+        <if test="openingAddr !=null and openingAddr!=''">
+            `opening_addr` = #{openingAddr},
+        </if>
+        <if test="enrollEndTime !=null and enrollEndTime!=''">
+            `enroll_end_time` = #{enrollEndTime},
+        </if>
+        <if test="bidEndTime !=null and bidEndTime!=''">
+            `bid_end_time` = #{bidEndTime},
+        </if>
+        <if test="bidBonds !=null and bidBonds!=''">
+            `bid_bonds` = #{bidBonds},
+        </if>
+        <if test="bidBondsEndTime !=null and bidBondsEndTime!=''">
+            `bid_bonds_end_time` = #{bidBondsEndTime},
+        </if>
+        <if test="keepBonds !=null and keepBonds!=''">
+            `keep_bonds` = #{keepBonds},
+        </if>
+        <if test="otherBonds !=null and otherBonds!=''">
+            `other_bonds` = #{otherBonds},
+        </if>
+        <if test="auditTime !=null and auditTime!=''">
+            `audit_time` = #{auditTime},
+        </if>
+        <if test="openingPerson !=null and openingPerson!=''">
+            `opening_person` = #{openingPerson},
+        </if>
+        <if test="openingFileFee !=null and openingFileFee!=''">
+            `opening_file_fee` = #{openingFileFee},
+        </if>
+        <if test="otherFee !=null and otherFee!=''">
+            `other_fee` = #{otherFee},
+        </if>
+        <if test="tenderee !=null and tenderee!=''">
+            `tenderee` = #{tenderee},
+        </if>
+        <if test="tenderContactPerson !=null and tenderContactPerson!=''">
+            `tender_contact_person` = #{tenderContactPerson},
+        </if>
+        <if test="tenderContactInfo !=null and tenderContactInfo!=''">
+            `tender_contact_info` = #{tenderContactInfo},
+        </if>
+        <if test="proxyContactPerson !=null and proxyContactPerson!=''">
+            `proxy_contact_person` = #{proxyContactPerson},
+        </if>
+        <if test="proxyContactInfo !=null and proxyContactInfo!=''">
+            `proxy_contact_info` = #{proxyContactInfo},
+        </if>
+        <if test="proPerson !=null and proPerson!=''">
+            `pro_person` = #{proPerson},
+        </if>
+        <if test="socialSecurity !=null and socialSecurity!=''">
+            `social_security` = #{socialSecurity},
+        </if>
+        <if test="achievement !=null and achievement!=''">
+            `achievement` = #{achievement},
+        </if>
+        <if test="enrollMethod !=null and enrollMethod!=''">
+            `enroll_method` = #{enrollMethod},
+        </if>
+        <if test="completionTime !=null and completionTime!=''">
+            `completion_time` = #{completionTime},
+        </if>
+        <if test="isFlow !=null and isFlow!=''">
+            `is_flow` = #{isFlow},
+        </if>
+        <if test="fundsProvid !=null and fundsProvid!=''">
+            `funds_provid` = #{fundsProvid},
+        </if>
+        <if test="certAuditAddr !=null and certAuditAddr!=''">
+            `cert_audit_addr` = #{certAuditAddr},
+        </if>
+        <if test="filingPfm !=null and filingPfm!=''">
+            `filing_pfm` = #{filingPfm},
+        </if>
+        <if test="controllSum !=null and controllSum!=''">
+            `controll_sum` = #{controllSum},
+        </if>
+        <if test="proSum !=null and proSum!=''">
+            `pro_sum` = #{proSum},
+        </if>
+        <if test="proDuration !=null and proDuration!=''">
+            `pro_duration` = #{proDuration},
+        </if>
+        <if test="pbMode !=null and pbMode!=''">
+            `pb_mode` = #{pbMode},
+        </if>
+        <if test="ntTdStatus !=null and ntTdStatus!=''">
+            `nt_td_status` = #{ntTdStatus},
+        </if>
+        <if test="proType !=null and proType!=''">
+            `pro_type` = #{proType},
+        </if>
+        <if test="updateBy !=null and updateBy!=''">
+            `update_by` = #{updateBy},
+        </if>
+        updated = NOW()
+        WHERE nt_id = #{ntId} AND `segment` = #{segment}
+    </update>
+
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
         SELECT t1.pkid, t1.nt_id, t1.edit_code, t1.segment, t1.controll_sum,
         t1.pro_sum, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = t1.nt_td_status) AS nt_td_status, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = t1.pro_type) AS pro_type, t1.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = t1.pb_mode) AS pb_mode,

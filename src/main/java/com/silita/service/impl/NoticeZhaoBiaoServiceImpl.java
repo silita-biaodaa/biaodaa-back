@@ -161,7 +161,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setCityCode(tbNtTenders.getCityCode());
         tbNtMian.setCountyCode(tbNtTenders.getCountyCode());
         tbNtMianMapper.updateNtMainByPkId(tbNtMian);
-        if(StringUtils.isEmpty(tbNtTenders.getPkid())) {
+        if(StringUtils.isEmpty(tbNtTenders.getSegment())) {
+            tbNtTenders.setSegment("1");
+        }
+//        if(StringUtils.isEmpty(tbNtTenders.getPkid())) {
             //添加标段
             tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
             Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
@@ -171,13 +174,17 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 tbNtTenders.setEditCode("td" + System.currentTimeMillis() + DataHandlingUtil.getNumberRandom(2));
                 tbNtTendersMapper.insertNtTenders(tbNtTenders);
                 msg = "添加标段信息成功！";
+            } else {
+                tbNtTendersMapper.updateNtTendersByNtIdAndSegment(tbNtTenders);
+                msg = "更新标段信息成功！";
             }
-        } else {
-            //更新标段
-            tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
-            tbNtTendersMapper.updateNtTendersByPkId(tbNtTenders);
-            msg = "更新标段信息成功！";
-        }
+//        }
+//        else {
+//            //更新标段
+//            tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+//            tbNtTendersMapper.updateNtTendersByPkId(tbNtTenders);
+//            msg = "更新标段信息成功！";
+//        }
         return msg;
     }
 
