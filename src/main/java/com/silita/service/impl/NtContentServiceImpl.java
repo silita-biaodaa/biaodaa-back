@@ -17,6 +17,10 @@ public class NtContentServiceImpl implements INtContentService {
 
     @Override
     public TbNtText getNtContent(TbNtText ntText) {
-        return tbNtTextHunanMapper.queryNtTextDetail(ntText);
+        TbNtText nt = tbNtTextHunanMapper.queryNtTextDetail(ntText);
+        if (null == nt) {
+            return new TbNtText();
+        }
+        return nt;
     }
 }
