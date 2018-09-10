@@ -264,6 +264,11 @@ public class TbNtTenders {
     private String fieldName;
 
     /**
+     * 标段变更后的值
+     */
+    private String fieldValue;
+
+    /**
      * 省份来源
      */
     private String source;
