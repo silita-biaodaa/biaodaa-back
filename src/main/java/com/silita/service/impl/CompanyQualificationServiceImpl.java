@@ -130,7 +130,7 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
         qual.setCertDate(qualification.getCertDate());
         qual.setCertNo(qualification.getCertNo());
         qual.setCertOrg(qualification.getCertOrg());
-        qual.setChannel(qualification.getChannel());
+        qual.setChannel(Integer.parseInt(qualification.getSource()));
         qual.setQualType(qualification.getQualType());
         qual.setValidDate(qualification.getValidDate());
         qual.setQualName(qualification.getQualName());

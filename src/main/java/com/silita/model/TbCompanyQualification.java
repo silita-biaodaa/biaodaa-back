@@ -97,4 +97,9 @@ public class TbCompanyQualification {
      * 抓取URL
      */
     private String url;
+
+    /**
+     * 来源
+     */
+    private String source;
 }

@@ -23,11 +23,12 @@
         <result column="qual_name" property="qualName" jdbcType="LONGVARCHAR"/>
         <result column="range" property="range" jdbcType="LONGVARCHAR"/>
         <result column="url" property="url" jdbcType="LONGVARCHAR"/>
+        <result column="source" property="source" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryCompanyQual" resultMap="BaseResultMap" parameterType="com.silita.model.TbCompanyQualification">
     select *,
-            '1' as channel
+            '1' as source
     from tb_company_qualification
     where com_id = #{comId}
   </select>
