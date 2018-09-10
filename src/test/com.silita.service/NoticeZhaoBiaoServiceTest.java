@@ -387,7 +387,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
     @Test
     public void testController23()throws Exception{
 //        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"cityCode\":\"changsha\", \"ntStatus\":\"\", \"ntCategory\":\"1\", \"title\":\"测试\", \"pubDate\":\"2018-08-10\", \"pubEndDate\":\"2018-08-20\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
-        String requestBody = "{\"source\":\"hunan\", \"title\":\"测试\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
+        String requestBody = "{\"source\":\"hunan\", \"title\":\"更新\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
         String responseString = mockMvc.perform(post("/common/listRelevantNotice").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
