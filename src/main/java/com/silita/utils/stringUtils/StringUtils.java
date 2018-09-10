@@ -1,4 +1,4 @@
-package com.silita.utils;
+package com.silita.utils.stringUtils;
 
 /**
  * Create by IntelliJ Idea 2018.1

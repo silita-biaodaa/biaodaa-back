@@ -6,7 +6,7 @@ import com.silita.dao.TbCompanySecurityCertMapper;
 import com.silita.model.TbCompanySecurityCert;
 import com.silita.service.ICompanySecurityCertService;
 import com.silita.utils.DataHandlingUtil;
-import com.silita.utils.MyDateUtils;
+import com.silita.utils.dateUtils.MyDateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +29,8 @@ public class CompanySecurityCertServiceImpl implements ICompanySecurityCertServi
     @Override
     public Map<String, Object> getCompanySecurity(TbCompanySecurityCert companySecurityCert) {
         Map<String,Object> resultMap = new HashMap<>();
-        List<TbCompanySecurityCert> list = tbCompanySecurityCertMapper.queryCompanySecurityList(companySecurityCert);
-        if(null != list && list.size() > 0){
+            List<TbCompanySecurityCert> list = tbCompanySecurityCertMapper.queryCompanySecurityList(companySecurityCert);
+            if(null != list && list.size() > 0){
             for (TbCompanySecurityCert companySecurity : list){
                 if(null != companySecurity.getCertCityCode()){
                     companySecurity.setCertCity(sysAreaMapper.queryAreaName(companySecurity.getCertCityCode()));

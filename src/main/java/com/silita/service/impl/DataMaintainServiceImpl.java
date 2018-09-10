@@ -8,7 +8,7 @@ import com.silita.model.DicCommon;
 import com.silita.service.IDataMaintainService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
-import com.silita.utils.PinYinUtil;
+import com.silita.utils.stringUtils.PinYinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

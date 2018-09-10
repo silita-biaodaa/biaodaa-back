@@ -2,14 +2,13 @@ package com.silita.service.impl;
 
 import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
-import com.silita.dao.DicCommonMapper;
 import com.silita.dao.DicQuaMapper;
 import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 import com.silita.service.IQualService;
 import com.silita.utils.DataHandlingUtil;
-import com.silita.utils.PinYinUtil;
+import com.silita.utils.stringUtils.PinYinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
