@@ -127,6 +127,7 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
             resultMap = new HashMap<>();
             resultMap.put("code",Constant.CODE_SUCCESS);
             resultMap.put("msg",Constant.MSG_SUCCESS);
+            resultMap.put("data",companyInfoHm.getComName());
             return  resultMap;
         }
         //查询统一信用代码
@@ -148,6 +149,7 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
         resultMap = new HashMap<>();
         resultMap.put("code",Constant.CODE_SUCCESS);
         resultMap.put("msg",Constant.MSG_SUCCESS);
+        resultMap.put("data",comInfo.getComName());
         return  resultMap;
     }
 
