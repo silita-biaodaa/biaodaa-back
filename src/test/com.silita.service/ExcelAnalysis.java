@@ -42,23 +42,23 @@ public class ExcelAnalysis extends ConfigTest {
                     cell = row.getCell(3);
                     String areaStr = cell.getStringCellValue();
                     String[] areas = areaStr.split(",");
-                    if (areas.length != 4) {
+                    if (areas.length != 3) {
                         continue;
                     }
-//                    if ("北京市".equals(areas[2]) || "天津市".equals(areas[2]) || "上海市".equals(areas[2]) || "重庆市".equals(areas[2])) {
-//                        continue;
-//                    }
-                    SysArea sysArea = sysAreaMapper.queryAreaByName(areas[2]);
+                    if (!"北京市".equals(areas[2]) && !"天津市".equals(areas[2]) && !"上海市".equals(areas[2]) && !"重庆市".equals(areas[2])) {
+                        continue;
+                    }
+                    SysArea sysArea = sysAreaMapper.queryAreaByName(areas[1]);
                     if (null == sysArea) {
                         continue;
                     }
                     area.setAreaParentId(sysArea.getPkid());
                     area.setPkid(DataHandlingUtil.getUUID());
-                    area.setAreaName(areas[3]);
+                    area.setAreaName(areas[2]);
                     cell = row.getCell(9);
                     area.setAreaShortName(area.getAreaName());
-                    area.setAreaCode(sysArea.getAreaCode() + "-" + cell.getStringCellValue().toLowerCase());
-                    area.setAreaLevel(3);
+                    area.setAreaCode(cell.getStringCellValue().toLowerCase());
+                    area.setAreaLevel(2);
                     area.setCreateBy("gemingyi");
                     area.setCreated(new Date());
                     areaList.add(area);

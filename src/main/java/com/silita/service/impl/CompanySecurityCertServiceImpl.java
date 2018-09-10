@@ -36,7 +36,7 @@ public class CompanySecurityCertServiceImpl implements ICompanySecurityCertServi
                     companySecurity.setCertCity(sysAreaMapper.queryAreaName(companySecurity.getCertCityCode()));
                 }
                 if(null != companySecurity.getCertProvCode()){
-                    companySecurity.setCertProvCode(sysAreaMapper.queryAreaName(companySecurity.getCertProvCode()));
+                    companySecurity.setCertProv(sysAreaMapper.queryAreaName(companySecurity.getCertProvCode()));
                 }
                 if(Constant.SOURCE_PRO.equals(companySecurity.getCertOrigin())){
                     resultMap.put("pro",companySecurity);
