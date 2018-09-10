@@ -6,10 +6,10 @@ import com.silita.service.INoticeZhaoBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.WordProcessingUtil;
-import org.apache.poi.hssf.usermodel.HSSFHyperlink;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -100,7 +100,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         int indexRow = 0;
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet();
-        Row row = sheet.createRow(indexRow++);
+        HSSFRow row = sheet.createRow(indexRow++);
         String[] headers = {
                 "项目名称", "公告状态", "标段", "公示日期", "项目地区",
                 "项目县市", "招标类型", "项目类型", "资质", "招标控制价",
@@ -112,7 +112,6 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         for (int i = 0; i < headers.length; i++) {
             row.createCell(i).setCellValue(headers[i]);
         }
-        HSSFHyperlink link = null;
         List<LinkedHashMap<String, Object>> details = tbNtMianMapper.listTendersDetail(tbNtMian);
         //一行数据
         for (int i = 0; i < details.size(); i++) {
@@ -122,14 +121,17 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             //一列数据
             for (Map.Entry<String, Object> entry : detail.entrySet()) {
                 if (!entry.getKey().equals("url")) {
-                    row.createCell(indexCell++).setCellValue(String.valueOf(entry.getValue()));
+                    HSSFCell cell = row.createCell(indexCell++);
+                    //标题要带超链接
+                    if(entry.getKey().equals("title")) {
+                        cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
+//                        cell.setCellStyle(linkStyle);
+                    } else {
+                        cell.setCellValue(String.valueOf(entry.getValue()));
+                    }
                 }
             }
-            link = new HSSFHyperlink(HSSFHyperlink.LINK_URL);
-            //标题设置超链接
-            link.setAddress(String.valueOf(detail.get("url")));
-            row.getCell(0).setHyperlink(link);
-//            System.out.println(row.getCell(0).getHyperlink().getAddress());
+            row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title"))+ "\")");
         }
         return wb;
     }
