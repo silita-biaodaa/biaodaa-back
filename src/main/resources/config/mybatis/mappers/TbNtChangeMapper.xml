@@ -60,6 +60,30 @@
         WHERE pkid = #{pkid}
     </update>
 
+    <update id="updateTbNtChangeByNtIdAndNtEditId" parameterType="com.silita.model.TbNtChange">
+        UPDATE tb_nt_change SET
+        <if test="ntCategory !=null and ntCategory!=''">
+            `nt_category` = #{ntCategory},
+        </if>
+        <if test="source !=null and source!=''">
+            `source` = #{source},
+        </if>
+        <if test="fieldFrom !=null and fieldFrom!=''">
+            `field_from` = #{fieldFrom},
+        </if>
+        <if test="fieldName !=null and fieldName!=''">
+            `field_name` = #{fieldName},
+        </if>
+        <if test="fieldValue !=null and fieldValue!=''">
+            `field_value` = #{fieldValue},
+        </if>
+        <if test="updateBy !=null and updateBy!=''">
+            `update_by` = #{updateBy},
+        </if>
+        updated = NOW()
+        WHERE `nt_id` = #{ntId} AND  `nt_edit_id` = #{ntEditId}
+    </update>
+
     <delete id="deleteTbNtChangeByNtEditId" parameterType="String">
       DELETE FROM tb_nt_change
         <where>
@@ -69,4 +93,8 @@
             </foreach>
         </where>
     </delete>
+
+    <select id="countTbNtChangeByNtIdAndNtEditId" parameterType="com.silita.model.TbNtChange" resultType="Integer">
+      SELECT COUNT(*) FROM tb_nt_change WHERE `nt_id` = #{ntId} AND  `nt_edit_id` = #{ntEditId}
+    </select>
 </mapper>

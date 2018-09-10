@@ -216,13 +216,13 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public void saveTbNtChange(TbNtChange tbNtChange) {
-        if (StringUtils.isEmpty(tbNtChange.getPkid())) {
+        Integer count = tbNtChangeMapper.countTbNtChangeByNtIdAndNtEditId(tbNtChange);
+        if(count == 0) {
             tbNtChange.setPkid(DataHandlingUtil.getUUID());
             tbNtChangeMapper.insertTbNtChange(tbNtChange);
         } else {
-            tbNtChangeMapper.updateTbNtChangeByPkId(tbNtChange);
+            tbNtChangeMapper.updateTbNtChangeByNtIdAndNtEditId(tbNtChange);
         }
-
        /* Map map = new HashMap<String, Object>(5);
         map.put("tableName", DataHandlingUtil.SplicingTable(TbNtTenders.class, tbNtChange.getSource()));
         //把下划线命名转为驼峰命名

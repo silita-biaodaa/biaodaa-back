@@ -236,7 +236,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
     @Test
     public void testController13()throws Exception{
         String requestBody = "{\"ntId\":\"1\", \"ntEditId\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"ntCategory\":\"1\", \"source\":\"hunan\", \"fieldFrom\":\"测试评标办法\", " +
-                "\"fieldName\":\"pb_mode\", \"fieldValue\":\"再次修改评标办法\", \"pkid\":\"f592d72506094d399d95e06547f3e512\"}";
+                "\"fieldName\":\"pb_mode\", \"fieldValue\":\"再次修改评标办法\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/insertTbNtChange").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
