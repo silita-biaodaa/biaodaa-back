@@ -197,7 +197,31 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public TbNtTenders getNtTendersByNtIdByPkId(TbNtTenders tbNtTenders) {
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
-        return tbNtTendersMapper.getNtTendersByNtIdByPkId(tbNtTenders);
+        //获取标段最新的、不重复的变更信息
+        TbNtChange tbNtChange = new TbNtChange();
+        tbNtChange.setNtId(tbNtTenders.getNtId());
+        tbNtChange.setNtEditId(tbNtTenders.getPkid());
+        List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        if(fields != null && fields.size() > 0) {
+            Map<String, String> field = new HashMap();
+            for (Map<String, Object> map : fields) {
+                field.put((String)map.get("field_name"), (String)map.get("field_value"));
+            }
+            for (Map.Entry<String, String> entry : field.entrySet()) {
+                sb1.append(entry.getKey()).append(",");
+                sb2.append(entry.getValue()).append(",");
+            }
+        }
+        TbNtTenders tbNtTenders1 = tbNtTendersMapper.getNtTendersByNtIdByPkId(tbNtTenders);
+        String fieldName = sb1.toString();
+        String fieldValue = sb2.toString();
+        if(!StringUtils.isEmpty(fieldName) && !StringUtils.isEmpty(fieldValue)) {
+            tbNtTenders1.setFieldName(fieldName.substring(0, fieldName.lastIndexOf(",")));
+            tbNtTenders1.setFieldValue(fieldValue.substring(0, fieldValue.lastIndexOf(",")));
+        }
+        return tbNtTenders1;
     }
 
 
@@ -222,13 +246,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public void saveTbNtChange(TbNtChange tbNtChange) {
-        Integer count = tbNtChangeMapper.countTbNtChangeByNtIdAndNtEditId(tbNtChange);
-        if(count == 0) {
+//        Integer count = tbNtChangeMapper.countTbNtChangeByNtIdAndNtEditIdAndfieldName(tbNtChange);
+//        if(count == 0) {
             tbNtChange.setPkid(DataHandlingUtil.getUUID());
             tbNtChangeMapper.insertTbNtChange(tbNtChange);
-        } else {
-            tbNtChangeMapper.updateTbNtChangeByNtIdAndNtEditId(tbNtChange);
-        }
+//        } else {
+//            tbNtChangeMapper.updateTbNtChangeByNtIdAndNtEditId(tbNtChange);
+//        }
+
        /* Map map = new HashMap<String, Object>(5);
         map.put("tableName", DataHandlingUtil.SplicingTable(TbNtTenders.class, tbNtChange.getSource()));
         //把下划线命名转为驼峰命名

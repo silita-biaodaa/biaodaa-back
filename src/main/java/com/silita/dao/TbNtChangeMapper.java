@@ -2,6 +2,9 @@ package com.silita.dao;
 
 import com.silita.model.TbNtChange;
 
+import java.util.List;
+import java.util.Map;
+
 public interface TbNtChangeMapper {
 
     /**
@@ -33,5 +36,12 @@ public interface TbNtChangeMapper {
      * @param tbNtChange
      * @return
      */
-    Integer countTbNtChangeByNtIdAndNtEditId(TbNtChange tbNtChange);
+    Integer countTbNtChangeByNtIdAndNtEditIdAndfieldName(TbNtChange tbNtChange);
+
+    /**
+     * 根据标段id获取变更信息
+     * @param tbNtChange
+     * @return
+     */
+    List<Map<String, Object>> listFieldNameAndFieldValueByNtEditId(TbNtChange tbNtChange);
 }

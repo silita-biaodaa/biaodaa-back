@@ -94,7 +94,16 @@
         </where>
     </delete>
 
-    <select id="countTbNtChangeByNtIdAndNtEditId" parameterType="com.silita.model.TbNtChange" resultType="Integer">
-      SELECT COUNT(*) FROM tb_nt_change WHERE `nt_id` = #{ntId} AND  `nt_edit_id` = #{ntEditId}
+    <select id="countTbNtChangeByNtIdAndNtEditIdAndfieldName" parameterType="com.silita.model.TbNtChange" resultType="Integer">
+      SELECT COUNT(*)
+      FROM tb_nt_change
+      WHERE `nt_id` = #{ntId} AND `nt_edit_id` = #{ntEditId} AND `field_name` = #{fieldName}
+    </select>
+
+    <select id="listFieldNameAndFieldValueByNtEditId" parameterType="com.silita.model.TbNtChange" resultType="Map">
+        SELECT `field_name`, `field_value`
+        FROM tb_nt_change
+        WHERE `nt_edit_id` = #{ntEditId} AND `nt_id` = #{ntId}
+        ORDER BY created ASC
     </select>
 </mapper>
