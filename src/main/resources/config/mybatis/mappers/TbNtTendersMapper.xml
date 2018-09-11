@@ -52,6 +52,7 @@
         <result column="county_code" property="countyCode" jdbcType="VARCHAR"/>
         <result column="field_name" property="fieldName" jdbcType="VARCHAR"/>
         <result column="field_value" property="fieldValue" jdbcType="VARCHAR"/>
+        <result column="nt_status" property="ntStatus" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -315,7 +316,7 @@
         t1.social_security, t1.achievement, CASE t1.enroll_method WHEN '1' THEN '线上报名' WHEN '2' then '线下报名' ELSE '其他' END AS enroll_method, t1.completion_time, t1.is_flow,
         t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
         (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = t.biness_type) as biness_type, t.url,  t.title,  t.pub_date, t.source,
-        (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source
+        (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
         WHERE t1.nt_id = #{ntId}
@@ -333,7 +334,7 @@
         t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
         (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = t.biness_type) as biness_type, t.url,  t.title,  t.pub_date, t.source,
         (SELECT GROUP_CONCAT(field_name) FROM `tb_nt_change` WHERE nt_edit_id = #{pkid}) AS field_name, (SELECT GROUP_CONCAT(field_value) FROM `tb_nt_change` WHERE nt_edit_id = #{pkid}) AS fieldValue,
-        (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source
+        (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
         WHERE t1.nt_id = #{ntId} AND t1.pkid = #{pkid}

@@ -277,4 +277,9 @@ public class TbNtTenders {
      * 拼接表名称
      */
     private String tableName;
+
+    /**
+     * 公告状态
+     */
+    private String  ntStatus;
 }

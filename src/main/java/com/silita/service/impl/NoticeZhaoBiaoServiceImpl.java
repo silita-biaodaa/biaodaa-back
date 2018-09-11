@@ -171,6 +171,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
         if (count == 0) {
+            //更新公告状态
+            tbNtMian.setNtStatus("5");
+            tbNtMianMapper.updateNtMainCategoryAndStatusByPkId(tbNtMian);
+
             tbNtTenders.setPkid(DataHandlingUtil.getUUID());
             //编辑明细编码（''td''+yyyymmddHH24MMss+随机数2位）
             tbNtTenders.setEditCode("td" + System.currentTimeMillis() + DataHandlingUtil.getNumberRandom(2));
