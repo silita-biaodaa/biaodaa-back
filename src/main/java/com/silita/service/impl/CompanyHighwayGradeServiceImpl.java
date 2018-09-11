@@ -48,6 +48,7 @@ public class CompanyHighwayGradeServiceImpl implements ICompanyHighwayGradeServi
                 highwayMap.put("assessProv",sysAreaMapper.queryAreaName(MapUtils.getString(map,"assessProvCode")));
                 highwayMap.put("comId",MapUtils.getString(map,"comId"));
                 highwayMap.put("assessYear",MapUtils.getString(map,"assessYear"));
+                highwayMap.put("assessProvCode",MapUtils.getString(map,"assessProvCode"));
                 companyHighwayList.add(highwayMap);
             }
         }
