@@ -55,6 +55,21 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
                             companyQualList.add(creatQual(qual));
                         }
                     }
+                }else if(null == qual.getRange() && null != qual.getQualName()){
+                    if(qual.getQualName().contains(",")) {
+                        rages = qual.getQualName().split(",");
+                        for (String str : rages) {
+                            qual.setQualName(str);
+                            companyQualList.add(creatQual(qual));
+                        }
+                    }
+                    if(qual.getQualName().contains(";")){
+                        rages = qual.getQualName().split(";");
+                        for (String str : rages) {
+                            qual.setQualName(str);
+                            companyQualList.add(creatQual(qual));
+                        }
+                    }
                 }else {
                     companyQualList.add(creatQual(qual));
                 }
@@ -106,6 +121,7 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
         companyQualificationHm.setQuaCode(quaCode);
         companyQualificationHm.setRange(quaCode + "/" + MapUtils.getString(param, "gradeCode"));
         companyQualificationHm.setValidDate(MapUtils.getString(param, "validDate"));
+        companyQualificationHm.setIssueDate(MapUtils.getString(param, "issueDate"));
         companyQualificationHm.setCreateBy(username);
         companyQualificationHm.setCreated(new Date());
         tbCompanyQualificationHmMapper.insertCompanyQual(companyQualificationHm);
