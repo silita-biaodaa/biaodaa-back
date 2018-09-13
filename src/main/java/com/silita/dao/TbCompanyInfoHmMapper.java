@@ -77,4 +77,11 @@ public interface TbCompanyInfoHmMapper extends MyMapper<TbCompanyInfoHm> {
      * @return
      */
     List<TbCompanyInfoHm> queryCompanyDetailHm(Map<String,Object> param);
+
+    /**
+     * 查询人工编辑企业名称数
+     * @param companyInfoHm
+     * @return
+     */
+    Integer queryComNameCount(TbCompanyInfoHm companyInfoHm);
 }

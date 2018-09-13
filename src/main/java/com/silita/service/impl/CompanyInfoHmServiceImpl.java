@@ -114,7 +114,7 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
     @Override
     public Map<String, Object> saveComName(TbCompanyInfoHm companyInfoHm, String username) {
         //校验名称
-        Map<String,Object> resultMap = checkCompany(companyInfoHm,"add");
+        Map<String,Object> resultMap = checkComName(companyInfoHm);
         if(MapUtils.isNotEmpty(resultMap)){
             return resultMap;
         }
@@ -193,6 +193,29 @@ public class CompanyInfoHmServiceImpl extends AbstractService implements ICompan
                 resultMap = new HashMap<>();
                 resultMap.put("code", Constant.CODE_WARN_400);
                 resultMap.put("msg", "信用代码已存在!");
+                return resultMap;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 校验名称是否已存在
+     * @param companyInfoHm
+     * @return
+     */
+    private Map<String,Object> checkComName(TbCompanyInfoHm companyInfoHm){
+        Map<String, Object> resultMap = null;
+        TbCompanyInfoHm companyInfo = new TbCompanyInfoHm();
+        if (null != companyInfoHm.getComName()) {
+            companyInfo.setComName(companyInfoHm.getComName());
+            companyInfo.setComId(companyInfoHm.getComId());
+            Integer count = companyInfoHmMapper.queryComNameCount(companyInfo);
+            Integer comCount = companyMapper.queryComCount(companyInfo);
+            if (comCount > 0 || count > 0) {
+                resultMap = new HashMap<>();
+                resultMap.put("code", Constant.CODE_WARN_400);
+                resultMap.put("msg", Constant.MSG_WARN_400);
                 return resultMap;
             }
         }

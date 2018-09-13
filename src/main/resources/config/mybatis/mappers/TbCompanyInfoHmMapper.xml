@@ -25,7 +25,6 @@
         select count(1)
         from tb_company_info_hm
         where 1=1
-        and com_id is null
         <if test="comName != null and comName != ''">
             and com_name = #{comName}
         </if>
@@ -238,5 +237,18 @@
         where t.com_id = #{comId}
         and t.com_name is not null
         order by t.created desc,t.change_time desc
+    </select>
+
+    <select id="queryComNameCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbCompanyInfoHm">
+        select count(1)
+        from tb_company_info_hm
+        where 1=1
+        <if test="comName != null and comName != ''">
+            and com_name = #{comName}
+        </if>
+        <if test="comId != null and comId != ''">
+            and com_id != #{comId}
+        </if>
+        order by created desc
     </select>
 </mapper>
