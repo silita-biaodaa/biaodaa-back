@@ -308,14 +308,14 @@
 
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
         SELECT t1.pkid, t1.nt_id, t1.edit_code, t1.segment, t1.controll_sum,
-        t1.pro_sum, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = t1.nt_td_status) AS nt_td_status, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = t1.pro_type) AS pro_type, t1.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = t1.pb_mode) AS pb_mode,
-        t1.cert_audit_addr, (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = t1.filing_pfm) AS filing_pfm, t1.enroll_addr, t1.opening_addr, t1.enroll_end_time,
+        t1.pro_sum, t1.nt_td_status, t1.pro_type, t1.pro_duration, t1.pb_mode,
+        t1.cert_audit_addr, t1.filing_pfm, t1.enroll_addr, t1.opening_addr, t1.enroll_end_time,
         t1.bid_end_time, t1.bid_bonds, t1.bid_bonds_end_time, t1.keep_bonds, t1.other_bonds,
         t1.audit_time, t1.opening_person, t1.opening_file_fee, t1.other_fee, t1.tenderee,
         t1.tender_contact_person, t1.tender_contact_info, t1.proxy_contact_person, t1.proxy_contact_info, t1.pro_person,
-        t1.social_security, t1.achievement, CASE t1.enroll_method WHEN '1' THEN '线上报名' WHEN '2' then '线下报名' ELSE '其他' END AS enroll_method, t1.completion_time, t1.is_flow,
+        t1.social_security, t1.achievement, t1.enroll_method, t1.completion_time, t1.is_flow,
         t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
-        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = t.biness_type) as biness_type, t.url,  t.title,  t.pub_date, t.source,
+        t.biness_type, t.url,  t.title,  t.pub_date, t.source,
         (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
@@ -325,16 +325,14 @@
 
     <select id="getNtTendersByNtIdByPkId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
         SELECT t1.pkid, t1.nt_id, t1.edit_code, t1.segment, t1.controll_sum,
-        t1.pro_sum, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = t1.nt_td_status) AS nt_td_status, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = t1.pro_type) AS pro_type, t1.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = t1.pb_mode) AS pb_mode,
-        t1.cert_audit_addr, (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = t1.filing_pfm) AS filing_pfm, t1.enroll_addr, t1.opening_addr, t1.enroll_end_time,
+        t1.pro_sum, t1.nt_td_status, t1.pro_type, t1.pro_duration, t1.pb_mode,
+        t1.cert_audit_addr, t1.filing_pfm, t1.enroll_addr, t1.opening_addr, t1.enroll_end_time,
         t1.bid_end_time, t1.bid_bonds, t1.bid_bonds_end_time, t1.keep_bonds, t1.other_bonds,
         t1.audit_time, t1.opening_person, t1.opening_file_fee, t1.other_fee, t1.tenderee,
         t1.tender_contact_person, t1.tender_contact_info, t1.proxy_contact_person, t1.proxy_contact_info, t1.pro_person,
-        t1.social_security, t1.achievement, CASE t1.enroll_method WHEN '1' THEN '线上报名' WHEN '2' then '线下报名' ELSE '其他' END AS enroll_method, t1.completion_time, t1.is_flow,
+        t1.social_security, t1.achievement, t1.enroll_method, t1.completion_time, t1.is_flow,
         t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
-        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = t.biness_type) as biness_type, t.url,  t.title,  t.pub_date, t.source,
-        <!-- (SELECT GROUP_CONCAT(field_name) FROM `tb_nt_change` WHERE nt_edit_id = #{pkid}) AS field_name,
-        (SELECT GROUP_CONCAT(field_value) FROM `tb_nt_change` WHERE nt_edit_id = #{pkid}) AS fieldValue, -->
+        t.biness_type, t.url,  t.title,  t.pub_date, t.source,
         (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
