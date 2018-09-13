@@ -46,7 +46,7 @@
         <if test="title != null and title != ''">
             and title like CONCAT('%', #{title}, '%')
         </if>
-        ORDER BY `pub_date` DESC, `nt_status` ASC
+        ORDER BY `created` DESC
         limit #{start},#{pageSize}
     </select>
 

@@ -92,4 +92,9 @@ public class TbCompanyQualificationHm {
      * 来源
      */
     private String channel;
+
+    /**
+     * 来源
+     */
+    private String source;
 }

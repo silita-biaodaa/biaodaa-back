@@ -90,6 +90,7 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
                 common = dicCommonMapper.queryDicComm(hm.getRange().split("/")[1]);
                 hm.setQualName(dicQua.getQuaName() + common.getName());
                 hm.setChannel(Constant.SOURCE_LAB);
+                hm.setSource("人工");
             }
             list.addAll(companyQualificationHmList);
         }
@@ -150,6 +151,8 @@ public class CompanyQualificationServiceImpl implements ICompanyQualificationSer
         qual.setQualType(qualification.getQualType());
         qual.setValidDate(qualification.getValidDate());
         qual.setQualName(qualification.getQualName());
+//        qual.setSource(qualification.getSource());
+        qual.setSource("程序");
         return qual;
     }
 }
