@@ -32,11 +32,23 @@ public class NoticeZhongBiaoController extends BaseController {
         return super.successMap(noticeZhongBiaoService.listNtTenders(tbNtMian));
     }
 
+    @RequestMapping(value = "/deleteNtTenders",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> deleteNtTenders(@RequestBody Map<String,Object> param) {
+        noticeZhongBiaoService.deleteNtTendersByPkId(param);
+        return super.successMap(null);
+    }
+
     @RequestMapping(value = "/listNtAssociateGp",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> listNtAssociateGp(@RequestBody TbNtMian tbNtMian) {
         return super.successMap(noticeZhongBiaoService.listNtAssociateGp(tbNtMian));
     }
 
+    @RequestMapping(value = "/listZhaoBiaoFiles",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> listZhaoBiaoFiles(@RequestBody TbNtMian tbNtMian) {
+        return super.successMap(noticeZhongBiaoService.listZhaoBiaoFilesByPkId(tbNtMian));
+    }
 
 }
