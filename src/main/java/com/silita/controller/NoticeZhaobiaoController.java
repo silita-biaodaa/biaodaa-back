@@ -7,7 +7,6 @@ import com.silita.service.INoticeZhaoBiaoService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,10 +101,6 @@ public class NoticeZhaobiaoController extends BaseController {
             tbNtTenders.setCreateBy(userName);
             String msg = noticeZhaoBiaoService.saveNtTenders(tbNtTenders);
             result.put("msg", msg);
-            if(StringUtils.isEmpty(msg)) {
-                result.put("code",0);
-                result.put("msg","标段已存在，添加失败！");
-            }
         } catch (Exception e) {
             result.put("code",0);
             result.put("msg",e.getMessage());

@@ -20,14 +20,14 @@
                         password="${jdbc.password}">
         </jdbcConnection>
 
-        <!--<javaModelGenerator targetPackage="com.silita" targetProject="src/main/java"/>-->
+        <javaModelGenerator targetPackage="com.silita.model" targetProject="src/main/java"/>
 
-        <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources/config"/>
+        <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources/config/mybatis"/>
 
-        <!--<javaClientGenerator targetPackage="com.silita.dao" targetProject="src/main/java"-->
-                             <!--type="XMLMAPPER"/>-->
+        <javaClientGenerator targetPackage="com.silita.dao" targetProject="src/main/java"
+                             type="XMLMAPPER"/>
 
-        <table tableName="tb_nt_tenders_hunan">
+        <table tableName="tb_nt_bids_hunan">
             <!--mysql 配置-->
             <generatedKey column="pkid" sqlStatement="Mysql" identity="true"/>
             <!--oracle 配置-->

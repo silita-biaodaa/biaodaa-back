@@ -92,7 +92,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
     @Test
     public void testController4()throws Exception{
 //        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"cityCode\":\"changsha\", \"ntStatus\":\"\", \"ntCategory\":\"1\", \"title\":\"测试\", \"pubDate\":\"2018-08-10\", \"pubEndDate\":\"2018-08-20\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
-        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"cityCode\":\"changsha\", \"ntStatus\":\"3\", \"ntCategory\":\"1\", \"title\":\"测试\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
+        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntStatus\":\"5\", \"ntCategory\":\"1\", \"title\":\"招标\", \"currentPage\":\"1\", \"pageSize\":\"5\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/listNtMain").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -164,7 +164,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController9()throws Exception{
-        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"1\", \"title\":\"更新\", \"ntStatus\":\"3\"}";
+        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"1\", \"title\":\"招标\", \"ntStatus\":\"3\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/exportTendersExcel").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

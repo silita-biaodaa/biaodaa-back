@@ -46,4 +46,11 @@ public interface TbNtAssociateGpMapper {
      */
     void updateRelTypeByBtId(TbNtAssociateGp tbNtAssociateGp);
 
+    /**
+     * 根据中标公告pkid获取招标公告pkid
+     * @param tbNtAssociateGp
+     * @return
+     */
+    String getNtIdByNtId(TbNtAssociateGp tbNtAssociateGp);
+
 }

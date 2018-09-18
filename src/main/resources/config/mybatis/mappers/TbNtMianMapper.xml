@@ -27,16 +27,9 @@
         <if test="ntCategory !=null and ntCategory!=''">
             AND nt_category = #{ntCategory}
         </if>
-        <choose>
-            <when test="ntStatus =='3' or ntStatus ==3">
-                AND nt_status != 2
-            </when>
-            <when test="ntStatus !=null and ntStatus!=''">
-                AND nt_status = #{ntStatus}
-            </when>
-            <otherwise>
-            </otherwise>
-        </choose>
+        <if test="ntStatus !=null and ntStatus!=''">
+            AND nt_status = #{ntStatus}
+        </if>
         ORDER BY `pub_date` DESC, `nt_status` ASC
         LIMIT #{start}, #{pageSize}
     </select>
@@ -66,16 +59,9 @@
         <if test="ntCategory !=null and ntCategory!=''">
             AND nt_category = #{ntCategory}
         </if>
-        <choose>
-            <when test="ntStatus =='3' or ntStatus ==3">
-                AND nt_status != 2
-            </when>
-            <when test="ntStatus !=null and ntStatus!=''">
-                AND nt_status = #{ntStatus}
-            </when>
-            <otherwise>
-            </otherwise>
-        </choose>
+        <if test="ntStatus !=null and ntStatus!=''">
+            AND nt_status = #{ntStatus}
+        </if>
     </select>
 
     <select id="listTendersDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
@@ -110,16 +96,9 @@
         <if test="ntCategory !=null and ntCategory!=''">
             AND main.nt_category = #{ntCategory}
         </if>
-        <choose>
-            <when test="ntStatus =='3' or ntStatus ==3">
-                AND main.nt_status != 2
-            </when>
-            <when test="ntStatus !=null and ntStatus!=''">
-                AND main.nt_status = #{ntStatus}
-            </when>
-            <otherwise>
-            </otherwise>
-        </choose>
+        <if test="ntStatus !=null and ntStatus!=''">
+            AND nt_status = #{ntStatus}
+        </if>
         ORDER BY pub_date DESC
     </select>
 

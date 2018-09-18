@@ -20,7 +20,7 @@ public class DataHandlingUtil {
      * @return
      */
     public static Map<String, String> getpProvinceCode() {
-        Map map = new HashMap<String, String>(40);
+        Map<String, String> map = new HashMap(40);
         map.put("广西壮族自治区", "guangx");
         map.put("江西省", "jiangx");
         map.put("贵州省", "guiz");
@@ -60,14 +60,13 @@ public class DataHandlingUtil {
      * @return
      */
     public static Map<String, Object> getBulletinStatus() {
-        Map map = new HashMap<String, String>(10);
-        map.put("all", "");
-        map.put("edited", "1");
-        map.put("unedited", "0");
-        map.put("audited", "2");
-        map.put("unaudited", "3");
-        map.put("notAudited", "4");
-        map.put("Handled", "5");
+        Map<String, Object> map = new HashMap(10);
+        map.put("all", ""); //全部
+        map.put("untreated", "0");  //未处理
+        map.put("unaudited", "1");  //未审核
+        map.put("Passed", "2"); //已通过
+        map.put("notThrough", "4"); //未通过
+        map.put("processed", "5");  //已处理
         return map;
     }
 

@@ -74,4 +74,9 @@
         UPDATE ${tableName} SET rel_type = #{relType} WHERE nt_id = #{ntId}
     </update>
 
+    <select id="getNtIdByNtId" parameterType="com.silita.model.TbNtAssociateGp" resultType="String">
+      SELECT `nt_id` FROM ${tableName}
+      WHERE `rel_gp` = (SELECT `rel_gp` FROM ${tableName} WHERE `nt_id` = #{ntId}) AND `rel_type` = 1
+    </select>
+
 </mapper>
