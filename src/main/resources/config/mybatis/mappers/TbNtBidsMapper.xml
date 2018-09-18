@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbNtBidsMapper" >
+
+  <resultMap id="BaseResultMap" type="com.silita.model.TbNtBids" >
+    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
+    <result column="nt_id" property="ntId" jdbcType="VARCHAR" />
+    <result column="edit_code" property="editCode" jdbcType="VARCHAR" />
+    <result column="td_edit_code" property="tdEditCode" jdbcType="VARCHAR" />
+    <result column="segment" property="segment" jdbcType="VARCHAR" />
+    <result column="controll_sum" property="controllSum" jdbcType="DOUBLE" />
+    <result column="pro_sum" property="proSum" jdbcType="DOUBLE" />
+    <result column="pro_type" property="proType" jdbcType="VARCHAR" />
+    <result column="pro_duration" property="proDuration" jdbcType="VARCHAR" />
+    <result column="pb_mode" property="pbMode" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <insert id="insertTbNtBids" parameterType="com.silita.model.TbNtBids">
+    INSERT INTO ${tableName}
+    (
+      `pkid`, `nt_id`, `edit_code`, `td_edit_code`, `segment`,
+      `controll_sum`, `pro_sum`, `pro_type`, `pro_duration`, `pb_mode`,
+      `create_by`, NOW()
+    )
+    VALUES (
+      #{pkid}, #{ntId}, #{editCode}, #{tdEditCode}, #{segment},
+      #{controllSum}, #{proSum}, #{proType}, #{proDuration}, #{pbMode},
+      #{createBy}, NOW()
+    )
+  </insert>
+
+  <update id="updateTbNtBidsByNtIdAndSegment" parameterType="com.silita.model.TbNtBids">
+    UPDATE ${tableName} SET
+    <if test="editCode != null and editCode != ''">
+      `edit_code` = #{editCode},
+    </if>
+    <if test="tdEditCode != null and tdEditCode != ''">
+      `td_edit_code` = #{tdEditCode},
+    </if>
+    <if test="controllSum != null and controllSum != ''">
+      `controll_sum` = #{controllSum},
+    </if>
+    <if test="proSum != null and proSum != ''">
+      `pro_sum` = #{proSum},
+    </if>
+    <if test="proType != null and proType != ''">
+      `pro_type` = #{proType},
+    </if>
+    <if test="proDuration != null and proDuration != ''">
+      `pro_duration` = #{proDuration},
+    </if>
+    <if test="pbMode != null and pbMode != ''">
+      `pb_mode` = #{pbMode},
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+      `update_by` = #{updateBy},
+    </if>
+    `updated` = NOW()
+    WHERE `nt_id` = #{ntId} AND `segment` = #{Segment}
+  </update>
+
+  <select id="countNtBidsByNtIdAndSegment" parameterType="com.silita.model.TbNtBids" resultType="Integer">
+    SELECT COUNT(*) FROM ${tableName} WHERE `nt_id` = #{ntId} AND `segment` = #{Segment}
+  </select>
+
+  <select id="listNtBidsByNtId" parameterType="com.silita.model.TbNtBids" resultMap="BaseResultMap">
+    SELECT * FROM ${tableName} WHERE `nt_id` = #{ntId}
+  </select>
+</mapper>

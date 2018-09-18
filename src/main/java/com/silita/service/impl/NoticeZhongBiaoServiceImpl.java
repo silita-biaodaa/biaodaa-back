@@ -1,13 +1,7 @@
 package com.silita.service.impl;
 
-import com.silita.dao.SysFilesMapper;
-import com.silita.dao.TbNtAssociateGpMapper;
-import com.silita.dao.TbNtChangeMapper;
-import com.silita.dao.TbNtTendersMapper;
-import com.silita.model.SysFiles;
-import com.silita.model.TbNtAssociateGp;
-import com.silita.model.TbNtMian;
-import com.silita.model.TbNtTenders;
+import com.silita.dao.*;
+import com.silita.model.*;
 import com.silita.service.INoticeZhongBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
@@ -33,6 +27,8 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     TbNtChangeMapper tbNtChangeMapper;
     @Autowired
     SysFilesMapper sysFilesMapper;
+    @Autowired
+    TbNtBidsMapper tbNtTenders;
 
     @Override
     public List<TbNtTenders> listNtTenders(TbNtMian tbNtMian) {
@@ -95,5 +91,14 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         return sysFilesMapper.listSysFilesByBizId(sysFiles);
     }
 
+    public String saveNtBids(TbNtBids tbNtBids) {
+        Integer count = tbNtTenders.countNtBidsByNtIdAndSegment(tbNtBids);
+        if(count == 0) {
+
+        } else {
+
+        }
+        return null;
+    }
 
 }

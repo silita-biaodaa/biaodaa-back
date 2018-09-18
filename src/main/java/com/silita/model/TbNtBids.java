@@ -78,4 +78,22 @@ public class TbNtBids {
      */
     private String updateBy;
 
+    /**
+     * 数据来源（区分省，冗余字段）
+     */
+    private String source;
+
+    /**
+     * 拼接表名称
+     */
+    private String tableName;
+
+    //项目名称
+    //公示日期
+    //项目地区
+    //项目县区
+    //项目类型
+    //招标类型
+    //评标办法
+    //资质要求
 }

@@ -1,6 +1,7 @@
 package com.silita.service;
 
 import com.silita.model.SysFiles;
+import com.silita.model.TbNtBids;
 import com.silita.model.TbNtMian;
 import com.silita.model.TbNtTenders;
 
@@ -43,5 +44,12 @@ public interface INoticeZhongBiaoService {
      * @return
      */
     List<SysFiles> listZhaoBiaoFilesByPkId(TbNtMian tbNtMian);
+
+    /**
+     * 添加或修改标段信息
+     * @param tbNtBids
+     * @return
+     */
+    String saveNtBids(TbNtBids tbNtBids);
 
 }
