@@ -1,23 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.TbNtBidsCandMapper" >
+<mapper namespace="com.silita.dao.TbNtBidsCandMapper">
 
-  <resultMap id="BaseResultMap" type="com.silita.model.TbNtBidsCand" >
-    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
-    <result column="nt_id" property="ntId" jdbcType="VARCHAR" />
-    <result column="nt_bids_id" property="ntBidsId" jdbcType="VARCHAR" />
-    <result column="f_candidate" property="fCandidate" jdbcType="VARCHAR" />
-    <result column="f_quote" property="fQuote" jdbcType="DOUBLE" />
-    <result column="f_pro_leader" property="fProLeader" jdbcType="VARCHAR" />
-    <result column="f_tech_leader" property="fTechLeader" jdbcType="VARCHAR" />
-    <result column="f_builder" property="fBuilder" jdbcType="VARCHAR" />
-    <result column="f_safety" property="fSafety" jdbcType="VARCHAR" />
-    <result column="f_quality" property="fQuality" jdbcType="VARCHAR" />
-    <result column="number" property="number" jdbcType="INTEGER" />
-    <result column="created" property="created" jdbcType="TIMESTAMP" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-    <result column="source" property="source" jdbcType="VARCHAR" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.silita.model.TbNtBidsCand">
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="nt_id" property="ntId" jdbcType="VARCHAR"/>
+        <result column="nt_bids_id" property="ntBidsId" jdbcType="VARCHAR"/>
+        <result column="f_candidate" property="fCandidate" jdbcType="VARCHAR"/>
+        <result column="f_quote" property="fQuote" jdbcType="DOUBLE"/>
+        <result column="f_pro_leader" property="fProLeader" jdbcType="VARCHAR"/>
+        <result column="f_tech_leader" property="fTechLeader" jdbcType="VARCHAR"/>
+        <result column="f_builder" property="fBuilder" jdbcType="VARCHAR"/>
+        <result column="f_safety" property="fSafety" jdbcType="VARCHAR"/>
+        <result column="f_quality" property="fQuality" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <insert id="batchInsertNtBidsCand" parameterType="com.silita.model.TbNtBidsCand">
+        INSERT INTO `tb_nt_bids_cand` (
+        `pkid`, `nt_id`, `nt_bids_id`, `f_candidate`, `f_quote`,
+        `f_pro_leader`, `f_tech_leader`, `f_builder`, `f_safety`, `f_quality`,
+        `source`, `number`, `create_by`, `created`
+        )
+        VALUES
+        <foreach collection="list" item="temp" index="index" separator=",">
+            (
+            #{temp.pkid}, #{temp.ntId}, #{temp.ntBidsId}, #{temp.fCandidate}, #{temp.fQuote},
+            #{temp.fProLeader}, #{temp.fTechLeader}, #{temp.fBuilder}, #{temp.fSafety}, #{temp.fQuality},
+            #{temp.source}, #{temp.number}, #{temp.createBy}, NOW()
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateNtBidsCand" parameterType="com.silita.model.TbNtBidsCand">
+        <foreach collection="tbNtBidsCands" item="temp" index="index" open="" close="" separator=";">
+            UPDATE `tb_nt_bids_cand` SET
+            <if test="temp.fCandidate != null and temp.fCandidate != ''">
+                `f_candidate` = #{temp.fCandidate},
+            </if>
+            <if test="temp.fQuote != null and temp.fQuote != ''">
+                `f_quote` = #{temp.fQuote},
+            </if>
+            <if test="temp.fProLeader != null and temp.fProLeader != ''">
+                `f_pro_leader` = #{temp.fProLeader},
+            </if>
+            <if test="temp.fTechLeader != null and temp.fTechLeader != ''">
+                `f_tech_leader` = #{temp.fTechLeader},
+            </if>
+            <if test="temp.fBuilder != null and temp.fBuilder != ''">
+                `f_builder` = #{temp.fBuilder},
+            </if>
+            <if test="temp.fSafety != null and temp.fSafety != ''">
+                `f_safety` = #{temp.fSafety},
+            </if>
+            <if test="temp.fQuality != null and temp.fQuality != ''">
+                `f_quality` = #{temp.fQuality},
+            </if>
+            <if test="temp.number != null and temp.number != ''">
+                `number` = #{temp.number},
+            </if>
+            <if test="temp.source != null and temp.source != ''">
+                `source` = #{temp.source}
+            </if>
+            WHERE `pkid` = #{temp.pkid}
+        </foreach>
+    </update>
+
 </mapper>

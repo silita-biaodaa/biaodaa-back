@@ -172,7 +172,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
         if (count == 0) {
             //更新公告状态
-            tbNtMian.setNtStatus("5");
+            tbNtMian.setNtStatus("1");
             tbNtMianMapper.updateNtMainCategoryAndStatusByPkId(tbNtMian);
 
             tbNtTenders.setPkid(DataHandlingUtil.getUUID());

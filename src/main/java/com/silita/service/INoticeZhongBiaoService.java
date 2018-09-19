@@ -52,4 +52,10 @@ public interface INoticeZhongBiaoService {
      */
     String saveNtBids(TbNtBids tbNtBids);
 
+    /**
+     * 根据公告pkid获取中标标段信息（包含中标候选人）
+     * @return
+     */
+    List<TbNtBids> listTbNtBidsByNtId(TbNtBids tbNtBids);
+
 }

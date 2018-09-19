@@ -1,12 +1,10 @@
 package com.silita.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
 
-@Getter
-@Setter
+/**
+ * 不要删get、set方法
+ */
 public class TbNtBidsCand {
     /**
      * 主键
@@ -88,4 +86,101 @@ public class TbNtBidsCand {
      */
     private String source;
 
+
+    public String getPkid() {
+        return pkid;
+    }
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+    public String getNtId() {
+        return ntId;
+    }
+    public void setNtId(String ntId) {
+        this.ntId = ntId;
+    }
+    public String getNtBidsId() {
+        return ntBidsId;
+    }
+    public void setNtBidsId(String ntBidsId) {
+        this.ntBidsId = ntBidsId;
+    }
+    public String getfCandidate() {
+        return fCandidate;
+    }
+    public void setfCandidate(String fCandidate) {
+        this.fCandidate = fCandidate;
+    }
+    public Double getfQuote() {
+        return fQuote;
+    }
+    public void setfQuote(Double fQuote) {
+        this.fQuote = fQuote;
+    }
+    public String getfProLeader() {
+        return fProLeader;
+    }
+    public void setfProLeader(String fProLeader) {
+        this.fProLeader = fProLeader;
+    }
+    public String getfTechLeader() {
+        return fTechLeader;
+    }
+    public void setfTechLeader(String fTechLeader) {
+        this.fTechLeader = fTechLeader;
+    }
+    public String getfBuilder() {
+        return fBuilder;
+    }
+    public void setfBuilder(String fBuilder) {
+        this.fBuilder = fBuilder;
+    }
+    public String getfSafety() {
+        return fSafety;
+    }
+    public void setfSafety(String fSafety) {
+        this.fSafety = fSafety;
+    }
+    public String getfQuality() {
+        return fQuality;
+    }
+    public void setfQuality(String fQuality) {
+        this.fQuality = fQuality;
+    }
+    public Integer getNumber() {
+        return number;
+    }
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+    public Date getCreated() {
+        return created;
+    }
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+    public String getCreateBy() {
+        return createBy;
+    }
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+    public Date getUpdated() {
+        return updated;
+    }
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+    public String getUpdateBy() {
+        return updateBy;
+    }
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+    public String getSource() {
+        return source;
+    }
+    public void setSource(String source) {
+        this.source = source;
+    }
 }

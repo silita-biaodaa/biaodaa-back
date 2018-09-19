@@ -336,7 +336,7 @@
         (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
-        WHERE t1.nt_id = #{ntId} AND t1.pkid = #{pkid}
+        WHERE t1.nt_id = #{ntId} AND t1.pkid = #{pkid} AND t.is_enable = 1
         ORDER BY LENGTH(t1.`segment`) ASC, t1.`segment` ASC
     </select>
 
@@ -357,5 +357,17 @@
         </if>
         updated = NOW()
         WHERE pkid = #{pkid}
+    </update>
+
+    <update id="updateProTypeAndPbModeByNtIdAndEditCode" parameterType="com.silita.model.TbNtTenders">
+        UPDATE ${tableName} SET
+        <if test="proType !=null and proType!=''">
+            `pro_type` = #{proType},
+        </if>
+        <if test="pbMode !=null and pbMode!=''">
+            `pb_mode` = #{pbMode},
+        </if>
+        updated = NOW()
+        WHERE `nt_id` = #{ntId} AND `edit_code` = #{editCode}
     </update>
 </mapper>

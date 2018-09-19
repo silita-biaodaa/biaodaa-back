@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -88,12 +89,48 @@ public class TbNtBids {
      */
     private String tableName;
 
-    //项目名称
-    //公示日期
-    //项目地区
-    //项目县区
-    //项目类型
-    //招标类型
-    //评标办法
+
+    /**
+     * 公告标题（项目名称）
+     */
+    private String title;
+
+    /**
+     * 公示日期
+     */
+    private String pubDate;
+
+    /**
+     * 市编码（项目地区）
+     */
+    private String cityCode;
+
+    /**
+     * 县编码（项目县区）
+     */
+    private String countyCode;
+
+    /**
+     * 业务类别(01:施工
+     02:监理
+     03:设计
+     04:勘察
+     05:采购
+     06:其他
+     07:PPP
+     08:设计施工
+     09:EPC
+     10:检测
+     11:施工采购
+     12:造价咨询
+     13:招标代理）
+     */
+    private String binessType;
+
     //资质要求
+
+    /**
+     * 中标候选人
+     */
+    private List<TbNtBidsCand> bidsCands;
 }

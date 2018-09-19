@@ -1,11 +1,11 @@
 package com.silita.utils;
 
-import com.silita.model.TbNtAssociateGp;
-import com.silita.model.TbNtMian;
-import com.silita.model.TbNtTenders;
-import com.silita.model.TbNtText;
+import com.silita.model.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -123,6 +123,8 @@ public class DataHandlingUtil {
             tableName = "tb_nt_associate_gp_" + source;
         } else if(model.getName().equals(TbNtText.class.getName())) {
             tableName = "tb_nt_text_" + source;
+        } else if(model.getName().equals(TbNtBids.class.getName())) {
+            tableName = "tb_nt_bids_" + source;
         }
         return tableName;
     }

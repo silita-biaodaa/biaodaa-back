@@ -28,7 +28,7 @@ public interface TbNtBidsMapper {
     Integer countNtBidsByNtIdAndSegment(TbNtBids tbNtBids);
 
     /**
-     * 根据公告pkid获取中标标段信息
+     * 根据公告pkid获取TbNtBids
      * @param tbNtBids
      * @return
      */

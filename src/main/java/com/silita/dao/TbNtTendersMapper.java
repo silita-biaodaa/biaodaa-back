@@ -58,4 +58,11 @@ public interface TbNtTendersMapper {
      * @param params
      */
     void updateChangeFieldValue(Map params);
+
+    /**
+     * 根据公告pkid\编辑明细编码更新项目类型(中标编辑时使用)
+     * @param tbNtTenders
+     * @return
+     */
+    Integer updateProTypeAndPbModeByNtIdAndEditCode(TbNtTenders tbNtTenders);
 }
