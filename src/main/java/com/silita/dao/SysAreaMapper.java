@@ -41,4 +41,18 @@ public interface SysAreaMapper {
      * @return
      */
     SysArea queryAreaByName(String areaName);
+
+    /**
+     * 根据name\parentId获取pkid
+     * @param area
+     * @return
+     */
+    String getPkIdByAreaNameAndParentId(SysArea area);
+
+    /**
+     * 根据area_parent_id获取地区name\code
+     * @param areaParentId
+     * @return
+     */
+    List<Map<String, Object>> listCodeAndNameByParentId(String areaParentId);
 }

@@ -53,4 +53,7 @@
     </where>
   </delete>
 
+  <select id="countSysFilesByBizIdAndSource" parameterType="com.silita.model.TbNtChange" resultType="Integer">
+    SELECT COUNT(*) FROM sys_files WHERE biz_id = #{bizId} AND source = #{source}
+  </select>
 </mapper>

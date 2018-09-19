@@ -32,4 +32,11 @@ public interface SysFilesMapper {
      * @param source
      */
     void deleteSysFilesByPkid(@Param("array") Object[] array, @Param("source") String source);
+
+    /**
+     * 根据公告pkid、source获取招标文件个数
+     * @param sysFiles
+     * @return
+     */
+    Integer countSysFilesByBizIdAndSource(SysFiles sysFiles);
 }

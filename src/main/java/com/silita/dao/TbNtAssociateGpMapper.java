@@ -51,6 +51,6 @@ public interface TbNtAssociateGpMapper {
      * @param tbNtAssociateGp
      * @return
      */
-    String getNtIdByNtId(TbNtAssociateGp tbNtAssociateGp);
+    List<String> getNtIdByNtId(TbNtAssociateGp tbNtAssociateGp);
 
 }

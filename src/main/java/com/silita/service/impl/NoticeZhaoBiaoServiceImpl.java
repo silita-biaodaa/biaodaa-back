@@ -191,7 +191,21 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders) {
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
-        return tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
+        List<TbNtTenders> lists = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
+        //前端要
+        if(null != lists && lists.size() > 0) {
+            for (int i = 0; i < lists.size(); i++) {
+                TbNtTenders tbNtTenders1 = lists.get(i);
+                if(!StringUtils.isEmpty(tbNtTenders1.getCityCode())) {
+                    SysArea sysArea = new SysArea();
+                    sysArea.setAreaName(tbNtTenders1.getCityCode());
+                    sysArea.setAreaCode(tbNtTenders.getSource());
+                    String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
+                    tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
+                }
+            }
+        }
+        return lists;
     }
 
     @Override
@@ -220,6 +234,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         if(!StringUtils.isEmpty(fieldName) && !StringUtils.isEmpty(fieldValue)) {
             tbNtTenders1.setFieldName(fieldName.substring(0, fieldName.lastIndexOf(",")));
             tbNtTenders1.setFieldValue(fieldValue.substring(0, fieldValue.lastIndexOf(",")));
+        }
+        //前端要
+        if(!StringUtils.isEmpty(tbNtTenders1.getCityCode())) {
+            SysArea sysArea = new SysArea();
+            sysArea.setAreaName(tbNtTenders1.getCityCode());
+            sysArea.setAreaCode(tbNtTenders.getSource());
+            String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
+            tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
         }
         return tbNtTenders1;
     }

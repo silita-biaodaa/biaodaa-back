@@ -7,7 +7,6 @@ import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -43,14 +42,22 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         tbNtAssociateGp.setNtId(tbNtMian.getPkid());
         tbNtAssociateGp.setSource(tbNtMian.getSource());
         tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(tbNtAssociateGp.getClass(), tbNtAssociateGp.getSource()));
-        String NtId = tbNtAssociateGpMapper.getNtIdByNtId(tbNtAssociateGp);
-        if(!StringUtils.isEmpty(NtId)) {
-            // 2、根据招标公告id获取招标标段信息
-            TbNtTenders tbNtTenders = new TbNtTenders();
-            tbNtTenders.setNtId(NtId);
-            tbNtTenders.setSource(tbNtMian.getSource());
-            tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
-            lists = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
+        List<String> ntIds = tbNtAssociateGpMapper.getNtIdByNtId(tbNtAssociateGp);
+        if(null != ntIds && ntIds.size() > 0) {
+            lists = new ArrayList<TbNtTenders>(ntIds.size());
+            for (int i = 0; i < ntIds.size(); i++) {
+                String ntId = ntIds.get(i);
+                TbNtTenders tbNtTenders = new TbNtTenders();
+                tbNtTenders.setNtId(ntId);
+                tbNtTenders.setSource(tbNtMian.getSource());
+                tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+                //判断公告是否存在招标编辑明细
+                Integer count = tbNtTendersMapper.countNtTendersByNtId(tbNtTenders);
+                if(count > 0) {
+                    // 2、根据招标公告id获取招标标段信息
+                    lists.addAll(tbNtTendersMapper.listNtTendersByNtId(tbNtTenders));
+                }
+            }
         }
       return lists;
     }
@@ -93,13 +100,21 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         tbNtAssociateGp.setNtId(tbNtMian.getPkid());
         tbNtAssociateGp.setSource(tbNtMian.getSource());
         tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(tbNtAssociateGp.getClass(), tbNtAssociateGp.getSource()));
-        String NtId = tbNtAssociateGpMapper.getNtIdByNtId(tbNtAssociateGp);
-        if(!StringUtils.isEmpty(NtId)) {
-            // 2、根据招标公告id获取文件列表
-            SysFiles sysFiles = new SysFiles();
-            sysFiles.setBizId(NtId);
-            sysFiles.setSource(tbNtMian.getSource());
-            lists = sysFilesMapper.listSysFilesByBizId(sysFiles);
+        List<String> ntIds = tbNtAssociateGpMapper.getNtIdByNtId(tbNtAssociateGp);
+        if(null != ntIds && ntIds.size() > 0) {
+            lists = new ArrayList<SysFiles>(ntIds.size());
+            for (int i = 0; i < ntIds.size(); i++) {
+                String ntId = ntIds.get(i);
+                SysFiles sysFiles = new SysFiles();
+                sysFiles.setBizId(ntId);
+                sysFiles.setSource(tbNtMian.getSource());
+                //判断公告是否存在招标文件列表
+                Integer count = sysFilesMapper.countSysFilesByBizIdAndSource(sysFiles);
+                if(count > 0) {
+                    //2、根据招标公告id获取文件列表
+                    lists.addAll(sysFilesMapper.listSysFilesByBizId(sysFiles));
+                }
+            }
         }
         return lists;
     }
@@ -124,6 +139,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         tbNtTenders.setPbMode(tbNtBids.getPbMode());
         tbNtTenders.setSource(tbNtBids.getSource());
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtBids.getSource()));
+        tbNtTendersMapper.updateProTypeAndPbModeByNtIdAndEditCode(tbNtTenders);
         //中标标段
         tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
         Integer count = tbNtBidsMapper.countNtBidsByNtIdAndSegment(tbNtBids);

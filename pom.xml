@@ -26,12 +26,12 @@
     <name>biaodaa-back</name>
     <groupId>com.biaodaa</groupId>
     <artifactId>biaodaa-back</artifactId>
-    <version>1.1.37</version>
+    <version>1.1.41</version>
 
     <properties>
         <spring.version>4.1.6.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <shiro.version>1.3.3</shiro.version>
+        <shiro.version>1.3.2</shiro.version>
 
         <junit.version>4.11</junit.version>
         <mockito.version>1.10.19</mockito.version>
@@ -356,9 +356,9 @@
             <version>${shiro.version}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.apache.shiro</groupId>-->
-            <!--<artifactId>shiro-quartz</artifactId>-->
-            <!--<version>${shiro.version}</version>-->
+        <!--<groupId>org.apache.shiro</groupId>-->
+        <!--<artifactId>shiro-quartz</artifactId>-->
+        <!--<version>${shiro.version}</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.apache.shiro</groupId>
@@ -379,15 +379,15 @@
 
         <!-- 附加工具包 -->
         <!--<dependency>-->
-            <!--<groupId>org.reflections</groupId>-->
-            <!--<artifactId>reflections</artifactId>-->
-            <!--<version>0.9.10</version>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>com.google.code.findbugs</groupId>-->
-                    <!--<artifactId>annotations</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+        <!--<groupId>org.reflections</groupId>-->
+        <!--<artifactId>reflections</artifactId>-->
+        <!--<version>0.9.10</version>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<groupId>com.google.code.findbugs</groupId>-->
+        <!--<artifactId>annotations</artifactId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
         <!--</dependency>-->
 
         <!-- 添加连接池druid支持 -->

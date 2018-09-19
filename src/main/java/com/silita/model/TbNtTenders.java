@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -282,4 +284,9 @@ public class TbNtTenders {
      * 公告状态
      */
     private String  ntStatus;
+
+    /**
+     * 项目地区（前端要...）
+     */
+    private List<Map<String, Object>> countys;
 }

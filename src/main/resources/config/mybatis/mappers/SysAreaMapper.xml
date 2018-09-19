@@ -25,7 +25,6 @@
                 area_parent_id = #{areaParentId}
             </otherwise>
         </choose>
-
     </select>
 
     <select id="queryAreaName" parameterType="java.lang.String" resultType="java.lang.String">
@@ -128,4 +127,22 @@
         </if>
         )
     </insert>
+
+    <select id="getPkIdByAreaNameAndParentId" parameterType="String" resultType="String">
+      SELECT `pkid` FROM sys_area WHERE area_name = #{areaName} AND `area_parent_id` = (SELECT `pkid` FROM sys_area WHERE area_code = #{areaCode} AND area_level = 1)
+    </select>
+
+    <select id="listCodeAndNameByParentId" parameterType="String" resultType="Map">
+        SELECT area_name as areaName ,area_code as areaCode
+        FROM sys_area
+        WHERE
+        <choose>
+            <when test='_parameter != null and _parameter == "0"'>
+                area_level = 1
+            </when>
+            <otherwise>
+                area_parent_id = #{areaParentId}
+            </otherwise>
+        </choose>
+    </select>
 </mapper>

@@ -319,7 +319,7 @@
         (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
-        WHERE t1.nt_id = #{ntId}
+        WHERE t1.nt_id = #{ntId} AND t.is_enable = 1
         ORDER BY LENGTH(t1.`segment`) ASC, t1.`segment` ASC
     </select>
 
@@ -370,4 +370,8 @@
         updated = NOW()
         WHERE `nt_id` = #{ntId} AND `edit_code` = #{editCode}
     </update>
+
+    <select id="countNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultType="Integer">
+        SELECT COUNT(*) FROM ${tableName} WHERE nt_id = #{ntId}
+    </select>
 </mapper>

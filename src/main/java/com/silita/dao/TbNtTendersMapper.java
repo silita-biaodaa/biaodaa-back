@@ -65,4 +65,11 @@ public interface TbNtTendersMapper {
      * @return
      */
     Integer updateProTypeAndPbModeByNtIdAndEditCode(TbNtTenders tbNtTenders);
+
+    /**
+     * 根据公告pkid获取招标标段个数
+     * @param tbNtTenders
+     * @return
+     */
+    Integer countNtTendersByNtId(TbNtTenders tbNtTenders);
 }
