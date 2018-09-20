@@ -192,13 +192,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     public List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders) {
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         List<TbNtTenders> lists = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
-        //前端要
+        //前端要的特定数据
         if(null != lists && lists.size() > 0) {
             for (int i = 0; i < lists.size(); i++) {
                 TbNtTenders tbNtTenders1 = lists.get(i);
                 if(!StringUtils.isEmpty(tbNtTenders1.getCityCode())) {
+                    String code = tbNtTenders1.getCityCode();
                     SysArea sysArea = new SysArea();
-                    sysArea.setAreaName(tbNtTenders1.getCityCode());
+                    sysArea.setAreaName(code.substring(code.indexOf(":") + 1, code.length()));
                     sysArea.setAreaCode(tbNtTenders.getSource());
                     String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
                     tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
@@ -235,10 +236,11 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             tbNtTenders1.setFieldName(fieldName.substring(0, fieldName.lastIndexOf(",")));
             tbNtTenders1.setFieldValue(fieldValue.substring(0, fieldValue.lastIndexOf(",")));
         }
-        //前端要
+        //前端要的特定数据
         if(!StringUtils.isEmpty(tbNtTenders1.getCityCode())) {
+            String code = tbNtTenders1.getCityCode();
             SysArea sysArea = new SysArea();
-            sysArea.setAreaName(tbNtTenders1.getCityCode());
+            sysArea.setAreaName(code.substring(code.indexOf(":") + 1, code.length()));
             sysArea.setAreaCode(tbNtTenders.getSource());
             String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
             tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));

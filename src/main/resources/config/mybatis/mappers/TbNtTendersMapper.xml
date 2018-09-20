@@ -308,7 +308,7 @@
 
     <select id="listNtTendersByNtId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
         SELECT t1.pkid, t1.nt_id, t1.edit_code, t1.segment, t1.controll_sum,
-        t1.pro_sum, t1.nt_td_status, t1.pro_type, t1.pro_duration, t1.pb_mode,
+        t1.pro_sum, t1.nt_td_status, t1.pro_type, t1.pro_duration, CONCAT(t1.pb_mode, ':', (SELECT `name` FROM dic_common WHERE `code` = t1.pb_mode)) AS pb_mode,
         t1.cert_audit_addr, t1.filing_pfm, t1.enroll_addr, t1.opening_addr, t1.enroll_end_time,
         t1.bid_end_time, t1.bid_bonds, t1.bid_bonds_end_time, t1.keep_bonds, t1.other_bonds,
         t1.audit_time, t1.opening_person, t1.opening_file_fee, t1.other_fee, t1.tenderee,
@@ -316,7 +316,8 @@
         t1.social_security, t1.achievement, t1.enroll_method, t1.completion_time, t1.is_flow,
         t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
         t.biness_type, t.url,  t.title,  t.pub_date, t.source,
-        (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source, t.nt_status
+        CONCAT(t.city_code, ':', (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code)) AS city_code, CONCAT(t.county_code, ':', (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code)) AS county_code,
+        t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
         WHERE t1.nt_id = #{ntId} AND t.is_enable = 1
@@ -325,7 +326,7 @@
 
     <select id="getNtTendersByNtIdByPkId" parameterType="com.silita.model.TbNtTenders" resultMap="BaseResultMap">
         SELECT t1.pkid, t1.nt_id, t1.edit_code, t1.segment, t1.controll_sum,
-        t1.pro_sum, t1.nt_td_status, t1.pro_type, t1.pro_duration, t1.pb_mode,
+        t1.pro_sum, t1.nt_td_status, t1.pro_type, t1.pro_duration, CONCAT(t1.pb_mode, ':', (SELECT `name` FROM dic_common WHERE `code` = t1.pb_mode)) AS pb_mode,
         t1.cert_audit_addr, t1.filing_pfm, t1.enroll_addr, t1.opening_addr, t1.enroll_end_time,
         t1.bid_end_time, t1.bid_bonds, t1.bid_bonds_end_time, t1.keep_bonds, t1.other_bonds,
         t1.audit_time, t1.opening_person, t1.opening_file_fee, t1.other_fee, t1.tenderee,
@@ -333,7 +334,8 @@
         t1.social_security, t1.achievement, t1.enroll_method, t1.completion_time, t1.is_flow,
         t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
         t.biness_type, t.url,  t.title,  t.pub_date, t.source,
-        (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code, t.source, t.nt_status
+        CONCAT(t.city_code, ':', (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code)) AS city_code, CONCAT(t.county_code, ':', (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code)) AS county_code,
+        t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
         WHERE t1.nt_id = #{ntId} AND t1.pkid = #{pkid} AND t.is_enable = 1
