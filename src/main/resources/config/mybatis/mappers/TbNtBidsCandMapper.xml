@@ -72,4 +72,32 @@
         </foreach>
     </update>
 
+    <delete id="batchDeleteNtBidsCandByNtBidsId" parameterType="String">
+        DELETE FROM `tb_nt_bids_cand`
+        <where>
+            pkid IN
+            <foreach collection="array" open="(" close=")" separator="," item="ele">
+                #{ele}
+            </foreach>
+        </where>
+    </delete>
+
+    <select id="getNtBidsCandByNtBidsIdAndNumber" parameterType="com.silita.model.TbNtBidsCand" resultType="java.util.LinkedHashMap">
+        SELECT
+        <if test="number == '1' or number == 1">
+            `f_candidate` AS `f_candidateA`, `f_quote` AS `f_quoteA`, `f_pro_leader` AS `f_pro_leaderA`, `f_tech_leader` AS `f_tech_leaderA`, `f_builder` AS `f_builderA`,
+            `f_safety` AS `f_safetyA`, `f_quality` AS `f_qualityA`
+        </if>
+        <if test="number == '2' or number == 2">
+            `f_candidate` AS `f_candidateB`, `f_quote` AS `f_quoteB`, `f_pro_leader` AS `f_pro_leaderB`, `f_tech_leader` AS `f_tech_leaderB`, `f_builder` AS `f_builderB`,
+            `f_safety` AS `f_safetyB`, `f_quality` AS `f_qualityB`
+        </if>
+        <if test="number == '3' or number == 3">
+            `f_candidate` AS `f_candidateC`, `f_quote` AS `f_quoteC`, `f_pro_leader` AS `f_pro_leaderC`, `f_tech_leader` AS `f_tech_leaderC`, `f_builder` AS `f_builderC`,
+            `f_safety` AS `f_safetyC`, `f_quality` AS `f_qualityC`
+        </if>
+        FROM `tb_nt_bids_cand`
+        WHERE `nt_bids_id` = #{ntBidsId} AND `number` = #{number} LIMIT 1
+    </select>
+
 </mapper>

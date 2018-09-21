@@ -152,6 +152,21 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public String saveNtTenders(TbNtTenders tbNtTenders) {
+        if(tbNtTenders.getAuditTime().equals("Invalid date")) {
+            tbNtTenders.setAuditTime(null);
+        }
+        if( tbNtTenders.getCompletionTime().equals("Invalid date")) {
+            tbNtTenders.setCompletionTime(null);
+        }
+        if(tbNtTenders.getBidEndTime().equals("Invalid date")) {
+            tbNtTenders.setBidEndTime(null);
+        }
+        if(tbNtTenders.getEnrollEndTime().equals("Invalid date")) {
+            tbNtTenders.setEnrollEndTime(null);
+        }
+        if( tbNtTenders.getBidBondsEndTime().equals("Invalid date")) {
+            tbNtTenders.setBidBondsEndTime(null);
+        }
         String msg = "";
         //更新招标主表状态
         TbNtMian tbNtMian = new TbNtMian();
@@ -164,6 +179,9 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setCityCode(tbNtTenders.getCityCode());
         tbNtMian.setCountyCode(tbNtTenders.getCountyCode());
         tbNtMianMapper.updateNtMainByPkId(tbNtMian);
+        if (StringUtils.isEmpty(tbNtTenders.getSegment())) {
+            tbNtTenders.setSegment("1");
+        }
         //添加或更新标段信息
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);

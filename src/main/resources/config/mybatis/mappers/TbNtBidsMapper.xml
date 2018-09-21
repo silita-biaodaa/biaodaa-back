@@ -17,9 +17,19 @@
         <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
         <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
         <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="source" property="source" jdbcType="VARCHAR"/>
+
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="pub_date" property="pubDate" jdbcType="VARCHAR"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="county_code" property="countyCode" jdbcType="VARCHAR"/>
+        <result column="biness_type" property="binessType" jdbcType="VARCHAR"/>
+
+        <result column="city_code_name" property="cityCodeName" jdbcType="VARCHAR"/>
+        <result column="county_code_name" property="countyCodeName" jdbcType="VARCHAR"/>
         <!-- 中标候选人 -->
-        <collection property="roles" ofType="com.silita.model.TbNtBidsCand">
-            <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <collection property="bidsCands" ofType="com.silita.model.TbNtBidsCand">
+            <id column="c_pkid" property="pkid" jdbcType="VARCHAR"/>
             <result column="nt_id" property="ntId" jdbcType="VARCHAR"/>
             <result column="nt_bids_id" property="ntBidsId" jdbcType="VARCHAR"/>
             <result column="f_candidate" property="fCandidate" jdbcType="VARCHAR"/>
@@ -39,17 +49,17 @@
     </resultMap>
 
     <insert id="insertTbNtBids" parameterType="com.silita.model.TbNtBids">
-    INSERT INTO ${tableName}
-    (
-      `pkid`, `nt_id`, `edit_code`, `td_edit_code`, `segment`,
-      `controll_sum`, `pro_sum`, `pro_type`, `pro_duration`, `pb_mode`,
-      `create_by`, `created`
-    )
-    VALUES (
-      #{pkid}, #{ntId}, #{editCode}, #{tdEditCode}, #{segment},
-      #{controllSum}, #{proSum}, #{proType}, #{proDuration}, #{pbMode},
-      #{createBy}, NOW()
-    )
+      INSERT INTO ${tableName}
+      (
+        `pkid`, `nt_id`, `edit_code`, `td_edit_code`, `segment`,
+        `controll_sum`, `pro_sum`, `pro_type`, `pro_duration`, `pb_mode`,
+        `create_by`, `created`
+      )
+      VALUES (
+        #{pkid}, #{ntId}, #{editCode}, #{tdEditCode}, #{segment},
+        #{controllSum}, #{proSum}, #{proType}, #{proDuration}, #{pbMode},
+        #{createBy}, NOW()
+      )
   </insert>
 
     <update id="updateTbNtBidsByNtIdAndSegment" parameterType="com.silita.model.TbNtBids">
@@ -87,6 +97,28 @@
     </select>
 
     <select id="listNtBidsByNtId" parameterType="com.silita.model.TbNtBids" resultMap="BaseResultMap">
-      SELECT * FROM ${tableName} WHERE `nt_id` = #{ntId}
+      SELECT bids.pkid, bids.nt_id, bids.edit_code, bids.td_edit_code, bids.segment,
+      bids.controll_sum, bids.pro_sum, bids.pro_type, bids.pro_duration, bids.pb_mode,
+      bids.created, bids.create_by, bids.updated, bids.update_by, mian.title,
+      mian.title, mian.pub_date, mian.city_code, mian.county_code, mian.biness_type,
+      cand.pkid AS c_pkid, cand.f_candidate, cand.f_quote, cand.f_pro_leader, cand.f_tech_leader,
+      cand.f_builder, cand.f_safety, cand.f_quality, cand.number, cand.created,
+      cand.create_by, cand.updated, cand.update_by, cand.source, cand.nt_bids_id
+      FROM ${tableName} bids
+      LEFT JOIN tb_nt_mian_${source} mian ON bids.nt_id = mian.pkid
+      LEFT JOIN tb_nt_bids_cand cand ON bids.pkid = cand.nt_bids_id
+      <!-- LEFT JOIN tb_nt_tenders_${source} tend ON bids.td_edit_code = tend.edit_code -->
+      WHERE bids.`nt_id` = #{ntId} AND mian.is_enable = 1
     </select>
+
+    <delete id="deleteNtTendersByPkId" parameterType="Map">
+        DELETE FROM ${tableName}
+        <where>
+            pkid IN
+            <foreach collection="array" open="(" close=")" separator="," item="ele">
+                #{ele}
+            </foreach>
+        </where>
+    </delete>
+
 </mapper>

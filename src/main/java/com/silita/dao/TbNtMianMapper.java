@@ -15,11 +15,18 @@ public interface TbNtMianMapper {
     public List<Map<String, Object>> listNtMain(TbNtMian tbNtMian);
 
     /**
-     * 根据查询条件获取公告列表及标段
+     * 根据查询条件获取公告列表及招标标段
      * @param tbNtMian
      * @return
      */
     public List<LinkedHashMap<String, Object>> listTendersDetail(TbNtMian tbNtMian);
+
+    /**
+     * 根据查询条件获取公告列表及中标标段
+     * @param tbNtMian
+     * @return
+     */
+    public List<LinkedHashMap<String, Object>> listBidsDetail(TbNtMian tbNtMian);
 
     /**
      * 根据查询条件获取公告条数

@@ -99,7 +99,41 @@
         <if test="ntStatus !=null and ntStatus!=''">
             AND nt_status = #{ntStatus}
         </if>
-        ORDER BY pub_date DESC
+        ORDER BY main.pub_date DESC
+    </select>
+
+    <select id="listBidsDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
+        SELECT main.title, CONCAT(bids.segment, '标段') AS segment, main.pub_date, bids.controll_sum, bids.pro_sum,
+        bids.pro_duration, '计划竣工时间', (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code, bids.pb_mode,
+        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = bids.pro_type) AS pro_type, '资质', main.url, bids.pkid
+        FROM tb_nt_mian_${source} AS main
+        LEFT JOIN tb_nt_bids_${source} AS bids ON main.pkid = bids.nt_id
+        WHERE 1=1 AND main.is_enable = 1
+        <if test="proviceCode !=null and proviceCode!=''">
+            AND main.provice_code = #{proviceCode}
+        </if>
+        <if test="cityCode !=null and cityCode!=''">
+            AND main.city_code = #{cityCode}
+        </if>
+        <if test="countyCode !=null and countyCode!=''">
+            AND main.county_code = #{countyCode}
+        </if>
+        <if test="pubDate !=null and pubDate!=''">
+            AND main.pub_date &gt;= #{pubDate}
+        </if>
+        <if test="pubEndDate !=null and pubEndDate!=''">
+            AND main.pub_date &lt;= #{pubEndDate}
+        </if>
+        <if test="title !=null and title!=''">
+            AND main.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="ntCategory !=null and ntCategory!=''">
+            AND main.nt_category = #{ntCategory}
+        </if>
+        <if test="ntStatus !=null and ntStatus!=''">
+            AND nt_status = #{ntStatus}
+        </if>
+        ORDER BY main.pub_date DESC
     </select>
 
     <!--<delete id="deleteNtMainByPkId" parameterType="com.silita.model.TbNtMian">-->

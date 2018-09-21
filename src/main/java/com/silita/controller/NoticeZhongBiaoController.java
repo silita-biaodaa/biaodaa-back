@@ -5,6 +5,7 @@ import com.silita.controller.base.BaseController;
 import com.silita.model.TbNtBids;
 import com.silita.model.TbNtMian;
 import com.silita.service.INoticeZhongBiaoService;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +81,31 @@ public class NoticeZhongBiaoController extends BaseController {
     @ResponseBody
     public Map<String,Object> listTbNtBids(@RequestBody TbNtBids tbNtBids) {
         return super.successMap(noticeZhongBiaoService.listTbNtBidsByNtId(tbNtBids));
+    }
+
+    @RequestMapping(value = "/deleteTbNtBids",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> deleteTbNtBids(@RequestBody Map params) {
+        noticeZhongBiaoService.deleteTbNtBidsByPkId(params);
+        return super.successMap(null);
+    }
+
+    @RequestMapping(value = "/exportBidsDetail",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public void exportBidsDetail(@RequestBody TbNtMian tbNtMian, HttpServletResponse response) {
+        try{
+            HSSFWorkbook work = noticeZhongBiaoService.listBids(tbNtMian);
+            response.setContentType("application/octet-stream;charset=ISO8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename="+ System.currentTimeMillis());
+            response.addHeader("Pargam", "no-cache");
+            response.addHeader("Cache-Control", "no-cache");
+            OutputStream out=response.getOutputStream();
+            work.write(out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

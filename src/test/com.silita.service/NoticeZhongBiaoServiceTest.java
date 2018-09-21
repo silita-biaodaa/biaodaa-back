@@ -91,7 +91,7 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
     @Test
     public void testController5()throws Exception {
         String requestBody = "{\n" +
-                "\"ntId\":\"1\", \"tdEditCode\":\"td153629015755017\", \"segment\":\"1\", \"controllSum\":200, \"proSum\":210, \"proType\":\"3\", \"proDuration\":\"666\", \"pbMode\":\"中标更新评标办法\", \"cityCode\":\"ceshi\", \"countyCode\":\"ceshi\", \"source\":\"hunan\", \"binessType\":\"02\",\n" +
+                "\"ntId\":\"2\", \"tdEditCode\":\"td153629015755017\", \"segment\":\"1\", \"controllSum\":200, \"proSum\":210, \"proType\":\"3\", \"proDuration\":\"666\", \"pbMode\":\"中标更新评标办法\", \"cityCode\":\"ceshi\", \"countyCode\":\"ceshi\", \"source\":\"hunan\", \"binessType\":\"02\",\n" +
                 "\"bidsCands\":\n" +
                 "\t\t\t[\n" +
                 "\t\t\t\t{\"ntId\":\"123456\",\"fCandidate\":\"测试中标候选人1\",\"fQuote\":310,\"fProLeader\":\"测试项目负责人1\",\"fTechLeader\":\"测试技术负责人1\"\n" +
@@ -112,5 +112,32 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
         System.out.println("-----返回的json = " + responseString);
     }
 
+    @Test
+    public void testController6()throws Exception{
+        String requestBody = "{\"ntId\":\"2\", \"source\":\"hunan\"}";
+        String responseString = mockMvc.perform(post("/zhongbiao/listTbNtBids").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController7()throws Exception{
+        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"2\", \"title\":\"中标公告\"}";
+        String responseString = mockMvc.perform(post("/zhongbiao/exporZhongBiaoDetail").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
 
 }

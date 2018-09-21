@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -127,10 +128,35 @@ public class TbNtBids {
      */
     private String binessType;
 
+    /**
+     * 公告url
+     */
+    private String url;
+
     //资质要求
 
     /**
      * 中标候选人
      */
     private List<TbNtBidsCand> bidsCands;
+
+    /**
+     * 项目地区（前端要...）
+     */
+    private List<Map<String, Object>> countys;
+
+    /**
+     * 评标办法name（前端要...）
+     */
+    private String pbModeName;
+
+    /**
+     * 城市name（前端要...）
+     */
+    private String cityCodeName;
+
+    /**
+     * 先区name（前端要...）
+     */
+    private String countyCodeName;
 }

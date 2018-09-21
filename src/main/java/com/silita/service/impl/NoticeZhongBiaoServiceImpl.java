@@ -5,8 +5,13 @@ import com.silita.model.*;
 import com.silita.service.INoticeZhongBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -158,10 +163,16 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         tbNtTenders.setSource(tbNtBids.getSource());
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtBids.getSource()));
         tbNtTendersMapper.updateProTypeAndPbModeByNtIdAndEditCode(tbNtTenders);
+        if (StringUtils.isEmpty(tbNtTenders.getSegment())) {
+            tbNtBids.setSegment("1");
+        }
         //中标标段
         tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
         Integer count = tbNtBidsMapper.countNtBidsByNtIdAndSegment(tbNtBids);
         if(count == 0) {
+            tbNtMian.setNtStatus("1");
+            //公告状态改为未审核
+            tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
             //添加中标标段基本信息
             tbNtBids.setPkid(DataHandlingUtil.getUUID());
             tbNtBids.setEditCode("td" + System.currentTimeMillis() + DataHandlingUtil.getNumberRandom(2));
@@ -192,7 +203,86 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
 
     @Override
     public List<TbNtBids> listTbNtBidsByNtId(TbNtBids tbNtBids) {
+        tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
         return tbNtBidsMapper.listNtBidsByNtId(tbNtBids);
+    }
+
+    @Override
+    public void deleteTbNtBidsByPkId(Map params) {
+        String idStr = (String) params.get("idsStr");
+        String source = (String) params.get("source");
+        String tableName = DataHandlingUtil.SplicingTable(TbNtBids.class, source);
+        String[] ids = idStr.split("\\|");
+        Set set = new HashSet<String>();
+        for (String id : ids) {
+            set.add(id);
+        }
+        if (set != null && set.size() > 0) {
+            //删除编辑明细
+            tbNtBidsMapper.batchDeleteNtBidsByPkId(tableName, set.toArray());
+            //删除中标候选人
+            tbNtBidsCandMapper.batchDeleteNtBidsCandByNtBidsId(set.toArray());
+        }
+    }
+
+    @Override
+    public HSSFWorkbook listBids(TbNtMian tbNtMian) {
+        int indexRow = 0;
+        HSSFWorkbook wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet();
+        HSSFRow row = sheet.createRow(indexRow++);
+        String[] headers = {
+                "项目名称", "标段", "公示时间", "招标控制价", "项目金额",
+                "项目工期", "计划竣工时间", "项目地区", "项目县市", "评标办法",
+                "招标类型", "项目类型", "资质要求", "单位名称(1)", "报价(1)",
+                "项目负责人(1)", "技术负责人(1)", "施工员(1)", "安全员(1)",
+                "质量员(1)", "单位名称(2)", "报价(2)",  "项目负责人(2)", "技术负责人(2)",
+                "施工员(2)", "安全员(2)", "质量员(2)","单位名称(3)", "报价(3)",
+                "项目负责人(3)", "技术负责人(3)", "施工员(3)", "安全员(3)",
+                "质量员(3)"
+        };
+        //创建标题
+        for (int i = 0; i < headers.length; i++) {
+            row.createCell(i).setCellValue(headers[i]);
+        }
+        List<LinkedHashMap<String, Object>> details = tbNtMianMapper.listBidsDetail(tbNtMian);
+        //一行数据
+        for (int i = 0; i < details.size(); i++) {
+            int indexCell = 0;
+            row = sheet.createRow(indexRow++);
+            Map<String, Object> detail = details.get(i);
+            String ntBidsId = String.valueOf(detail.get("pkid"));
+            detail.remove("pkid");
+            //拼接3个中标候选人数据（太机智了）
+            for (int j = 1; j < 4; j++) {
+                TbNtBidsCand tbNtBidsCand = new TbNtBidsCand();
+                tbNtBidsCand.setNtBidsId(ntBidsId);
+                tbNtBidsCand.setNumber(j);
+                LinkedHashMap<String, Object> temp = tbNtBidsCandMapper.getNtBidsCandByNtBidsIdAndNumber(tbNtBidsCand);
+                if(temp == null) {
+                    for (int k = 1; k <= 7; k++) {
+                        detail.put("fill_" + j + "_" + k, "");
+                    }
+                } else {
+                    detail.putAll(temp);
+                }
+            }
+            //一列数据
+            for (Map.Entry<String, Object> entry : detail.entrySet()) {
+                if (!entry.getKey().equals("url")) {
+                    HSSFCell cell = row.createCell(indexCell++);
+                    //标题要带超链接
+                    if (entry.getKey().equals("title")) {
+                        cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
+//                        cell.setCellStyle(linkStyle);
+                    } else {
+                        cell.setCellValue(String.valueOf(entry.getValue()));
+                    }
+                }
+            }
+            row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title")) + "\")");
+        }
+        return wb;
     }
 
 }

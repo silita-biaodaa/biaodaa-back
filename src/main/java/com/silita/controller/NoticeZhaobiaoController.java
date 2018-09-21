@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -70,16 +69,20 @@ public class NoticeZhaobiaoController extends BaseController {
 
     @RequestMapping(value = "/exportTendersExcel",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
-    public void listTendersDetail(@RequestBody TbNtMian tbNtMian, HttpServletResponse response) throws IOException {
-        HSSFWorkbook work = noticeZhaoBiaoService.listTendersDetail(tbNtMian);
-        response.setContentType("application/octet-stream;charset=ISO8859-1");
-        response.setHeader("Content-Disposition", "attachment;filename="+ System.currentTimeMillis());
-        response.addHeader("Pargam", "no-cache");
-        response.addHeader("Cache-Control", "no-cache");
-        OutputStream out=response.getOutputStream();
-        work.write(out);
-        out.flush();
-        out.close();
+    public void listTendersDetail(@RequestBody TbNtMian tbNtMian, HttpServletResponse response) {
+        try {
+            HSSFWorkbook work = noticeZhaoBiaoService.listTendersDetail(tbNtMian);
+            response.setContentType("application/octet-stream;charset=ISO8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename="+ System.currentTimeMillis());
+            response.addHeader("Pargam", "no-cache");
+            response.addHeader("Cache-Control", "no-cache");
+            OutputStream out=response.getOutputStream();
+            work.write(out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping(value = "/updateNtMainStatus",method = RequestMethod.POST,produces="application/json;charset=utf-8")

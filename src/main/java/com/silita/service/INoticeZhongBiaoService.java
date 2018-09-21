@@ -4,6 +4,7 @@ import com.silita.model.SysFiles;
 import com.silita.model.TbNtBids;
 import com.silita.model.TbNtMian;
 import com.silita.model.TbNtTenders;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.util.List;
 import java.util.Map;
@@ -57,5 +58,18 @@ public interface INoticeZhongBiaoService {
      * @return
      */
     List<TbNtBids> listTbNtBidsByNtId(TbNtBids tbNtBids);
+
+    /**
+     * 根据标段pkid 批量删除中标编辑明显
+     * @param params
+     */
+    void deleteTbNtBidsByPkId(Map params);
+
+    /**
+     * 导出中标编辑明细
+     * @param tbNtMian
+     * @return
+     */
+    HSSFWorkbook listBids(TbNtMian tbNtMian);
 
 }
