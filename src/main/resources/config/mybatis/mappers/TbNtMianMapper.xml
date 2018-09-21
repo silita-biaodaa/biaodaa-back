@@ -122,7 +122,7 @@
        WHERE pkid = #{pkid}
     </update>
 
-    <update id="updateNtMainCategoryAndStatusByPkId" parameterType="com.silita.model.TbNtMian">
+    <update id="updateCategoryAndStatusByPkId" parameterType="com.silita.model.TbNtMian">
         UPDATE ${tableName} SET
         <if test="ntCategory !=null and ntCategory!=''">
             `nt_category` = #{ntCategory},
@@ -166,6 +166,28 @@
 
     <select id="getNtCategoryByPkId" parameterType="com.silita.model.TbNtMian" resultType="String">
         SELECT nt_category AS ntCategory
+        FROM ${tableName}
+        WHERE pkid = #{pkid}
+    </select>
+
+    <update id="updateSegCountByPkid" parameterType="com.silita.model.TbNtMian">
+        UPDATE ${tableName} SET
+        <choose>
+            <when test="segCount != null and segCount == 1">
+                `seg_count` = `seg_count` + 1,
+            </when>
+            <when test="segCount != null">
+                `seg_count` = `seg_count` - #{segCount},
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        `updated` = NOW()
+        WHERE pkid = #{pkid}
+    </update>
+
+    <select id="getSegCountByPkId" parameterType="com.silita.model.TbNtMian" resultType="Integer">
+        SELECT seg_count AS segCount
         FROM ${tableName}
         WHERE pkid = #{pkid}
     </select>

@@ -38,7 +38,7 @@ public interface TbNtMianMapper {
      * 根据主键更新公告状态（0：新建；1：已编辑；2：已审核）、类型（公告类目（大类）：1：招标；2：中标）
      * @param tbNtMian
      */
-    public void updateNtMainCategoryAndStatusByPkId(TbNtMian tbNtMian);
+    public void updateCategoryAndStatusByPkId(TbNtMian tbNtMian);
 
     /**
      * 根据主键更新 公告类型（0：新建；1：已编辑；2：已审核）、类型（公告类目（大类）：1：招标；2：中标） 公告类型（小类）
@@ -48,9 +48,23 @@ public interface TbNtMianMapper {
     public void updateNtMainByPkId(TbNtMian tbNtMian);
 
     /**
-     * 根据公告类目（大类）：1：招标；2：中标 获取pkid
+     * 根据pkid获取 公告类目（大类）：1：招标；2：中标
      * @param tbNtMian
      * @return
      */
     public String getNtCategoryByPkId(TbNtMian tbNtMian);
+
+    /**
+     * 更新公告标段个数
+     * @param tbNtMian
+     */
+    public void updateSegCountByPkid(TbNtMian tbNtMian);
+
+    /**
+     * 根据pkid获取 标段个数
+     * @param tbNtMian
+     * @return
+     */
+    public Integer getSegCountByPkId(TbNtMian tbNtMian);
+
 }

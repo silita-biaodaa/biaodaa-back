@@ -48,7 +48,7 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController2()throws Exception{
-        String requestBody = "{\"idsStr\":\"d52aad232faa44608d5367de81658bbb\", \"source\":\"hunan\"}";
+        String requestBody = "{\"idsStr\":\"41311819ab2e41b88d080e57d739429b|9606d89605bd4351bd72ce92d4bb8950|d52aad232faa44608d5367de81658c36\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhongbiao/deleteNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

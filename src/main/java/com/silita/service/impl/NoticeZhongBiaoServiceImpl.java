@@ -73,10 +73,28 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             set.add(id);
         }
         if (set != null && set.size() > 0) {
-            // 1、 删除变更信息
+            TbNtTenders tbNtTenders = new TbNtTenders();
+            tbNtTenders.setPkid(ids[0]);
+            tbNtTenders.setSource(source);
+            tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+            //获取公告pkid用于判断公共是否还有标段信息
+            String ntId = tbNtTendersMapper.getNtIdByNtId(tbNtTenders);
+            // 1、删除变更信息
             tbNtChangeMapper.deleteTbNtChangeByNtEditId(set.toArray());
-            // 2、删除编辑明细
+            // 2、删除招标编辑明细
             tbNtTendersMapper.deleteNtTendersByPkId(tableName, set.toArray());
+            // 3、获取招标编辑明细个数
+            tbNtTenders.setNtId(ntId);
+            Integer count = tbNtTendersMapper.countNtTendersByNtId(tbNtTenders);
+            if(count == 0) {
+                TbNtMian tbNtMian = new TbNtMian();
+                tbNtMian.setPkid(ntId);
+                tbNtMian.setNtStatus("0");
+                tbNtMian.setSource(source);
+                tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+                //更新公告状态为 新建
+                tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
+            }
         }
     }
 

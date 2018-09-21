@@ -289,4 +289,19 @@ public class TbNtTenders {
      * 项目地区（前端要...）
      */
     private List<Map<String, Object>> countys;
+
+    /**
+     * 评标办法name（前端要...）
+     */
+    private String pbModeName;
+
+    /**
+     * 城市name（前端要...）
+     */
+    private String cityCodeName;
+
+    /**
+     * 先区name（前端要...）
+     */
+    private String countyCodeName;
 }

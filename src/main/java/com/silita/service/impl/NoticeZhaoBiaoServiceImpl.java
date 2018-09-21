@@ -123,7 +123,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 if (!entry.getKey().equals("url")) {
                     HSSFCell cell = row.createCell(indexCell++);
                     //标题要带超链接
-                    if(entry.getKey().equals("title")) {
+                    if (entry.getKey().equals("title")) {
                         cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
 //                        cell.setCellStyle(linkStyle);
                     } else {
@@ -131,7 +131,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                     }
                 }
             }
-            row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title"))+ "\")");
+            row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title")) + "\")");
         }
         return wb;
     }
@@ -139,8 +139,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public void updateNtMainStatus(TbNtMian tbNtMian) {
         tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
-        //更新公共状态
-        tbNtMianMapper.updateNtMainCategoryAndStatusByPkId(tbNtMian);
+        //更新公告状态
+        tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
         TbNtAssociateGp tbNtAssociateGp = new TbNtAssociateGp();
         tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(tbNtAssociateGp.getClass(), tbNtMian.getSource()));
         tbNtAssociateGp.setNtId(tbNtMian.getPkid());
@@ -164,19 +164,18 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtMian.setCityCode(tbNtTenders.getCityCode());
         tbNtMian.setCountyCode(tbNtTenders.getCountyCode());
         tbNtMianMapper.updateNtMainByPkId(tbNtMian);
-        if (StringUtils.isEmpty(tbNtTenders.getSegment())) {
-            tbNtTenders.setSegment("1");
-        }
-        //添加标段
+        //添加或更新标段信息
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
         if (count == 0) {
-            //更新公告状态
             tbNtMian.setNtStatus("1");
-            tbNtMianMapper.updateNtMainCategoryAndStatusByPkId(tbNtMian);
+            //公告状态改为未审核
+            tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
+//            公告标段数+1
+//            tbNtTenders.setSegment("1");
+//            tbNtMianMapper.updateSegCountByPkid(tbNtMian);
 
             tbNtTenders.setPkid(DataHandlingUtil.getUUID());
-            //编辑明细编码（''td''+yyyymmddHH24MMss+随机数2位）
             tbNtTenders.setEditCode("td" + System.currentTimeMillis() + DataHandlingUtil.getNumberRandom(2));
             tbNtTendersMapper.insertNtTenders(tbNtTenders);
             msg = "添加标段信息成功！";
@@ -193,13 +192,12 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         List<TbNtTenders> lists = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
         //前端要的特定数据
-        if(null != lists && lists.size() > 0) {
+        if (null != lists && lists.size() > 0) {
             for (int i = 0; i < lists.size(); i++) {
                 TbNtTenders tbNtTenders1 = lists.get(i);
-                if(!StringUtils.isEmpty(tbNtTenders1.getCityCode())) {
-                    String code = tbNtTenders1.getCityCode();
+                if (!StringUtils.isEmpty(tbNtTenders1.getCityCodeName())) {
                     SysArea sysArea = new SysArea();
-                    sysArea.setAreaName(code.substring(code.indexOf(":") + 1, code.length()));
+                    sysArea.setAreaName(tbNtTenders1.getCityCodeName());
                     sysArea.setAreaCode(tbNtTenders.getSource());
                     String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
                     tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
@@ -219,10 +217,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
         StringBuilder sb1 = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
-        if(fields != null && fields.size() > 0) {
+        if (fields != null && fields.size() > 0) {
             Map<String, String> field = new HashMap();
             for (Map<String, Object> map : fields) {
-                field.put((String)map.get("field_name"), (String)map.get("field_value"));
+                field.put((String) map.get("field_name"), (String) map.get("field_value"));
             }
             for (Map.Entry<String, String> entry : field.entrySet()) {
                 sb1.append(entry.getKey()).append(",");
@@ -232,15 +230,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         TbNtTenders tbNtTenders1 = tbNtTendersMapper.getNtTendersByNtIdByPkId(tbNtTenders);
         String fieldName = sb1.toString();
         String fieldValue = sb2.toString();
-        if(!StringUtils.isEmpty(fieldName) && !StringUtils.isEmpty(fieldValue)) {
+        if (!StringUtils.isEmpty(fieldName) && !StringUtils.isEmpty(fieldValue)) {
             tbNtTenders1.setFieldName(fieldName.substring(0, fieldName.lastIndexOf(",")));
             tbNtTenders1.setFieldValue(fieldValue.substring(0, fieldValue.lastIndexOf(",")));
         }
         //前端要的特定数据
-        if(!StringUtils.isEmpty(tbNtTenders1.getCityCode())) {
-            String code = tbNtTenders1.getCityCode();
+        if (!StringUtils.isEmpty(tbNtTenders1.getCityCodeName())) {
             SysArea sysArea = new SysArea();
-            sysArea.setAreaName(code.substring(code.indexOf(":") + 1, code.length()));
+            sysArea.setAreaName(tbNtTenders1.getCityCodeName());
             sysArea.setAreaCode(tbNtTenders.getSource());
             String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
             tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
@@ -260,10 +257,28 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             set.add(id);
         }
         if (set != null && set.size() > 0) {
+            TbNtTenders tbNtTenders = new TbNtTenders();
+            tbNtTenders.setPkid(ids[0]);
+            tbNtTenders.setSource(source);
+            tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+            //获取公告pkid用于判断公共是否还有标段信息
+            String ntId = tbNtTendersMapper.getNtIdByNtId(tbNtTenders);
             //删除变更信息
             tbNtChangeMapper.deleteTbNtChangeByNtEditId(set.toArray());
             //删除编辑明细
             tbNtTendersMapper.deleteNtTendersByPkId(tableName, set.toArray());
+            //获取招标编辑明细个数
+            tbNtTenders.setNtId(ntId);
+            Integer count = tbNtTendersMapper.countNtTendersByNtId(tbNtTenders);
+            if(count == 0) {
+                TbNtMian tbNtMian = new TbNtMian();
+                tbNtMian.setPkid(ntId);
+                tbNtMian.setNtStatus("0");
+                tbNtMian.setSource(source);
+                tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+                //更新公告状态为 新建
+                tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
+            }
         }
     }
 
@@ -272,8 +287,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     public void saveTbNtChange(TbNtChange tbNtChange) {
 //        Integer count = tbNtChangeMapper.countTbNtChangeByNtIdAndNtEditIdAndfieldName(tbNtChange);
 //        if(count == 0) {
-            tbNtChange.setPkid(DataHandlingUtil.getUUID());
-            tbNtChangeMapper.insertTbNtChange(tbNtChange);
+        tbNtChange.setPkid(DataHandlingUtil.getUUID());
+        tbNtChangeMapper.insertTbNtChange(tbNtChange);
 //        } else {
 //            tbNtChangeMapper.updateTbNtChangeByNtIdAndNtEditId(tbNtChange);
 //        }

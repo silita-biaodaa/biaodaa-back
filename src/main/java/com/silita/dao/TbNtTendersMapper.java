@@ -72,4 +72,11 @@ public interface TbNtTendersMapper {
      * @return
      */
     Integer countNtTendersByNtId(TbNtTenders tbNtTenders);
+
+    /**
+     * 根据标段pkid获取公告pkid
+     * @param tbNtTenders
+     * @return
+     */
+    String getNtIdByNtId(TbNtTenders tbNtTenders);
 }
