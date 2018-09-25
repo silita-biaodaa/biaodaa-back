@@ -164,7 +164,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController9()throws Exception{
-        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"1\", \"title\":\"招标\", \"ntStatus\":\"3\"}";
+        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"1\", \"title\":\"招标\", \"ntStatus\":\"1\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/exportTendersExcel").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -220,7 +220,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController12()throws Exception{
-        String requestBody = "{\"ntId\":\"1\", \"ntEditId\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"ntCategory\":\"1\", \"source\":\"hunan\", \"fieldFrom\":\"测试评标办法\", " +
+        String requestBody = "{\"ntId\":\"4\", \"ntEditId\":\"2d6555a2b41f49a3b14b246be963fe26\", \"ntCategory\":\"1\", \"source\":\"hunan\", \"fieldFrom\":\"测试评标办法\", " +
                 "\"fieldName\":\"pbMode\", \"fieldValue\":\"更新时，一起修改的\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/insertTbNtChange").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -15,7 +15,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -48,7 +47,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Autowired
     TbNtTextHunanMapper tbNtTextHunanMapper;
 
-    SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     @Override
     @Cacheable(value = "TwfDictNameCache")
@@ -121,8 +120,37 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             int indexCell = 0;
             row = sheet.createRow(indexRow++);
             Map<String, Object> detail = details.get(i);
+
+            //获取标段最新的、不重复的变更信息
+            TbNtChange tbNtChange = new TbNtChange();
+            tbNtChange.setNtId(String.valueOf(detail.get("nt_id")));
+            tbNtChange.setNtEditId(String.valueOf(detail.get("pkid")));
+            List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+            Map<String, String> field = new HashMap();
+            if (fields != null && fields.size() > 0) {
+                for (Map<String, Object> map : fields) {
+                    field.put(com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name"))), String.valueOf(map.get("field_value")));
+                }
+            }
+            detail.remove("pkid");
+            detail.remove("nt_id");
             //一列数据
             for (Map.Entry<String, Object> entry : detail.entrySet()) {
+                //替换变更后的值
+                if(field.size() > 0) {
+                    for (Map.Entry<String, String> temp : field.entrySet()) {
+                        String tempKey = temp.getKey();
+//                        if("biness_type".equals(tempKey)) {
+//                        } else if("pro_type".equals(tempKey)) {
+//                        }else if("filing_pfm".equals(tempKey)) {
+//                        }else if("nt_type".equals(tempKey)) {
+//                        }
+                        String tempValue = temp.getValue();
+                        if(tempKey.equals(entry.getKey())) {
+                            entry.setValue(tempValue);
+                        }
+                    }
+                }
                 if (!entry.getKey().equals("url")) {
                     HSSFCell cell = row.createCell(indexCell++);
                     //标题要带超链接

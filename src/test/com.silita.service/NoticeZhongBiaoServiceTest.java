@@ -140,4 +140,18 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
         System.out.println("-----返回的json = " + responseString);
     }
 
+    @Test
+    public void testController8()throws Exception{
+        String requestBody = "{\"ntId\":\"2\", \"ntEditId\":\"e3ec36b503d1484cbd9f8c3a456a44f4\", \"ntCategory\":\"2\", \"source\":\"hunan\", \"fieldFrom\":\"200\", " +
+                "\"fieldName\":\"controllSum\", \"fieldValue\":\"300\"}";
+        String responseString = mockMvc.perform(post("/zhongbiao/insertTbNtChange").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
 }

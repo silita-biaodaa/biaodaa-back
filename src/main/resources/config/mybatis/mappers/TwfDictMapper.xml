@@ -5,4 +5,8 @@
   <select id="listTwfDictNameByType" parameterType="Integer" resultType="Map">
     SELECT `name`, `code` AS `value` FROM twf_dict WHERE `type` = #{type}
   </select>
+
+  <select id="getNameByCodeAndType" parameterType="com.silita.model.TwfDict">
+    SELECT `name` FROM twf_dict WHERE `type` = #{type} AND code = #{code}
+  </select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.silita.dao;
 
+import com.silita.model.TwfDict;
+
 import java.util.List;
 import java.util.Map;
 
@@ -10,4 +12,11 @@ public interface TwfDictMapper {
      * @return
      */
     public List<Map<String, Object>> listTwfDictNameByType(Integer type);
+
+    /**
+     * 根据code\type获取名称
+     * @param twfDict
+     * @return
+     */
+    public String getNameByCodeAndType(TwfDict twfDict);
 }

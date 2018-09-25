@@ -11,6 +11,7 @@
         <result column="field_from" property="fieldFrom" jdbcType="VARCHAR"/>
         <result column="field_name" property="fieldName" jdbcType="VARCHAR"/>
         <result column="field_value" property="fieldValue" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="VARCHAR"/>
         <result column="created" property="created" jdbcType="TIMESTAMP"/>
         <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
         <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
@@ -22,11 +23,13 @@
         INSERT INTO
         tb_nt_change (
           `pkid`, `nt_id`, `nt_edit_id`, `nt_category`, `source`,
-          `field_from`, `field_name`, `field_value`, `create_by`, `created`
+          `field_from`, `field_name`, `field_value`, `number`, `create_by`,
+          `created`
         )
         VALUES (
           #{pkid}, #{ntId}, #{ntEditId}, #{ntCategory}, #{source},
-          #{fieldFrom}, #{fieldName}, #{fieldValue}, #{createBy}, NOW()
+          #{fieldFrom}, #{fieldName}, #{fieldValue}, #{number}, #{createBy},
+          NOW()
         )
     </insert>
 
@@ -53,6 +56,9 @@
         <if test="fieldValue !=null and fieldValue!=''">
             `field_value` = #{fieldValue},
         </if>
+        <if test="number !=null and number!=''">
+            `number` = #{number},
+        </if>
         <if test="updateBy !=null and updateBy!=''">
             `update_by` = #{updateBy},
         </if>
@@ -76,6 +82,9 @@
         </if>
         <if test="fieldValue !=null and fieldValue!=''">
             `field_value` = #{fieldValue},
+        </if>
+        <if test="number !=null and number!=''">
+            `number` = #{number},
         </if>
         <if test="updateBy !=null and updateBy!=''">
             `update_by` = #{updateBy},
@@ -104,6 +113,9 @@
         SELECT `field_name`, `field_value`
         FROM tb_nt_change
         WHERE `nt_edit_id` = #{ntEditId} AND `nt_id` = #{ntId}
+        <if test="number !=null and number!=''">
+            AND `number` = #{number},
+        </if>
         ORDER BY created ASC
     </select>
 </mapper>
