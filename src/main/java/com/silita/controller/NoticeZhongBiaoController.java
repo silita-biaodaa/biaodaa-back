@@ -3,6 +3,7 @@ package com.silita.controller;
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.model.TbNtBids;
+import com.silita.model.TbNtChange;
 import com.silita.model.TbNtMian;
 import com.silita.service.INoticeZhongBiaoService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -62,7 +63,6 @@ public class NoticeZhongBiaoController extends BaseController {
     @RequestMapping(value = "/saveTbNtBids",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> saveTbNtBids(@RequestBody TbNtBids tbNtBids, ServletRequest request) {
-        System.out.println(tbNtBids.toString());
         Map result = new HashMap<String,Object>();
         result.put("code", 1);
         try{
@@ -106,6 +106,15 @@ public class NoticeZhongBiaoController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @RequestMapping(value = "/insertTbNtChange", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> insertTbNtChange(@RequestBody TbNtChange tbNtChange, ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        tbNtChange.setCreateBy(userName);
+        noticeZhongBiaoService.saveTbNtChange(tbNtChange);
+        return successMap(null);
     }
 
 }

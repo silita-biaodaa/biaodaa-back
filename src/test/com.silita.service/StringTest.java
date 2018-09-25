@@ -1,6 +1,8 @@
 package com.silita.service;
 
-import com.silita.utils.stringUtils.StringUtils;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -9,7 +11,7 @@ import com.silita.utils.stringUtils.StringUtils;
  * Date: 2018-08-10 16:21
  */
 public class StringTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
 //        System.out.println(DataHandlingUtil.getTimeStamp());
 //        System.out.println(DataHandlingUtil.getTimeStamp().length());
 //
@@ -17,10 +19,22 @@ public class StringTest {
 //        System.out.println((DataHandlingUtil.getTimeStamp() + "_" + DataHandlingUtil.getNumberRandom(4)).length());
 
 
-        String str = StringUtils.HumpToUnderline("pbMode");
-        System.out.println(str);
+//        String str = StringUtils.HumpToUnderline("pbMode");
+//        System.out.println(str);
+//
+//        String str2 = StringUtils.UnderlineToHump("pb_mode");
+//        System.out.println(str2);
 
-        String str2 = StringUtils.UnderlineToHump("pb_mode");
-        System.out.println(str2);
-}
+//        String str = "0000-00-00 00:00:00";
+        String str = "2018-09-25 11:15:18.0";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = simpleDateFormat.parse(str);
+        long ts = date.getTime();
+        System.out.println(ts);
+
+//        String str = "1537845318000";
+//        SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String completionTime = simple.format(new Date(Long.parseLong(str)));
+//        System.out.println(completionTime);
+    }
 }

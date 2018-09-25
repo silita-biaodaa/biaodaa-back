@@ -49,6 +49,11 @@ public class TbNtChange {
     private String fieldValue;
 
     /**
+     * 中标候选人序号
+     */
+    private Integer number;
+
+    /**
      * 创建时间
      */
     private Date created;

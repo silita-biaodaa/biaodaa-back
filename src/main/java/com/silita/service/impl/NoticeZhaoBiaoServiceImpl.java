@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -46,6 +47,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtAssociateGpMapper tbNtAssociateGpMapper;
     @Autowired
     TbNtTextHunanMapper tbNtTextHunanMapper;
+
+    SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     @Cacheable(value = "TwfDictNameCache")
@@ -152,21 +155,6 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public String saveNtTenders(TbNtTenders tbNtTenders) {
-        if(tbNtTenders.getAuditTime().equals("Invalid date")) {
-            tbNtTenders.setAuditTime(null);
-        }
-        if( tbNtTenders.getCompletionTime().equals("Invalid date")) {
-            tbNtTenders.setCompletionTime(null);
-        }
-        if(tbNtTenders.getBidEndTime().equals("Invalid date")) {
-            tbNtTenders.setBidEndTime(null);
-        }
-        if(tbNtTenders.getEnrollEndTime().equals("Invalid date")) {
-            tbNtTenders.setEnrollEndTime(null);
-        }
-        if( tbNtTenders.getBidBondsEndTime().equals("Invalid date")) {
-            tbNtTenders.setBidBondsEndTime(null);
-        }
         String msg = "";
         //更新招标主表状态
         TbNtMian tbNtMian = new TbNtMian();
@@ -209,17 +197,21 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     public List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders) {
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         List<TbNtTenders> lists = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
-        //前端要的特定数据
         if (null != lists && lists.size() > 0) {
-            for (int i = 0; i < lists.size(); i++) {
-                TbNtTenders tbNtTenders1 = lists.get(i);
-                if (!StringUtils.isEmpty(tbNtTenders1.getCityCodeName())) {
-                    SysArea sysArea = new SysArea();
-                    sysArea.setAreaName(tbNtTenders1.getCityCodeName());
-                    sysArea.setAreaCode(tbNtTenders.getSource());
-                    String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
-                    tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
+            try {
+                for (int i = 0; i < lists.size(); i++) {
+                    TbNtTenders tbNtTenders1 = lists.get(i);
+                    //前端要的特定数据
+                    if (!StringUtils.isEmpty(tbNtTenders1.getCityCodeName())) {
+                        SysArea sysArea = new SysArea();
+                        sysArea.setAreaName(tbNtTenders1.getCityCodeName());
+                        sysArea.setAreaCode(tbNtTenders.getSource());
+                        String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
+                        tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
+                    }
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return lists;
@@ -288,7 +280,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             //获取招标编辑明细个数
             tbNtTenders.setNtId(ntId);
             Integer count = tbNtTendersMapper.countNtTendersByNtId(tbNtTenders);
-            if(count == 0) {
+            if (count == 0) {
                 TbNtMian tbNtMian = new TbNtMian();
                 tbNtMian.setPkid(ntId);
                 tbNtMian.setNtStatus("0");

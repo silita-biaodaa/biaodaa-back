@@ -90,12 +90,12 @@ public class TbNtTenders {
     /**
      * 报名截止时间
      */
-    private String enrollEndTime;
+    private Date enrollEndTime;
 
     /**
      * 投标截止时间
      */
-    private String bidEndTime;
+    private Date bidEndTime;
 
     /**
      * 投标保证金
@@ -105,7 +105,7 @@ public class TbNtTenders {
     /**
      * 投标保证金截止时间
      */
-    private String bidBondsEndTime;
+    private Date bidBondsEndTime;
 
     /**
      * 履约保证金
@@ -120,7 +120,7 @@ public class TbNtTenders {
     /**
      * 资格审查时间
      */
-    private String auditTime;
+    private Date auditTime;
 
     /**
      * 开标人员要求
@@ -185,7 +185,7 @@ public class TbNtTenders {
     /**
      * 计划竣工时间
      */
-    private String completionTime;
+    private Date completionTime;
 
     /**
      * 是否流标

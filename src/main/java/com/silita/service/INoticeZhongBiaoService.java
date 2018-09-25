@@ -1,9 +1,6 @@
 package com.silita.service;
 
-import com.silita.model.SysFiles;
-import com.silita.model.TbNtBids;
-import com.silita.model.TbNtMian;
-import com.silita.model.TbNtTenders;
+import com.silita.model.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.util.List;
@@ -71,5 +68,12 @@ public interface INoticeZhongBiaoService {
      * @return
      */
     HSSFWorkbook listBids(TbNtMian tbNtMian);
+
+    /**
+     * 添加中标编辑明细 变更信息
+     * @param tbNtChange
+     */
+    void saveTbNtChange(TbNtChange tbNtChange);
+
 
 }

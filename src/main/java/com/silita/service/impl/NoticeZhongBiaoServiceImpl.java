@@ -253,7 +253,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             Map<String, Object> detail = details.get(i);
             String ntBidsId = String.valueOf(detail.get("pkid"));
             detail.remove("pkid");
-            //拼接3个中标候选人数据（太机智了）
+            //拼接3个中标候选人数据
             for (int j = 1; j < 4; j++) {
                 TbNtBidsCand tbNtBidsCand = new TbNtBidsCand();
                 tbNtBidsCand.setNtBidsId(ntBidsId);
@@ -283,6 +283,12 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title")) + "\")");
         }
         return wb;
+    }
+
+    @Override
+    public void saveTbNtChange(TbNtChange tbNtChange) {
+        tbNtChange.setPkid(DataHandlingUtil.getUUID());
+        tbNtChangeMapper.insertTbNtChange(tbNtChange);
     }
 
 }
