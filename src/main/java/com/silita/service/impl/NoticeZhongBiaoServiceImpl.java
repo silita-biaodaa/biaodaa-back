@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -24,6 +27,8 @@ import java.util.*;
 @Service("noticeZhongBiaoService")
 public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoticeZhongBiaoService {
 
+    @Autowired
+    DicCommonMapper dicCommonMapper;
     @Autowired
     TbNtTendersMapper tbNtTendersMapper;
     @Autowired
@@ -39,32 +44,89 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     @Autowired
     TbNtBidsCandMapper tbNtBidsCandMapper;
 
+    SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
     @Override
     public List<TbNtTenders> listNtTenders(TbNtMian tbNtMian) {
-        List<TbNtTenders> lists = null;
-        // 1、根据中标公告id获取关联的招标公告id
-        TbNtAssociateGp tbNtAssociateGp = new TbNtAssociateGp();
-        tbNtAssociateGp.setNtId(tbNtMian.getPkid());
-        tbNtAssociateGp.setSource(tbNtMian.getSource());
-        tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(tbNtAssociateGp.getClass(), tbNtAssociateGp.getSource()));
-        List<String> ntIds = tbNtAssociateGpMapper.getNtIdByNtId(tbNtAssociateGp);
-        if(null != ntIds && ntIds.size() > 0) {
-            lists = new ArrayList<TbNtTenders>(ntIds.size());
-            for (int i = 0; i < ntIds.size(); i++) {
-                String ntId = ntIds.get(i);
-                TbNtTenders tbNtTenders = new TbNtTenders();
-                tbNtTenders.setNtId(ntId);
-                tbNtTenders.setSource(tbNtMian.getSource());
-                tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
-                //判断公告是否存在招标编辑明细
-                Integer count = tbNtTendersMapper.countNtTendersByNtId(tbNtTenders);
-                if(count > 0) {
-                    // 2、根据招标公告id获取招标标段信息
-                    lists.addAll(tbNtTendersMapper.listNtTendersByNtId(tbNtTenders));
+        List lists = null;
+        try {
+            // 1、根据中标公告id获取关联的招标公告id
+            TbNtAssociateGp tbNtAssociateGp = new TbNtAssociateGp();
+            tbNtAssociateGp.setNtId(tbNtMian.getPkid());
+            tbNtAssociateGp.setSource(tbNtMian.getSource());
+            tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(tbNtAssociateGp.getClass(), tbNtAssociateGp.getSource()));
+            List<String> ntIds = tbNtAssociateGpMapper.getNtIdByNtId(tbNtAssociateGp);
+            if (null != ntIds && ntIds.size() > 0) {
+                lists = new ArrayList<TbNtTenders>(ntIds.size());
+                for (int i = 0; i < ntIds.size(); i++) {
+                    String ntId = ntIds.get(i);
+                    TbNtTenders tbNtTenders = new TbNtTenders();
+                    tbNtTenders.setNtId(ntId);
+                    tbNtTenders.setSource(tbNtMian.getSource());
+                    tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
+                    //判断公告是否存在招标编辑明细
+                    Integer count = tbNtTendersMapper.countNtTendersByNtId(tbNtTenders);
+                    if (count > 0) {
+                        // 2、根据招标公告id获取招标标段信息
+                        List<TbNtTenders> tbNtTendersList = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
+                        for (int j = 0; j < tbNtTendersList.size(); j++) {
+                            TbNtTenders tempTenders = tbNtTendersList.get(j);
+                            //获取标段最新的、不重复的变更信息
+                            TbNtChange tbNtChange = new TbNtChange();
+                            tbNtChange.setNtId(String.valueOf(tempTenders.getNtId()));
+                            tbNtChange.setNtEditId(String.valueOf(tempTenders.getPkid()));
+                            List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+                            Map<String, String> tempMap = new HashMap();
+                            if (fields != null && fields.size() > 0) {
+                                for (Map<String, Object> map : fields) {
+                                    String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
+                                    String tempValue = String.valueOf(map.get("field_value"));
+                                    tempMap.put(tempKey, tempValue);
+                                }
+                            }
+                            Field[] field = tempTenders.getClass().getDeclaredFields();
+                            //遍历field、替换变更后的值
+                            for (int k = 0; k < field.length; k++) {
+                                String name = field[k].getName();
+                                name = name.substring(0, 1).toUpperCase() + name.substring(1);
+                                String keyName = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(name).substring(1);
+                                String type = field[k].getGenericType().toString();
+                                //替换变更后的值
+                                if (tempMap.size() > 0) {
+                                    for (Map.Entry<String, String> temp : tempMap.entrySet()) {
+                                        String tempKey = temp.getKey();
+                                        String tempValue = temp.getValue();
+                                        if (tempKey.equals(keyName)) {
+                                            if (type.equals("class java.lang.String")) {
+                                                Method m = tempTenders.getClass().getMethod("set" + name, String.class);
+                                                m.invoke(tempTenders, String.valueOf(tempValue));
+                                            }
+                                            if (type.equals("class java.lang.Double")) {
+                                                Method m = tempTenders.getClass().getMethod("set" + name, Double.class);
+                                                m.invoke(tempTenders, Double.valueOf(tempValue));
+                                            }
+                                            if (type.equals("class java.lang.Boolean")) {
+                                                Method m = tempTenders.getClass().getMethod("set" + name, Boolean.class);
+                                                m.invoke(tempTenders, Boolean.valueOf(tempValue));
+                                            }
+                                            if (type.equals("class java.util.Date")) {
+                                                Method m = tempTenders.getClass().getMethod("set" + name, Date.class);
+                                                m.invoke(tempTenders, new Date(Long.parseLong(tempValue)));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        lists.addAll(tbNtTendersList);
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-      return lists;
+        return lists;
     }
 
     @Override
@@ -91,7 +153,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             // 3、获取招标编辑明细个数
             tbNtTenders.setNtId(ntId);
             Integer count = tbNtTendersMapper.countNtTendersByNtId(tbNtTenders);
-            if(count == 0) {
+            if (count == 0) {
                 TbNtMian tbNtMian = new TbNtMian();
                 tbNtMian.setPkid(ntId);
                 tbNtMian.setNtStatus("0");
@@ -124,7 +186,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         tbNtAssociateGp.setSource(tbNtMian.getSource());
         tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(tbNtAssociateGp.getClass(), tbNtAssociateGp.getSource()));
         List<String> ntIds = tbNtAssociateGpMapper.getNtIdByNtId(tbNtAssociateGp);
-        if(null != ntIds && ntIds.size() > 0) {
+        if (null != ntIds && ntIds.size() > 0) {
             lists = new ArrayList<SysFiles>(ntIds.size());
             for (int i = 0; i < ntIds.size(); i++) {
                 String ntId = ntIds.get(i);
@@ -133,7 +195,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 sysFiles.setSource(tbNtMian.getSource());
                 //判断公告是否存在招标文件列表
                 Integer count = sysFilesMapper.countSysFilesByBizIdAndSource(sysFiles);
-                if(count > 0) {
+                if (count > 0) {
                     //2、根据招标公告id获取文件列表
                     lists.addAll(sysFilesMapper.listSysFilesByBizId(sysFiles));
                 }
@@ -169,7 +231,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         //中标标段
         tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
         Integer count = tbNtBidsMapper.countNtBidsByNtIdAndSegment(tbNtBids);
-        if(count == 0) {
+        if (count == 0) {
             tbNtMian.setNtStatus("1");
             //公告状态改为未审核
             tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
@@ -179,7 +241,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             tbNtBidsMapper.insertTbNtBids(tbNtBids);
             //批量添加中标候选人
             List<TbNtBidsCand> tbNtBidsCands = tbNtBids.getBidsCands();
-            if(null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
+            if (null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
                 for (int i = 0; i < tbNtBidsCands.size(); i++) {
                     tbNtBidsCands.get(i).setPkid(DataHandlingUtil.getUUID());
                     tbNtBidsCands.get(i).setNtBidsId(tbNtBids.getPkid());
@@ -193,7 +255,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             tbNtBidsMapper.updateTbNtBidsByNtIdAndSegment(tbNtBids);
             //批量更新中标候选人
             List<TbNtBidsCand> tbNtBidsCands = tbNtBids.getBidsCands();
-            if(null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
+            if (null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
                 tbNtBidsCandMapper.batchUpdateNtBidsCand(tbNtBidsCands);
             }
             msg = "更新标段信息成功！";
@@ -218,6 +280,8 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             set.add(id);
         }
         if (set != null && set.size() > 0) {
+            //删除变更信息
+            tbNtChangeMapper.deleteTbNtChangeByNtEditId(set.toArray());
             //删除编辑明细
             tbNtBidsMapper.batchDeleteNtBidsByPkId(tableName, set.toArray());
             //删除中标候选人
@@ -236,8 +300,8 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 "项目工期", "计划竣工时间", "项目地区", "项目县市", "评标办法",
                 "招标类型", "项目类型", "资质要求", "单位名称(1)", "报价(1)",
                 "项目负责人(1)", "技术负责人(1)", "施工员(1)", "安全员(1)",
-                "质量员(1)", "单位名称(2)", "报价(2)",  "项目负责人(2)", "技术负责人(2)",
-                "施工员(2)", "安全员(2)", "质量员(2)","单位名称(3)", "报价(3)",
+                "质量员(1)", "单位名称(2)", "报价(2)", "项目负责人(2)", "技术负责人(2)",
+                "施工员(2)", "安全员(2)", "质量员(2)", "单位名称(3)", "报价(3)",
                 "项目负责人(3)", "技术负责人(3)", "施工员(3)", "安全员(3)",
                 "质量员(3)"
         };
@@ -259,7 +323,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 tbNtBidsCand.setNtBidsId(ntBidsId);
                 tbNtBidsCand.setNumber(j);
                 LinkedHashMap<String, Object> temp = tbNtBidsCandMapper.getNtBidsCandByNtBidsIdAndNumber(tbNtBidsCand);
-                if(temp == null) {
+                if (temp == null) {
                     for (int k = 1; k <= 7; k++) {
                         detail.put("fill_" + j + "_" + k, "");
                     }

@@ -170,15 +170,9 @@
 
     <update id="updateNtMainByPkId" parameterType="com.silita.model.TbNtMian">
         UPDATE ${tableName} SET
-        <if test="binessType !=null and binessType!=''">
-            `biness_type` = #{binessType},
-        </if>
-        <if test="ntCategory !=null and ntCategory!=''">
-            `nt_category` = #{ntCategory},
-        </if>
-        <if test="ntType !=null and ntType!=''">
-            `nt_type` = #{ntType},
-        </if>
+        `biness_type` = #{binessType},
+        `nt_category` = #{ntCategory},
+        `nt_type` = #{ntType},
         <if test="title !=null and title!=''">
             `title` = #{title},
         </if>
@@ -188,12 +182,8 @@
         <if test="url !=null and url!=''">
             `url` = #{url},
         </if>
-        <if test="cityCode !=null and cityCode!=''">
-            `city_code` = #{cityCode},
-        </if>
-        <if test="countyCode !=null and countyCode!=''">
-            `county_code` = #{countyCode},
-        </if>
+        `city_code` = #{cityCode},
+        `county_code` = #{countyCode},
         `updated` = NOW()
         WHERE pkid = #{pkid}
     </update>

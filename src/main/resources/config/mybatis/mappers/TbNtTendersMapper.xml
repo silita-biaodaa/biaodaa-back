@@ -206,105 +206,39 @@
 
     <update id="updateNtTendersByNtIdAndSegment" parameterType="com.silita.model.TbNtTenders">
         UPDATE ${tableName} SET
-        <if test="enrollAddr !=null and enrollAddr!=''">
-            `enroll_addr` = #{enrollAddr},
-        </if>
-        <if test="openingAddr !=null and openingAddr!=''">
-            `opening_addr` = #{openingAddr},
-        </if>
-        <if test="enrollEndTime !=null">
-            `enroll_end_time` = #{enrollEndTime},
-        </if>
-        <if test="bidEndTime !=null">
-            `bid_end_time` = #{bidEndTime},
-        </if>
-        <if test="bidBonds !=null and bidBonds!=''">
-            `bid_bonds` = #{bidBonds},
-        </if>
-        <if test="bidBondsEndTime !=null">
-            `bid_bonds_end_time` = #{bidBondsEndTime},
-        </if>
-        <if test="keepBonds !=null and keepBonds!=''">
-            `keep_bonds` = #{keepBonds},
-        </if>
-        <if test="otherBonds !=null and otherBonds!=''">
-            `other_bonds` = #{otherBonds},
-        </if>
-        <if test="auditTime !=null">
-            `audit_time` = #{auditTime},
-        </if>
-        <if test="openingPerson !=null and openingPerson!=''">
-            `opening_person` = #{openingPerson},
-        </if>
-        <if test="openingFileFee !=null and openingFileFee!=''">
-            `opening_file_fee` = #{openingFileFee},
-        </if>
-        <if test="otherFee !=null and otherFee!=''">
-            `other_fee` = #{otherFee},
-        </if>
-        <if test="tenderee !=null and tenderee!=''">
-            `tenderee` = #{tenderee},
-        </if>
-        <if test="tenderContactPerson !=null and tenderContactPerson!=''">
-            `tender_contact_person` = #{tenderContactPerson},
-        </if>
-        <if test="tenderContactInfo !=null and tenderContactInfo!=''">
-            `tender_contact_info` = #{tenderContactInfo},
-        </if>
-        <if test="proxyContactPerson !=null and proxyContactPerson!=''">
-            `proxy_contact_person` = #{proxyContactPerson},
-        </if>
-        <if test="proxyContactInfo !=null and proxyContactInfo!=''">
-            `proxy_contact_info` = #{proxyContactInfo},
-        </if>
-        <if test="proPerson !=null and proPerson!=''">
-            `pro_person` = #{proPerson},
-        </if>
-        <if test="socialSecurity !=null and socialSecurity!=''">
-            `social_security` = #{socialSecurity},
-        </if>
-        <if test="achievement !=null and achievement!=''">
-            `achievement` = #{achievement},
-        </if>
-        <if test="enrollMethod !=null and enrollMethod!=''">
-            `enroll_method` = #{enrollMethod},
-        </if>
-        <if test="completionTime !=null">
-            `completion_time` = #{completionTime},
-        </if>
-        <if test="isFlow !=null and isFlow!=''">
-            `is_flow` = #{isFlow},
-        </if>
-        <if test="fundsProvid !=null and fundsProvid!=''">
-            `funds_provid` = #{fundsProvid},
-        </if>
-        <if test="certAuditAddr !=null and certAuditAddr!=''">
-            `cert_audit_addr` = #{certAuditAddr},
-        </if>
-        <if test="filingPfm !=null and filingPfm!=''">
-            `filing_pfm` = #{filingPfm},
-        </if>
-        <if test="controllSum !=null and controllSum!=''">
-            `controll_sum` = #{controllSum},
-        </if>
-        <if test="proSum !=null and proSum!=''">
-            `pro_sum` = #{proSum},
-        </if>
-        <if test="proDuration !=null and proDuration!=''">
-            `pro_duration` = #{proDuration},
-        </if>
-        <if test="pbMode !=null and pbMode!=''">
-            `pb_mode` = #{pbMode},
-        </if>
-        <if test="ntTdStatus !=null and ntTdStatus!=''">
-            `nt_td_status` = #{ntTdStatus},
-        </if>
-        <if test="proType !=null and proType!=''">
-            `pro_type` = #{proType},
-        </if>
-        <if test="updateBy !=null and updateBy!=''">
-            `update_by` = #{updateBy},
-        </if>
+        `enroll_addr` = #{enrollAddr},
+        `opening_addr` = #{openingAddr},
+        `enroll_end_time` = #{enrollEndTime},
+        `bid_end_time` = #{bidEndTime},
+        `bid_bonds` = #{bidBonds},
+        `bid_bonds_end_time` = #{bidBondsEndTime},
+        `keep_bonds` = #{keepBonds},
+        `other_bonds` = #{otherBonds},
+        `audit_time` = #{auditTime},
+        `opening_person` = #{openingPerson},
+        `opening_file_fee` = #{openingFileFee},
+        `other_fee` = #{otherFee},
+        `tenderee` = #{tenderee},
+        `tender_contact_person` = #{tenderContactPerson},
+        `tender_contact_info` = #{tenderContactInfo},
+        `proxy_contact_person` = #{proxyContactPerson},
+        `proxy_contact_info` = #{proxyContactInfo},
+        `pro_person` = #{proPerson},
+        `social_security` = #{socialSecurity},
+        `achievement` = #{achievement},
+        `enroll_method` = #{enrollMethod},
+        `completion_time` = #{completionTime},
+        `is_flow` = #{isFlow},
+        `funds_provid` = #{fundsProvid},
+        `cert_audit_addr` = #{certAuditAddr},
+        `filing_pfm` = #{filingPfm},
+        `controll_sum` = #{controllSum},
+        `pro_sum` = #{proSum},
+        `pro_duration` = #{proDuration},
+        `pb_mode` = #{pbMode},
+        `nt_td_status` = #{ntTdStatus},
+        `pro_type` = #{proType},
+        `update_by` = #{updateBy},
         updated = NOW()
         WHERE nt_id = #{ntId} AND `segment` = #{segment}
     </update>
@@ -320,7 +254,7 @@
         t1.funds_provid, t1.created, t1.create_by, t1.updated, t1.update_by,
         t.biness_type, t.url,  t.title,  t.pub_date, t.source,
         t.city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code_name,
-        t.county_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS clistTendersDetailounty_code_name,
+        t.county_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code_name,
         t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
