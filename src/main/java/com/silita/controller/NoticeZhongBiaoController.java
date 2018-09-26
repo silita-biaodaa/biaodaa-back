@@ -117,4 +117,12 @@ public class NoticeZhongBiaoController extends BaseController {
         return successMap(null);
     }
 
+    @RequestMapping(value = "/delNtMain", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> delNtMain(@RequestBody TbNtMian tbNtMian,ServletRequest request) {
+        tbNtMian.setCreateBy(JWTUtil.getUsername(request));
+        noticeZhongBiaoService.delNtMain(tbNtMian);
+        return super.successMap(null);
+    }
+
 }

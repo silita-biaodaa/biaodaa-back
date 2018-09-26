@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -47,6 +48,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Autowired
     TbNtTextHunanMapper tbNtTextHunanMapper;
 
+
+    SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     @Cacheable(value = "TwfDictNameCache")
@@ -119,15 +122,15 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             int indexCell = 0;
             row = sheet.createRow(indexRow++);
             Map<String, Object> detail = details.get(i);
-            //获取标段最新的、不重复的变更信息
+            //获取招标编辑明细变更信息
             TbNtChange tbNtChange = new TbNtChange();
             tbNtChange.setNtId(String.valueOf(detail.get("nt_id")));
             tbNtChange.setNtEditId(String.valueOf(detail.get("pkid")));
-            List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
-            Map<String, String> field = new HashMap();
-            if (fields != null && fields.size() > 0) {
+            List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+            Map<String, String> changeField = new HashMap();
+            if (changeFields != null && changeFields.size() > 0) {
                 TwfDict twfDict = new TwfDict();
-                for (Map<String, Object> map : fields) {
+                for (Map<String, Object> map : changeFields) {
                     String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
                     String tempValue = String.valueOf(map.get("field_value"));
                     if ("biness_type".equals(tempKey)) {
@@ -148,8 +151,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                         tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
                     } else if("pb_mode".equals(tempKey)) {
                         tempValue = dicCommonMapper.getNameByCode(tempValue);
+                    } else if("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey)|| "bid_bonds_end_time".equals(tempKey)|| "audit_time".equals(tempKey)|| "completion_time".equals(tempKey)) {
+                        tempValue = simple.format(new Date(Long.parseLong(tempValue)));
                     }
-                    field.put(tempKey, tempValue);
+                    changeField.put(tempKey, tempValue);
                 }
             }
             detail.remove("pkid");
@@ -157,8 +162,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             //一列数据
             for (Map.Entry<String, Object> entry : detail.entrySet()) {
                 //替换变更后的值
-                if (field.size() > 0) {
-                    for (Map.Entry<String, String> temp : field.entrySet()) {
+                if (changeField.size() > 0) {
+                    for (Map.Entry<String, String> temp : changeField.entrySet()) {
                         String tempKey = temp.getKey();
                         String tempValue = temp.getValue();
                         if (tempKey.equals(entry.getKey())) {

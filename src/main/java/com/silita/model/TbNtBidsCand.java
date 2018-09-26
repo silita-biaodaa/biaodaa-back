@@ -86,6 +86,16 @@ public class TbNtBidsCand {
      */
     private String source;
 
+    /**
+     * 变更字段
+     */
+    private String changeFieldName;
+
+    /**
+     * 变更值
+     */
+    private String changeFieldValue;
+
 
     public String getPkid() {
         return pkid;
@@ -182,5 +192,17 @@ public class TbNtBidsCand {
     }
     public void setSource(String source) {
         this.source = source;
+    }
+    public String getChangeFieldName() {
+        return changeFieldName;
+    }
+    public void setChangeFieldName(String changeFieldName) {
+        this.changeFieldName = changeFieldName;
+    }
+    public String getChangeFieldValue() {
+        return changeFieldValue;
+    }
+    public void setChangeFieldValue(String changeFieldValue) {
+        this.changeFieldValue = changeFieldValue;
     }
 }

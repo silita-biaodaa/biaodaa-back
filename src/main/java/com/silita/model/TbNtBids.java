@@ -159,4 +159,14 @@ public class TbNtBids {
      * 先区name（前端要...）
      */
     private String countyCodeName;
+
+    /**
+     * 变更字段
+     */
+    private String changeFieldName;
+
+    /**
+     * 变更值
+     */
+    private String changeFieldValue;
 }

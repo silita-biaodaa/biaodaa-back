@@ -41,4 +41,11 @@ public interface TbNtRecycleHunanMapper extends MyMapper<TbNtRecycle> {
      * @return
      */
     Integer inertRecycleForNtMain(TbNtRecycle recycle);
+
+    /**
+     * 添加中标公告到回收站公告
+     * @param tbNtRecycle
+     * @return
+     */
+    Integer inertRecycleForBids(TbNtRecycle tbNtRecycle);
 }

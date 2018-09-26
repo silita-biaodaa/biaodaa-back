@@ -2,9 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.TbNtRecycleHunanMapper">
     <resultMap id="BaseResultMap" type="com.silita.model.TbNtRecycle">
-        <!--
-          WARNING - @mbg.generated
-        -->
         <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
         <result column="del_type" property="delType" jdbcType="VARCHAR"/>
         <result column="nt_id" property="ntId" jdbcType="VARCHAR"/>
@@ -61,48 +58,58 @@
     </select>
 
     <select id="queryNtRecycleDetail" parameterType="com.silita.model.TbNtRecycle" resultMap="BaseResultMap">
-     select *
-    from tb_nt_recycle_${source}
-    where 1=1
-    and pkid = #{pkid}
-  </select>
+      select *
+      from tb_nt_recycle_${source}
+      where 1=1 and pkid = #{pkid}
+    </select>
 
     <update id="deleteRecyleLogic" parameterType="com.silita.model.TbNtRecycle">
-    update tb_nt_recycle_${source} set is_enable = 0 where pkid = #{pkid}
-  </update>
+      update tb_nt_recycle_${source} set is_enable = 0 where pkid = #{pkid}
+    </update>
 
     <insert id="inertRecycleForNtMain" parameterType="com.silita.model.TbNtRecycle">
-    INSERT INTO `tb_nt_recycle_${source}` (
-          `pkid`,
-          `del_type`,
-          `nt_id`,
-          `title`,
-          `url`,
-          `seg_count`,
-          `provice_code`,
-          `city_code`,
-          `county_code`,
-          `biness_type`,
-          `nt_category`,
-          `nt_type`,
-          `year`,
-          `pub_date`,
-          `src_site`,
-          `source`,
-          `is_enable`,
-          `nt_status`,
-          `px`,
-          `snatch_id`,
-          `snatch_batch`,
-          `snatch_time`,
-          `analysis_id`,
-          `analysis_time`,
-          `created`,
-          `create_by`
-        )
-SELECT #{pkid},#{delType},t.`pkid`,t.`title`,t.`url`,t.`seg_count`,t.`provice_code`,t.`city_code`
-,t.`county_code`,t.`biness_type`,t.`nt_category`,t.`nt_type`,t.`year`,t.`pub_date`,t.`src_site`,t.`source`,t.`is_enable`,t.`nt_status`
-,t.`px`,t.`snatch_id`,t.`snatch_batch`,t.`snatch_time`,t.`analysis_id`,t.`analysis_time`,NOW(),#{createBy}
-FROM tb_nt_mian_${source} t WHERE t.`pkid` = #{ntId}
-  </insert>
+      INSERT INTO `tb_nt_recycle_${source}`
+      (
+        `pkid`, `del_type`, `nt_id`, `title`, `url`,
+        `controll_sum`, `pro_sum`, `pro_duration`,
+        `seg_count`, `provice_code`, `city_code`, `county_code`, `biness_type`,
+        `nt_category`, `nt_type`, `year`, `pub_date`, `src_site`,
+        `source`, `is_enable`, `nt_status`, `px`, `snatch_id`,
+        `snatch_batch`, `snatch_time`, `analysis_id`, `analysis_time`, `created`,
+        `create_by`
+      )
+      SELECT #{pkid}, #{delType}, t.`pkid`, t.`title`, t.`url`,
+      tend.`controll_sum`, tend.`pro_sum`, tend.`pro_duration`,
+      t.`seg_count`, t.`provice_code`, t.`city_code`, t.`county_code`, t.`biness_type`,
+      t.`nt_category`, t.`nt_type`, t.`year`, t.`pub_date`, t.`src_site`,
+      t.`source`, t.`is_enable`, t.`nt_status`, t.`px`, t.`snatch_id`,
+      t.`snatch_batch`, t.`snatch_time`, t.`analysis_id`, t.`analysis_time`, NOW(),
+      #{createBy}
+      FROM tb_nt_mian_${source} AS t
+      LEFT JOIN tb_nt_tenders_${source} AS tend ON t.pkid = tend.nt_id
+      WHERE t.`pkid` = #{ntId}
+    </insert>
+
+    <insert id="inertRecycleForBids" parameterType="com.silita.model.TbNtRecycle">
+      INSERT INTO `tb_nt_recycle_${source}`
+      (
+        `pkid`, `del_type`, `nt_id`, `title`, `url`,
+        `controll_sum`, `pro_sum`, `pro_duration`,
+        `seg_count`, `provice_code`, `city_code`, `county_code`, `biness_type`,
+        `nt_category`, `nt_type`, `year`, `pub_date`, `src_site`,
+        `source`, `is_enable`, `nt_status`, `px`, `snatch_id`,
+        `snatch_batch`, `snatch_time`, `analysis_id`, `analysis_time`, `created`,
+        `create_by`
+      )
+      SELECT #{pkid}, #{delType}, t.`pkid`, t.`title`, t.`url`,
+      bids.`controll_sum`, bids.`pro_sum`, bids.`pro_duration`,
+      t.`seg_count`, t.`provice_code`, t.`city_code`, t.`county_code`, t.`biness_type`,
+      t.`nt_category`, t.`nt_type`, t.`year`, t.`pub_date`, t.`src_site`,
+      t.`source`, t.`is_enable`, t.`nt_status`, t.`px`, t.`snatch_id`,
+      t.`snatch_batch`, t.`snatch_time`, t.`analysis_id`, t.`analysis_time`, NOW(),
+      #{createBy}
+      FROM tb_nt_mian_${source} AS t
+      LEFT JOIN tb_nt_bids_${source} AS bids ON t.pkid = bids.nt_id
+      WHERE t.`pkid` = #{ntId}
+    </insert>
 </mapper>

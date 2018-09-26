@@ -15,7 +15,6 @@ import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -43,8 +42,8 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     TbNtMianMapper tbNtMianMapper;
     @Autowired
     TbNtBidsCandMapper tbNtBidsCandMapper;
-
-    SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @Autowired
+    TbNtRecycleHunanMapper recycleHunanMapper;
 
 
     @Override
@@ -266,7 +265,69 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     @Override
     public List<TbNtBids> listTbNtBidsByNtId(TbNtBids tbNtBids) {
         tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
-        return tbNtBidsMapper.listNtBidsByNtId(tbNtBids);
+        //获取中标编辑明细
+        List<TbNtBids> lists = tbNtBidsMapper.listNtBidsByNtId(tbNtBids);
+        //添加编辑明细变更信息
+        if(null != lists && lists.size() > 0) {
+            TbNtBids tempNtBids;
+            for (int i = 0; i < lists.size(); i++) {
+                tempNtBids = lists.get(i);
+                TbNtChange tbNtChange = new TbNtChange();
+                tbNtChange.setNtId(tempNtBids.getNtId());
+                tbNtChange.setNtEditId(tempNtBids.getPkid());
+                List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+                StringBuilder sb1 = new StringBuilder();
+                StringBuilder sb2 = new StringBuilder();
+                if (changeFields != null && changeFields.size() > 0) {
+                    Map<String, String> changeField = new HashMap();
+                    for (Map<String, Object> map : changeFields) {
+                        changeField.put((String) map.get("field_name"), (String) map.get("field_value"));
+                    }
+                    for (Map.Entry<String, String> entry : changeField.entrySet()) {
+                        sb1.append(entry.getKey()).append(",");
+                        sb2.append(entry.getValue()).append(",");
+                    }
+                }
+                String changeFieldName = sb1.toString();
+                String changeFieldValue = sb2.toString();
+                if (!StringUtils.isEmpty(changeFieldName) && !StringUtils.isEmpty(changeFieldValue)) {
+                    tempNtBids.setChangeFieldName(changeFieldName.substring(0, changeFieldName.lastIndexOf(",")));
+                    tempNtBids.setChangeFieldValue(changeFieldValue.substring(0, changeFieldValue.lastIndexOf(",")));
+                }
+                List<TbNtBidsCand> bidsCands = tempNtBids.getBidsCands();
+                //添加中标候选人编辑明细
+                if(null != bidsCands && bidsCands.size() > 0) {
+                    TbNtBidsCand tempNtBidsCand;
+                    for (int j = 0; j < bidsCands.size(); j++) {
+                        tempNtBidsCand = bidsCands.get(j);
+                        tbNtChange = new TbNtChange();
+                        tbNtChange.setNtId(tempNtBidsCand.getNtId());
+                        tbNtChange.setNtEditId(tempNtBidsCand.getPkid());
+                        List<Map<String, Object>> candChangeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+                        StringBuilder CandidateSb1 = new StringBuilder();
+                        StringBuilder CandidateSb2 = new StringBuilder();
+                        if (candChangeFields != null && candChangeFields.size() > 0) {
+                            Map<String, String> candChangeField = new HashMap();
+                            for (Map<String, Object> map : candChangeFields) {
+                                candChangeField.put((String) map.get("field_name"), (String) map.get("field_value"));
+                            }
+                            for (Map.Entry<String, String> entry : candChangeField.entrySet()) {
+                                CandidateSb1.append(entry.getKey()).append(",");
+                                CandidateSb2.append(entry.getValue()).append(",");
+                            }
+                        }
+                        String CandidateChangeFieldName = CandidateSb1.toString();
+                        String CandidateChangeFieldValue = CandidateSb2.toString();
+                        if (!StringUtils.isEmpty(CandidateChangeFieldName) && !StringUtils.isEmpty(CandidateChangeFieldValue)) {
+                            tempNtBidsCand.setChangeFieldName(CandidateChangeFieldName.substring(0, CandidateChangeFieldName.lastIndexOf(",")));
+                            tempNtBidsCand.setChangeFieldValue(CandidateChangeFieldValue.substring(0, CandidateChangeFieldValue.lastIndexOf(",")));
+                        }
+                    }
+                }
+
+            }
+        }
+        return lists;
     }
 
     @Override
@@ -353,6 +414,20 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     public void saveTbNtChange(TbNtChange tbNtChange) {
         tbNtChange.setPkid(DataHandlingUtil.getUUID());
         tbNtChangeMapper.insertTbNtChange(tbNtChange);
+    }
+
+    @Override
+    public void delNtMain(TbNtMian main) {
+        main.setTableName(DataHandlingUtil.SplicingTable(main.getClass(), main.getSource()));
+        TbNtRecycle recycle = new TbNtRecycle();
+        recycle.setPkid(DataHandlingUtil.getUUID());
+        recycle.setNtId(main.getPkid());
+        recycle.setSource(main.getSource());
+        recycle.setCreateBy(main.getCreateBy());
+        recycle.setDelType("4");
+        //将公告数据填进回收站
+        recycleHunanMapper.inertRecycleForBids(recycle);
+        tbNtMianMapper.deleteNtMainByPkId(main);
     }
 
 }

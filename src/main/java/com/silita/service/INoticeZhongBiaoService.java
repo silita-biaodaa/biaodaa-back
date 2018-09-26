@@ -75,5 +75,9 @@ public interface INoticeZhongBiaoService {
      */
     void saveTbNtChange(TbNtChange tbNtChange);
 
-
+    /**
+     * 逻辑删除公告
+     * @param main
+     */
+    void delNtMain(TbNtMian main);
 }

@@ -75,7 +75,7 @@
     <delete id="batchDeleteNtBidsCandByNtBidsId" parameterType="String">
         DELETE FROM `tb_nt_bids_cand`
         <where>
-            pkid IN
+            `nt_bids_id` IN
             <foreach collection="array" open="(" close=")" separator="," item="ele">
                 #{ele}
             </foreach>

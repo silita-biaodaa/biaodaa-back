@@ -103,7 +103,10 @@
       mian.title, mian.pub_date, mian.city_code, mian.county_code, mian.biness_type,
       cand.pkid AS c_pkid, cand.f_candidate, cand.f_quote, cand.f_pro_leader, cand.f_tech_leader,
       cand.f_builder, cand.f_safety, cand.f_quality, cand.number, cand.created,
-      cand.create_by, cand.updated, cand.update_by, cand.source, cand.nt_bids_id
+      cand.create_by, cand.updated, cand.update_by, cand.source, cand.nt_bids_id,
+      (SELECT `name` FROM dic_common WHERE `code` = bids.pb_mode) AS pb_mode_name,
+      (SELECT `area_name` FROM sys_area WHERE area_code = mian.city_code) AS city_code_name,
+      (SELECT `area_name` FROM sys_area WHERE area_code = mian.county_code) AS county_code_name
       FROM ${tableName} bids
       LEFT JOIN tb_nt_mian_${source} mian ON bids.nt_id = mian.pkid
       LEFT JOIN tb_nt_bids_cand cand ON bids.pkid = cand.nt_bids_id
@@ -111,7 +114,7 @@
       WHERE bids.`nt_id` = #{ntId} AND mian.is_enable = 1
     </select>
 
-    <delete id="deleteNtTendersByPkId" parameterType="Map">
+    <delete id="batchDeleteNtBidsByPkId" parameterType="Map">
         DELETE FROM ${tableName}
         <where>
             pkid IN

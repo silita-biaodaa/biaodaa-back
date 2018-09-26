@@ -170,8 +170,12 @@
 
     <update id="updateNtMainByPkId" parameterType="com.silita.model.TbNtMian">
         UPDATE ${tableName} SET
+        <if test="binessType !=null and binessType!=''">
         `biness_type` = #{binessType},
+        </if>
+        <if test="ntCategory !=null and ntCategory!=''">
         `nt_category` = #{ntCategory},
+        </if>
         `nt_type` = #{ntType},
         <if test="title !=null and title!=''">
             `title` = #{title},
