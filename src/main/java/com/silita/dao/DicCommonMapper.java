@@ -80,4 +80,11 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     DicCommon queryDicComm(String code);
+
+    /**
+     * 根据code获取name
+     * @param code
+     * @return
+     */
+    String getNameByCode(String code);
 }

@@ -48,7 +48,6 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtTextHunanMapper tbNtTextHunanMapper;
 
 
-
     @Override
     @Cacheable(value = "TwfDictNameCache")
     public Map<String, Object> listFixedEditData() {
@@ -120,7 +119,6 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             int indexCell = 0;
             row = sheet.createRow(indexRow++);
             Map<String, Object> detail = details.get(i);
-
             //获取标段最新的、不重复的变更信息
             TbNtChange tbNtChange = new TbNtChange();
             tbNtChange.setNtId(String.valueOf(detail.get("nt_id")));
@@ -128,8 +126,30 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
             Map<String, String> field = new HashMap();
             if (fields != null && fields.size() > 0) {
+                TwfDict twfDict = new TwfDict();
                 for (Map<String, Object> map : fields) {
-                    field.put(com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name"))), String.valueOf(map.get("field_value")));
+                    String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
+                    String tempValue = String.valueOf(map.get("field_value"));
+                    if ("biness_type".equals(tempKey)) {
+                        twfDict.setCode(tempValue);
+                        twfDict.setType(1);
+                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                    } else if ("pro_type".equals(tempKey)) {
+                        twfDict.setCode(tempValue);
+                        twfDict.setType(4);
+                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                    } else if ("filing_pfm".equals(tempKey)) {
+                        twfDict.setCode(tempValue);
+                        twfDict.setType(6);
+                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                    } else if ("nt_type".equals(tempKey)) {
+                        twfDict.setCode(tempValue);
+                        twfDict.setType(2);
+                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                    } else if("pb_mode".equals(tempKey)) {
+                        tempValue = dicCommonMapper.getNameByCode(tempValue);
+                    }
+                    field.put(tempKey, tempValue);
                 }
             }
             detail.remove("pkid");
@@ -137,16 +157,11 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             //一列数据
             for (Map.Entry<String, Object> entry : detail.entrySet()) {
                 //替换变更后的值
-                if(field.size() > 0) {
+                if (field.size() > 0) {
                     for (Map.Entry<String, String> temp : field.entrySet()) {
                         String tempKey = temp.getKey();
-//                        if("biness_type".equals(tempKey)) {
-//                        } else if("pro_type".equals(tempKey)) {
-//                        }else if("filing_pfm".equals(tempKey)) {
-//                        }else if("nt_type".equals(tempKey)) {
-//                        }
                         String tempValue = temp.getValue();
-                        if(tempKey.equals(entry.getKey())) {
+                        if (tempKey.equals(entry.getKey())) {
                             entry.setValue(tempValue);
                         }
                     }

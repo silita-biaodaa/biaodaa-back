@@ -119,4 +119,8 @@
         from dic_common
         where `code` = #{code}
     </select>
+
+    <select id="getNameByCode" parameterType="String" resultType="String">
+       SELECT `name` FROM dic_common WHERE `code` = #{code}
+    </select>
 </mapper>

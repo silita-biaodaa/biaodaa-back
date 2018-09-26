@@ -6,7 +6,7 @@
     SELECT `name`, `code` AS `value` FROM twf_dict WHERE `type` = #{type}
   </select>
 
-  <select id="getNameByCodeAndType" parameterType="com.silita.model.TwfDict">
+  <select id="getNameByCodeAndType" parameterType="com.silita.model.TwfDict" resultType="String">
     SELECT `name` FROM twf_dict WHERE `type` = #{type} AND code = #{code}
   </select>
 </mapper>
