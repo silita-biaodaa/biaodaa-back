@@ -20,7 +20,8 @@ public class BaseController {
         if (null != obj) {
             resultMap.put("data", obj);
         } else {
-            resultMap.put("data", "[]");
+            Object[] nullObj = new Object[0];
+            resultMap.put("data", nullObj);
         }
         return resultMap;
     }
