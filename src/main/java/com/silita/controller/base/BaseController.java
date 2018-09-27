@@ -19,6 +19,8 @@ public class BaseController {
         resultMap.put("msg",Constant.MSG_SUCCESS);
         if (null != obj) {
             resultMap.put("data", obj);
+        } else {
+            resultMap.put("data", "{}");
         }
         return resultMap;
     }

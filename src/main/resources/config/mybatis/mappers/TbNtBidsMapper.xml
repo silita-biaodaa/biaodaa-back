@@ -27,6 +27,8 @@
 
         <result column="city_code_name" property="cityCodeName" jdbcType="VARCHAR"/>
         <result column="county_code_name" property="countyCodeName" jdbcType="VARCHAR"/>
+        <result column="pro_type_name" property="proTypeName" jdbcType="VARCHAR"/>
+        <result column="biness_type_name" property="binessTypeName" jdbcType="VARCHAR"/>
         <!-- 中标候选人 -->
         <collection property="bidsCands" ofType="com.silita.model.TbNtBidsCand">
             <id column="c_pkid" property="pkid" jdbcType="VARCHAR"/>
@@ -106,7 +108,9 @@
       cand.create_by, cand.updated, cand.update_by, cand.source, cand.nt_bids_id,
       (SELECT `name` FROM dic_common WHERE `code` = bids.pb_mode) AS pb_mode_name,
       (SELECT `area_name` FROM sys_area WHERE area_code = mian.city_code) AS city_code_name,
-      (SELECT `area_name` FROM sys_area WHERE area_code = mian.county_code) AS county_code_name
+      (SELECT `area_name` FROM sys_area WHERE area_code = mian.county_code) AS county_code_name,
+      (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = bids.pro_type) AS pro_type_name,
+      (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = mian.biness_type) AS biness_type_name
       FROM ${tableName} bids
       LEFT JOIN tb_nt_mian_${source} mian ON bids.nt_id = mian.pkid
       LEFT JOIN tb_nt_bids_cand cand ON bids.pkid = cand.nt_bids_id

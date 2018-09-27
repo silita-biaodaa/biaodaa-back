@@ -96,6 +96,21 @@ public class TbNtBidsCand {
      */
     private String changeFieldValue;
 
+    /**
+     * 1中标候选人
+     */
+    private String oneCandidate;
+
+    /**
+     * 2中标候选人
+     */
+    private String twoCandidate;
+
+    /**
+     * 3中标候选人
+     */
+    private String threeCandidate;
+
 
     public String getPkid() {
         return pkid;
@@ -204,5 +219,24 @@ public class TbNtBidsCand {
     }
     public void setChangeFieldValue(String changeFieldValue) {
         this.changeFieldValue = changeFieldValue;
+    }
+
+    public String getOneCandidate() {
+        return oneCandidate;
+    }
+    public void setOneCandidate(String oneCandidate) {
+        this.oneCandidate = oneCandidate;
+    }
+    public String getTwoCandidate() {
+        return twoCandidate;
+    }
+    public void setTwoCandidate(String twoCandidate) {
+        this.twoCandidate = twoCandidate;
+    }
+    public String getThreeCandidate() {
+        return threeCandidate;
+    }
+    public void setThreeCandidate(String threeCandidate) {
+        this.threeCandidate = threeCandidate;
     }
 }

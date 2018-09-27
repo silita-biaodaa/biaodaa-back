@@ -9,10 +9,7 @@ import com.silita.service.INoticeZhongBiaoService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -123,6 +120,12 @@ public class NoticeZhongBiaoController extends BaseController {
         tbNtMian.setCreateBy(JWTUtil.getUsername(request));
         noticeZhongBiaoService.delNtMain(tbNtMian);
         return super.successMap(null);
+    }
+
+    @RequestMapping(value = "/listCompany", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> listCompany(@RequestBody Map params) {
+        return super.successMap(noticeZhongBiaoService.listCompany(String.valueOf(params.get("queryKey"))));
     }
 
 }

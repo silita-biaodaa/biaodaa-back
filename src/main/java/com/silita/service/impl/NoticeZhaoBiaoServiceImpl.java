@@ -10,6 +10,8 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ import java.util.*;
  */
 @Service("noticeZhaoBiaoService")
 public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INoticeZhaoBiaoService {
+
+    Logger logger = LoggerFactory.getLogger(NoticeZhaoBiaoServiceImpl.class);
 
     @Autowired
     DicCommonMapper dicCommonMapper;

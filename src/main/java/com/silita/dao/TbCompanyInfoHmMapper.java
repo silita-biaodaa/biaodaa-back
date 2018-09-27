@@ -2,6 +2,7 @@ package com.silita.dao;
 
 import com.silita.model.TbCompanyInfoHm;
 import com.silita.utils.MyMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -84,4 +85,11 @@ public interface TbCompanyInfoHmMapper extends MyMapper<TbCompanyInfoHm> {
      * @return
      */
     Integer queryComNameCount(TbCompanyInfoHm companyInfoHm);
+
+    /**
+     * 根据企业名称或拼音获取信息
+     * @param queryKey
+     * @return
+     */
+    List<Map<String, Object>> listComNameCountByNameOrPinYin(@Param("queryKey") String queryKey);
 }

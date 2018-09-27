@@ -1,5 +1,10 @@
 package com.silita.service.impl;
 
+import com.silita.biaodaa.elastic.common.ConstantUtil;
+import com.silita.biaodaa.elastic.common.NativeElasticSearchUtils;
+import com.silita.biaodaa.elastic.model.PaginationAndSort;
+import com.silita.biaodaa.elastic.model.QuerysModel;
+import com.silita.commons.elasticSearch.InitESClient;
 import com.silita.dao.*;
 import com.silita.model.*;
 import com.silita.service.INoticeZhongBiaoService;
@@ -9,6 +14,12 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -25,6 +36,8 @@ import java.util.*;
  */
 @Service("noticeZhongBiaoService")
 public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoticeZhongBiaoService {
+
+    Logger logger = LoggerFactory.getLogger(NoticeZhongBiaoServiceImpl.class);
 
     @Autowired
     DicCommonMapper dicCommonMapper;
@@ -44,6 +57,11 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     TbNtBidsCandMapper tbNtBidsCandMapper;
     @Autowired
     TbNtRecycleHunanMapper recycleHunanMapper;
+    @Autowired
+    TbCompanyInfoHmMapper tbCompanyInfoHmMapper;
+
+    @Autowired
+    private NativeElasticSearchUtils nativeElasticSearchUtils;
 
 
     @Override
@@ -123,7 +141,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.toString());
         }
         return lists;
     }
@@ -298,6 +316,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 //添加中标候选人编辑明细
                 if(null != bidsCands && bidsCands.size() > 0) {
                     TbNtBidsCand tempNtBidsCand;
+                    String candidate;
                     for (int j = 0; j < bidsCands.size(); j++) {
                         tempNtBidsCand = bidsCands.get(j);
                         tbNtChange = new TbNtChange();
@@ -322,9 +341,24 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                             tempNtBidsCand.setChangeFieldName(CandidateChangeFieldName.substring(0, CandidateChangeFieldName.lastIndexOf(",")));
                             tempNtBidsCand.setChangeFieldValue(CandidateChangeFieldValue.substring(0, CandidateChangeFieldValue.lastIndexOf(",")));
                         }
+                        //拆出3个中标候选人(前端要的)
+                        candidate = tempNtBidsCand.getfCandidate();
+                        if(!StringUtils.isEmpty(candidate)) {
+                            String[] candidates = candidate.split("\\,");
+                            if(candidates.length > 0) {
+                                tempNtBidsCand.setOneCandidate(candidates[0]);
+                                if(candidates.length > 1) {
+                                    tempNtBidsCand.setTwoCandidate(candidates[1]);
+                                    if(candidates.length > 2) {
+                                        tempNtBidsCand.setThreeCandidate(candidates[2]);
+                                    }
+                                }
+                            } else {
+                                tempNtBidsCand.setOneCandidate(candidate);
+                            }
+                        }
                     }
                 }
-
             }
         }
         return lists;
@@ -428,6 +462,35 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         //将公告数据填进回收站
         recycleHunanMapper.inertRecycleForBids(recycle);
         tbNtMianMapper.deleteNtMainByPkId(main);
+    }
+
+    @Override
+    public List<Map<String, Object>> listCompany(String queryKey) {
+        List lists = new ArrayList<TbCompany>(20);
+        TransportClient client = InitESClient.getInit();
+        Map sort = new HashMap<String, String>();
+        sort.put("px", SortOrder.DESC);
+        PaginationAndSort pageSort = new PaginationAndSort(1, 10, sort);
+        //
+        List<QuerysModel> querys = new ArrayList();
+        if(!StringUtils.isEmpty(queryKey)) {
+            querys.add(new QuerysModel(ConstantUtil.CONDITION_SHOULD, ConstantUtil.MATCHING_WILDCARD, "comName", "*" + queryKey + "*"));
+            querys.add(new QuerysModel(ConstantUtil.CONDITION_SHOULD, ConstantUtil.MATCHING_WILDCARD, "comNamePy", "*" + queryKey + "*"));
+        }
+        SearchResponse response = nativeElasticSearchUtils.complexQuery(client, "company", "comes", querys, null, ConstantUtil.CONDITION_MUST, pageSort);
+        Map temp;
+        for (SearchHit hit : response.getHits()) {
+            temp = new HashMap(4);
+            temp.put("companyName", hit.getSource().get("comName"));
+            temp.put("creditCode", hit.getSource().get("creditCode"));
+            lists.add(temp);
+        }
+        //获取手动录入数据
+        List<Map<String, Object>> tempList = tbCompanyInfoHmMapper.listComNameCountByNameOrPinYin(queryKey);
+        if(tempList.size() > 0) {
+            lists.addAll(tempList);
+        }
+        return lists;
     }
 
 }

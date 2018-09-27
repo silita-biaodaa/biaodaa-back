@@ -76,7 +76,7 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController4()throws Exception{
-        String requestBody = "{\"pkid\":\"2\", \"source\":\"hunan\"}";
+        String requestBody = "{\"pkid\":\"10\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhongbiao/listZhaoBiaoFiles").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -171,8 +171,8 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController10()throws Exception{
-        String requestBody = "{\"idsStr\":\"e3ec36b503d1484cbd9f8c3a456a44f4\",\"source\":\"hunan\"}";
-        String responseString = mockMvc.perform(post("/zhongbiao/deleteTbNtBids").characterEncoding("UTF-8")
+        String requestBody = "{\"queryKey\":\"耀邦\"}";
+        String responseString = mockMvc.perform(post("/zhongbiao/listCompany").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
                 .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
@@ -182,4 +182,6 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
                 .andReturn().getResponse().getContentAsString();
         System.out.println("-----返回的json = " + responseString);
     }
+
+
 }

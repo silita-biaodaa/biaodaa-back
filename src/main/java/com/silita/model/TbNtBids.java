@@ -169,4 +169,14 @@ public class TbNtBids {
      * 变更值
      */
     private String changeFieldValue;
+
+    /**
+     * 项目类别name
+     */
+    private String proTypeName;
+
+    /**
+     * 业务类别name
+     */
+    private String binessTypeName;
 }
