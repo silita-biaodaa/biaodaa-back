@@ -20,7 +20,7 @@ public class BaseController {
         if (null != obj) {
             resultMap.put("data", obj);
         } else {
-            resultMap.put("data", "{}");
+            resultMap.put("data", "[]");
         }
         return resultMap;
     }
