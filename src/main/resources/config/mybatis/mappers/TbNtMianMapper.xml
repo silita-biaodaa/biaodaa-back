@@ -70,7 +70,7 @@
         (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = tenders.pro_type) AS pro_type, '资质', tenders.controll_sum,
         tenders.pro_sum, tenders.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = tenders.pb_mode) AS pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
         tenders.enroll_end_time,tenders.enroll_addr, tenders.audit_time, tenders.bid_end_time, tenders.opening_addr,
-        (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = tenders.filing_pfm) AS filing_pfm, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = tenders.nt_td_status) AS nt_type, tenders.opening_person,
+        (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = tenders.filing_pfm) AS filing_pfm, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = tenders.nt_td_status) AS nt_td_status, tenders.opening_person,
         main.url, tenders.pkid, tenders.nt_id
         FROM tb_nt_mian_${source} AS main
         LEFT JOIN tb_nt_tenders_${source} AS tenders ON main.pkid = tenders.nt_id

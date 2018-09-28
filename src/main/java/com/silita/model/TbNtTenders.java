@@ -301,7 +301,27 @@ public class TbNtTenders {
     private String cityCodeName;
 
     /**
-     * 先区name（前端要...）
+     * 县区name（前端要...）
      */
     private String countyCodeName;
+
+    /**
+     * 项目类型（name）
+     */
+    private String proTypeName;
+
+    /**
+     * 业务类别(name)
+     */
+    private String binessTypeName;
+
+    /**
+     * 备案平台(name)
+     */
+    private String filingPfmName;
+
+    /**
+     * 招标状态(name)
+     */
+    private String ntTdStatusName;
 }

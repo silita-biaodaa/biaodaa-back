@@ -134,6 +134,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             Map<String, String> changeField = new HashMap();
             if (changeFields != null && changeFields.size() > 0) {
                 TwfDict twfDict = new TwfDict();
+                //去除旧的变更信息
                 for (Map<String, Object> map : changeFields) {
                     String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
                     String tempValue = String.valueOf(map.get("field_value"));

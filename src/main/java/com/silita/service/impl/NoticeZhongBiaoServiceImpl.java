@@ -40,6 +40,8 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     Logger logger = LoggerFactory.getLogger(NoticeZhongBiaoServiceImpl.class);
 
     @Autowired
+    TwfDictMapper twfDictMapper;
+    @Autowired
     DicCommonMapper dicCommonMapper;
     @Autowired
     TbNtTendersMapper tbNtTendersMapper;
@@ -96,10 +98,31 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                             List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
                             Map<String, String> tempMap = new HashMap();
                             if (fields != null && fields.size() > 0) {
+                                TwfDict twfDict = new TwfDict();
+                                //去除旧的变更信息
                                 for (Map<String, Object> map : fields) {
                                     String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
                                     String tempValue = String.valueOf(map.get("field_value"));
                                     tempMap.put(tempKey, tempValue);
+                                    if("pb_mode".equals(tempKey)) {
+                                        tempTenders.setPbModeName(dicCommonMapper.getNameByCode(tempValue));
+                                    } else if("pro_type".equals(tempKey)) {
+                                        twfDict.setCode(tempValue);
+                                        twfDict.setType(4);
+                                        tempTenders.setProTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
+                                    } else if("biness_type".equals(tempKey)) {
+                                        twfDict.setCode(tempValue);
+                                        twfDict.setType(1);
+                                        tempTenders.setBinessTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
+                                    } else if("filing_pfm".equals(tempKey)) {
+                                        twfDict.setCode(tempValue);
+                                        twfDict.setType(6);
+                                        tempTenders.setFilingPfmName(twfDictMapper.getNameByCodeAndType(twfDict));
+                                    } else if("nt_td_status".equals(tempKey)) {
+                                        twfDict.setCode(tempValue);
+                                        twfDict.setType(2);
+                                        tempTenders.setNtTdStatusName(twfDictMapper.getNameByCodeAndType(twfDict));
+                                    }
                                 }
                             }
                             Field[] field = tempTenders.getClass().getDeclaredFields();
@@ -297,9 +320,23 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 StringBuilder sb1 = new StringBuilder();
                 StringBuilder sb2 = new StringBuilder();
                 if (changeFields != null && changeFields.size() > 0) {
+                    TwfDict twfDict = new TwfDict();
                     Map<String, String> changeField = new HashMap();
                     for (Map<String, Object> map : changeFields) {
-                        changeField.put((String) map.get("field_name"), (String) map.get("field_value"));
+                        String field_name = (String) map.get("field_name");
+                        String field_value = (String) map.get("field_value");
+                        changeField.put(field_name, field_value);
+                        if("pbMode".equals(field_name)) {
+                            tempNtBids.setPbModeName(dicCommonMapper.getNameByCode(field_value));
+                        } else if("proType".equals(field_name)) {
+                            twfDict.setCode(field_value);
+                            twfDict.setType(4);
+                            tempNtBids.setProTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
+                        } else if("binessType".equals(field_name)) {
+                            twfDict.setCode(field_value);
+                            twfDict.setType(1);
+                            tempNtBids.setBinessTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
+                        }
                     }
                     for (Map.Entry<String, String> entry : changeField.entrySet()) {
                         sb1.append(entry.getKey()).append(",");
@@ -328,7 +365,9 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         if (candChangeFields != null && candChangeFields.size() > 0) {
                             Map<String, String> candChangeField = new HashMap();
                             for (Map<String, Object> map : candChangeFields) {
-                                candChangeField.put((String) map.get("field_name"), (String) map.get("field_value"));
+                                String field_name = (String) map.get("field_name");
+                                String field_value = (String) map.get("field_value");
+                                candChangeField.put(field_name, field_value);
                             }
                             for (Map.Entry<String, String> entry : candChangeField.entrySet()) {
                                 CandidateSb1.append(entry.getKey()).append(",");

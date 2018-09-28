@@ -56,6 +56,11 @@
         <result column="field_name" property="fieldName" jdbcType="VARCHAR"/>
         <result column="field_value" property="fieldValue" jdbcType="VARCHAR"/>
         <result column="nt_status" property="ntStatus" jdbcType="VARCHAR"/>
+
+        <result column="pro_type_name" property="proTypeName" jdbcType="VARCHAR"/>
+        <result column="biness_type_name" property="binessTypeName" jdbcType="VARCHAR"/>
+        <result column="filing_pfm_name" property="filingPfmName" jdbcType="VARCHAR"/>
+        <result column="nt_td_status_name" property="ntTdStatusName" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -255,6 +260,10 @@
         t.biness_type, t.url,  t.title,  t.pub_date, t.source,
         t.city_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.city_code) AS city_code_name,
         t.county_code, (SELECT `area_name` FROM sys_area WHERE area_code = t.county_code) AS county_code_name,
+        (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = t1.pro_type) AS pro_type_name,
+        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = t.biness_type) AS biness_type_name,
+        (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = t1.filing_pfm) AS filing_pfm_name,
+        (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = t1.nt_td_status) AS nt_td_status_name,
         t.source, t.nt_status
         FROM ${tableName} t1
         LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid

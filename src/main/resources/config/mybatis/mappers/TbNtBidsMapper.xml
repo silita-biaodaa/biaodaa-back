@@ -29,6 +29,7 @@
         <result column="county_code_name" property="countyCodeName" jdbcType="VARCHAR"/>
         <result column="pro_type_name" property="proTypeName" jdbcType="VARCHAR"/>
         <result column="biness_type_name" property="binessTypeName" jdbcType="VARCHAR"/>
+        <result column="pb_mode_name" property="pbModeName" jdbcType="VARCHAR"/>
         <!-- 中标候选人 -->
         <collection property="bidsCands" ofType="com.silita.model.TbNtBidsCand">
             <id column="c_pkid" property="pkid" jdbcType="VARCHAR"/>
