@@ -1,7 +1,6 @@
 package com.silita.dao;
 
 import com.silita.model.TbNtBids;
-import com.silita.model.TbNtMian;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -41,5 +40,18 @@ public interface TbNtBidsMapper {
      * @return
      */
     Integer batchDeleteNtBidsByPkId(@Param("tableName") String tableName, @Param("array") Object[] array);
+
+    /**
+     *
+     * @param tbNtBids
+     */
+    Integer countNtTendersByNtId(TbNtBids tbNtBids);
+
+    /**
+     *
+     * @param tbNtBids
+     * @return
+     */
+    String getNtIdByNtId(TbNtBids tbNtBids);
 
 }

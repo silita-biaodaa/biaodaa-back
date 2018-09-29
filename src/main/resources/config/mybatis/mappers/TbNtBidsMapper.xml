@@ -116,7 +116,7 @@
       LEFT JOIN tb_nt_mian_${source} mian ON bids.nt_id = mian.pkid
       LEFT JOIN tb_nt_bids_cand cand ON bids.pkid = cand.nt_bids_id
       <!-- LEFT JOIN tb_nt_tenders_${source} tend ON bids.td_edit_code = tend.edit_code -->
-      WHERE bids.`nt_id` = #{ntId} AND mian.is_enable = 1
+      WHERE cand.nt_id = mian.pkid AND bids.`nt_id` = #{ntId} AND mian.is_enable = 1
     </select>
 
     <delete id="batchDeleteNtBidsByPkId" parameterType="Map">
@@ -129,4 +129,11 @@
         </where>
     </delete>
 
+    <select id="countNtTendersByNtId" parameterType="com.silita.model.TbNtBids" resultType="Integer">
+      SELECT COUNT(*) FROM ${tableName} WHERE nt_id = #{ntId}
+    </select>
+
+    <select id="getNtIdByNtId" parameterType="com.silita.model.TbNtBids" resultType="String">
+         SELECT `nt_id` FROM ${tableName} WHERE pkid = #{pkid}
+    </select>
 </mapper>

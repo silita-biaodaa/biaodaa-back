@@ -244,6 +244,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         return lists;
     }
 
+    @Override
     public String saveNtBids(TbNtBids tbNtBids) {
         String msg = null;
         //更新招标主表状态
@@ -265,7 +266,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         tbNtTenders.setSource(tbNtBids.getSource());
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtBids.getSource()));
         tbNtTendersMapper.updateProTypeAndPbModeByNtIdAndEditCode(tbNtTenders);
-        if (StringUtils.isEmpty(tbNtTenders.getSegment())) {
+        if (StringUtils.isEmpty(tbNtBids.getSegment())) {
             tbNtBids.setSegment("1");
         }
         //中标标段
@@ -293,10 +294,29 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         } else {
             //更新中标标段基本信息
             tbNtBidsMapper.updateTbNtBidsByNtIdAndSegment(tbNtBids);
-            //批量更新中标候选人
+            //批量添加或更新中标候选人
             List<TbNtBidsCand> tbNtBidsCands = tbNtBids.getBidsCands();
-            if (null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
-                tbNtBidsCandMapper.batchUpdateNtBidsCand(tbNtBidsCands);
+            if(null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
+                List<TbNtBidsCand> tempInsert = new ArrayList<>(tbNtBidsCands.size());
+                List<TbNtBidsCand> tempUpdate = new ArrayList<>(tbNtBidsCands.size());
+                for (int i = 0; i < tbNtBidsCands.size(); i++) {
+                    String pkid = tbNtBidsCands.get(i).getPkid();
+                    if(StringUtils.isEmpty(pkid)) {
+                        tbNtBidsCands.get(i).setPkid(DataHandlingUtil.getUUID());
+                        tbNtBidsCands.get(i).setNtBidsId(tbNtBids.getPkid());
+                        tbNtBidsCands.get(i).setCreateBy(tbNtBids.getCreateBy());
+                        tempInsert.add(tbNtBidsCands.get(i));
+                    } else {
+                        tbNtBidsCands.get(i).setUpdateBy(tbNtBids.getCreateBy());
+                        tempUpdate.add(tbNtBidsCands.get(i));
+                    }
+                }
+                if(tempInsert.size() > 0) {
+                    tbNtBidsCandMapper.batchInsertNtBidsCand(tempInsert);
+                }
+                if(tempUpdate.size() > 0) {
+                    tbNtBidsCandMapper.batchUpdateNtBidsCand(tempUpdate);
+                }
             }
             msg = "更新标段信息成功！";
         }
@@ -414,12 +434,30 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             set.add(id);
         }
         if (set != null && set.size() > 0) {
+            TbNtBids tbNtBids = new TbNtBids();
+            tbNtBids.setPkid(ids[0]);
+            tbNtBids.setSource(source);
+            tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
+            //获取公告pkid用于判断公共是否还有标段信息
+            String ntId = tbNtBidsMapper.getNtIdByNtId(tbNtBids);
             //删除变更信息
             tbNtChangeMapper.deleteTbNtChangeByNtEditId(set.toArray());
             //删除编辑明细
             tbNtBidsMapper.batchDeleteNtBidsByPkId(tableName, set.toArray());
             //删除中标候选人
             tbNtBidsCandMapper.batchDeleteNtBidsCandByNtBidsId(set.toArray());
+            //获取招标编辑明细个数
+            tbNtBids.setNtId(ntId);
+            Integer count = tbNtBidsMapper.countNtTendersByNtId(tbNtBids);
+            if (count == 0) {
+                TbNtMian tbNtMian = new TbNtMian();
+                tbNtMian.setPkid(ntId);
+                tbNtMian.setNtStatus("0");
+                tbNtMian.setSource(source);
+                tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+                //更新公告状态为 新建
+                tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
+            }
         }
     }
 
