@@ -33,4 +33,16 @@ public interface TbNtBidsCandMapper {
      */
     LinkedHashMap<String, Object> getNtBidsCandByNtBidsIdAndNumber(TbNtBidsCand tbNtBidsCand);
 
+    /**
+     * 根据公共pkid\中标编辑明细pkid\number获取中标候选人个数
+     * @param tbNtBidsCand
+     * @return
+     */
+    Integer countBidsCandByBtIdAndNtBidsIdAndNumber(TbNtBidsCand tbNtBidsCand);
+
+    /**
+     * 添加中标候选人
+     * @param tbNtBidsCands
+     */
+    void updateNtBidsCand(TbNtBidsCand tbNtBidsCands);
 }

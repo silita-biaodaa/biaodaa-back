@@ -292,33 +292,36 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             }
             msg = "添加标段信息成功！";
         } else {
+            msg = "更新标段信息成功！";
             //更新中标标段基本信息
             tbNtBidsMapper.updateTbNtBidsByNtIdAndSegment(tbNtBids);
             //批量添加或更新中标候选人
             List<TbNtBidsCand> tbNtBidsCands = tbNtBids.getBidsCands();
             if(null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
                 List<TbNtBidsCand> tempInsert = new ArrayList<>(tbNtBidsCands.size());
-                List<TbNtBidsCand> tempUpdate = new ArrayList<>(tbNtBidsCands.size());
+                //更新或修改中标候选人
                 for (int i = 0; i < tbNtBidsCands.size(); i++) {
-                    String pkid = tbNtBidsCands.get(i).getPkid();
+                    TbNtBidsCand tempBidsCand = tbNtBidsCands.get(i);
+                    String pkid = tempBidsCand.getPkid();
                     if(StringUtils.isEmpty(pkid)) {
-                        tbNtBidsCands.get(i).setPkid(DataHandlingUtil.getUUID());
-                        tbNtBidsCands.get(i).setNtBidsId(tbNtBids.getPkid());
-                        tbNtBidsCands.get(i).setCreateBy(tbNtBids.getCreateBy());
-                        tempInsert.add(tbNtBidsCands.get(i));
+                        tempBidsCand.setPkid(DataHandlingUtil.getUUID());
+                        tempBidsCand.setNtBidsId(tbNtBids.getPkid());
+                        tempBidsCand.setCreateBy(tbNtBids.getCreateBy());
+                        tempInsert.add(tempBidsCand);
                     } else {
-                        tbNtBidsCands.get(i).setUpdateBy(tbNtBids.getCreateBy());
-                        tempUpdate.add(tbNtBidsCands.get(i));
+                        //number存在不保存
+                       Integer tempCount = tbNtBidsCandMapper.countBidsCandByBtIdAndNtBidsIdAndNumber(tempBidsCand);
+                       if(tempCount == 0) {
+                           tbNtBidsCandMapper.updateNtBidsCand(tempBidsCand);
+                       } else {
+                           msg = "存在中标候选人" + tempBidsCand.getNumber();
+                       }
                     }
                 }
                 if(tempInsert.size() > 0) {
                     tbNtBidsCandMapper.batchInsertNtBidsCand(tempInsert);
                 }
-                if(tempUpdate.size() > 0) {
-                    tbNtBidsCandMapper.batchUpdateNtBidsCand(tempUpdate);
-                }
             }
-            msg = "更新标段信息成功！";
         }
         return msg;
     }

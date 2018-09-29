@@ -85,19 +85,66 @@
     <select id="getNtBidsCandByNtBidsIdAndNumber" parameterType="com.silita.model.TbNtBidsCand" resultType="java.util.LinkedHashMap">
         SELECT
         <if test="number == '1' or number == 1">
-            `f_candidate` AS `f_candidateA`, `f_quote` AS `f_quoteA`, `f_pro_leader` AS `f_pro_leaderA`, `f_tech_leader` AS `f_tech_leaderA`, `f_builder` AS `f_builderA`,
+            `f_candidate` AS `f_candidateA`, `f_quote` AS `f_quoteA`, `f_pro_leader` AS `f_pro_leaderA`, `f_tech_leader`
+            AS `f_tech_leaderA`, `f_builder` AS `f_builderA`,
             `f_safety` AS `f_safetyA`, `f_quality` AS `f_qualityA`
         </if>
         <if test="number == '2' or number == 2">
-            `f_candidate` AS `f_candidateB`, `f_quote` AS `f_quoteB`, `f_pro_leader` AS `f_pro_leaderB`, `f_tech_leader` AS `f_tech_leaderB`, `f_builder` AS `f_builderB`,
+            `f_candidate` AS `f_candidateB`, `f_quote` AS `f_quoteB`, `f_pro_leader` AS `f_pro_leaderB`, `f_tech_leader`
+            AS `f_tech_leaderB`, `f_builder` AS `f_builderB`,
             `f_safety` AS `f_safetyB`, `f_quality` AS `f_qualityB`
         </if>
         <if test="number == '3' or number == 3">
-            `f_candidate` AS `f_candidateC`, `f_quote` AS `f_quoteC`, `f_pro_leader` AS `f_pro_leaderC`, `f_tech_leader` AS `f_tech_leaderC`, `f_builder` AS `f_builderC`,
+            `f_candidate` AS `f_candidateC`, `f_quote` AS `f_quoteC`, `f_pro_leader` AS `f_pro_leaderC`, `f_tech_leader`
+            AS `f_tech_leaderC`, `f_builder` AS `f_builderC`,
             `f_safety` AS `f_safetyC`, `f_quality` AS `f_qualityC`
         </if>
         FROM `tb_nt_bids_cand`
         WHERE `nt_bids_id` = #{ntBidsId} AND `number` = #{number} LIMIT 1
     </select>
+
+    <select id="countBidsCandByBtIdAndNtBidsIdAndNumber" parameterType="com.silita.model.TbNtBidsCand" resultType="Integer">
+        SELECT COUNT(*)
+        FROM tb_nt_bids_cand
+        WHERE 1 = 1
+        <if test="ntId != null and ntId != ''">
+            AND `nt_id` = #{ntId}
+        </if>
+        <if test="number != null and number != ''">
+            AND `number` = #{number}
+        </if>
+    </select>
+
+    <update id="updateNtBidsCand" parameterType="com.silita.model.TbNtBidsCand">
+        UPDATE `tb_nt_bids_cand` SET
+        <if test="fCandidate != null and fCandidate != ''">
+            `f_candidate` = #{fCandidate},
+        </if>
+        <if test="fQuote != null and fQuote != ''">
+            `f_quote` = #{fQuote},
+        </if>
+        <if test="fProLeader != null and fProLeader != ''">
+            `f_pro_leader` = #{fProLeader},
+        </if>
+        <if test="fTechLeader != null and fTechLeader != ''">
+            `f_tech_leader` = #{fTechLeader},
+        </if>
+        <if test="fBuilder != null and fBuilder != ''">
+            `f_builder` = #{fBuilder},
+        </if>
+        <if test="fSafety != null and fSafety != ''">
+            `f_safety` = #{fSafety},
+        </if>
+        <if test="fQuality != null and fQuality != ''">
+            `f_quality` = #{fQuality},
+        </if>
+        <if test="number != null and number != ''">
+            `number` = #{number},
+        </if>
+        <if test="source != null and source != ''">
+            `source` = #{source}
+        </if>
+        WHERE `pkid` = #{pkid}
+    </update>
 
 </mapper>

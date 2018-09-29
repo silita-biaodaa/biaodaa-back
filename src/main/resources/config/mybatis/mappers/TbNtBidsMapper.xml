@@ -33,7 +33,7 @@
         <!-- 中标候选人 -->
         <collection property="bidsCands" ofType="com.silita.model.TbNtBidsCand">
             <id column="c_pkid" property="pkid" jdbcType="VARCHAR"/>
-            <result column="nt_id" property="ntId" jdbcType="VARCHAR"/>
+            <result column="c_nt_id" property="ntId" jdbcType="VARCHAR"/>
             <result column="nt_bids_id" property="ntBidsId" jdbcType="VARCHAR"/>
             <result column="f_candidate" property="fCandidate" jdbcType="VARCHAR"/>
             <result column="f_quote" property="fQuote" jdbcType="DOUBLE"/>
@@ -43,11 +43,11 @@
             <result column="f_safety" property="fSafety" jdbcType="VARCHAR"/>
             <result column="f_quality" property="fQuality" jdbcType="VARCHAR"/>
             <result column="number" property="number" jdbcType="INTEGER"/>
-            <result column="created" property="created" jdbcType="TIMESTAMP"/>
-            <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
-            <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
-            <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
-            <result column="source" property="source" jdbcType="VARCHAR"/>
+            <result column="c_created" property="created" jdbcType="TIMESTAMP"/>
+            <result column="c_create_by" property="createBy" jdbcType="VARCHAR"/>
+            <result column="c_updated" property="updated" jdbcType="TIMESTAMP"/>
+            <result column="c_update_by" property="updateBy" jdbcType="VARCHAR"/>
+            <result column="c_source" property="source" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
 
@@ -88,6 +88,9 @@
         <if test="pbMode != null and pbMode != ''">
             `pb_mode` = #{pbMode},
         </if>
+        <if test="segment != null and segment != ''">
+            `segment` = #{segment},
+        </if>
         <if test="updateBy != null and updateBy != ''">
             `update_by` = #{updateBy},
         </if>
@@ -105,8 +108,9 @@
       bids.created, bids.create_by, bids.updated, bids.update_by, mian.title,
       mian.title, mian.pub_date, mian.city_code, mian.county_code, mian.biness_type,
       cand.pkid AS c_pkid, cand.f_candidate, cand.f_quote, cand.f_pro_leader, cand.f_tech_leader,
-      cand.f_builder, cand.f_safety, cand.f_quality, cand.number, cand.created,
-      cand.create_by, cand.updated, cand.update_by, cand.source, cand.nt_bids_id,
+      cand.f_builder, cand.f_safety, cand.f_quality, cand.number, cand.created AS c_created,
+      cand.create_by AS c_create_by, cand.updated AS c_updated, cand.update_by AS c_update_by, cand.source AS c_source, cand.nt_bids_id,
+      cand.nt_id AS c_nt_id,
       (SELECT `name` FROM dic_common WHERE `code` = bids.pb_mode) AS pb_mode_name,
       (SELECT `area_name` FROM sys_area WHERE area_code = mian.city_code) AS city_code_name,
       (SELECT `area_name` FROM sys_area WHERE area_code = mian.county_code) AS county_code_name,
@@ -116,7 +120,7 @@
       LEFT JOIN tb_nt_mian_${source} mian ON bids.nt_id = mian.pkid
       LEFT JOIN tb_nt_bids_cand cand ON bids.pkid = cand.nt_bids_id
       <!-- LEFT JOIN tb_nt_tenders_${source} tend ON bids.td_edit_code = tend.edit_code -->
-      WHERE cand.nt_id = mian.pkid AND bids.`nt_id` = #{ntId} AND mian.is_enable = 1
+      WHERE bids.`nt_id` = #{ntId} AND mian.is_enable = 1
     </select>
 
     <delete id="batchDeleteNtBidsByPkId" parameterType="Map">
