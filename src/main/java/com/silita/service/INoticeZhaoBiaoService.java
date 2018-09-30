@@ -73,7 +73,7 @@ public interface INoticeZhaoBiaoService {
      * @param tbNtTenders
      * @return
      */
-    List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders);
+    Object listNtTenders(TbNtTenders tbNtTenders);
 
     /**
      * 根据公告id、标段id获取标段信息

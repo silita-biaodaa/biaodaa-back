@@ -247,7 +247,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
 
     @Override
-    public List<TbNtTenders> listNtTenders(TbNtTenders tbNtTenders) {
+    public Object listNtTenders(TbNtTenders tbNtTenders) {
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         List<TbNtTenders> lists = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
         if (null != lists && lists.size() > 0) {
@@ -266,6 +266,16 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        if(lists.size() == 0) {
+            Map map = new HashMap(2);
+            TbNtMian tbNtMian = new TbNtMian();
+            tbNtMian.setPkid(tbNtTenders.getNtId());
+            tbNtMian.setSource(tbNtTenders.getSource());
+            tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+            String status = tbNtMianMapper.getNtStatusByPkId(tbNtMian);
+            map.put("status", status);
+            return map;
         }
         return lists;
     }

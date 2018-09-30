@@ -219,4 +219,10 @@
         FROM ${tableName}
         WHERE pkid = #{pkid}
     </select>
+
+    <select id="getNtStatusByPkId" parameterType="com.silita.model.TbNtMian" resultType="String">
+        SELECT `nt_status` AS ntStatus
+        FROM ${tableName}
+        WHERE pkid = #{pkid}
+    </select>
 </mapper>

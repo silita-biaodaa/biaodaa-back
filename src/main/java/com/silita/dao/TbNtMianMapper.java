@@ -74,4 +74,10 @@ public interface TbNtMianMapper {
      */
     public Integer getSegCountByPkId(TbNtMian tbNtMian);
 
+    /**
+     * 根据pkid获取 公告状态
+     * @param tbNtMian
+     * @return
+     */
+    public String getNtStatusByPkId(TbNtMian tbNtMian);
 }
