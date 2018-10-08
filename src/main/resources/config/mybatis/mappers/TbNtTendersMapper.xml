@@ -244,7 +244,7 @@
         `nt_td_status` = #{ntTdStatus},
         `pro_type` = #{proType},
         `update_by` = #{updateBy},
-        updated = NOW()
+        `updated` = NOW()
         WHERE nt_id = #{ntId} AND `segment` = #{segment}
     </update>
 

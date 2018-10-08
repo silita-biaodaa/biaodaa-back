@@ -42,32 +42,22 @@
         <foreach collection="tbNtBidsCands" item="temp" index="index" open="" close="" separator=";">
             UPDATE `tb_nt_bids_cand` SET
             <if test="temp.fCandidate != null and temp.fCandidate != ''">
-                `f_candidate` = #{temp.fCandidate},
+              `f_candidate` = #{temp.fCandidate},
             </if>
-            <if test="temp.fQuote != null and temp.fQuote != ''">
-                `f_quote` = #{temp.fQuote},
-            </if>
-            <if test="temp.fProLeader != null and temp.fProLeader != ''">
-                `f_pro_leader` = #{temp.fProLeader},
-            </if>
-            <if test="temp.fTechLeader != null and temp.fTechLeader != ''">
-                `f_tech_leader` = #{temp.fTechLeader},
-            </if>
-            <if test="temp.fBuilder != null and temp.fBuilder != ''">
-                `f_builder` = #{temp.fBuilder},
-            </if>
-            <if test="temp.fSafety != null and temp.fSafety != ''">
-                `f_safety` = #{temp.fSafety},
-            </if>
-            <if test="temp.fQuality != null and temp.fQuality != ''">
-                `f_quality` = #{temp.fQuality},
-            </if>
+            `f_quote` = #{temp.fQuote},
+            `f_pro_leader` = #{temp.fProLeader},
+            `f_tech_leader` = #{temp.fTechLeader},
+            `f_builder` = #{temp.fBuilder},
+            `f_safety` = #{temp.fSafety},
+            `f_quality` = #{temp.fQuality},
             <if test="temp.number != null and temp.number != ''">
-                `number` = #{temp.number},
+              `number` = #{temp.number},
             </if>
             <if test="temp.source != null and temp.source != ''">
-                `source` = #{temp.source}
+              `source` = #{temp.source}
             </if>
+            `update_by` = #{temp.updateBy},
+            `updated` = NOW()
             WHERE `pkid` = #{temp.pkid}
         </foreach>
     </update>
@@ -85,19 +75,16 @@
     <select id="getNtBidsCandByNtBidsIdAndNumber" parameterType="com.silita.model.TbNtBidsCand" resultType="java.util.LinkedHashMap">
         SELECT
         <if test="number == '1' or number == 1">
-            `f_candidate` AS `f_candidateA`, `f_quote` AS `f_quoteA`, `f_pro_leader` AS `f_pro_leaderA`, `f_tech_leader`
-            AS `f_tech_leaderA`, `f_builder` AS `f_builderA`,
-            `f_safety` AS `f_safetyA`, `f_quality` AS `f_qualityA`
+          `f_candidate` AS `f_candidateA`, `f_quote` AS `f_quoteA`, `f_pro_leader` AS `f_pro_leaderA`, `f_tech_leader` AS `f_tech_leaderA`, `f_builder` AS `f_builderA`,
+          `f_safety` AS `f_safetyA`, `f_quality` AS `f_qualityA`
         </if>
         <if test="number == '2' or number == 2">
-            `f_candidate` AS `f_candidateB`, `f_quote` AS `f_quoteB`, `f_pro_leader` AS `f_pro_leaderB`, `f_tech_leader`
-            AS `f_tech_leaderB`, `f_builder` AS `f_builderB`,
-            `f_safety` AS `f_safetyB`, `f_quality` AS `f_qualityB`
+          `f_candidate` AS `f_candidateB`, `f_quote` AS `f_quoteB`, `f_pro_leader` AS `f_pro_leaderB`, `f_tech_leader` AS `f_tech_leaderB`, `f_builder` AS `f_builderB`,
+          `f_safety` AS `f_safetyB`, `f_quality` AS `f_qualityB`
         </if>
         <if test="number == '3' or number == 3">
-            `f_candidate` AS `f_candidateC`, `f_quote` AS `f_quoteC`, `f_pro_leader` AS `f_pro_leaderC`, `f_tech_leader`
-            AS `f_tech_leaderC`, `f_builder` AS `f_builderC`,
-            `f_safety` AS `f_safetyC`, `f_quality` AS `f_qualityC`
+          `f_candidate` AS `f_candidateC`, `f_quote` AS `f_quoteC`, `f_pro_leader` AS `f_pro_leaderC`, `f_tech_leader` AS `f_tech_leaderC`, `f_builder` AS `f_builderC`,
+          `f_safety` AS `f_safetyC`, `f_quality` AS `f_qualityC`
         </if>
         FROM `tb_nt_bids_cand`
         WHERE `nt_bids_id` = #{ntBidsId} AND `number` = #{number} LIMIT 1
@@ -108,45 +95,35 @@
         FROM tb_nt_bids_cand
         WHERE 1 = 1
         <if test="ntId != null and ntId != ''">
-            AND `nt_id` = #{ntId}
+          AND `nt_id` = #{ntId}
         </if>
         <if test="number != null and number != ''">
-            AND `number` = #{number}
+          AND `number` = #{number}
         </if>
         <if test="pkid != null and pkid != ''">
-            AND `pkid` != #{pkid}
+          AND `pkid` != #{pkid}
         </if>
     </select>
 
     <update id="updateNtBidsCand" parameterType="com.silita.model.TbNtBidsCand">
         UPDATE `tb_nt_bids_cand` SET
         <if test="fCandidate != null and fCandidate != ''">
-            `f_candidate` = #{fCandidate},
+          `f_candidate` = #{fCandidate},
         </if>
-        <if test="fQuote != null and fQuote != ''">
-            `f_quote` = #{fQuote},
-        </if>
-        <if test="fProLeader != null and fProLeader != ''">
-            `f_pro_leader` = #{fProLeader},
-        </if>
-        <if test="fTechLeader != null and fTechLeader != ''">
-            `f_tech_leader` = #{fTechLeader},
-        </if>
-        <if test="fBuilder != null and fBuilder != ''">
-            `f_builder` = #{fBuilder},
-        </if>
-        <if test="fSafety != null and fSafety != ''">
-            `f_safety` = #{fSafety},
-        </if>
-        <if test="fQuality != null and fQuality != ''">
-            `f_quality` = #{fQuality},
-        </if>
+        `f_quote` = #{fQuote},
+        `f_pro_leader` = #{fProLeader},
+        `f_tech_leader` = #{fTechLeader},
+        `f_builder` = #{fBuilder},
+        `f_safety` = #{fSafety},
+        `f_quality` = #{fQuality},
         <if test="number != null and number != ''">
-            `number` = #{number},
+          `number` = #{number},
         </if>
         <if test="source != null and source != ''">
-            `source` = #{source}
+          `source` = #{source}
         </if>
+        `update_by` = #{updateBy},
+        `updated` = NOW()
         WHERE `pkid` = #{pkid}
     </update>
 

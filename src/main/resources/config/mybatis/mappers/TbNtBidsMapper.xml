@@ -73,27 +73,13 @@
         <if test="tdEditCode != null and tdEditCode != ''">
             `td_edit_code` = #{tdEditCode},
         </if>
-        <if test="controllSum != null and controllSum != ''">
-            `controll_sum` = #{controllSum},
-        </if>
-        <if test="proSum != null and proSum != ''">
-            `pro_sum` = #{proSum},
-        </if>
-        <if test="proType != null and proType != ''">
-            `pro_type` = #{proType},
-        </if>
-        <if test="proDuration != null and proDuration != ''">
-            `pro_duration` = #{proDuration},
-        </if>
-        <if test="pbMode != null and pbMode != ''">
-            `pb_mode` = #{pbMode},
-        </if>
-        <if test="segment != null and segment != ''">
-            `segment` = #{segment},
-        </if>
-        <if test="updateBy != null and updateBy != ''">
-            `update_by` = #{updateBy},
-        </if>
+        `segment` = #{segment},
+        `controll_sum` = #{controllSum},
+        `pro_sum` = #{proSum},
+        `pro_duration` = #{proDuration},
+        `pb_mode` = #{pbMode},
+        `pro_type` = #{proType},
+        `update_by` = #{updateBy},
         `updated` = NOW()
         WHERE `nt_id` = #{ntId} AND `segment` = #{segment}
     </update>
@@ -134,10 +120,10 @@
     </delete>
 
     <select id="countNtTendersByNtId" parameterType="com.silita.model.TbNtBids" resultType="Integer">
-      SELECT COUNT(*) FROM ${tableName} WHERE nt_id = #{ntId}
+        SELECT COUNT(*) FROM ${tableName} WHERE nt_id = #{ntId}
     </select>
 
     <select id="getNtIdByNtId" parameterType="com.silita.model.TbNtBids" resultType="String">
-         SELECT `nt_id` FROM ${tableName} WHERE pkid = #{pkid}
+        SELECT `nt_id` FROM ${tableName} WHERE pkid = #{pkid}
     </select>
 </mapper>

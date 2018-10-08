@@ -104,21 +104,21 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                                     String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
                                     String tempValue = String.valueOf(map.get("field_value"));
                                     tempMap.put(tempKey, tempValue);
-                                    if("pb_mode".equals(tempKey)) {
+                                    if ("pb_mode".equals(tempKey)) {
                                         tempTenders.setPbModeName(dicCommonMapper.getNameByCode(tempValue));
-                                    } else if("pro_type".equals(tempKey)) {
+                                    } else if ("pro_type".equals(tempKey)) {
                                         twfDict.setCode(tempValue);
                                         twfDict.setType(4);
                                         tempTenders.setProTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
-                                    } else if("biness_type".equals(tempKey)) {
+                                    } else if ("biness_type".equals(tempKey)) {
                                         twfDict.setCode(tempValue);
                                         twfDict.setType(1);
                                         tempTenders.setBinessTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
-                                    } else if("filing_pfm".equals(tempKey)) {
+                                    } else if ("filing_pfm".equals(tempKey)) {
                                         twfDict.setCode(tempValue);
                                         twfDict.setType(6);
                                         tempTenders.setFilingPfmName(twfDictMapper.getNameByCodeAndType(twfDict));
-                                    } else if("nt_td_status".equals(tempKey)) {
+                                    } else if ("nt_td_status".equals(tempKey)) {
                                         twfDict.setCode(tempValue);
                                         twfDict.setType(2);
                                         tempTenders.setNtTdStatusName(twfDictMapper.getNameByCodeAndType(twfDict));
@@ -246,7 +246,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
 
     @Override
     public String saveNtBids(TbNtBids tbNtBids) {
-        String msg = null;
+        String msg = "添加标段信息成功！";
         //更新招标主表状态
         TbNtMian tbNtMian = new TbNtMian();
         tbNtMian.setPkid(tbNtBids.getNtId());
@@ -290,36 +290,34 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 }
                 tbNtBidsCandMapper.batchInsertNtBidsCand(tbNtBidsCands);
             }
-            msg = "添加标段信息成功！";
         } else {
             msg = "更新标段信息成功！";
             //更新中标标段基本信息
             tbNtBidsMapper.updateTbNtBidsByNtIdAndSegment(tbNtBids);
             //批量添加或更新中标候选人
             List<TbNtBidsCand> tbNtBidsCands = tbNtBids.getBidsCands();
-            if(null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
+            if (null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
                 List<TbNtBidsCand> tempInsert = new ArrayList<>(tbNtBidsCands.size());
+                List<TbNtBidsCand> tempUpdate = new ArrayList<>(tbNtBidsCands.size());
                 //更新或修改中标候选人
                 for (int i = 0; i < tbNtBidsCands.size(); i++) {
                     TbNtBidsCand tempBidsCand = tbNtBidsCands.get(i);
                     String pkid = tempBidsCand.getPkid();
-                    if(StringUtils.isEmpty(pkid)) {
+                    if (StringUtils.isEmpty(pkid)) {
                         tempBidsCand.setPkid(DataHandlingUtil.getUUID());
                         tempBidsCand.setNtBidsId(tbNtBids.getPkid());
                         tempBidsCand.setCreateBy(tbNtBids.getCreateBy());
                         tempInsert.add(tempBidsCand);
                     } else {
-                        //number存在不保存
-                       Integer tempCount = tbNtBidsCandMapper.countBidsCandByBtIdAndNtBidsIdAndNumber(tempBidsCand);
-                       if(tempCount == 0) {
-                           tbNtBidsCandMapper.updateNtBidsCand(tempBidsCand);
-                       } else {
-                           msg = "存在中标候选人" + tempBidsCand.getNumber();
-                       }
+                        tbNtBidsCands.get(i).setUpdateBy(tbNtBids.getCreateBy());
+                        tempUpdate.add(tbNtBidsCands.get(i));
                     }
                 }
-                if(tempInsert.size() > 0) {
+                if (tempInsert.size() > 0) {
                     tbNtBidsCandMapper.batchInsertNtBidsCand(tempInsert);
+                }
+                if(tempUpdate.size() > 0) {
+                    tbNtBidsCandMapper.batchUpdateNtBidsCand(tempUpdate);
                 }
             }
         }
@@ -332,7 +330,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         //获取中标编辑明细
         List<TbNtBids> lists = tbNtBidsMapper.listNtBidsByNtId(tbNtBids);
         //添加编辑明细变更信息
-        if(null != lists && lists.size() > 0) {
+        if (null != lists && lists.size() > 0) {
             TbNtBids tempNtBids;
             for (int i = 0; i < lists.size(); i++) {
                 tempNtBids = lists.get(i);
@@ -349,13 +347,13 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         String field_name = (String) map.get("field_name");
                         String field_value = (String) map.get("field_value");
                         changeField.put(field_name, field_value);
-                        if("pbMode".equals(field_name)) {
+                        if ("pbMode".equals(field_name)) {
                             tempNtBids.setPbModeName(dicCommonMapper.getNameByCode(field_value));
-                        } else if("proType".equals(field_name)) {
+                        } else if ("proType".equals(field_name)) {
                             twfDict.setCode(field_value);
                             twfDict.setType(4);
                             tempNtBids.setProTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
-                        } else if("binessType".equals(field_name)) {
+                        } else if ("binessType".equals(field_name)) {
                             twfDict.setCode(field_value);
                             twfDict.setType(1);
                             tempNtBids.setBinessTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
@@ -374,7 +372,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 }
                 List<TbNtBidsCand> bidsCands = tempNtBids.getBidsCands();
                 //添加中标候选人编辑明细
-                if(null != bidsCands && bidsCands.size() > 0) {
+                if (null != bidsCands && bidsCands.size() > 0) {
                     TbNtBidsCand tempNtBidsCand;
                     String candidate;
                     for (int j = 0; j < bidsCands.size(); j++) {
@@ -405,13 +403,13 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         }
                         //拆出3个中标候选人(前端要的)
                         candidate = tempNtBidsCand.getfCandidate();
-                        if(!StringUtils.isEmpty(candidate)) {
+                        if (!StringUtils.isEmpty(candidate)) {
                             String[] candidates = candidate.split("\\,");
-                            if(candidates.length > 0) {
+                            if (candidates.length > 0) {
                                 tempNtBidsCand.setOneCandidate(candidates[0]);
-                                if(candidates.length > 1) {
+                                if (candidates.length > 1) {
                                     tempNtBidsCand.setTwoCandidate(candidates[1]);
-                                    if(candidates.length > 2) {
+                                    if (candidates.length > 2) {
                                         tempNtBidsCand.setThreeCandidate(candidates[2]);
                                     }
                                 }
@@ -553,7 +551,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         PaginationAndSort pageSort = new PaginationAndSort(1, 10, sort);
         //
         List<QuerysModel> querys = new ArrayList();
-        if(!StringUtils.isEmpty(queryKey)) {
+        if (!StringUtils.isEmpty(queryKey)) {
             querys.add(new QuerysModel(ConstantUtil.CONDITION_SHOULD, ConstantUtil.MATCHING_WILDCARD, "comName", "*" + queryKey + "*"));
             querys.add(new QuerysModel(ConstantUtil.CONDITION_SHOULD, ConstantUtil.MATCHING_WILDCARD, "comNamePy", "*" + queryKey + "*"));
         }
@@ -567,7 +565,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         }
         //获取手动录入数据
         List<Map<String, Object>> tempList = tbCompanyInfoHmMapper.listComNameCountByNameOrPinYin(queryKey);
-        if(tempList.size() > 0) {
+        if (tempList.size() > 0) {
             lists.addAll(tempList);
         }
         return lists;

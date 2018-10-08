@@ -171,21 +171,21 @@
     <update id="updateNtMainByPkId" parameterType="com.silita.model.TbNtMian">
         UPDATE ${tableName} SET
         <if test="binessType !=null and binessType!=''">
-        `biness_type` = #{binessType},
+          `biness_type` = #{binessType},
         </if>
         <if test="ntCategory !=null and ntCategory!=''">
-        `nt_category` = #{ntCategory},
+          `nt_category` = #{ntCategory},
         </if>
-        `nt_type` = #{ntType},
         <if test="title !=null and title!=''">
-            `title` = #{title},
+          `title` = #{title},
         </if>
         <if test="pubDate !=null and pubDate!=''">
-            `pub_date` = #{pubDate},
+          `pub_date` = #{pubDate},
         </if>
         <if test="url !=null and url!=''">
-            `url` = #{url},
+          `url` = #{url},
         </if>
+        `nt_type` = #{ntType},
         `city_code` = #{cityCode},
         `county_code` = #{countyCode},
         `updated` = NOW()

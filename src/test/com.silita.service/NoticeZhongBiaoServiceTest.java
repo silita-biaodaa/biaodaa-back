@@ -91,11 +91,11 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
     @Test
     public void testController5()throws Exception {
         String requestBody = "{\n" +
-                "\"pkid\":\"1e3eb71425734b01aa487a61595f7284\",\"ntId\":\"2\", \"tdEditCode\":\"td153629015755017\", \"segment\":\"1\", \"controllSum\":200, \"proSum\":210, \"proType\":\"3\", \"proDuration\":\"666\", \"pbMode\":\"中标更新评标办法\", \"cityCode\":\"ceshi\", \"countyCode\":\"ceshi\", \"source\":\"hunan\", \"binessType\":\"02\",\n" +
+                "\"pkid\":\"1e3eb71425734b01aa487a61595f7284\",\"ntId\":\"2\", \"tdEditCode\":\"td153629015755017\", \"segment\":\"1\", \"controllSum\":, \"proSum\":210, \"proType\":\"3\", \"proDuration\":\"666\", \"pbMode\":\"中标更新评标办法\", \"cityCode\":\"ceshi\", \"countyCode\":\"ceshi\", \"source\":\"hunan\", \"binessType\":\"02\",\n" +
                 "\"bidsCands\":\n" +
                 "\t\t\t[\n" +
-                "\t\t\t\t{\"ntId\":\"2\",\"fCandidate\":\"测试更新中标候选人1\",\"fQuote\":310,\"fProLeader\":\"测试更新项目负责人1\",\"fTechLeader\":\"测试更新技术负责人1\"\n" +
-                "\t\t\t\t,\"fBuilder\":\"测试更新施工员1\",\"fSafety\":\"测试更新安全员1\",\"fQuality\":\"测试更新质量员1\",\"number\":1,\"source\":\"hunan\",\"pkid\":\"7830dfaa271f4fac8acce070b60ea9ac\"},\n" +
+                "\t\t\t\t{\"ntId\":\"2\",\"fCandidate\":\"测试更新中标候选人1\",\"fQuote\":310,\"fProLeader\":\"测试项目负责人1\",\"fTechLeader\":\"测试技术负责人1\"\n" +
+                "\t\t\t\t,\"fBuilder\":\"测试施工员1\",\"fSafety\":\"测试安全员1\",\"fQuality\":\"测试质量员1\",\"number\":1,\"source\":\"hunan\",\"pkid\":\"b1c82c6930e646988b01b10b8c92c49d\"},\n" +
                 "\t\t\t\t{\"ntId\":\"2\",\"fCandidate\":\"测试中标候选人2\",\"fQuote\":410,\"fProLeader\":\"测试项目负责人2\",\"fTechLeader\":\"测试技术负责人2\"\n" +
                 "\t\t\t\t,\"fBuilder\":\"测试施工员2\",\"fSafety\":\"测试安全员2\",\"fQuality\":\"测试质量员2\",\"number\":3,\"source\":\"hunan\"}\n" +
                 "\t\t\t]\n" +
@@ -142,8 +142,8 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController8()throws Exception{
-        String requestBody = "{\"ntId\":\"2\", \"ntEditId\":\"1e3eb71425734b01aa487a61595f7284\", \"ntCategory\":\"2\", \"source\":\"hunan\", \"fieldFrom\":\"200\", " +
-                "\"fieldName\":\"controllSum\", \"fieldValue\":\"300\"}";
+        String requestBody = "{\"ntId\":\"2\", \"ntEditId\":\"7830dfaa271f4fac8acce070b60ea9ac\", \"ntCategory\":\"2\", \"source\":\"hunan\", \"fieldFrom\":\"200\", " +
+                "\"fieldName\":\"controllSum\", \"fieldValue\":\"500\"}";
         String responseString = mockMvc.perform(post("/zhongbiao/insertTbNtChange").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
