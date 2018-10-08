@@ -113,6 +113,9 @@
         <if test="number != null and number != ''">
             AND `number` = #{number}
         </if>
+        <if test="pkid != null and pkid != ''">
+            AND `pkid` != #{pkid}
+        </if>
     </select>
 
     <update id="updateNtBidsCand" parameterType="com.silita.model.TbNtBidsCand">
