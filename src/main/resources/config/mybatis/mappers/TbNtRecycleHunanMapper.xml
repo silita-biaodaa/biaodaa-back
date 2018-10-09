@@ -87,7 +87,7 @@
       #{createBy}
       FROM tb_nt_mian_${source} AS t
       LEFT JOIN tb_nt_tenders_${source} AS tend ON t.pkid = tend.nt_id
-      WHERE t.`pkid` = #{ntId}
+      WHERE t.`pkid` = #{ntId} LIMIT 1
     </insert>
 
     <insert id="inertRecycleForBids" parameterType="com.silita.model.TbNtRecycle">
@@ -110,6 +110,6 @@
       #{createBy}
       FROM tb_nt_mian_${source} AS t
       LEFT JOIN tb_nt_bids_${source} AS bids ON t.pkid = bids.nt_id
-      WHERE t.`pkid` = #{ntId}
+      WHERE t.`pkid` = #{ntId} LIMIT 1
     </insert>
 </mapper>

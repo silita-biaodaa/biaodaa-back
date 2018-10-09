@@ -54,7 +54,7 @@
               `number` = #{temp.number},
             </if>
             <if test="temp.source != null and temp.source != ''">
-              `source` = #{temp.source}
+              `source` = #{temp.source},
             </if>
             `update_by` = #{temp.updateBy},
             `updated` = NOW()
@@ -120,7 +120,7 @@
           `number` = #{number},
         </if>
         <if test="source != null and source != ''">
-          `source` = #{source}
+          `source` = #{source},
         </if>
         `update_by` = #{updateBy},
         `updated` = NOW()

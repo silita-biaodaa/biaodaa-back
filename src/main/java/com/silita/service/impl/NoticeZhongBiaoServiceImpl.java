@@ -552,6 +552,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         //
         List<QuerysModel> querys = new ArrayList();
         if (!StringUtils.isEmpty(queryKey)) {
+            queryKey = queryKey.toLowerCase();
             querys.add(new QuerysModel(ConstantUtil.CONDITION_SHOULD, ConstantUtil.MATCHING_WILDCARD, "comName", "*" + queryKey + "*"));
             querys.add(new QuerysModel(ConstantUtil.CONDITION_SHOULD, ConstantUtil.MATCHING_WILDCARD, "comNamePy", "*" + queryKey + "*"));
         }
@@ -563,10 +564,13 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             temp.put("creditCode", hit.getSource().get("creditCode"));
             lists.add(temp);
         }
-        //获取手动录入数据
-        List<Map<String, Object>> tempList = tbCompanyInfoHmMapper.listComNameCountByNameOrPinYin(queryKey);
-        if (tempList.size() > 0) {
-            lists.addAll(tempList);
+        if (!StringUtils.isEmpty(queryKey)) {
+            queryKey = queryKey.toLowerCase();
+            //获取手动录入数据
+            List<Map<String, Object>> tempList = tbCompanyInfoHmMapper.listComNameCountByNameOrPinYin(queryKey);
+            if (tempList.size() > 0) {
+                lists.addAll(tempList);
+            }
         }
         return lists;
     }
