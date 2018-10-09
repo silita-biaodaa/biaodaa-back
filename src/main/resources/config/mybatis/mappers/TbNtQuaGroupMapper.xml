@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbNtQuaGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.TbNtQuaGroup" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="VARCHAR" />
+    <result column="qua_id" property="quaId" jdbcType="VARCHAR" />
+    <result column="rel_type" property="relType" jdbcType="VARCHAR" />
+    <result column="is_head" property="isHead" jdbcType="BIT" />
+    <result column="px" property="px" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>
