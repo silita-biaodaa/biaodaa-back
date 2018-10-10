@@ -15,4 +15,16 @@
     <result column="updated" property="updated" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
   </resultMap>
+
+  <select id="queryNtRegexGroup" resultMap="BaseResultMap" parameterType="com.silita.model.TbNtRegexGroup">
+    select *
+    from tb_nt_regex_group
+    where 1=1
+    <if test="ntEditId != null and ntEditId != ''">
+      and nt_edit_id = #{ntEditId}
+    </if>
+    <if test="ntId != null and ntId != ''">
+      and nt_id = #{ntId}
+    </if>
+  </select>
 </mapper>

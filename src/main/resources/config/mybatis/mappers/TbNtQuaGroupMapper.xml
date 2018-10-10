@@ -8,8 +8,19 @@
     <id column="pkid" property="pkid" jdbcType="VARCHAR" />
     <result column="group_id" property="groupId" jdbcType="VARCHAR" />
     <result column="qua_id" property="quaId" jdbcType="VARCHAR" />
+    <result column="qua_grade_id" property="quaGradeId" jdbcType="VARCHAR" />
     <result column="rel_type" property="relType" jdbcType="VARCHAR" />
     <result column="is_head" property="isHead" jdbcType="BIT" />
     <result column="px" property="px" jdbcType="VARCHAR" />
   </resultMap>
+
+  <select id="queryNtQuaGroupList" parameterType="com.silita.model.TbNtQuaGroup" resultMap="BaseResultMap">
+    select *
+    from tb_nt_qua_group
+    where 1=1
+    <if test="groupId != null and groupId != ''">
+      and group_id = #{groupId}
+    </if>
+    order by px asc
+  </select>
 </mapper>

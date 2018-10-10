@@ -22,6 +22,11 @@ public class TbNtQuaGroup {
     private String quaId;
 
     /**
+     * 资质等级id
+     */
+    private String quaGradeId;
+
+    /**
      * 组别内资质的和/或关系
      */
     private String relType;
