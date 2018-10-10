@@ -99,17 +99,17 @@ public class TbNtBidsCand {
     /**
      * 1中标候选人
      */
-    private String oneCandidate;
+    private String oneCandidate = "";
 
     /**
      * 2中标候选人
      */
-    private String twoCandidate;
+    private String twoCandidate = "";
 
     /**
      * 3中标候选人
      */
-    private String threeCandidate;
+    private String threeCandidate = "";
 
 
     public String getPkid() {

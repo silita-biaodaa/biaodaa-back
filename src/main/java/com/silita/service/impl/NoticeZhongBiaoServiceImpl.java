@@ -61,6 +61,8 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     TbNtRecycleHunanMapper recycleHunanMapper;
     @Autowired
     TbCompanyInfoHmMapper tbCompanyInfoHmMapper;
+    @Autowired
+    SysAreaMapper sysAreaMapper;
 
     @Autowired
     private NativeElasticSearchUtils nativeElasticSearchUtils;
@@ -325,7 +327,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     }
 
     @Override
-    public List<TbNtBids> listTbNtBidsByNtId(TbNtBids tbNtBids) {
+    public Object listTbNtBidsByNtId(TbNtBids tbNtBids) {
         tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
         //获取中标编辑明细
         List<TbNtBids> lists = tbNtBidsMapper.listNtBidsByNtId(tbNtBids);
@@ -419,9 +421,26 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         }
                     }
                 }
+                //前端要的特定数据
+                if (!StringUtils.isEmpty(tempNtBids.getCityCodeName())) {
+                    SysArea sysArea = new SysArea();
+                    sysArea.setAreaName(tempNtBids.getCityCodeName());
+                    sysArea.setAreaCode(tempNtBids.getSource());
+                    String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
+                    tempNtBids.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
+                }
             }
+            return lists;
+        } else {
+            Map map = new HashMap(2);
+            TbNtMian tbNtMian = new TbNtMian();
+            tbNtMian.setPkid(tbNtBids.getNtId());
+            tbNtMian.setSource(tbNtBids.getSource());
+            tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
+            String status = tbNtMianMapper.getNtStatusByPkId(tbNtMian);
+            map.put("status", status);
+            return map;
         }
-        return lists;
     }
 
     @Override
@@ -561,7 +580,11 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         for (SearchHit hit : response.getHits()) {
             temp = new HashMap(4);
             temp.put("companyName", hit.getSource().get("comName"));
-            temp.put("creditCode", hit.getSource().get("creditCode"));
+            if(null == hit.getSource().get("creditCode")) {
+                temp.put("creditCode", "");
+            } else {
+                temp.put("creditCode", hit.getSource().get("creditCode"));
+            }
             lists.add(temp);
         }
         if (!StringUtils.isEmpty(queryKey)) {
