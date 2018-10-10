@@ -1,41 +1,37 @@
 package com.silita.service;
 
+import com.silita.dao.TbNtRegexGroupMapper;
+import com.silita.model.TbNtRegexGroup;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QualTest {
+public class QuaTest extends ConfigTest {
+
+    @Autowired
+    TbNtRegexGroupMapper tbNtRegexGroupMapper;
 
     @Test
     public void test() {
-        List<String> list = this.designFormulas(initData());
-        System.out.println(list);
-    }
+        TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+        tbNtRegexGroup.setNtEditId("1");
+        tbNtRegexGroup.setNtEditId("1");
+        TbNtRegexGroup ntRegexGroup = tbNtRegexGroupMapper.queryNtRegexGroup(tbNtRegexGroup);
+        String groupRegex = ntRegexGroup.getGroupRegex();
+        String[] groupRegexs = groupRegex.split("\\|");
+        List<List<String>> list = new ArrayList<>(groupRegexs.length);
+        for (String str : groupRegexs) {
+            if (str.contains("&")) {
+                String[] andStr = str.split("&");
+                for (String groupStr : andStr) {
 
-    private List<Map<String, Object>> initData() {
-        List<Map<String, Object>> mapList = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        List<Map<String, Object>> list = new ArrayList<>();
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("label", "资质2");
-        map1.put("rela", "&");
-        list.add(map1);
-        map1 = new HashMap<>();
-        map1.put("label", "资质3");
-        list.add(map1);
-        map1 = new HashMap<>();
-        map1.put("label", "资质4");
-        list.add(map1);
-        map1 = new HashMap<>();
-        map1.put("label", "资质5");
-        list.add(map1);
-        map.put("list", list);
-        map.put("label", "资质1");
-        mapList.add(map);
-        return mapList;
+                }
+            }
+        }
+        System.out.println(groupRegexs);
     }
 
     private List<String> designFormulas(List<Map<String, Object>> list) {
@@ -67,7 +63,7 @@ public class QualTest {
         for (String str : shortList) {
             lable = lable + "&" + str;
         }
-        lists.add(lable.substring(1,lable.length()));
+        lists.add(lable.substring(1, lable.length()));
         return lists;
     }
 }
