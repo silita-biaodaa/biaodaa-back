@@ -265,9 +265,9 @@
         (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = t1.filing_pfm) AS filing_pfm_name,
         (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = t1.nt_td_status) AS nt_td_status_name,
         t.source, t.nt_status
-        FROM ${tableName} t1
-        LEFT JOIN tb_nt_mian_${source} t ON t1.nt_id = t.pkid
-        WHERE t1.nt_id = #{ntId} AND t.is_enable = 1
+        FROM tb_nt_mian_${source} t
+        LEFT JOIN ${tableName} t1 ON t.pkid = t1.nt_id
+        WHERE t.pkid = #{ntId} AND t.is_enable = 1
         ORDER BY LENGTH(t1.`segment`) ASC, t1.`segment` ASC
     </select>
 

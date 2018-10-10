@@ -102,11 +102,11 @@
       (SELECT `area_name` FROM sys_area WHERE area_code = mian.county_code) AS county_code_name,
       (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = bids.pro_type) AS pro_type_name,
       (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = mian.biness_type) AS biness_type_name
-      FROM ${tableName} bids
-      LEFT JOIN tb_nt_mian_${source} mian ON bids.nt_id = mian.pkid
+      FROM tb_nt_mian_${source} mian
+      LEFT JOIN ${tableName} bids ON mian.pkid = bids.nt_id
       LEFT JOIN tb_nt_bids_cand cand ON bids.pkid = cand.nt_bids_id
       <!-- LEFT JOIN tb_nt_tenders_${source} tend ON bids.td_edit_code = tend.edit_code -->
-      WHERE bids.`nt_id` = #{ntId} AND mian.is_enable = 1
+      WHERE mian.pkid = #{ntId} AND mian.is_enable = 1
     </select>
 
     <delete id="batchDeleteNtBidsByPkId" parameterType="Map">

@@ -161,7 +161,7 @@ public class QualTest {
                 for (int j = 0; j < list[1].size(); j++) {
                     for (int k = 0; k < list[2].size(); k++) {
                         for (int l = 0; l < list[3].size(); l++) {
-                            for (int m = 0; m < list[3].size(); m++) {
+                            for (int m = 0; m < list[4].size(); m++) {
                                 sb = new StringBuilder();
                                 sb = sb.append(list[0].get(i)).append(list[1].get(j)).append(list[2].get(k)).append(list[3].get(l)).append(list[4].get(m));
                                 result.add(sb.toString());
@@ -172,7 +172,6 @@ public class QualTest {
             }
             return result;
         }
-        System.out.println(result);
-        return result;
+        return null;
     }
 }

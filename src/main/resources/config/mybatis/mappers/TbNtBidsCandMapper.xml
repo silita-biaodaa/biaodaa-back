@@ -75,16 +75,16 @@
     <select id="getNtBidsCandByNtBidsIdAndNumber" parameterType="com.silita.model.TbNtBidsCand" resultType="java.util.LinkedHashMap">
         SELECT
         <if test="number == '1' or number == 1">
-          `f_candidate` AS `f_candidateA`, `f_quote` AS `f_quoteA`, `f_pro_leader` AS `f_pro_leaderA`, `f_tech_leader` AS `f_tech_leaderA`, `f_builder` AS `f_builderA`,
-          `f_safety` AS `f_safetyA`, `f_quality` AS `f_qualityA`
+          `f_candidate` AS `f_candidate1`, `f_quote` AS `f_quote1`, `f_pro_leader` AS `f_pro_leader1`, `f_tech_leader` AS `f_tech_leader1`, `f_builder` AS `f_builder1`,
+          `f_safety` AS `f_safety1`, `f_quality` AS `f_quality1`, `pkid`
         </if>
         <if test="number == '2' or number == 2">
-          `f_candidate` AS `f_candidateB`, `f_quote` AS `f_quoteB`, `f_pro_leader` AS `f_pro_leaderB`, `f_tech_leader` AS `f_tech_leaderB`, `f_builder` AS `f_builderB`,
-          `f_safety` AS `f_safetyB`, `f_quality` AS `f_qualityB`
+          `f_candidate` AS `f_candidate2`, `f_quote` AS `f_quote2`, `f_pro_leader` AS `f_pro_leader2`, `f_tech_leader` AS `f_tech_leader2`, `f_builder` AS `f_builder2`,
+          `f_safety` AS `f_safety2`, `f_quality` AS `f_quality2`, `pkid`
         </if>
         <if test="number == '3' or number == 3">
-          `f_candidate` AS `f_candidateC`, `f_quote` AS `f_quoteC`, `f_pro_leader` AS `f_pro_leaderC`, `f_tech_leader` AS `f_tech_leaderC`, `f_builder` AS `f_builderC`,
-          `f_safety` AS `f_safetyC`, `f_quality` AS `f_qualityC`
+          `f_candidate` AS `f_candidate3`, `f_quote` AS `f_quote3`, `f_pro_leader` AS `f_pro_leader3`, `f_tech_leader` AS `f_tech_leader3`, `f_builder` AS `f_builder3`,
+          `f_safety` AS `f_safety3`, `f_quality` AS `f_quality3`, `pkid`
         </if>
         FROM `tb_nt_bids_cand`
         WHERE `nt_bids_id` = #{ntBidsId} AND `number` = #{number} LIMIT 1
