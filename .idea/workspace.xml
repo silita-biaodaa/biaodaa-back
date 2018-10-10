@@ -6,24 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5295f244-9126-4c8c-bc8a-54ac801ebe95" name="Default" comment="#标大大后台管理接口">
-      <change afterPath="$PROJECT_DIR$/../biaodaa-back/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../biaodaa-back/.idea/copyright/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../biaodaa-back/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../biaodaa-back/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../biaodaa-back/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../biaodaa-back/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../biaodaa-back/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../biaodaa-back/biaodaa-back.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/biaodaa-back.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../biaodaa-back/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/model/TbNtBidsCand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/model/TbNtBidsCand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/INoticeZhongBiaoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/INoticeZhongBiaoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhaoBiaoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhaoBiaoServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhongBiaoServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhongBiaoServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../biaodaa-back/src/main/resources/config/mybatis/mappers/TbNtBidsMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/src/main/resources/config/mybatis/mappers/TbNtBidsMapper.xml" afterDir="false" />
-    </list>
     <list id="bd339854-bda8-4989-8ebb-1486685ca4a7" name="New changelist" comment="" />
+    <list default="true" id="5295f244-9126-4c8c-bc8a-54ac801ebe95" name="Default" comment="#标大大后台管理接口">
+      <change afterPath="$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../biaodaa-back/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../biaodaa-back/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../biaodaa-back/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QuaTest.java" beforeDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -71,11 +60,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../biaodaa-back/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="447">
+              <caret line="27" column="41" lean-forward="true" selection-start-line="27" selection-start-column="41" selection-end-line="27" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="NoticeZhongBiaoController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/controller/NoticeZhongBiaoController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="439">
-              <caret line="122" column="5" selection-start-line="122" selection-start-column="5" selection-end-line="122" selection-end-column="5" />
+            <state relative-caret-position="263">
+              <caret line="114" column="5" lean-forward="true" selection-start-line="114" selection-start-column="5" selection-end-line="114" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -83,8 +81,8 @@
       <file leaf-file-name="QualTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1800">
-              <caret line="164" column="57" selection-start-line="164" selection-start-column="57" selection-end-line="164" selection-end-column="57" />
+            <state relative-caret-position="308">
+              <caret line="14" column="44" lean-forward="true" selection-start-line="14" selection-start-column="44" selection-end-line="14" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -96,16 +94,16 @@
         <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhaoBiaoServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-18">
-              <caret line="475" column="48" lean-forward="true" selection-start-line="475" selection-start-column="48" selection-end-line="475" selection-end-column="48" />
+              <caret line="475" column="48" selection-start-line="475" selection-start-column="48" selection-end-line="475" selection-end-column="48" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NoticeZhongBiaoServiceImpl.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="NoticeZhongBiaoServiceImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhongBiaoServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="304">
-              <caret line="579" column="50" lean-forward="true" selection-start-line="579" selection-start-column="50" selection-end-line="579" selection-end-column="50" />
+              <caret line="576" column="9" selection-start-line="576" selection-start-column="9" selection-end-line="576" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -145,7 +143,7 @@
         <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/resources/config/mybatis/mappers/TbNtBidsCandMapper.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="88">
-              <caret line="4" column="71" lean-forward="true" selection-start-line="4" selection-start-column="71" selection-end-line="4" selection-end-column="71" />
+              <caret line="4" column="71" selection-start-line="4" selection-start-column="71" selection-end-line="4" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -215,7 +213,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/silita/model/TbNtBids.java" />
         <option value="$PROJECT_DIR$/src/main/resources/config/mybatis/mappers/TbNtBidsMapper.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/resources/config/biaodaa-back.properties" />
@@ -258,14 +255,15 @@
         <option value="$PROJECT_DIR$/src/test/com.silita.service/QualTest.java" />
         <option value="$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/StringTest.java" />
         <option value="$PROJECT_DIR$/../biaodaa-back/src/main/resources/config/mybatis/mappers/TbNtRecycleHunanMapper.xml" />
-        <option value="$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java" />
         <option value="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhaoBiaoServiceImpl.java" />
-        <option value="$PROJECT_DIR$/../biaodaa-back/pom.xml" />
         <option value="$PROJECT_DIR$/../biaodaa-back/src/main/resources/config/mybatis/mappers/TbNtBidsMapper.xml" />
         <option value="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/INoticeZhongBiaoService.java" />
         <option value="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/model/TbNtBidsCand.java" />
         <option value="$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/NoticeZhongBiaoServiceTest.java" />
         <option value="$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhongBiaoServiceImpl.java" />
+        <option value="$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QuaTest.java" />
+        <option value="$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java" />
+        <option value="$PROJECT_DIR$/../biaodaa-back/pom.xml" />
       </list>
     </option>
   </component>
@@ -369,35 +367,14 @@
               <item name="biaodaa-back" type="b2602c69:ProjectViewProjectNode" />
               <item name="biaodaa-back" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="biaodaa-back" type="b2602c69:ProjectViewProjectNode" />
               <item name="biaodaa-back" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="biaodaa-back" type="b2602c69:ProjectViewProjectNode" />
-              <item name="biaodaa-back" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-              <item name="mybatis" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="biaodaa-back" type="b2602c69:ProjectViewProjectNode" />
-              <item name="biaodaa-back" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-              <item name="mybatis" type="462c0819:PsiDirectoryNode" />
-              <item name="mappers" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="com.silita.service" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -435,6 +412,117 @@
       <recent name="G:\biaodaa-back\src\main\resource\config\mybatis\mappers" />
       <recent name="G:\biaodaa-back\src\main\java\com\silita\utils\split" />
     </key>
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QuaTest.java</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -1123,7 +1211,7 @@
       <workItem from="1538293111714" duration="63000" />
       <workItem from="1538295298373" duration="2702000" />
       <workItem from="1538961501961" duration="23338000" />
-      <workItem from="1539052841843" duration="24094000" />
+      <workItem from="1539052841843" duration="24641000" />
     </task>
     <task id="LOCAL-00025" summary="#标大大后台管理接口  添加、修改招标公告标段">
       <created>1535682633158</created>
@@ -1504,7 +1592,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="819323000" />
+    <option name="totallyTimeSpent" value="819870000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1859,12 +1947,6 @@
           <option name="timeStamp" value="478" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java</url>
-          <line>73</line>
-          <properties />
-          <option name="timeStamp" value="481" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhongBiaoServiceImpl.java</url>
           <line>565</line>
           <properties />
@@ -1907,13 +1989,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/resources/config/spring/applicationContext.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="74" column="8" selection-start-line="74" selection-start-column="8" selection-end-line="74" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/elasticsearch/elasticsearch/5.5.2/elasticsearch-5.5.2.jar!/org/elasticsearch/search/SearchHits.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -2148,13 +2223,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/controller/NoticeZhongBiaoController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="122" column="5" selection-start-line="122" selection-start-column="5" selection-end-line="122" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../biaodaa-back/biaodaa-back.iml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -2180,16 +2248,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1800">
-          <caret line="164" column="57" selection-start-line="164" selection-start-column="57" selection-end-line="164" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/resources/config/mybatis/mappers/TbNtRecycleHunanMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
@@ -2208,13 +2266,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-162">
           <caret line="239" column="40" selection-start-line="239" selection-start-column="40" selection-end-line="239" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../biaodaa-back/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="322" column="21" selection-start-line="322" selection-start-column="21" selection-end-line="322" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -2242,7 +2293,7 @@
     <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/resources/config/mybatis/mappers/TbNtBidsCandMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
-          <caret line="4" column="71" lean-forward="true" selection-start-line="4" selection-start-column="71" selection-end-line="4" selection-end-column="71" />
+          <caret line="4" column="71" selection-start-line="4" selection-start-column="71" selection-end-line="4" selection-end-column="71" />
         </state>
       </provider>
     </entry>
@@ -2260,7 +2311,7 @@
     <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhaoBiaoServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-18">
-          <caret line="475" column="48" lean-forward="true" selection-start-line="475" selection-start-column="48" selection-end-line="475" selection-end-column="48" />
+          <caret line="475" column="48" selection-start-line="475" selection-start-column="48" selection-end-line="475" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -2274,7 +2325,41 @@
     <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/service/impl/NoticeZhongBiaoServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="304">
-          <caret line="579" column="50" lean-forward="true" selection-start-line="579" selection-start-column="50" selection-end-line="579" selection-end-column="50" />
+          <caret line="576" column="9" selection-start-line="576" selection-start-column="9" selection-end-line="576" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QuaTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="44" lean-forward="true" selection-end-line="178" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/main/java/com/silita/controller/NoticeZhongBiaoController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="263">
+          <caret line="114" column="5" lean-forward="true" selection-start-line="114" selection-start-column="5" selection-end-line="114" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../biaodaa-back/src/test/com.silita.service/QualTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="44" lean-forward="true" selection-start-line="14" selection-start-column="44" selection-end-line="14" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../biaodaa-back/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="447">
+          <caret line="27" column="41" lean-forward="true" selection-start-line="27" selection-start-column="41" selection-end-line="27" selection-end-column="41" />
         </state>
       </provider>
     </entry>
