@@ -72,7 +72,7 @@ public class ExcelAnalysis extends ConfigTest {
 
 
     private void add(List<SysArea> areaList) {
-        for (SysArea area : areaList) {
+        for (SysArea area:areaList) {
             sysAreaMapper.insertArea(area);
         }
     }
