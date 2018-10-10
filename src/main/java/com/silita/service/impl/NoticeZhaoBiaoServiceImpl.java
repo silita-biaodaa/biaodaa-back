@@ -251,23 +251,20 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         List<TbNtTenders> lists = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
         if (null != lists && lists.size() > 0) {
-            try {
-                for (int i = 0; i < lists.size(); i++) {
-                    TbNtTenders tbNtTenders1 = lists.get(i);
-                    //前端要的特定数据
-                    if (!StringUtils.isEmpty(tbNtTenders1.getCityCodeName())) {
-                        SysArea sysArea = new SysArea();
-                        sysArea.setAreaName(tbNtTenders1.getCityCodeName());
-                        sysArea.setAreaCode(tbNtTenders.getSource());
-                        String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
-                        tbNtTenders1.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
-                    }
+            TbNtTenders tempTbNtTenders;
+            for (int i = 0; i < lists.size(); i++) {
+                tempTbNtTenders = lists.get(i);
+                //前端要的特定数据
+                if (!StringUtils.isEmpty(tempTbNtTenders.getCityCodeName())) {
+                    SysArea sysArea = new SysArea();
+                    sysArea.setAreaName(tempTbNtTenders.getCityCodeName());
+                    sysArea.setAreaCode(tbNtTenders.getSource());
+                    String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
+                    tempTbNtTenders.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
-        if(lists.size() == 0) {
+            return lists;
+        } else {
             Map map = new HashMap(2);
             TbNtMian tbNtMian = new TbNtMian();
             tbNtMian.setPkid(tbNtTenders.getNtId());
@@ -277,7 +274,6 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             map.put("status", status);
             return map;
         }
-        return lists;
     }
 
     @Override
