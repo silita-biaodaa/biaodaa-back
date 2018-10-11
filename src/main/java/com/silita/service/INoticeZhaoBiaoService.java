@@ -149,4 +149,10 @@ public interface INoticeZhaoBiaoService {
      */
     Map<String, Object> listNtAssociateGp(TbNtAssociateGp tbNtAssociateGp);
 
+    /**
+     * 添加资质关系表达式(程序算法生成）
+     * @param tbNtRegexQua
+     */
+    void insertNtRegexQua(TbNtRegexQua tbNtRegexQua);
+
 }

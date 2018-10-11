@@ -14,13 +14,14 @@
     <result column="px" property="px" jdbcType="VARCHAR" />
   </resultMap>
 
+
   <select id="queryNtQuaGroupList" parameterType="com.silita.model.TbNtQuaGroup" resultMap="BaseResultMap">
-    select *
-    from tb_nt_qua_group
-    where 1=1
+    SELECT *
+    FROM tb_nt_qua_group
+    WHERE 1=1
     <if test="groupId != null and groupId != ''">
-      and group_id = #{groupId}
+      AND `group_id` = #{groupId}
     </if>
-    order by px asc
+    ORDER BY `px` ASC
   </select>
 </mapper>

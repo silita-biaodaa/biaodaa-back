@@ -6,9 +6,9 @@ import com.silita.utils.MyMapper;
 public interface TbNtRegexGroupMapper extends MyMapper<TbNtRegexGroup> {
 
     /**
-     * 查询公告标段资质组之间的关系
+     * 根据公告id、标段id获取资质组关系
      * @param tbNtRegexGroup
      * @return
      */
-    TbNtRegexGroup queryNtRegexGroup(TbNtRegexGroup tbNtRegexGroup);
+    TbNtRegexGroup getNtRegexGroupByNtIdAndNtEditId(TbNtRegexGroup tbNtRegexGroup);
 }

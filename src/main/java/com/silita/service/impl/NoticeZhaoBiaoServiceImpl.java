@@ -51,6 +51,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtAssociateGpMapper tbNtAssociateGpMapper;
     @Autowired
     TbNtTextHunanMapper tbNtTextHunanMapper;
+    @Autowired
+    TbNtRegexGroupMapper tbNtRegexGroupMapper;
 
 
     SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -511,4 +513,148 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         return super.handlePageCount(result, tbNtAssociateGp);
     }
 
+    @Override
+    public void insertNtRegexQua(TbNtRegexQua tbNtRegexQua) {
+        TbNtRegexGroup tempRegexGroup = new TbNtRegexGroup();
+        tempRegexGroup.setNtId(tbNtRegexQua.getNtId());
+        tempRegexGroup.setNtEditId(tbNtRegexQua.getNtEditId());
+        //1、获取资质组关系表达式
+        TbNtRegexGroup tbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tempRegexGroup);
+        String groupRegex = tbNtRegexGroup.getGroupRegex();
+        //按|分割，把资质拆成诺干块
+        String[] blockQualGroup = groupRegex.split("\\|");
+        for (int i = 0; i < blockQualGroup.length; i++) {
+            String block = blockQualGroup[i];
+            //获取块
+            List<String> tempList = this.splitBlockQualGroup(block);
+            if (tempList.size() > 0) {
+                List<String> temp = null;
+                Map<String, List> tempMap = new TreeMap();
+                if (tempList.size() > 1) {
+                    for (int j = 0; j < tempList.size(); j++) {
+
+                    }
+                    if(tempMap.size() == 2) {
+                        this.merge(tempMap.get("list0"), tempMap.get("list1"));
+                    } else if(tempMap.size() == 3) {
+                        this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"));
+                    } else if(tempMap.size() == 4) {
+                        this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"), tempMap.get("list3"));
+                    } else if(tempMap.size() == 5) {
+                        this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"), tempMap.get("list3"), tempMap.get("list4"));
+                    }
+                } else {
+                    String singleGroup = tempList.get(0);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 拆分资质块
+     *
+     * @param blockQual
+     * @return list
+     */
+    public List splitBlockQualGroup(String blockQual) {
+        List list = new ArrayList<String>(10);
+        if (blockQual.contains("&")) {
+            String[] combinationQual = blockQual.split("\\&");
+            for (String tempQual : combinationQual) {
+                list.add(tempQual);
+            }
+        } else {
+            list.add(blockQual);
+        }
+        return list;
+    }
+
+    /**
+     * 拆分小组资质
+     * @param SingleGroup
+     * @return list
+     */
+    public List splitSingleQual(String SingleGroup) {
+        List list = new ArrayList<String>(10);
+        if (!StringUtils.isEmpty(SingleGroup)) {
+            if (SingleGroup.contains("&")) {
+                StringBuilder sb = new StringBuilder();
+                String[] temp = SingleGroup.split("\\&");
+                for (int i = 0; i < temp.length; i++) {
+                    sb.append(temp[i]);
+                }
+                list.add(sb.toString());
+            } else {
+                String[] temp = SingleGroup.split("\\|");
+                for (int i = 0; i < temp.length; i++) {
+                    list.add(temp[i]);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 拼接生成资质关系 最多5个小组
+     * @param list
+     * @return
+     */
+    public List merge(List... list) {
+        List result = new ArrayList<String>(20);
+        StringBuilder sb;
+        if (list.length == 2) {
+            for (int i = 0; i < list[0].size(); i++) {
+                for (int j = 0; j < list[1].size(); j++) {
+                    sb = new StringBuilder();
+                    sb = sb.append(list[0].get(i)).append(list[1].get(j));
+                    result.add(sb.toString());
+                }
+            }
+            return result;
+        }
+        if (list.length == 3) {
+            for (int i = 0; i < list[0].size(); i++) {
+                for (int j = 0; j < list[1].size(); j++) {
+                    for (int k = 0; k < list[2].size(); k++) {
+                        sb = new StringBuilder();
+                        sb = sb.append(list[0].get(i)).append(list[1].get(j)).append(list[2].get(k));
+                        result.add(sb.toString());
+                    }
+                }
+            }
+            return result;
+        }
+        if(list.length == 4) {
+            for (int i = 0; i < list[0].size(); i++) {
+                for (int j = 0; j < list[1].size(); j++) {
+                    for (int k = 0; k < list[2].size(); k++) {
+                        for (int l = 0; l < list[3].size(); l++) {
+                            sb = new StringBuilder();
+                            sb = sb.append(list[0].get(i)).append(list[1].get(j)).append(list[2].get(k)).append(list[3].get(l));
+                            result.add(sb.toString());
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        if(list.length == 5) {
+            for (int i = 0; i < list[0].size(); i++) {
+                for (int j = 0; j < list[1].size(); j++) {
+                    for (int k = 0; k < list[2].size(); k++) {
+                        for (int l = 0; l < list[3].size(); l++) {
+                            for (int m = 0; m < list[4].size(); m++) {
+                                sb = new StringBuilder();
+                                sb = sb.append(list[0].get(i)).append(list[1].get(j)).append(list[2].get(k)).append(list[3].get(l)).append(list[4].get(m));
+                                result.add(sb.toString());
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        return null;
+    }
 }

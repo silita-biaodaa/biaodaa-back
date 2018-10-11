@@ -22,7 +22,7 @@ public class QuaTest extends ConfigTest {
         TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
         tbNtRegexGroup.setNtEditId("1");
         tbNtRegexGroup.setNtEditId("1");
-        TbNtRegexGroup ntRegexGroup = tbNtRegexGroupMapper.queryNtRegexGroup(tbNtRegexGroup);
+        TbNtRegexGroup ntRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
         String groupRegex = ntRegexGroup.getGroupRegex();
         String[] groupRegexs = groupRegex.split("\\|");
         List<List<String>> list = new ArrayList<>(groupRegexs.length);

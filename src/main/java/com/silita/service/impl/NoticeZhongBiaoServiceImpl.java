@@ -288,10 +288,24 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             //批量添加中标候选人
             List<TbNtBidsCand> tbNtBidsCands = tbNtBids.getBidsCands();
             if (null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
+                StringBuilder sb = null;
                 for (int i = 0; i < tbNtBidsCands.size(); i++) {
+                    sb = new StringBuilder();
                     tbNtBidsCands.get(i).setPkid(DataHandlingUtil.getUUID());
                     tbNtBidsCands.get(i).setNtBidsId(tbNtBids.getPkid());
+                    tbNtBidsCands.get(i).setSource(tbNtBids.getSource());
                     tbNtBidsCands.get(i).setCreateBy(tbNtBids.getCreateBy());
+                    //拼凑联合中标候选人
+                    if(!StringUtils.isEmpty(tbNtBidsCands.get(i).getOneCandidate())) {
+                        sb.append(tbNtBidsCands.get(i).getOneCandidate());
+                    }
+                    if(!StringUtils.isEmpty(tbNtBidsCands.get(i).getTwoCandidate())) {
+                        sb.append(",").append(tbNtBidsCands.get(i).getTwoCandidate());
+                    }
+                    if(!StringUtils.isEmpty(tbNtBidsCands.get(i).getThreeCandidate())) {
+                        sb.append(",").append(tbNtBidsCands.get(i).getThreeCandidate());
+                    }
+                    tbNtBidsCands.get(i).setfCandidate(sb.toString());
                 }
                 tbNtBidsCandMapper.batchInsertNtBidsCand(tbNtBidsCands);
             }
@@ -302,27 +316,42 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             //批量添加或更新中标候选人
             List<TbNtBidsCand> tbNtBidsCands = tbNtBids.getBidsCands();
             if (null != tbNtBidsCands && tbNtBidsCands.size() > 0) {
-                List<TbNtBidsCand> tempInsert = new ArrayList<>(tbNtBidsCands.size());
-                List<TbNtBidsCand> tempUpdate = new ArrayList<>(tbNtBidsCands.size());
+                StringBuilder sb = null;
+                List<TbNtBidsCand> tempInsertList = new ArrayList<>(tbNtBidsCands.size());
+                List<TbNtBidsCand> tempUpdateList = new ArrayList<>(tbNtBidsCands.size());
                 //更新或修改中标候选人
                 for (int i = 0; i < tbNtBidsCands.size(); i++) {
                     TbNtBidsCand tempBidsCand = tbNtBidsCands.get(i);
                     String pkid = tempBidsCand.getPkid();
+                    sb = new StringBuilder();
+                    //拼凑联合中标候选人
+                    if(!StringUtils.isEmpty(tempBidsCand.getOneCandidate())) {
+                        sb.append(tempBidsCand.getOneCandidate());
+                    }
+                    if(!StringUtils.isEmpty(tempBidsCand.getTwoCandidate())) {
+                        sb.append(",").append(tempBidsCand.getTwoCandidate());
+                    }
+                    if(!StringUtils.isEmpty(tempBidsCand.getThreeCandidate())) {
+                        sb.append(",").append(tempBidsCand.getThreeCandidate());
+                    }
+                    tempBidsCand.setfCandidate(sb.toString());
+                    //候选人pkid为空添加
                     if (StringUtils.isEmpty(pkid)) {
                         tempBidsCand.setPkid(DataHandlingUtil.getUUID());
                         tempBidsCand.setNtBidsId(tbNtBids.getPkid());
+                        tempBidsCand.setSource(tbNtBids.getSource());
                         tempBidsCand.setCreateBy(tbNtBids.getCreateBy());
-                        tempInsert.add(tempBidsCand);
+                        tempInsertList.add(tempBidsCand);
                     } else {
-                        tbNtBidsCands.get(i).setUpdateBy(tbNtBids.getCreateBy());
-                        tempUpdate.add(tbNtBidsCands.get(i));
+                        tempBidsCand.setUpdateBy(tbNtBids.getCreateBy());
+                        tempUpdateList.add(tempBidsCand);
                     }
                 }
-                if (tempInsert.size() > 0) {
-                    tbNtBidsCandMapper.batchInsertNtBidsCand(tempInsert);
+                if (tempInsertList.size() > 0) {
+                    tbNtBidsCandMapper.batchInsertNtBidsCand(tempInsertList);
                 }
-                if(tempUpdate.size() > 0) {
-                    tbNtBidsCandMapper.batchUpdateNtBidsCand(tempUpdate);
+                if(tempUpdateList.size() > 0) {
+                    tbNtBidsCandMapper.batchUpdateNtBidsCand(tempUpdateList);
                 }
             }
         }

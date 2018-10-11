@@ -26,7 +26,7 @@
     <name>biaodaa-back</name>
     <groupId>com.biaodaa</groupId>
     <artifactId>biaodaa-back</artifactId>
-    <version>1.1.67</version>
+    <version>1.1.68</version>
 
     <properties>
         <spring.version>4.1.6.RELEASE</spring.version>
@@ -315,11 +315,6 @@
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
             <version>${jta.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jstl</groupId>
-            <artifactId>jstl</artifactId>
-            <version>${jstl.version}</version>
         </dependency>
 
         <!--Apache poi-->
