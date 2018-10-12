@@ -292,6 +292,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 for (int i = 0; i < tbNtBidsCands.size(); i++) {
                     sb = new StringBuilder();
                     tbNtBidsCands.get(i).setPkid(DataHandlingUtil.getUUID());
+                    tbNtBidsCands.get(i).setNtId(tbNtBids.getNtId());
                     tbNtBidsCands.get(i).setNtBidsId(tbNtBids.getPkid());
                     tbNtBidsCands.get(i).setSource(tbNtBids.getSource());
                     tbNtBidsCands.get(i).setCreateBy(tbNtBids.getCreateBy());
@@ -338,6 +339,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                     //候选人pkid为空添加
                     if (StringUtils.isEmpty(pkid)) {
                         tempBidsCand.setPkid(DataHandlingUtil.getUUID());
+                        tempBidsCand.setNtId(tbNtBids.getNtId());
                         tempBidsCand.setNtBidsId(tbNtBids.getPkid());
                         tempBidsCand.setSource(tbNtBids.getSource());
                         tempBidsCand.setCreateBy(tbNtBids.getCreateBy());

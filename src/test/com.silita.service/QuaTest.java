@@ -34,14 +34,14 @@ public class QuaTest extends ConfigTest {
                 for (String groupStr : andStr) {
                     tbNtQuaGroup = new TbNtQuaGroup();
                     tbNtQuaGroup.setGroupId(groupStr);
-                    andQuaList.addAll(designFormulas(tbNtQuaGroupMapper.queryNtQuaGroupList(tbNtQuaGroup)));
+                    andQuaList.addAll(designFormulas(tbNtQuaGroupMapper.listTbNtQuaGroupByGroupId(groupStr)));
                 }
                 list.add(andQuaList);
                 continue;
             }
             tbNtQuaGroup = new TbNtQuaGroup();
             tbNtQuaGroup.setGroupId(str);
-            list.add(designFormulas(tbNtQuaGroupMapper.queryNtQuaGroupList(tbNtQuaGroup)));
+            list.add(designFormulas(tbNtQuaGroupMapper.listTbNtQuaGroupByGroupId(str)));
         }
         List<String> groupList = group(list);
         System.out.println(groupList.toString());

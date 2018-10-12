@@ -53,7 +53,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtTextHunanMapper tbNtTextHunanMapper;
     @Autowired
     TbNtRegexGroupMapper tbNtRegexGroupMapper;
-
+    @Autowired
+    TbNtQuaGroupMapper tbNtQuaGroupMapper;
+    @Autowired
+    TbNtRegexQuaMapper tbNtRegexQuaMapper;
 
     SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -156,9 +159,9 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                         twfDict.setCode(tempValue);
                         twfDict.setType(2);
                         tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if("pb_mode".equals(tempKey)) {
+                    } else if ("pb_mode".equals(tempKey)) {
                         tempValue = dicCommonMapper.getNameByCode(tempValue);
-                    } else if("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey)|| "bid_bonds_end_time".equals(tempKey)|| "audit_time".equals(tempKey)|| "completion_time".equals(tempKey)) {
+                    } else if ("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey) || "bid_bonds_end_time".equals(tempKey) || "audit_time".equals(tempKey) || "completion_time".equals(tempKey)) {
                         tempValue = simple.format(new Date(Long.parseLong(tempValue)));
                     }
                     changeField.put(tempKey, tempValue);
@@ -518,46 +521,64 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         TbNtRegexGroup tempRegexGroup = new TbNtRegexGroup();
         tempRegexGroup.setNtId(tbNtRegexQua.getNtId());
         tempRegexGroup.setNtEditId(tbNtRegexQua.getNtEditId());
-        //1、获取资质组关系表达式
+        //获取资质组关系表达式
         TbNtRegexGroup tbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tempRegexGroup);
         String groupRegex = tbNtRegexGroup.getGroupRegex();
-        //按|分割，把资质拆成诺干块
-        String[] blockQualGroup = groupRegex.split("\\|");
-        for (int i = 0; i < blockQualGroup.length; i++) {
-            String block = blockQualGroup[i];
-            //获取块
-            List<String> tempList = this.splitBlockQualGroup(block);
-            if (tempList.size() > 0) {
+        List qualRegexList = new ArrayList(20);
+        //1、把资质组关系表达式 拆分成资质组块表达式 （G1&G2&G4|G3 = G1&G2&G4  G3）
+        String[] blockQual = groupRegex.split("\\|");
+        for (int i = 0; i < blockQual.length; i++) {
+            String block = blockQual[i];
+            //2、遍历资质块表达式，获取资质块表达式中的各个资质小组表达式(G1&G2&G4 = G1,G2,G3)
+            List<String> singleList = this.splitBlockQualGroup(block);
+            if (singleList.size() > 0) {
                 List<String> temp = null;
+                List<String> mergeList = null;
                 Map<String, List> tempMap = new TreeMap();
-                if (tempList.size() > 1) {
-                    for (int j = 0; j < tempList.size(); j++) {
-
+                if (singleList.size() > 1) {
+                    //3、遍历资质小组表达式，生成各个资质小组表达式组内关系（A1,A2,A3 = A1A2A3）
+                    for (int j = 0; j < singleList.size(); j++) {
+                        //获取小组内资质
+                        List<TbNtQuaGroup> tbNtQuaGroups = tbNtQuaGroupMapper.listTbNtQuaGroupByGroupId(singleList.get(j));
+                        temp = this.mergeSingleQualGroup(tbNtQuaGroups);
+                        tempMap.put("list" + j, temp);
                     }
-                    if(tempMap.size() == 2) {
-                        this.merge(tempMap.get("list0"), tempMap.get("list1"));
-                    } else if(tempMap.size() == 3) {
-                        this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"));
-                    } else if(tempMap.size() == 4) {
-                        this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"), tempMap.get("list3"));
-                    } else if(tempMap.size() == 5) {
-                        this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"), tempMap.get("list3"), tempMap.get("list4"));
+                    //4、合并资质组块表达式中小组之间的关系（((A1&,A2&,A3&) (B1|,B2|,B3|)) = (A1A2A3B1,A1A2A3B2,A1A2A3B3)）
+                    if (tempMap.size() == 2) {
+                        mergeList = this.merge(tempMap.get("list0"), tempMap.get("list1"));
+                    } else if (tempMap.size() == 3) {
+                        mergeList = this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"));
+                    } else if (tempMap.size() == 4) {
+                        mergeList = this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"), tempMap.get("list3"));
+                    } else if (tempMap.size() == 5) {
+                        mergeList = this.merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"), tempMap.get("list3"), tempMap.get("list4"));
                     }
                 } else {
-                    String singleGroup = tempList.get(0);
+                    //获取小组内资质
+                    List<TbNtQuaGroup> tbNtQuaGroups = tbNtQuaGroupMapper.listTbNtQuaGroupByGroupId(singleList.get(0));
+                    //3、生成各个资质小组表达式组内关系
+                    temp = this.mergeSingleQualGroup(tbNtQuaGroups);
+                    //4、合并资质组块表达式中小组之间的关系（A1&,A2&,A3& = A1A2A3）
+                    mergeList = temp;
                 }
+                //5、合并各个资质组块表达式生成的资质关系
+                qualRegexList.addAll(mergeList);
             }
         }
+        String qualRegex = StringUtils.collectionToDelimitedString(qualRegexList, ",");
+        tbNtRegexQua.setPkid(DataHandlingUtil.getUUID());
+        tbNtRegexQua.setQuaRegex(qualRegex);
+        tbNtRegexQuaMapper.insertTbNtRegexQua(tbNtRegexQua);
     }
 
 
     /**
-     * 拆分资质块
+     * 把资质块 拆分成单个小组 （G1&G2&G4 = G1,G2,G3）
      *
      * @param blockQual
      * @return list
      */
-    public List splitBlockQualGroup(String blockQual) {
+    private List splitBlockQualGroup(String blockQual) {
         List list = new ArrayList<String>(10);
         if (blockQual.contains("&")) {
             String[] combinationQual = blockQual.split("\\&");
@@ -571,36 +592,45 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     }
 
     /**
-     * 拆分小组资质
-     * @param SingleGroup
-     * @return list
+     * 组合小组内关系 返回list（A1&A2&A3 = A1A2A3， B1|B2|B3 = B1,B2,B3）
+     * @param tbNtQuaGroups
+     * @return
      */
-    public List splitSingleQual(String SingleGroup) {
-        List list = new ArrayList<String>(10);
-        if (!StringUtils.isEmpty(SingleGroup)) {
-            if (SingleGroup.contains("&")) {
-                StringBuilder sb = new StringBuilder();
-                String[] temp = SingleGroup.split("\\&");
-                for (int i = 0; i < temp.length; i++) {
-                    sb.append(temp[i]);
-                }
-                list.add(sb.toString());
+    private List mergeSingleQualGroup(List<TbNtQuaGroup> tbNtQuaGroups) {
+        List<String> result = new ArrayList<>(10);
+        if(null != tbNtQuaGroups && tbNtQuaGroups.size() > 0) {
+            TbNtQuaGroup tbNtQuaGroup;
+            if(tbNtQuaGroups.size() == 1) {
+                tbNtQuaGroup = tbNtQuaGroups.get(0);
+                result.add(tbNtQuaGroup.getQuaId());
             } else {
-                String[] temp = SingleGroup.split("\\|");
-                for (int i = 0; i < temp.length; i++) {
-                    list.add(temp[i]);
+                TbNtQuaGroup tbNtQuaGroup1;
+                String relType = tbNtQuaGroups.get(tbNtQuaGroups.size() - 1).getRelType();
+                if("&".equals(relType)) {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < tbNtQuaGroups.size(); i++) {
+                        tbNtQuaGroup1 = tbNtQuaGroups.get(i);
+                        sb.append(tbNtQuaGroup1.getQuaId());
+                    }
+                    result.add(sb.toString());
+                } else {
+                    for (int i = 0; i < tbNtQuaGroups.size(); i++) {
+                        tbNtQuaGroup1 = tbNtQuaGroups.get(i);
+                        result.add(tbNtQuaGroup1.getQuaId());
+                    }
                 }
             }
         }
-        return list;
+        return result;
     }
 
     /**
-     * 拼接生成资质关系 最多5个小组
+     * 拼接生成小组间资质关系 最多5个小组
+     *
      * @param list
      * @return
      */
-    public List merge(List... list) {
+    private List merge(List... list) {
         List result = new ArrayList<String>(20);
         StringBuilder sb;
         if (list.length == 2) {
@@ -625,7 +655,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             }
             return result;
         }
-        if(list.length == 4) {
+        if (list.length == 4) {
             for (int i = 0; i < list[0].size(); i++) {
                 for (int j = 0; j < list[1].size(); j++) {
                     for (int k = 0; k < list[2].size(); k++) {
@@ -639,7 +669,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             }
             return result;
         }
-        if(list.length == 5) {
+        if (list.length == 5) {
             for (int i = 0; i < list[0].size(); i++) {
                 for (int j = 0; j < list[1].size(); j++) {
                     for (int k = 0; k < list[2].size(); k++) {

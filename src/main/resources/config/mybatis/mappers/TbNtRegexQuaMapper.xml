@@ -14,4 +14,17 @@
     <result column="updated" property="updated" jdbcType="TIMESTAMP" />
     <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
   </resultMap>
+
+
+  <insert id="insertTbNtRegexQua" parameterType="com.silita.model.TbNtRegexQua">
+    INSERT INTO `tb_nt_regex_qua`
+      (
+        `pkid`, `nt_edit_id`, `nt_id`, `qua_regex`, `create_by`,
+        `created`
+      )
+      VALUES (
+        #{pkid}, #{ntEditId}, #{ntId}, #{quaRegex}, #{createBy},
+        NOW()
+      )
+  </insert>
 </mapper>

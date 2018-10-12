@@ -209,6 +209,13 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(noticeZhaoBiaoService.listNtAssociateGp(tbNtAssociateGp));
     }
 
-
+    @RequestMapping(value = "/test",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> test(@RequestBody TbNtRegexQua tbNtRegexQua, ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        tbNtRegexQua.setCreateBy(userName);
+        noticeZhaoBiaoService.insertNtRegexQua(tbNtRegexQua);
+        return super.successMap(null);
+    }
 
 }

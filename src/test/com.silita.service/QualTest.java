@@ -19,6 +19,8 @@ public class QualTest {
         String G3 = "C1&C2&C3";
         String G4 = "D1|D2|D3";
 
+        List quaRegex = new ArrayList(20);
+
         //按|分割成诺干块
         String[] blockQual = group.split("\\|");
         for (int i = 0; i < blockQual.length; i++) {
@@ -28,6 +30,7 @@ public class QualTest {
 //            System.out.println(temp);
             if (temp.size() > 0) {
                 List<String> temp2 = null;
+                List<String> mergeList = null;
                 Map<String, List> tempMap = new TreeMap();
                 if (temp.size() > 1) {
                     //
@@ -46,9 +49,9 @@ public class QualTest {
                     }
 
                     if(tempMap.size() == 2) {
-                        merge(tempMap.get("list0"), tempMap.get("list1"));
+                        mergeList = merge(tempMap.get("list0"), tempMap.get("list1"));
                     } else if(tempMap.size() == 3) {
-                        merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"));
+                        mergeList = merge(tempMap.get("list0"), tempMap.get("list1"), tempMap.get("list2"));
                     }
 
                 } else {
@@ -62,12 +65,13 @@ public class QualTest {
                     } else if (singleGroup.equals("G4")) {
                         temp2 = splitSingleQual(G4);
                     }
-                    System.out.println(temp2);
+                    mergeList = temp2;
 //                    tempMap.put("list", temp2);
                 }
+                quaRegex.addAll(mergeList);
             }
         }
-
+        System.out.println(quaRegex);
 //        List<String> temp = splitSingleQual(G2);
 //        System.out.println(temp);
 

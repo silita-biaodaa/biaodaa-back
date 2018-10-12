@@ -15,7 +15,7 @@
   </resultMap>
 
 
-  <select id="queryNtQuaGroupList" parameterType="com.silita.model.TbNtQuaGroup" resultMap="BaseResultMap">
+  <select id="listTbNtQuaGroupByGroupId" parameterType="String" resultMap="BaseResultMap">
     SELECT *
     FROM tb_nt_qua_group
     WHERE 1=1
