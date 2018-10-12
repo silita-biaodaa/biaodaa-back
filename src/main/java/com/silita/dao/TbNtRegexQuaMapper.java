@@ -10,4 +10,11 @@ public interface TbNtRegexQuaMapper extends MyMapper<TbNtRegexQua> {
      * @return
      */
     Integer insertTbNtRegexQua(TbNtRegexQua tbNtRegexQua);
+
+    /**
+     * 根据公告id、标段id删除资质表达式关系表
+     * @param tbNtRegexQua
+     * @return
+     */
+    Integer deleteTbNtRegexQuaByNtIdAndNtEditId(TbNtRegexQua tbNtRegexQua);
 }

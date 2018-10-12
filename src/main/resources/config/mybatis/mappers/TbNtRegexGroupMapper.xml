@@ -28,4 +28,37 @@
       AND `nt_id` = #{ntId}
     </if>
   </select>
+
+  <insert id="insertNtRegexGroup" parameterType="com.silita.model.TbNtRegexGroup">
+    INSERT INTO tb_nt_regex_group(
+      `pkid`, `nt_edit_id`, `nt_id`, `group_code`, `group_regex`,
+      `create_by`, `created`
+    )
+    VALUES (
+      #{pkid}, #{ntEditId}, #{ntId}, #{groupCode}, #{groupRegex},
+      #{createBy}
+    )
+  </insert>
+
+  <update id="updateNtRegexGroupByNtIdAndNtEditId" parameterType="com.silita.model.TbNtRegexGroup">
+    UPDATE `tb_nt_regex_group` SET
+    <if test="groupCode != null and groupCode != ''">
+      `group_code` = #{groupCode},
+    </if>
+    <if test="groupRegex != null and groupRegex != ''">
+      `group_regex` = #{groupRegex},
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+      `update_by` = #{updateBy},
+    </if>
+    `updated` = NOW()
+    WHERE `nt_edit_id` = #{ntEditId} AND `nt_id` = #{ntId}
+  </update>
+
+  <delete id="deleteNtRegexGroupByNtIdAndNtEditId" parameterType="com.silita.model.TbNtRegexGroup">
+    DELETE
+    FROM tb_nt_regex_group
+    WHERE `nt_edit_id` = #{ntEditId} AND `nt_id` = #{ntId}
+  </delete>
+
 </mapper>

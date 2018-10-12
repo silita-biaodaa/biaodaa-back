@@ -543,7 +543,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                         temp = this.mergeSingleQualGroup(tbNtQuaGroups);
                         tempMap.put("list" + j, temp);
                     }
-                    //4、合并资质组块表达式中小组之间的关系（((A1&,A2&,A3&) (B1|,B2|,B3|)) = (A1A2A3B1,A1A2A3B2,A1A2A3B3)）
+                    //4、合并资质组块表达式中小组之间的关系 **不能超过5组**（((A1&,A2&,A3&) (B1|,B2|,B3|)) = (A1A2A3B1,A1A2A3B2,A1A2A3B3)）
                     if (tempMap.size() == 2) {
                         mergeList = this.merge(tempMap.get("list0"), tempMap.get("list1"));
                     } else if (tempMap.size() == 3) {
@@ -570,6 +570,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtRegexQua.setQuaRegex(qualRegex);
         tbNtRegexQuaMapper.insertTbNtRegexQua(tbNtRegexQua);
     }
+
+
 
 
     /**

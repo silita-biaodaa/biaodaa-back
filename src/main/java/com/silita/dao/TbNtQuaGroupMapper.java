@@ -14,4 +14,18 @@ public interface TbNtQuaGroupMapper extends MyMapper<TbNtQuaGroup> {
      * @return
      */
     List<TbNtQuaGroup> listTbNtQuaGroupByGroupId(@Param("groupId") String groupId);
+
+    /**
+     * 批量添加公告资质组内关联
+     * @param tbNtQuaGroups
+     * @return
+     */
+    Integer batchInsertTbNtQuaGroup(List<TbNtQuaGroup> tbNtQuaGroups);
+
+    /**
+     * 批量更新公告资质组内关联
+     * @param tbNtQuaGroups
+     * @return
+     */
+    Integer batchUpdateTbNtQuaGroup(@Param("tbNtQuaGroups") List<TbNtQuaGroup> tbNtQuaGroups);
 }
