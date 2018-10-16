@@ -7,14 +7,12 @@ import com.silita.service.INoticeZhaoBiaoService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -209,12 +207,41 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(noticeZhaoBiaoService.listNtAssociateGp(tbNtAssociateGp));
     }
 
-    @RequestMapping(value = "/test",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @RequestMapping(value = "/insertNtRegexQua",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
-    public Map<String,Object> test(@RequestBody TbNtRegexQua tbNtRegexQua, ServletRequest request) {
+    public Map<String,Object> insertNtRegexQua(@RequestBody TbNtRegexQua tbNtRegexQua, ServletRequest request) {
         String userName = JWTUtil.getUsername(request);
         tbNtRegexQua.setCreateBy(userName);
         noticeZhaoBiaoService.insertNtRegexQua(tbNtRegexQua);
+        return super.successMap(null);
+    }
+
+    @RequestMapping(value = "/saveTbNtRegexGroup",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> saveTbNtRegexGroup(@RequestBody Map<String, Object> test) {
+        List<Map<String, Object>> regexGroupslist = (List<Map<String, Object>>) test.get("tbNtRegexGroups");
+        Map temp;
+        TbNtRegexGroup tbNtRegexGroup;
+        List<TbNtRegexGroup> tbNtRegexGroups = new ArrayList<>();
+        for (int i = 0; i < regexGroupslist.size(); i++) {
+            temp = regexGroupslist.get(i);
+            tbNtRegexGroup = new TbNtRegexGroup();
+//            tbNtRegexGroup.setTbNtQuaGroups((List<TbNtQuaGroup>) temp.get("tbNtQuaGroups"));
+            List<Map<String, Object>> quaGroupsList = (List<Map<String, Object>>) temp.get("tbNtQuaGroups");
+            List<TbNtQuaGroup> tbNtQuaGroups = new ArrayList<>();
+            for (int j = 0; j < quaGroupsList.size(); j++) {
+                TbNtQuaGroup tbNtQuaGroup = new TbNtQuaGroup();
+                tbNtQuaGroup.setQuaId((String) quaGroupsList.get(j).get("quaId"));
+                tbNtQuaGroup.setRelType((String) quaGroupsList.get(j).get("relType"));
+                tbNtQuaGroups.add(tbNtQuaGroup);
+            }
+            tbNtRegexGroup.setTbNtQuaGroups(tbNtQuaGroups);
+            tbNtRegexGroup.setQuaId((String) temp.get("quaId"));
+            tbNtRegexGroup.setRelType((String) temp.get("relType"));
+            tbNtRegexGroups.add(tbNtRegexGroup);
+        }
+        Map params = (Map) test.get("params");
+        noticeZhaoBiaoService.saveTbNtRegexGroup(tbNtRegexGroups, params);
         return super.successMap(null);
     }
 

@@ -1,10 +1,5 @@
 package com.silita.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Setter
-@Getter
 public class TbNtQuaGroup {
     /**
      * 主键
@@ -41,4 +36,46 @@ public class TbNtQuaGroup {
      */
     private String px;
 
+    public String getPkid() {
+        return pkid;
+    }
+    public void setPkid(String pkid) {
+        this.pkid = pkid;
+    }
+    public String getGroupId() {
+        return groupId;
+    }
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+    public String getQuaId() {
+        return quaId;
+    }
+    public void setQuaId(String quaId) {
+        this.quaId = quaId;
+    }
+    public String getQuaGradeId() {
+        return quaGradeId;
+    }
+    public void setQuaGradeId(String quaGradeId) {
+        this.quaGradeId = quaGradeId;
+    }
+    public String getRelType() {
+        return relType;
+    }
+    public void setRelType(String relType) {
+        this.relType = relType;
+    }
+    public Boolean getHead() {
+        return isHead;
+    }
+    public void setHead(Boolean head) {
+        isHead = head;
+    }
+    public String getPx() {
+        return px;
+    }
+    public void setPx(String px) {
+        this.px = px;
+    }
 }

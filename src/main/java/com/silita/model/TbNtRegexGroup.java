@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -53,4 +54,18 @@ public class TbNtRegexGroup {
      */
     private String updateBy;
 
+    /**
+     *
+     */
+    private String quaId;
+
+    /**
+     *
+     */
+    private String relType;
+
+    /**
+     * 资质小组
+     */
+    private List<TbNtQuaGroup> tbNtQuaGroups;
 }

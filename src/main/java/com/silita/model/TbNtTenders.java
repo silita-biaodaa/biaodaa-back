@@ -324,4 +324,6 @@ public class TbNtTenders {
      * 招标状态(name)
      */
     private String ntTdStatusName;
+
+    private List<TbNtRegexGroup> tbNtRegexGroups;
 }

@@ -155,4 +155,9 @@ public interface INoticeZhaoBiaoService {
      */
     void insertNtRegexQua(TbNtRegexQua tbNtRegexQua);
 
+    /**
+     *
+     * @param tbNtRegexGroups
+     */
+    void saveTbNtRegexGroup(List<TbNtRegexGroup> tbNtRegexGroups, Map params);
 }

@@ -30,6 +30,7 @@
         <result column="pro_type_name" property="proTypeName" jdbcType="VARCHAR"/>
         <result column="biness_type_name" property="binessTypeName" jdbcType="VARCHAR"/>
         <result column="pb_mode_name" property="pbModeName" jdbcType="VARCHAR"/>
+        <result column="nt_status" property="ntStatus" jdbcType="VARCHAR"/>
         <!-- 中标候选人 -->
         <collection property="bidsCands" ofType="com.silita.model.TbNtBidsCand">
             <id column="c_pkid" property="pkid" jdbcType="VARCHAR"/>
@@ -96,7 +97,7 @@
       cand.pkid AS c_pkid, cand.f_candidate, cand.f_quote, cand.f_pro_leader, cand.f_tech_leader,
       cand.f_builder, cand.f_safety, cand.f_quality, cand.number, cand.created AS c_created,
       cand.create_by AS c_create_by, cand.updated AS c_updated, cand.update_by AS c_update_by, cand.source AS c_source, cand.nt_bids_id,
-      cand.nt_id AS c_nt_id, cand.source,
+      cand.nt_id AS c_nt_id, cand.source, mian.nt_status,
       (SELECT `name` FROM dic_common WHERE `code` = bids.pb_mode) AS pb_mode_name,
       (SELECT `area_name` FROM sys_area WHERE area_code = mian.city_code) AS city_code_name,
       (SELECT `area_name` FROM sys_area WHERE area_code = mian.county_code) AS county_code_name,

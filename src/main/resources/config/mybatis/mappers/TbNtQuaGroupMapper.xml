@@ -32,7 +32,7 @@
     )
     VALUES
     <foreach collection="list" item="temp" index="index" separator=",">
-      (#{temp.pkid}, #{temp.groupId}, #{temp.quaId}, #{temp.relType}, #{temp.isHead}
+      (#{temp.pkid}, #{temp.groupId}, #{temp.quaId}, #{temp.relType}, #{temp.isHead},
       #{temp.px}
       )
     </foreach>
@@ -45,9 +45,19 @@
       `qua_id` = #{temp.quaId},
       `rel_type` = #{temp.relType},
       `is_head` = #{temp.isHead},
-      `px` = #{temp.px},
+      `px` = #{temp.px}
       WHERE `pkid` = #{temp.pkid}
     </foreach>
   </update>
+
+  <delete id="batchDeleteTbNtQuaGroupByGroupId" parameterType="String">
+    DELETE FROM `tb_nt_qua_group`
+    <where>
+      `group_id` IN
+      <foreach collection="array" open="(" close=")" separator="," item="ele">
+        #{ele}
+      </foreach>
+    </where>
+  </delete>
 
 </mapper>

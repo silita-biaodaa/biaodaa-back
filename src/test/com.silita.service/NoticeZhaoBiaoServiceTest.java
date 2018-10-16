@@ -142,15 +142,8 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController8()throws Exception{
-        String requestBody = "{\"ntId\":\"1\", \"segment\":\"2\", \"proSum\":\"1000.0\", \"enrollAddr\":\"测试报名修改地点\", \"openingAddr\":\"测试开修改标地点\", " +
-                "\"enrollEndTime\":\"2018-08-12\", \"bidEndTime\":\"2018-08-12\", \"pbMode\":\"测试评标办法\", \"bidBonds\":\"222\", \"bidBondsEndTime\":\"2018-08-12\", " +
-                "\"keepBonds\":\"222\", \"otherBonds\":\"222\", \"auditTime\":\"2018-08-12\", \"openingPerson\":\"测试开标人\", \"openingFileFee\":\"222.2\", " +
-                "\"otherFee\":\"444.2\", \"tenderee\":\"6666\", \"tenderContactPerson\":\"测试修改\", \"tenderContactInfo\":\"1876666\", \"proxyContactPerson\":\"修改代理联系人\", " +
-                "\"proxyContactInfo\":\"1674444\", \"proPerson\":\"修改项目人要求\", \"socialSecurity\":\"社保有修改要球\", \"achievement\":\"修改业绩要求\", \"enrollMethod\":\"1\", " +
-                "\"proDuration\":\"180\", \"completionTime\":\"2018-08-12\", \"isFlow\":\"true\", \"fundsProvid\":\"修改资金来源\", \"enrollMethod\":\"1\", " +
-                "\"source\":\"hunan\", \"binessType\":\"2\", \"certAuditAddr\":\"资格审查地点\", \"filingPfm\":\"备案平台\", \"controllSum\":\"678\", " +
-                "\"title\":\"我要更新\", \"pubDate\":\"2018-09-04\", \"cityCode\":\"hengyang\", \"countyCode\":\"hengyangxian\", \"ntTdStatus\":\"7\", \"proType\":\"1\"," +
-                "\"pkid\":\"df02df31d1d64f1bbbae3e6b2b19fb02\"}";
+        String requestBody = "{\"ntId\":\"20\",\"segment\":\"1\",\"proSum\":\"1000.0\",\"enrollAddr\":\"测试报名修改地点\",\"openingAddr\":\"测试开修改标地点\",\"enrollEndTime\":\"2018-08-12\",\"bidEndTime\":\"2018-08-12\",\"pbMode\":\"测试评标办法\",\"bidBonds\":\"222\",\"bidBondsEndTime\":\"2018-08-12\",\"keepBonds\":\"222\",\"otherBonds\":\"222\",\"auditTime\":\"2018-08-12\",\"openingPerson\":\"测试开标人\",\"openingFileFee\":\"222.2\",\"otherFee\":\"444.2\",\"tenderee\":\"6666\",\"tenderContactPerson\":\"测试修改\",\"tenderContactInfo\":\"1876666\",\"proxyContactPerson\":\"修改代理联系人\",\"proxyContactInfo\":\"1674444\",\"proPerson\":\"修改项目人要求\",\"socialSecurity\":\"社保有修改要球\",\"achievement\":\"修改业绩要求\",\"enrollMethod\":\"1\",\"proDuration\":\"180\",\"completionTime\":\"2018-08-12\",\"isFlow\":\"true\",\"fundsProvid\":\"修改资金来源\",\"source\":\"hunan\",\"binessType\":\"2\",\"certAuditAddr\":\"资格审查地点\",\"filingPfm\":\"备案平台\",\"controllSum\":\"678\",\"title\":\"我要更新\",\"pubDate\":\"2018-09-04\",\"cityCode\":\"hengyang\",\"countyCode\":\"hengyangxian\",\"ntTdStatus\":\"7\",\"proType\":\"1\",\"pkid\":\"df02df31d1d64f1bbbae3e6b2b19fb02\"," +
+                "\"tbNtRegexGroups\":[{\"tbNtQuaGroups\":[{\"quaId\":\"老板a2\",\"relType\":\"|\"}],\"quaId\":\"老板a1\",\"relType\":\"&\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板b2\",\"relType\":\"&\"},{\"quaId\":\"经理b3\",\"relType\":\"&\"}],\"quaId\":\"老板b1\",\"relType\":\"|\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板c2\",\"relType\":\"|\"}],\"quaId\":\"老板c1\",\"relType\":\"\"}]}";
         String responseString = mockMvc.perform(post("/zhaobiao/saveNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -415,8 +408,22 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController25()throws Exception{
-        String requestBody = "{\"ntEditId\":\"1\", \"ntId\":\"1\"}";
-        String responseString = mockMvc.perform(post("/zhaobiao/test").characterEncoding("UTF-8")
+        String requestBody = "{\"ntEditId\":\"3\", \"ntId\":\"3\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/insertNtRegexQua").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController26()throws Exception{
+        String requestBody = "{\"tbNtRegexGroups\":[{\"tbNtQuaGroups\":[{\"quaId\":\"老板a2\",\"relType\":\"|\"}],\"quaId\":\"老板a1\",\"relType\":\"&\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板b2\",\"relType\":\"&\"},{\"quaId\":\"经理b3\",\"relType\":\"&\"}],\"quaId\":\"老板b1\",\"relType\":\"|\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板c2\",\"relType\":\"|\"}],\"quaId\":\"老板c1\",\"relType\":\"\"}],\"params\":{\"ntId\":\"3\",\"ntEditId\":\"3\",\"userName\":\"gmy\"}}";
+        String responseString = mockMvc.perform(post("/zhaobiao/saveTbNtRegexGroup").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
                 .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")

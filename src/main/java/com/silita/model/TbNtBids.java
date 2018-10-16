@@ -90,6 +90,10 @@ public class TbNtBids {
      */
     private String tableName;
 
+    /**
+     * 公告状态
+     */
+    private String  ntStatus;
 
     /**
      * 公告标题（项目名称）
@@ -179,4 +183,6 @@ public class TbNtBids {
      * 业务类别name
      */
     private String binessTypeName;
+
+
 }

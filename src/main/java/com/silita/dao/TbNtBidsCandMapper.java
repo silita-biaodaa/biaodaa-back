@@ -45,4 +45,11 @@ public interface TbNtBidsCandMapper {
      * @param tbNtBidsCands
      */
     void updateNtBidsCand(TbNtBidsCand tbNtBidsCands);
+
+    /**
+     *
+     * @param pkid
+     * @return
+     */
+    Integer deleteNtBidsCandByPkId(@Param("pkid") String pkid);
 }

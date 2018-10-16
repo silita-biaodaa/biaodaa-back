@@ -28,4 +28,11 @@ public interface TbNtQuaGroupMapper extends MyMapper<TbNtQuaGroup> {
      * @return
      */
     Integer batchUpdateTbNtQuaGroup(@Param("tbNtQuaGroups") List<TbNtQuaGroup> tbNtQuaGroups);
+
+    /**
+     *
+     * @param array
+     * @return
+     */
+    Integer batchDeleteTbNtQuaGroupByGroupId(@Param("array") Object[] array);
 }

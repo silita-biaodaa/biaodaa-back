@@ -311,6 +311,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 tbNtBidsCandMapper.batchInsertNtBidsCand(tbNtBidsCands);
             }
         } else {
+            tbNtBids.setUpdateBy(tbNtBids.getCreateBy());
             msg = "更新标段信息成功！";
             //更新中标标段基本信息
             tbNtBidsMapper.updateTbNtBidsByNtIdAndSegment(tbNtBids);
@@ -336,17 +337,23 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         sb.append(",").append(tempBidsCand.getThreeCandidate());
                     }
                     tempBidsCand.setfCandidate(sb.toString());
-                    //候选人pkid为空添加
-                    if (StringUtils.isEmpty(pkid)) {
-                        tempBidsCand.setPkid(DataHandlingUtil.getUUID());
-                        tempBidsCand.setNtId(tbNtBids.getNtId());
-                        tempBidsCand.setNtBidsId(tbNtBids.getPkid());
-                        tempBidsCand.setSource(tbNtBids.getSource());
-                        tempBidsCand.setCreateBy(tbNtBids.getCreateBy());
-                        tempInsertList.add(tempBidsCand);
+                    //删除中标候选人
+                    if(StringUtils.isEmpty(tempBidsCand.getNumber())) {
+                        tbNtBidsCandMapper.deleteNtBidsCandByPkId(pkid);
                     } else {
-                        tempBidsCand.setUpdateBy(tbNtBids.getCreateBy());
-                        tempUpdateList.add(tempBidsCand);
+                        if (StringUtils.isEmpty(pkid)) {
+                            //候选人pkid为空添加
+                            tempBidsCand.setPkid(DataHandlingUtil.getUUID());
+                            tempBidsCand.setNtId(tbNtBids.getNtId());
+                            tempBidsCand.setNtBidsId(tbNtBids.getPkid());
+                            tempBidsCand.setSource(tbNtBids.getSource());
+                            tempBidsCand.setCreateBy(tbNtBids.getCreateBy());
+                            tempInsertList.add(tempBidsCand);
+                        } else {
+                            //修改
+                            tempBidsCand.setUpdateBy(tbNtBids.getCreateBy());
+                            tempUpdateList.add(tempBidsCand);
+                        }
                     }
                 }
                 if (tempInsertList.size() > 0) {

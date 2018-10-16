@@ -127,4 +127,8 @@
         WHERE `pkid` = #{pkid}
     </update>
 
+    <delete id="deleteNtBidsCandByPkId" parameterType="String">
+      DELETE FROM `tb_nt_bids_cand` WHERE `pkid` = #{pkid}
+    </delete>
+
 </mapper>

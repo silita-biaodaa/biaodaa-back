@@ -1,5 +1,6 @@
 package com.silita.service.impl;
 
+import com.google.common.base.Splitter;
 import com.silita.dao.*;
 import com.silita.model.*;
 import com.silita.service.INoticeZhaoBiaoService;
@@ -214,6 +215,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public String saveNtTenders(TbNtTenders tbNtTenders) {
         String msg = "";
+        String ntEditId;
+        String userName;
         //更新招标主表状态
         TbNtMian tbNtMian = new TbNtMian();
         tbNtMian.setPkid(tbNtTenders.getNtId());
@@ -232,6 +235,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtTenders.setTableName(DataHandlingUtil.SplicingTable(tbNtTenders.getClass(), tbNtTenders.getSource()));
         Integer count = tbNtTendersMapper.countNtTendersByNtIdAndSegment(tbNtTenders);
         if (count == 0) {
+            ntEditId = DataHandlingUtil.getUUID();
+            userName = tbNtTenders.getCreateBy();
             tbNtMian.setNtStatus("1");
             //公告状态改为未审核
             tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
@@ -239,14 +244,28 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 //            tbNtTenders.setSegment("1");
 //            tbNtMianMapper.updateSegCountByPkid(tbNtMian);
 
-            tbNtTenders.setPkid(DataHandlingUtil.getUUID());
+            tbNtTenders.setPkid(ntEditId);
             tbNtTenders.setEditCode("td" + System.currentTimeMillis() + DataHandlingUtil.getNumberRandom(2));
             tbNtTendersMapper.insertNtTenders(tbNtTenders);
             msg = "添加标段信息成功！";
         } else {
+            tbNtTenders.setUpdateBy(tbNtTenders.getCreateBy());
+            ntEditId = tbNtTenders.getPkid();
+            userName = tbNtTenders.getUpdateBy();
             tbNtTendersMapper.updateNtTendersByNtIdAndSegment(tbNtTenders);
             msg = "更新标段信息成功！";
         }
+        //保存资质关系
+        Map parmas = new HashMap<String, Object>();
+        parmas.put("ntId", tbNtTenders.getNtId());
+        parmas.put("ntEditId", ntEditId);
+        parmas.put("userName", userName);
+        this.saveTbNtRegexGroup(tbNtTenders.getTbNtRegexGroups(), parmas);
+        //保存资质算法
+        TbNtRegexQua tbNtRegexQua = new TbNtRegexQua();
+        tbNtRegexQua.setNtId(tbNtTenders.getNtId());
+        tbNtRegexQua.setNtEditId(ntEditId);
+        this.insertNtRegexQua(tbNtRegexQua);
         return msg;
     }
 
@@ -518,6 +537,8 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public void insertNtRegexQua(TbNtRegexQua tbNtRegexQua) {
+        //删除资质算发表达式
+        tbNtRegexQuaMapper.deleteTbNtRegexQuaByNtIdAndNtEditId(tbNtRegexQua);
         TbNtRegexGroup tempRegexGroup = new TbNtRegexGroup();
         tempRegexGroup.setNtId(tbNtRegexQua.getNtId());
         tempRegexGroup.setNtEditId(tbNtRegexQua.getNtEditId());
@@ -571,7 +592,61 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtRegexQuaMapper.insertTbNtRegexQua(tbNtRegexQua);
     }
 
+    @Override
+    public void saveTbNtRegexGroup(List<TbNtRegexGroup> tbNtRegexGroups, Map params) {
+        TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+        tbNtRegexGroup.setNtId(String.valueOf(params.get("ntId")));
+        tbNtRegexGroup.setNtEditId(String.valueOf(params.get("ntEditId")));
+        tbNtRegexGroup.setCreateBy(String.valueOf(params.get("userName")));
+        //保存前删除原资质
+        TbNtRegexGroup tempTbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
+        if(null != tempTbNtRegexGroup) {
+            Set set = new HashSet<String>();
+            String groupRegex = tempTbNtRegexGroup.getGroupRegex();
+            Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
+            while (iterator.hasNext()) {
+                set.add(iterator.next());
+            }
+            ///删除小组资质
+            tbNtQuaGroupMapper.batchDeleteTbNtQuaGroupByGroupId(set.toArray());
+            //删除资质组关系表
+            tbNtRegexGroupMapper.deleteNtRegexGroupByNtIdAndNtEditId(tempTbNtRegexGroup);
+        }
 
+        StringBuilder regexGroup = new StringBuilder();
+        for (int i = 0; i < tbNtRegexGroups.size(); i++) {
+            String groupId = DataHandlingUtil.getTimeStamp();
+            TbNtRegexGroup tempRegex = tbNtRegexGroups.get(i);
+            List<TbNtQuaGroup> tbNtQuaGroupList = tempRegex.getTbNtQuaGroups();
+            //第一条资质
+            TbNtQuaGroup firstQual = new TbNtQuaGroup();
+            firstQual.setPkid(DataHandlingUtil.getUUID());
+            firstQual.setPx("1");
+            firstQual.setHead(true);
+            firstQual.setGroupId(groupId);
+            firstQual.setQuaId(tempRegex.getQuaId());
+            //其他资质
+            if(tbNtQuaGroupList.size() > 0) {
+                TbNtQuaGroup temp;
+                for (int j = 0; j < tbNtQuaGroupList.size(); j++) {
+                    temp = tbNtQuaGroupList.get(j);
+                    temp.setPx(String.valueOf(j + 2));
+                    temp.setGroupId(groupId);
+                    temp.setPkid(DataHandlingUtil.getUUID());
+                }
+            }
+            tbNtQuaGroupList.add(firstQual);
+            //添加小组资质信息
+            tbNtQuaGroupMapper.batchInsertTbNtQuaGroup(tbNtQuaGroupList);
+            regexGroup.append(groupId).append(tempRegex.getRelType());
+        }
+        tbNtRegexGroup.setPkid(DataHandlingUtil.getUUID());
+        tbNtRegexGroup.setGroupCode(DataHandlingUtil.getTimeStamp());
+        tbNtRegexGroup.setGroupRegex(regexGroup.toString());
+        //添加资质组关系
+        tbNtRegexGroupMapper.insertNtRegexGroup(tbNtRegexGroup);
+        System.out.println(regexGroup.toString());
+    }
 
 
     /**

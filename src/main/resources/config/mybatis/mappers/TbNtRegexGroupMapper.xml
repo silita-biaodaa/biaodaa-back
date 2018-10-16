@@ -36,7 +36,7 @@
     )
     VALUES (
       #{pkid}, #{ntEditId}, #{ntId}, #{groupCode}, #{groupRegex},
-      #{createBy}
+      #{createBy}, NOW()
     )
   </insert>
 

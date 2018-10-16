@@ -88,8 +88,14 @@ public class DataHandlingUtil {
      * 获取时间戳
      * @return
      */
-    public static String getTimeStamp() {
-        return String.valueOf(System.currentTimeMillis());
+    public synchronized static String getTimeStamp() {
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return timeStamp;
     }
 
     /**
