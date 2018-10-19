@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao2.ZhaobiaoDetailOthersMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.ZhaobiaoDetailOthers" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="snatchUrlId" property="snatchurlid" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="projName" property="projname" jdbcType="VARCHAR" />
+    <result column="gsDate" property="gsdate" jdbcType="VARCHAR" />
+    <result column="projDq" property="projdq" jdbcType="VARCHAR" />
+    <result column="projXs" property="projxs" jdbcType="VARCHAR" />
+    <result column="projType" property="projtype" jdbcType="VARCHAR" />
+    <result column="projTypeId" property="projtypeid" jdbcType="VARCHAR" />
+    <result column="zzRank" property="zzrank" jdbcType="VARCHAR" />
+    <result column="projSum" property="projsum" jdbcType="VARCHAR" />
+    <result column="pbMode" property="pbmode" jdbcType="VARCHAR" />
+    <result column="bmStartDate" property="bmstartdate" jdbcType="VARCHAR" />
+    <result column="bmEndDate" property="bmenddate" jdbcType="VARCHAR" />
+    <result column="bmEndTime" property="bmendtime" jdbcType="VARCHAR" />
+    <result column="bmSite" property="bmsite" jdbcType="VARCHAR" />
+    <result column="tbAssureSum" property="tbassuresum" jdbcType="VARCHAR" />
+    <result column="tbAssureEndDate" property="tbassureenddate" jdbcType="VARCHAR" />
+    <result column="tbAssureEndTime" property="tbassureendtime" jdbcType="VARCHAR" />
+    <result column="lyAssureSum" property="lyassuresum" jdbcType="VARCHAR" />
+    <result column="slProveSum" property="slprovesum" jdbcType="VARCHAR" />
+    <result column="assureEndDate" property="assureenddate" jdbcType="VARCHAR" />
+    <result column="assureEndTime" property="assureendtime" jdbcType="VARCHAR" />
+    <result column="zgCheckDate" property="zgcheckdate" jdbcType="VARCHAR" />
+    <result column="tbEndDate" property="tbenddate" jdbcType="VARCHAR" />
+    <result column="tbEndTime" property="tbendtime" jdbcType="VARCHAR" />
+    <result column="kbStaffAsk" property="kbstaffask" jdbcType="VARCHAR" />
+    <result column="kbSite" property="kbsite" jdbcType="VARCHAR" />
+    <result column="fileCost" property="filecost" jdbcType="VARCHAR" />
+    <result column="otherCost" property="othercost" jdbcType="VARCHAR" />
+    <result column="zbName" property="zbname" jdbcType="VARCHAR" />
+    <result column="zbContactMan" property="zbcontactman" jdbcType="VARCHAR" />
+    <result column="zbContactWay" property="zbcontactway" jdbcType="VARCHAR" />
+    <result column="dlName" property="dlname" jdbcType="VARCHAR" />
+    <result column="dlContactMan" property="dlcontactman" jdbcType="VARCHAR" />
+    <result column="dlContactWay" property="dlcontactway" jdbcType="VARCHAR" />
+    <result column="personRequest" property="personrequest" jdbcType="VARCHAR" />
+    <result column="shebaoRequest" property="shebaorequest" jdbcType="VARCHAR" />
+    <result column="yejiRequest" property="yejirequest" jdbcType="VARCHAR" />
+    <result column="createdDate" property="createddate" jdbcType="VARCHAR" />
+    <result column="registrationForm" property="registrationform" jdbcType="VARCHAR" />
+    <result column="projectTimeLimit" property="projecttimelimit" jdbcType="VARCHAR" />
+    <result column="projectCompletionDate" property="projectcompletiondate" jdbcType="VARCHAR" />
+    <result column="supplementaryNoticeNumber" property="supplementarynoticenumber" jdbcType="VARCHAR" />
+    <result column="supplementaryNoticeReason" property="supplementarynoticereason" jdbcType="VARCHAR" />
+    <result column="flowStandardFlag" property="flowstandardflag" jdbcType="VARCHAR" />
+    <result column="block" property="block" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

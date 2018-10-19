@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao2.SnatchurlMapper" >
+<resultMap id="BaseResultMap" type="com.silita.model.Snatchurl" >
+  <!--
+    WARNING - @mbg.generated
+  -->
+  <id column="id" property="id" jdbcType="INTEGER" />
+  <id column="range" property="range" jdbcType="INTEGER" />
+  <result column="url" property="url" jdbcType="VARCHAR" />
+  <result column="urlPage" property="urlPage" jdbcType="INTEGER" />
+  <result column="snatchDateTime" property="snatchDateTime" jdbcType="TIMESTAMP" />
+  <result column="snatchPlanId" property="snatchPlanId" jdbcType="INTEGER" />
+  <result column="type" property="type" jdbcType="INTEGER" />
+  <result column="otherType" property="otherType" jdbcType="INTEGER" />
+  <result column="biddingType" property="biddingType" jdbcType="INTEGER" />
+  <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+  <result column="title" property="title" jdbcType="VARCHAR" />
+  <result column="status" property="status" jdbcType="INTEGER" />
+  <result column="openDate" property="openDate" jdbcType="VARCHAR" />
+  <result column="keysWords" property="keysWords" jdbcType="VARCHAR" />
+  <result column="edit" property="edit" jdbcType="INTEGER" />
+  <result column="block" property="block" jdbcType="VARCHAR" />
+  <result column="tableName" property="tableName" jdbcType="VARCHAR" />
+  <result column="randomNum" property="randomNum" jdbcType="INTEGER" />
+  <result column="suuid" property="suuid" jdbcType="VARCHAR" />
+  <result column="changeNum" property="changeNum" jdbcType="INTEGER" />
+  <result column="isShow" property="isShow" jdbcType="INTEGER" />
+  <result column="province" property="province" jdbcType="VARCHAR" />
+  <result column="city" property="city" jdbcType="VARCHAR" />
+  <result column="county" property="county" jdbcType="VARCHAR" />
+  <result column="rank" property="rank" jdbcType="INTEGER" />
+  <result column="redisId" property="redisId" jdbcType="INTEGER" />
+  <result column="websitePlanId" property="websitePlanId" jdbcType="INTEGER" />
+  <result column="source" property="source" jdbcType="VARCHAR" />
+</resultMap>
+
+  <select id="listSnatchurl" parameterType="com.silita.model.Snatchurl" resultMap="BaseResultMap">
+    SELECT *
+    FROM mishu.snatchurl_${source}
+    <where>
+      1 = 1
+      <if test="type !=null and type!=''">
+        AND `type` = #{type}
+      </if>
+      <if test="title !=null and title!=''">
+        AND `title` LIKE CONCAT('%', #{title}, '%')
+      </if>
+      <if test="openDate !=null and openDate!=''">
+        AND `openDate` <![CDATA[ >= ]]> #{openDate}
+      </if>
+      <if test="openDateEnd !=null and openDateEnd!=''">
+        AND `openDate` <![CDATA[ <= ]]> #{openDateEnd}
+      </if>
+      AND isShow = 0
+    </where>
+    ORDER BY openDate DESC, id DESC
+    LIMIT #{start}, #{pageSize}
+  </select>
+
+  <select id="countSnatchurl" parameterType="com.silita.model.Snatchurl" resultType="Integer">
+    SELECT COUNT(*)
+    FROM mishu.snatchurl_${source}
+    <where>
+      1 = 1
+      <if test="type !=null and type!=''">
+        AND `type` = #{type}
+      </if>
+      <if test="title !=null and title!=''">
+        AND `title` LIKE CONCAT('%', #{title}, '%')
+      </if>
+      <if test="openDate !=null and openDate!=''">
+        AND `openDate` <![CDATA[ >= ]]> #{openDate}
+      </if>
+      <if test="openDateEnd !=null and openDateEnd!=''">
+        AND `openDate` <![CDATA[ <= ]]> #{openDateEnd}
+      </if>
+      AND isShow = 0
+    </where>
+    ORDER BY openDate DESC, id DESC
+  </select>
+
+  <update id="updateSnatchurlIsShowById" parameterType="com.silita.model.Snatchurl">
+    UPDATE mishu.snatchurl_${source}
+    SET `isShow` = 1
+    WHERE `id` = #{id}
+  </update>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao2.ZhongbiaoDetailOthersMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.ZhongbiaoDetailOthers" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="snatchUrlId" property="snatchurlid" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="projName" property="projname" jdbcType="VARCHAR" />
+    <result column="gsDate" property="gsdate" jdbcType="VARCHAR" />
+    <result column="projSum" property="projsum" jdbcType="VARCHAR" />
+    <result column="projDq" property="projdq" jdbcType="VARCHAR" />
+    <result column="projXs" property="projxs" jdbcType="VARCHAR" />
+    <result column="pbMode" property="pbmode" jdbcType="VARCHAR" />
+    <result column="projType" property="projtype" jdbcType="VARCHAR" />
+    <result column="projTypeId" property="projtypeid" jdbcType="VARCHAR" />
+    <result column="oneName" property="onename" jdbcType="VARCHAR" />
+    <result column="oneUUid" property="oneuuid" jdbcType="VARCHAR" />
+    <result column="oneOffer" property="oneoffer" jdbcType="VARCHAR" />
+    <result column="oneProjDuty" property="oneprojduty" jdbcType="VARCHAR" />
+    <result column="oneProjDutyUuid" property="oneprojdutyuuid" jdbcType="VARCHAR" />
+    <result column="oneSkillDuty" property="oneskillduty" jdbcType="VARCHAR" />
+    <result column="oneSgy" property="onesgy" jdbcType="VARCHAR" />
+    <result column="oneAqy" property="oneaqy" jdbcType="VARCHAR" />
+    <result column="oneZly" property="onezly" jdbcType="VARCHAR" />
+    <result column="twoName" property="twoname" jdbcType="VARCHAR" />
+    <result column="twoOffer" property="twooffer" jdbcType="VARCHAR" />
+    <result column="twoProjDuty" property="twoprojduty" jdbcType="VARCHAR" />
+    <result column="twoSkillDuty" property="twoskillduty" jdbcType="VARCHAR" />
+    <result column="twoSgy" property="twosgy" jdbcType="VARCHAR" />
+    <result column="twoAqy" property="twoaqy" jdbcType="VARCHAR" />
+    <result column="twoZly" property="twozly" jdbcType="VARCHAR" />
+    <result column="threeName" property="threename" jdbcType="VARCHAR" />
+    <result column="threeOffer" property="threeoffer" jdbcType="VARCHAR" />
+    <result column="threeProjDuty" property="threeprojduty" jdbcType="VARCHAR" />
+    <result column="threeSkillDuty" property="threeskillduty" jdbcType="VARCHAR" />
+    <result column="threeSgy" property="threesgy" jdbcType="VARCHAR" />
+    <result column="threeAqy" property="threeaqy" jdbcType="VARCHAR" />
+    <result column="threeZly" property="threezly" jdbcType="VARCHAR" />
+    <result column="createdDate" property="createddate" jdbcType="VARCHAR" />
+    <result column="projectTimeLimit" property="projecttimelimit" jdbcType="VARCHAR" />
+    <result column="projectCompletionDate" property="projectcompletiondate" jdbcType="VARCHAR" />
+    <result column="block" property="block" jdbcType="VARCHAR" />
+    <result column="zhaobdId" property="zhaobdid" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

@@ -214,7 +214,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public String saveNtTenders(TbNtTenders tbNtTenders) {
-        String msg = "";
+        String msg = "添加标段信息成功！";
         String ntEditId;
         String userName;
         //更新招标主表状态
@@ -247,13 +247,12 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             tbNtTenders.setPkid(ntEditId);
             tbNtTenders.setEditCode("td" + System.currentTimeMillis() + DataHandlingUtil.getNumberRandom(2));
             tbNtTendersMapper.insertNtTenders(tbNtTenders);
-            msg = "添加标段信息成功！";
         } else {
+            msg = "更新标段信息成功！";
             tbNtTenders.setUpdateBy(tbNtTenders.getCreateBy());
             ntEditId = tbNtTenders.getPkid();
             userName = tbNtTenders.getUpdateBy();
             tbNtTendersMapper.updateNtTendersByNtIdAndSegment(tbNtTenders);
-            msg = "更新标段信息成功！";
         }
         //保存资质关系
         Map parmas = new HashMap<String, Object>();

@@ -8,7 +8,9 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
@@ -27,9 +29,8 @@ import java.util.Map;
  */
 public class JWTAuthenticationFilter extends AuthenticatingFilter {
 
-    //不知道怎么获取applicationContext-shiro配置文件里面的，现在写死
-    private final String loginUrl = "/authorize/login";
-    private final String druidUrl = "/manager/druid";
+    @Value("${jwt.anon}")
+    private String anonymousStr;
 
     @Override
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
@@ -54,9 +55,14 @@ public class JWTAuthenticationFilter extends AuthenticatingFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
         String contextPath = WebUtils.getPathWithinApplication(WebUtils.toHttp(servletRequest));
-        //登录、druid监控不拦截
-        if(contextPath.contains(loginUrl) || contextPath.contains(druidUrl)) {
-            return true;
+        if(!StringUtils.isEmpty(anonymousStr)) {
+            String[] anonUrls = anonymousStr.split(",");
+            //未认证可访问url
+            for (int i = 0; i < anonUrls.length; i++) {
+                if(contextPath.contains(anonUrls[i])) {
+                    return true;
+                }
+            }
         }
         AuthenticationToken token = this.createToken(servletRequest, servletResponse);
         if(token.getPrincipal() == null) {

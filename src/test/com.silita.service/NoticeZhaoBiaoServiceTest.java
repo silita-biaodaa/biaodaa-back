@@ -171,7 +171,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController10()throws Exception{
-        String requestBody = "{\"ntId\":\"4\", \"source\":\"hunan\"}";
+        String requestBody = "{\"ntId\":\"5\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/listNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

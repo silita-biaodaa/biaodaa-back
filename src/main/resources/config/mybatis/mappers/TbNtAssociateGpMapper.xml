@@ -49,7 +49,7 @@
         main.pub_date AS pubDate, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' WHEN 5 then '已处理' ELSE '未审核' END AS ntStatus
         FROM ${tableName} gp
         LEFT JOIN tb_nt_mian_${source} main ON gp.nt_id = main.pkid
-        WHERE gp.rel_gp = (SELECT rel_gp FROM ${tableName} WHERE nt_id = #{ntId}) AND gp.nt_id != #{ntId} AND main.is_enable = 1
+        WHERE gp.rel_gp = (SELECT rel_gp FROM ${tableName} WHERE nt_id = #{ntId} LIMIT 1) AND gp.nt_id != #{ntId} AND main.is_enable = 1
         LIMIT #{start}, #{pageSize}
     </select>
 
@@ -57,7 +57,7 @@
         SELECT COUNT(*)
         FROM ${tableName} gp
         LEFT JOIN tb_nt_mian_${source} main ON gp.nt_id = main.pkid
-        WHERE gp.rel_gp = (SELECT rel_gp FROM ${tableName} WHERE nt_id = #{ntId}) AND gp.nt_id != #{ntId} AND main.is_enable = 1
+        WHERE gp.rel_gp = (SELECT rel_gp FROM ${tableName} WHERE nt_id = #{ntId} LIMIT 1) AND gp.nt_id != #{ntId} AND main.is_enable = 1
     </select>
 
     <select id="getRelGpByNtIds" parameterType="Map" resultMap="BaseResultMap">
