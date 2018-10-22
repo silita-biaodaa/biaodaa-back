@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao2.AptitudeDictionaryMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.AptitudeDictionary" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="aptitudeName" property="aptitudeName" jdbcType="VARCHAR" />
+    <result column="aptitudeCode" property="aptitudeCode" jdbcType="VARCHAR" />
+    <result column="majorName" property="majorName" jdbcType="VARCHAR" />
+    <result column="majorUuid" property="majorUuid" jdbcType="VARCHAR" />
+    <result column="zztype" property="zztype" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="getAptitudeDictionaryByMajorUUid" parameterType="String" resultMap="BaseResultMap">
+    SELECT *
+    FROM mishu.aptitude_dictionary
+    WHERE majorUUid = #{majorUuid} AND `majorName` IS NOT NULL
+  </select>
+</mapper>

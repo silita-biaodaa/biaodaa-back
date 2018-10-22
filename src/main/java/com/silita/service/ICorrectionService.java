@@ -1,7 +1,10 @@
 package com.silita.service;
 
+import com.silita.model.AllZh;
 import com.silita.model.Snatchurl;
+import com.silita.model.ZhaobiaoDetailOthers;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,15 +16,36 @@ import java.util.Map;
 public interface ICorrectionService {
 
     /**
+     * 根据资质名称筛选资质别名
+     * @return
+     */
+    List<AllZh> ListAllZhByName(AllZh allZh);
+
+    /**
      * 根据查询条件获取招、中标纠错列表
      * @return
      */
     Map<String, Object> listSnatchurl(Snatchurl snatchurl);
 
     /**
-     * 根据公告pkid更新公告显示状态
+     * 根据公告pkid更新公告显示状态（逻辑删除）
      * @param snatchurl
      * @return
      */
     Integer updateSnatchurlIsShowById(Snatchurl snatchurl);
+
+    /**
+     * 根据公告pkid获取公告标段信息
+     * @param zhaobiaoDetailOthers
+     * @return
+     */
+    List<ZhaobiaoDetailOthers> listZhaobiaoDetailBySnatchUrlId(ZhaobiaoDetailOthers zhaobiaoDetailOthers);
+
+    /**
+     * 根据标段pkid更新公告标段信息
+     * @param zhaobiaoDetailOthers
+     * @return
+     */
+    Integer updateZhaobiaoDetailById(ZhaobiaoDetailOthers zhaobiaoDetailOthers);
+
 }

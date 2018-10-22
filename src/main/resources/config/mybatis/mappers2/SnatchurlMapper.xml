@@ -40,7 +40,7 @@
     FROM mishu.snatchurl_${source}
     <where>
       1 = 1
-      <if test="type !=null and type!=''">
+      <if test="type !=null">
         AND `type` = #{type}
       </if>
       <if test="title !=null and title!=''">
@@ -63,7 +63,7 @@
     FROM mishu.snatchurl_${source}
     <where>
       1 = 1
-      <if test="type !=null and type!=''">
+      <if test="type !=null">
         AND `type` = #{type}
       </if>
       <if test="title !=null and title!=''">
@@ -84,6 +84,12 @@
     UPDATE mishu.snatchurl_${source}
     SET `isShow` = 1
     WHERE `id` = #{id}
+  </update>
+
+  <update id="updateSnatchurlById" parameterType="com.silita.model.Snatchurl">
+    UPDATE mishu.snatchurl_${source}
+    SET `title` = #{title}
+    WHERE `id` = (SELECT `snatchUrlId` FROM mishu.zhaobiao_detail_others WHERE `id` = #{id})
   </update>
 
 </mapper>

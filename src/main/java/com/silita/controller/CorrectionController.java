@@ -1,7 +1,9 @@
 package com.silita.controller;
 
 import com.silita.controller.base.BaseController;
+import com.silita.model.AllZh;
 import com.silita.model.Snatchurl;
+import com.silita.model.ZhaobiaoDetailOthers;
 import com.silita.service.ICorrectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,12 @@ public class CorrectionController extends BaseController {
     @Autowired
     ICorrectionService correctionService;
 
+    @RequestMapping(value = "/ListAllZh",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> ListAllZh(@RequestBody AllZh allZh) {
+        return super.successMap(correctionService.ListAllZhByName(allZh));
+    }
+
     @RequestMapping(value = "/listNotice",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> listSnatchurl(@RequestBody Snatchurl snatchurl) {
@@ -35,6 +43,19 @@ public class CorrectionController extends BaseController {
     @ResponseBody
     public Map<String,Object> updateNtText(@RequestBody Snatchurl snatchurl) {
         correctionService.updateSnatchurlIsShowById(snatchurl);
+        return successMap(null);
+    }
+
+    @RequestMapping(value = "/listZhaobiaoDetail",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> listZhaobiaoDetail(@RequestBody ZhaobiaoDetailOthers zhaobiaoDetailOthers) {
+        return super.successMap(correctionService.listZhaobiaoDetailBySnatchUrlId(zhaobiaoDetailOthers));
+    }
+
+    @RequestMapping(value = "/updateZhaobiaoDetail", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> updateZhaobiaoDetail(@RequestBody ZhaobiaoDetailOthers zhaobiaoDetailOthers) {
+        correctionService.updateZhaobiaoDetailById(zhaobiaoDetailOthers);
         return successMap(null);
     }
 }

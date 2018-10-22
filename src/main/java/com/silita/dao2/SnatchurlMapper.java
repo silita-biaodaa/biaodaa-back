@@ -27,4 +27,11 @@ public interface SnatchurlMapper extends MyMapper<Snatchurl> {
      * @return
      */
     Integer updateSnatchurlIsShowById(Snatchurl snatchurl);
+
+    /**
+     * 根据公告pkid更新公告基本信息
+     * @param snatchurl
+     * @return
+     */
+    Integer updateSnatchurlById(Snatchurl snatchurl);
 }

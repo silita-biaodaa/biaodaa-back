@@ -27,9 +27,9 @@
         <javaClientGenerator targetPackage="com.silita.dao2" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="snatchurl">
+        <table tableName="all_zh">
             <!--mysql 配置-->
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+            <generatedKey column="uuid" sqlStatement="Mysql" identity="true"/>
             <!--oracle 配置-->
             <!--<generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/>-->
         </table>

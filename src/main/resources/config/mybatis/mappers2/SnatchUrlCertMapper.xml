@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao2.SnatchUrlCertMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.SnatchUrlCert" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="contId" property="contid" jdbcType="INTEGER" />
+    <result column="certificate" property="certificate" jdbcType="VARCHAR" />
+    <result column="certificateUuid" property="certificateuuid" jdbcType="VARCHAR" />
+    <result column="licence" property="licence" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="block" property="block" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <insert id="batchInsertSnatchUrlCert" parameterType="com.silita.model.SnatchUrlCert">
+    INSERT INTO `snatch_url_cert_others` (
+    `id`, `contId`, `certificate`, `certificateUuid`, `licence`,
+    `type`, `block`, `source`
+    )
+    VALUES
+    <foreach collection="list" item="temp" index="index" separator=",">
+      (
+      #{temp.id}, #{temp.contId}, #{temp.certificate}, #{temp.certificateUuid}, #{temp.licence},
+      #{temp.type}, #{temp.block}, #{temp.source}
+      )
+    </foreach>
+  </insert>
+
+  <update id="batchUpdateSnatchUrlCert" parameterType="com.silita.model.SnatchUrlCert">
+    <foreach collection="list" item="temp" index="index" open="" close="" separator=";">
+      UPDATE `snatch_url_cert_others` SET
+      <if test="temp.certificate != null and temp.certificate != ''">
+        `certificate` = #{temp.certificate}
+      </if>
+      <if test="temp.certificateUuid != null and temp.certificateUuid != ''">
+        ,`certificateUuid` = #{temp.certificateUuid}
+      </if>
+      <if test="temp.licence != null and temp.licence != ''">
+        ,`licence` = #{temp.licence}
+      </if>
+      <if test="temp.type != null and temp.type != ''">
+        ,`type` = #{temp.type}
+      </if>
+      <if test="temp.block != null and temp.block != ''">
+        ,`block` = #{temp.block}
+      </if>
+      <if test="temp.source != null and temp.source != ''">
+        ,`source` = #{temp.source}
+      </if>
+      WHERE `id` = #{temp.id}
+    </foreach>
+  </update>
+
+  <delete id="deleteSnatchUrlCertById" parameterType="com.silita.model.SnatchUrlCert">
+    DELETE FROM `snatch_url_cert_others` WHERE `id` = #{id}
+  </delete>
+</mapper>
