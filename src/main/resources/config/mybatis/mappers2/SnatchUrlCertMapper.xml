@@ -57,4 +57,9 @@
   <delete id="deleteSnatchUrlCertById" parameterType="com.silita.model.SnatchUrlCert">
     DELETE FROM `snatch_url_cert_others` WHERE `id` = #{id}
   </delete>
+
+  <delete id="deleteSnatchUrlCertByContId" parameterType="com.silita.model.SnatchUrlCert">
+    DELETE FROM `snatch_url_cert_others` WHERE `contId` = #{contId}
+  </delete>
+
 </mapper>

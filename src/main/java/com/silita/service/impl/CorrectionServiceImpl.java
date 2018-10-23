@@ -1,14 +1,24 @@
 package com.silita.service.impl;
 
+import com.silita.biaodaa.elastic.common.ConstantUtil;
+import com.silita.biaodaa.elastic.common.NativeElasticSearchUtils;
+import com.silita.biaodaa.elastic.model.PaginationAndSort;
+import com.silita.biaodaa.elastic.model.QuerysModel;
+import com.silita.commons.elasticSearch.InitESClient;
 import com.silita.dao2.*;
 import com.silita.model.*;
 import com.silita.service.ICorrectionService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.oldProjectUtils.CommonUtil;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +45,9 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
     private ZhongbiaoDetailOthersMapper zhongbiaoDetailOthersMapper;
     @Autowired
     private SnatchUrlCertMapper snatchUrlCertMapper;
+
+    @Autowired
+    private NativeElasticSearchUtils nativeElasticSearchUtils;
 
     @Override
     public List<AllZh> ListAllZhByName(AllZh allZh) {
@@ -68,14 +81,20 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
         if(snatchUrlCerts.size() > 0) {
             for (int i = 0; i < snatchUrlCerts.size(); i++) {
                 SnatchUrlCert snatchUrlCert = snatchUrlCerts.get(i);
-                if(StringUtils.isEmpty(snatchUrlCert.getTempMainUuid())) {
+                if(StringUtils.isEmpty(snatchUrlCert.getFinalUuid())) {
                     //资质id为空时，删除本条资质
                     snatchUrlCertMapper.deleteSnatchUrlCertById(snatchUrlCert);
                     snatchUrlCerts.remove(i);
                 } else {
-                    AptitudeDictionary aptitudeDictionary = aptitudeDictionaryMapper.getAptitudeDictionaryByMajorUUid(snatchUrlCert.getTempMainUuid());
-                    snatchUrlCert.setCertificate(aptitudeDictionary.getMajorName() + CommonUtil.spellRank(snatchUrlCert.getTempRank()));
-                    snatchUrlCert.setCertificateUuid(CommonUtil.spellUuid(snatchUrlCert.getTempMainUuid(), snatchUrlCert.getTempRank()));
+                    if(StringUtils.isEmpty(snatchUrlCert.getType())) {
+                        snatchUrlCert.setType("OR");
+                    }
+                    String finalUuid = snatchUrlCert.getFinalUuid();
+                    String mainUuid = finalUuid.substring(0, finalUuid.indexOf("|"));
+                    String rank = finalUuid.substring(finalUuid.indexOf("|") + 1);
+                    AptitudeDictionary aptitudeDictionary = aptitudeDictionaryMapper.getAptitudeDictionaryByMajorUUid(mainUuid);
+                    snatchUrlCert.setCertificate(aptitudeDictionary.getMajorName() + CommonUtil.spellRank(rank));
+                    snatchUrlCert.setCertificateUuid(CommonUtil.spellUuid(mainUuid, rank));
                 }
             }
             if(snatchUrlCerts.size() > 0) {
@@ -92,6 +111,42 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
         //修改公告主表
         snatchurlMapper.updateSnatchurlById(snatchurl);
         return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> listCompanyByNameOrPinYin(String queryKey) {
+        List lists = new ArrayList<TbCompany>(20);
+        TransportClient client = InitESClient.getInit();
+        Map sort = new HashMap<String, String>();
+        sort.put("px", SortOrder.DESC);
+        PaginationAndSort pageSort = new PaginationAndSort(1, 20, sort);
+
+        List<QuerysModel> querys = new ArrayList();
+        if (!StringUtils.isEmpty(queryKey)) {
+            queryKey = queryKey.toLowerCase();
+            querys.add(new QuerysModel(ConstantUtil.CONDITION_SHOULD, ConstantUtil.MATCHING_WILDCARD, "comName", "*" + queryKey + "*"));
+            querys.add(new QuerysModel(ConstantUtil.CONDITION_SHOULD, ConstantUtil.MATCHING_WILDCARD, "comNamePy", "*" + queryKey + "*"));
+        }
+        SearchResponse response = nativeElasticSearchUtils.complexQuery(client, "company", "comes", querys, null, ConstantUtil.CONDITION_MUST, pageSort);
+        Map temp;
+        for (SearchHit hit : response.getHits()) {
+            temp = new HashMap(4);
+            temp.put("comId", hit.getSource().get("comId"));
+            temp.put("companyName", hit.getSource().get("comName"));
+            temp.put("creditCode", hit.getSource().get("creditCode"));
+            lists.add(temp);
+        }
+        return lists;
+    }
+
+    @Override
+    public List<ZhongbiaoDetailOthers> listZhongbiaoDetailBySnatchUrlId(ZhongbiaoDetailOthers zhongbiaoDetailOthers) {
+        return zhongbiaoDetailOthersMapper.listZhongbiaoDetailOthersBySnatchUrlId(zhongbiaoDetailOthers);
+    }
+
+    @Override
+    public Integer updateZhongbiaoDetailById(ZhongbiaoDetailOthers zhongbiaoDetailOthers) {
+        return zhongbiaoDetailOthersMapper.updateZhongbiaoDetailOthersById(zhongbiaoDetailOthers);
     }
 
 }

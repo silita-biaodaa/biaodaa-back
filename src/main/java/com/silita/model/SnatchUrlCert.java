@@ -44,13 +44,7 @@ public class SnatchUrlCert {
     private String source;
 
     /**
-     * 业务查询资质uuid
+     * 业务使用 最终uuid：mainUuid+/rank
      */
-    private String tempMainUuid;
-
-    /**
-     * 业务查询 资质等级
-     */
-    private String tempRank;
-
+    private String finalUuid;
 }

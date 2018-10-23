@@ -35,8 +35,12 @@ public class StringTest {
 //        SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        System.out.println(new Date(Long.parseLong(str)));
 
-        String groupRegex = "G4";
-        String[] blockQual = groupRegex.split("\\|");
-        System.out.println(blockQual.toString());
+//        String groupRegex = "G4";
+//        String[] blockQual = groupRegex.split("\\|");
+//        System.out.println(blockQual.toString());
+
+        String finalUuid = "4c7f9474-2934-11e5-a311-63b86f04c8dd|21";
+        System.out.println(finalUuid.substring(0, finalUuid.indexOf("|")));
+        System.out.println(finalUuid.substring(finalUuid.indexOf("|")));
     }
 }

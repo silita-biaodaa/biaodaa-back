@@ -4,6 +4,7 @@ import com.silita.controller.base.BaseController;
 import com.silita.model.AllZh;
 import com.silita.model.Snatchurl;
 import com.silita.model.ZhaobiaoDetailOthers;
+import com.silita.model.ZhongbiaoDetailOthers;
 import com.silita.service.ICorrectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,25 @@ public class CorrectionController extends BaseController {
     @ResponseBody
     public Map<String,Object> updateZhaobiaoDetail(@RequestBody ZhaobiaoDetailOthers zhaobiaoDetailOthers) {
         correctionService.updateZhaobiaoDetailById(zhaobiaoDetailOthers);
+        return successMap(null);
+    }
+
+    @RequestMapping(value = "/listCompany",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> listCompany(@RequestBody Map params) {
+        return super.successMap(correctionService.listCompanyByNameOrPinYin(String.valueOf(params.get("queryKey"))));
+    }
+
+    @RequestMapping(value = "/listZhongbiaoDetail",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> listZhongbiaoDetail(@RequestBody ZhongbiaoDetailOthers zhongbiaoDetailOthers) {
+        return super.successMap(correctionService.listZhongbiaoDetailBySnatchUrlId(zhongbiaoDetailOthers));
+    }
+
+    @RequestMapping(value = "/updateZhongbiaoDetail", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> updateZhongbiaoDetail(@RequestBody ZhongbiaoDetailOthers zhongbiaoDetailOthers) {
+        correctionService.updateZhongbiaoDetailById(zhongbiaoDetailOthers);
         return successMap(null);
     }
 }

@@ -671,13 +671,9 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         SearchResponse response = nativeElasticSearchUtils.complexQuery(client, "company", "comes", querys, null, ConstantUtil.CONDITION_MUST, pageSort);
         Map temp;
         for (SearchHit hit : response.getHits()) {
-            temp = new HashMap(4);
+            temp = new HashMap(3);
             temp.put("companyName", hit.getSource().get("comName"));
-            if(null == hit.getSource().get("creditCode")) {
-                temp.put("creditCode", "");
-            } else {
-                temp.put("creditCode", hit.getSource().get("creditCode"));
-            }
+            temp.put("creditCode", hit.getSource().get("creditCode"));
             lists.add(temp);
         }
         if (!StringUtils.isEmpty(queryKey)) {

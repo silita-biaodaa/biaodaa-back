@@ -76,7 +76,7 @@ public class MyRealm extends AuthorizingRealm {
         } else if(!JWTUtil.verify(token, userName, vo.getPassword())) {
             throw new IncorrectCredentialsException("用户名或密码错误！");
         } else {
-            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(token, token, "MyRealm");
+            AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(token, token, vo.getUserName());
             return authcInfo;
         }
     }

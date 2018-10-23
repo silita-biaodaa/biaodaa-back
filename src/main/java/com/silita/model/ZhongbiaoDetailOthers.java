@@ -11,7 +11,7 @@ public class ZhongbiaoDetailOthers {
     /**
      * 公告id
      */
-    private Integer snatchurlid;
+    private Integer snatchUrlId;
 
     /**
      * 公告来源省份
@@ -21,163 +21,163 @@ public class ZhongbiaoDetailOthers {
     /**
      * 项目名称
      */
-    private String projname;
+    private String projName;
 
     /**
      * 公示日期
      */
-    private String gsdate;
+    private String gsDate;
 
     /**
      * 项目金额
      */
-    private String projsum;
+    private String projSum;
 
-    private String projdq;
+    private String projDq;
 
-    private String projxs;
+    private String projXs;
 
     /**
      * 评标办法
      */
-    private String pbmode;
+    private String pbMode;
 
-    private String projtype;
+    private String projType;
 
-    private String projtypeid;
+    private String projTypeId;
 
     /**
      * 第一候选人
      */
-    private String onename;
+    private String oneName;
 
     /**
      * 候选单位UUid
      */
-    private String oneuuid;
+    private String oneUUid;
 
     /**
      * 报价
      */
-    private String oneoffer;
+    private String oneOffer;
 
     /**
      * 项目负责人
      */
-    private String oneprojduty;
+    private String oneProjDuty;
 
-    private String oneprojdutyuuid;
+    private String oneProjDutyUuid;
 
     /**
      * 技术负责人
      */
-    private String oneskillduty;
+    private String oneSkillDuty;
 
     /**
      * 施工员
      */
-    private String onesgy;
+    private String oneSgy;
 
     /**
      * 安全员
      */
-    private String oneaqy;
+    private String oneAqy;
 
     /**
      * 质量员
      */
-    private String onezly;
+    private String oneZly;
 
     /**
      * 第二候选人
      */
-    private String twoname;
+    private String twoName;
 
     /**
      * 报价
      */
-    private String twooffer;
+    private String twoOffer;
 
     /**
      * 项目负责人
      */
-    private String twoprojduty;
+    private String twoProjDuty;
 
     /**
      * 技术负责人
      */
-    private String twoskillduty;
+    private String twoSkillDuty;
 
     /**
      * 施工员
      */
-    private String twosgy;
+    private String twoSgy;
 
     /**
      * 安全员
      */
-    private String twoaqy;
+    private String twoAqy;
 
     /**
      * 质量员
      */
-    private String twozly;
+    private String twoZly;
 
     /**
      * 第三候选人
      */
-    private String threename;
+    private String threeName;
 
     /**
      * 报价
      */
-    private String threeoffer;
+    private String threeOffer;
 
     /**
      * 项目负责人
      */
-    private String threeprojduty;
+    private String threeProjDuty;
 
     /**
      * 技术负责人
      */
-    private String threeskillduty;
+    private String threeSkillDuty;
 
     /**
      * 施工员
      */
-    private String threesgy;
+    private String threeSgy;
 
     /**
      * 安全员
      */
-    private String threeaqy;
+    private String threeAqy;
 
     /**
      * 质量员
      */
-    private String threezly;
+    private String threeZly;
 
     /**
      * 创建日期
      */
-    private String createddate;
+    private String createdDate;
 
     /**
      * 项目工期
      */
-    private String projecttimelimit;
+    private String projectTimeLimit;
 
     /**
      * 计划竣工时间
      */
-    private String projectcompletiondate;
+    private String projectCompletionDate;
 
     /**
      * 标段信息
      */
     private String block;
 
-    private Integer zhaobdid;
+    private Integer zhaobdId;
 
 }

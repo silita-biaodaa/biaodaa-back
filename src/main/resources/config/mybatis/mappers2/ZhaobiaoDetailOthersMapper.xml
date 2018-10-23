@@ -30,14 +30,14 @@
 
 
   <select id="listZhaobiaoDetailOthersBySnatchUrlId" parameterType="com.silita.model.ZhaobiaoDetailOthers" resultMap="BaseResultMap">
-    SELECT zhaobiao.id, zhaobiao.projName, zhaobiao.block, zhaobiao.projDq, zhaobiao.projXs,
-    zhaobiao.pbMode ,
+    SELECT zhaobiao.id, main.id AS snatchUrlId, main.title AS projName, zhaobiao.block, zhaobiao.projDq, zhaobiao.projXs,
+    zhaobiao.pbMode , main.openDate AS gsDate,
     cert.id AS s_id, cert.contId, cert.certificate, cert.certificateUuid, cert.licence,
     cert.type , cert.block AS s_block, cert.source
-    FROM mishu.zhaobiao_detail_others zhaobiao
-    LEFT JOIN mishu.snatch_url_cert_others cert ON zhaobiao.`snatchUrlId` = cert.`contId`
-    WHERE zhaobiao.`snatchUrlId` = #{snatchUrlId} AND zhaobiao.`source` = #{source}
-    AND cert.`source` = #{source}
+    FROM mishu.snatchurl_${source} main
+    LEFT JOIN mishu.zhaobiao_detail_others zhaobiao ON main.`id` = zhaobiao.`snatchUrlId` AND main.`source` = zhaobiao.`source`
+    LEFT JOIN mishu.snatch_url_cert_others cert ON zhaobiao.`snatchUrlId` = cert.`contId` AND zhaobiao.`source` = cert.`source`
+    WHERE main.`id` = #{snatchUrlId} AND main.`source` = #{source}
   </select>
 
   <update id="updateZhaobiaoDetailOthersById" parameterType="com.silita.model.ZhaobiaoDetailOthers">
@@ -51,7 +51,7 @@
     `projDq` = #{projDq},
     `projXs` = #{projXs},
     `pbMode` = #{pbMode}
-    WHERE id = #{id}
+    WHERE `id` = #{id}
   </update>
 
 </mapper>

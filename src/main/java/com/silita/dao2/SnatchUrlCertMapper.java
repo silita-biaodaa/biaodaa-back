@@ -27,4 +27,11 @@ public interface SnatchUrlCertMapper extends MyMapper<SnatchUrlCert> {
      * @return
      */
     Integer deleteSnatchUrlCertById(SnatchUrlCert snatchUrlCerts);
+
+    /**
+     * 根据公告pkid删除资质
+     * @param snatchUrlCerts
+     * @return
+     */
+    Integer deleteSnatchUrlCertByContId(SnatchUrlCert snatchUrlCerts);
 }

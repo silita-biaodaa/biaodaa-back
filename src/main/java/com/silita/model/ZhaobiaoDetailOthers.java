@@ -247,9 +247,4 @@ public class ZhaobiaoDetailOthers {
      */
     List<SnatchUrlCert> snatchUrlCerts;
 
-    /**
-     * 资质别名
-     */
-    List<AllZh> allZhs;
-
 }

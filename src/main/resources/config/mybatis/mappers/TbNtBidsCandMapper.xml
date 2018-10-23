@@ -87,7 +87,8 @@
           `f_safety` AS `f_safety3`, `f_quality` AS `f_quality3`, `pkid`
         </if>
         FROM `tb_nt_bids_cand`
-        WHERE `nt_bids_id` = #{ntBidsId} AND `nt_id` = #{ntId} AND `number` = #{number} LIMIT 1
+        WHERE `nt_bids_id` = #{ntBidsId} AND `nt_id` = #{ntId} AND `number` = #{number}
+        ORDER BY `created` ASC LIMIT 1
     </select>
 
     <select id="countBidsCandByBtIdAndNtBidsIdAndNumber" parameterType="com.silita.model.TbNtBidsCand" resultType="Integer">
