@@ -1,10 +1,7 @@
 package com.silita.controller;
 
 import com.silita.controller.base.BaseController;
-import com.silita.model.AllZh;
-import com.silita.model.Snatchurl;
-import com.silita.model.ZhaobiaoDetailOthers;
-import com.silita.model.ZhongbiaoDetailOthers;
+import com.silita.model.*;
 import com.silita.service.ICorrectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -77,6 +74,12 @@ public class CorrectionController extends BaseController {
     public Map<String,Object> updateZhongbiaoDetail(@RequestBody ZhongbiaoDetailOthers zhongbiaoDetailOthers) {
         correctionService.updateZhongbiaoDetailById(zhongbiaoDetailOthers);
         return successMap(null);
+    }
+
+    @RequestMapping(value = "/getSnatchurlcontent",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> getSnatchurlcontent(@RequestBody Snatchurlcontent snatchurlcontent) {
+        return super.successMap(correctionService.getSnatchurlcontentBySnatchUrlId(snatchurlcontent));
     }
 
 

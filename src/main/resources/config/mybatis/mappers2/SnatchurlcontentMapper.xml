@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao2.SnatchurlcontentMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.Snatchurlcontent" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="snatchUrlId" property="snatchUrlId" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="press" property="press" jdbcType="LONGVARCHAR" />
+    <result column="contentPress" property="contentPress" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <select id="getSnatchurlcontentBySnatchUrlId" parameterType="com.silita.model.Snatchurlcontent" resultMap="BaseResultMap">
+    SELECT *
+    FROM mishu.snatchurlcontent_${source}
+    WHERE snatchUrlId = #{snatchUrlId}
+  </select>
+</mapper>

@@ -45,6 +45,8 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
     private ZhongbiaoDetailOthersMapper zhongbiaoDetailOthersMapper;
     @Autowired
     private SnatchUrlCertMapper snatchUrlCertMapper;
+    @Autowired
+    private SnatchurlcontentMapper snatchurlcontentMapper;
 
     @Autowired
     private NativeElasticSearchUtils nativeElasticSearchUtils;
@@ -170,6 +172,11 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
         //修改公告主表
         snatchurlMapper.updateSnatchurlById(snatchurl);
         return null;
+    }
+
+    @Override
+    public Snatchurlcontent getSnatchurlcontentBySnatchUrlId(Snatchurlcontent snatchurlcontent) {
+        return snatchurlcontentMapper.getSnatchurlcontentBySnatchUrlId(snatchurlcontent);
     }
 
 }

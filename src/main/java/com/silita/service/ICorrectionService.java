@@ -1,9 +1,6 @@
 package com.silita.service;
 
-import com.silita.model.AllZh;
-import com.silita.model.Snatchurl;
-import com.silita.model.ZhaobiaoDetailOthers;
-import com.silita.model.ZhongbiaoDetailOthers;
+import com.silita.model.*;
 
 import java.util.List;
 import java.util.Map;
@@ -68,4 +65,10 @@ public interface ICorrectionService {
      * @return
      */
     Integer updateZhongbiaoDetailById(ZhongbiaoDetailOthers zhongbiaoDetailOthers);
+
+    /**
+     * 根据公告pkid获取公告内容
+     * @return
+     */
+    Snatchurlcontent getSnatchurlcontentBySnatchUrlId(Snatchurlcontent snatchurlcontent);
 }

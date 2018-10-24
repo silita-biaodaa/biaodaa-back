@@ -31,7 +31,7 @@
 
   <update id="batchUpdateSnatchUrlCert" parameterType="com.silita.model.SnatchUrlCert">
     <foreach collection="list" item="temp" index="index" open="" close="" separator=";">
-      UPDATE `snatch_url_cert_others` SET
+      UPDATE mishu.snatch_url_cert_others SET
       `certificate` = #{temp.certificate},
       `certificateUuid` = #{temp.certificateUuid},
       `type` = #{temp.type},
