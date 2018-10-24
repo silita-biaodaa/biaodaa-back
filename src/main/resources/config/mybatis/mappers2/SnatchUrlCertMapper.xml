@@ -17,21 +17,21 @@
 
   <insert id="batchInsertSnatchUrlCert" parameterType="com.silita.model.SnatchUrlCert">
     INSERT INTO `snatch_url_cert_others` (
-    `id`, `contId`, `certificate`, `certificateUuid`, `licence`,
-    `type`, `block`, `source`
+    `contId`, `certificate`, `certificateUuid`, `licence`, `type`,
+    `block`, `source`
     )
     VALUES
     <foreach collection="list" item="temp" index="index" separator=",">
       (
-      #{temp.id}, #{temp.contId}, #{temp.certificate}, #{temp.certificateUuid}, #{temp.licence},
-      #{temp.type}, #{temp.block}, #{temp.source}
+      #{temp.contId}, #{temp.certificate}, #{temp.certificateUuid}, #{temp.licence}, #{temp.type},
+      #{temp.block}, #{temp.source}
       )
     </foreach>
   </insert>
 
   <update id="batchUpdateSnatchUrlCert" parameterType="com.silita.model.SnatchUrlCert">
     <foreach collection="list" item="temp" index="index" open="" close="" separator=";">
-      UPDATE `snatch_url_cert_others` SET
+      UPDATE mishu.snatch_url_cert_others SET
       <if test="temp.certificate != null and temp.certificate != ''">
         `certificate` = #{temp.certificate}
       </if>
@@ -46,9 +46,6 @@
       </if>
       <if test="temp.block != null and temp.block != ''">
         ,`block` = #{temp.block}
-      </if>
-      <if test="temp.source != null and temp.source != ''">
-        ,`source` = #{temp.source}
       </if>
       WHERE `id` = #{temp.id}
     </foreach>

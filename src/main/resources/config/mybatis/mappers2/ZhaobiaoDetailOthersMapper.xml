@@ -24,16 +24,16 @@
       <result column="licence" property="licence" jdbcType="VARCHAR" />
       <result column="type" property="type" jdbcType="VARCHAR" />
       <result column="s_block" property="block" jdbcType="VARCHAR" />
-      <result column="source" property="source" jdbcType="VARCHAR" />
+      <result column="s_source" property="source" jdbcType="VARCHAR" />
     </collection>
   </resultMap>
 
 
   <select id="listZhaobiaoDetailOthersBySnatchUrlId" parameterType="com.silita.model.ZhaobiaoDetailOthers" resultMap="BaseResultMap">
     SELECT zhaobiao.id, main.id AS snatchUrlId, main.title AS projName, zhaobiao.block, zhaobiao.projDq, zhaobiao.projXs,
-    zhaobiao.pbMode , main.openDate AS gsDate,
+    zhaobiao.pbMode , main.openDate AS gsDate, main.source,
     cert.id AS s_id, cert.contId, cert.certificate, cert.certificateUuid, cert.licence,
-    cert.type , cert.block AS s_block, cert.source
+    cert.type , cert.block AS s_block, cert.source AS s_source
     FROM mishu.snatchurl_${source} main
     LEFT JOIN mishu.zhaobiao_detail_others zhaobiao ON main.`id` = zhaobiao.`snatchUrlId` AND main.`source` = zhaobiao.`source`
     LEFT JOIN mishu.snatch_url_cert_others cert ON zhaobiao.`snatchUrlId` = cert.`contId` AND zhaobiao.`source` = cert.`source`

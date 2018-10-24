@@ -26,13 +26,18 @@
     <result column="oneSgy" property="oneSgy" jdbcType="VARCHAR" />
     <result column="oneAqy" property="oneAqy" jdbcType="VARCHAR" />
     <result column="oneZly" property="oneZly" jdbcType="VARCHAR" />
+    <result column="oneName2" property="oneName2" jdbcType="VARCHAR" />
+    <result column="oneUUid2" property="oneUUid2" jdbcType="VARCHAR" />
+    <result column="oneName3" property="oneName3" jdbcType="VARCHAR" />
+    <result column="oneUUid3" property="oneUUid3" jdbcType="VARCHAR" />
   </resultMap>
 
   <select id="listZhongbiaoDetailOthersBySnatchUrlId" parameterType="com.silita.model.ZhongbiaoDetailOthers" resultMap="BaseResultMap">
     SELECT zhongbiao.`id`, main.`id` AS snatchUrlId, main.`title` AS `projName`, zhongbiao.`block`, main.`openDate` AS `gsDate`,
     zhongbiao.`projSum`, zhongbiao.`projDq`, zhongbiao.`projXs`, zhongbiao.`pbMode`, zhongbiao.`projType`,
-    zhongbiao.`projTypeId`, zhongbiao.`oneName`, zhongbiao.`oneUUid`, zhongbiao.`oneOffer`, zhongbiao.`oneProjDuty`,
-    zhongbiao.`oneProjDutyUuid`, zhongbiao.`oneSkillDuty`, zhongbiao.`oneSgy`, zhongbiao.`oneAqy`, zhongbiao.`oneZly`
+    zhongbiao.`projTypeId`, zhongbiao.`oneName`, zhongbiao.`oneName2`, zhongbiao.`oneName3`, zhongbiao.`oneOffer`,
+    zhongbiao.`oneProjDuty`, zhongbiao.`oneProjDutyUuid`, zhongbiao.`oneSkillDuty`, zhongbiao.`oneSgy`, zhongbiao.`oneAqy`,
+    zhongbiao.`oneZly`
     FROM mishu.snatchurl_${source} main
     LEFT JOIN mishu.zhongbiao_detail_others zhongbiao ON main.`id` = zhongbiao.`snatchUrlId` AND main.`source` = zhongbiao.`source`
     WHERE main.`id` = #{snatchUrlId} AND main.`source` = #{source}
@@ -46,20 +51,17 @@
     <if test="block != null and block != ''">
       `block` = #{block},
     </if>
-    `projSum` = #{projSum},
     `projDq` = #{projDq},
     `projXs` = #{projXs},
-    `pbMode` = #{pbMode},
-    `projType` = #{projType},
-    `projTypeId` = #{projTypeId},
     `oneName` = #{oneName},
-    `oneUUid` = #{oneUUid},
     `oneOffer` = #{oneOffer},
     `oneProjDuty` = #{oneProjDuty},
     `oneSkillDuty` = #{oneSkillDuty},
     `oneSgy` = #{oneSgy},
     `oneAqy` = #{oneAqy},
-    `oneZly` = #{oneZly}
+    `oneZly` = #{oneZly},
+    `oneName2` = #{oneName2},
+    `oneName3` = #{oneName3}
     WHERE `id` = #{id}
   </update>
 </mapper>

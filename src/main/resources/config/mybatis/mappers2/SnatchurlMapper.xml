@@ -89,7 +89,15 @@
   <update id="updateSnatchurlById" parameterType="com.silita.model.Snatchurl">
     UPDATE mishu.snatchurl_${source}
     SET `title` = #{title}
-    WHERE `id` = (SELECT `snatchUrlId` FROM mishu.zhaobiao_detail_others WHERE `id` = #{id})
+    WHERE 1 =1
+      <choose>
+          <when test="type != null and type == 0">
+              AND `id` = (SELECT `snatchUrlId` FROM mishu.zhaobiao_detail_others WHERE `id` = #{id})
+          </when>
+          <otherwise>
+              AND `id` = (SELECT `snatchUrlId` FROM mishu.zhongbiao_detail_others WHERE `id` = #{id})
+          </otherwise>
+      </choose>
   </update>
 
 </mapper>

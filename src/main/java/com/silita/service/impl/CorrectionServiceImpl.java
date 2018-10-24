@@ -79,27 +79,39 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
     public Integer updateZhaobiaoDetailById(ZhaobiaoDetailOthers zhaobiaoDetailOthers) {
         List<SnatchUrlCert> snatchUrlCerts = zhaobiaoDetailOthers.getSnatchUrlCerts();
         if(snatchUrlCerts.size() > 0) {
+            List<SnatchUrlCert> insertSnatchUrlCerts = new ArrayList<>(snatchUrlCerts.size());
+            List<SnatchUrlCert> updateSnatchUrlCerts = new ArrayList<>(snatchUrlCerts.size());
             for (int i = 0; i < snatchUrlCerts.size(); i++) {
                 SnatchUrlCert snatchUrlCert = snatchUrlCerts.get(i);
                 if(StringUtils.isEmpty(snatchUrlCert.getFinalUuid())) {
                     //资质id为空时，删除本条资质
                     snatchUrlCertMapper.deleteSnatchUrlCertById(snatchUrlCert);
-                    snatchUrlCerts.remove(i);
+                    continue;
+                }
+                if(StringUtils.isEmpty(snatchUrlCert.getType())) {
+                    snatchUrlCert.setType("OR");
+                }
+                snatchUrlCert.setSource(zhaobiaoDetailOthers.getSource());
+                snatchUrlCert.setBlock(zhaobiaoDetailOthers.getBlock());
+                String finalUuid = snatchUrlCert.getFinalUuid();
+                String mainUuid = finalUuid.substring(0, finalUuid.indexOf("|"));
+                String rank = finalUuid.substring(finalUuid.indexOf("|") + 1);
+                AptitudeDictionary aptitudeDictionary = aptitudeDictionaryMapper.getAptitudeDictionaryByMajorUUid(mainUuid);
+                snatchUrlCert.setCertificate(aptitudeDictionary.getMajorName() + CommonUtil.spellRank(rank));
+                snatchUrlCert.setCertificateUuid(CommonUtil.spellUuid(mainUuid, rank));
+                if(StringUtils.isEmpty(snatchUrlCert.getId())) {
+                    insertSnatchUrlCerts.add(snatchUrlCert);
                 } else {
-                    if(StringUtils.isEmpty(snatchUrlCert.getType())) {
-                        snatchUrlCert.setType("OR");
-                    }
-                    String finalUuid = snatchUrlCert.getFinalUuid();
-                    String mainUuid = finalUuid.substring(0, finalUuid.indexOf("|"));
-                    String rank = finalUuid.substring(finalUuid.indexOf("|") + 1);
-                    AptitudeDictionary aptitudeDictionary = aptitudeDictionaryMapper.getAptitudeDictionaryByMajorUUid(mainUuid);
-                    snatchUrlCert.setCertificate(aptitudeDictionary.getMajorName() + CommonUtil.spellRank(rank));
-                    snatchUrlCert.setCertificateUuid(CommonUtil.spellUuid(mainUuid, rank));
+                    updateSnatchUrlCerts.add(snatchUrlCert);
                 }
             }
-            if(snatchUrlCerts.size() > 0) {
-                //修改资质
-                snatchUrlCertMapper.batchUpdateSnatchUrlCert(snatchUrlCerts);
+            if(insertSnatchUrlCerts.size() > 0) {
+                //添加
+                snatchUrlCertMapper.batchInsertSnatchUrlCert(insertSnatchUrlCerts);
+            }
+            if(updateSnatchUrlCerts.size() > 0) {
+                //更新
+                snatchUrlCertMapper.batchUpdateSnatchUrlCert(updateSnatchUrlCerts);
             }
         }
         //修改招标编辑明细
@@ -108,6 +120,7 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
         snatchurl.setTitle(zhaobiaoDetailOthers.getProjName());
         snatchurl.setSource(zhaobiaoDetailOthers.getSource());
         snatchurl.setId(zhaobiaoDetailOthers.getId());
+        snatchurl.setType(0);
         //修改公告主表
         snatchurlMapper.updateSnatchurlById(snatchurl);
         return null;
@@ -146,7 +159,16 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
 
     @Override
     public Integer updateZhongbiaoDetailById(ZhongbiaoDetailOthers zhongbiaoDetailOthers) {
-        return zhongbiaoDetailOthersMapper.updateZhongbiaoDetailOthersById(zhongbiaoDetailOthers);
+        //修改中标编辑明细
+        zhongbiaoDetailOthersMapper.updateZhongbiaoDetailOthersById(zhongbiaoDetailOthers);
+        Snatchurl snatchurl = new Snatchurl();
+        snatchurl.setTitle(zhongbiaoDetailOthers.getProjName());
+        snatchurl.setSource(zhongbiaoDetailOthers.getSource());
+        snatchurl.setId(zhongbiaoDetailOthers.getId());
+        snatchurl.setType(2);
+        //修改公告主表
+        snatchurlMapper.updateSnatchurlById(snatchurl);
+        return null;
     }
 
 }

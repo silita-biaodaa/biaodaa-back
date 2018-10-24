@@ -178,6 +178,29 @@ public class ZhongbiaoDetailOthers {
      */
     private String block;
 
+    /**
+     *
+     */
     private Integer zhaobdId;
+
+    /**
+     *
+     */
+    private String oneName2;
+
+    /**
+     *
+     */
+    private String oneUUid2;
+
+    /**
+     *
+     */
+    private String oneName3;
+
+    /**
+     *
+     */
+    private String oneUUid3;
 
 }
