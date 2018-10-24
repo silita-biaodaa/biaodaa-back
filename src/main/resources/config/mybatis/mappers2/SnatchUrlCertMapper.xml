@@ -16,7 +16,7 @@
 
 
   <insert id="batchInsertSnatchUrlCert" parameterType="com.silita.model.SnatchUrlCert">
-    INSERT INTO `snatch_url_cert_others` (
+    INSERT INTO mishu.snatch_url_cert_others (
     `contId`, `certificate`, `certificateUuid`, `licence`, `type`,
     `block`, `source`
     )
@@ -31,32 +31,22 @@
 
   <update id="batchUpdateSnatchUrlCert" parameterType="com.silita.model.SnatchUrlCert">
     <foreach collection="list" item="temp" index="index" open="" close="" separator=";">
-      UPDATE mishu.snatch_url_cert_others SET
-      <if test="temp.certificate != null and temp.certificate != ''">
-        `certificate` = #{temp.certificate}
-      </if>
-      <if test="temp.certificateUuid != null and temp.certificateUuid != ''">
-        ,`certificateUuid` = #{temp.certificateUuid}
-      </if>
-      <if test="temp.licence != null and temp.licence != ''">
-        ,`licence` = #{temp.licence}
-      </if>
-      <if test="temp.type != null and temp.type != ''">
-        ,`type` = #{temp.type}
-      </if>
-      <if test="temp.block != null and temp.block != ''">
-        ,`block` = #{temp.block}
-      </if>
+      UPDATE `snatch_url_cert_others` SET
+      `certificate` = #{temp.certificate},
+      `certificateUuid` = #{temp.certificateUuid},
+      `type` = #{temp.type},
+      `block` = #{temp.block},
+      `licence` = #{temp.licence}
       WHERE `id` = #{temp.id}
     </foreach>
   </update>
 
   <delete id="deleteSnatchUrlCertById" parameterType="com.silita.model.SnatchUrlCert">
-    DELETE FROM `snatch_url_cert_others` WHERE `id` = #{id}
+    DELETE FROM mishu.snatch_url_cert_others WHERE `id` = #{id}
   </delete>
 
   <delete id="deleteSnatchUrlCertByContId" parameterType="com.silita.model.SnatchUrlCert">
-    DELETE FROM `snatch_url_cert_others` WHERE `contId` = #{contId}
+    DELETE FROM mishu.snatch_url_cert_others WHERE `contId` = #{contId}
   </delete>
 
 </mapper>

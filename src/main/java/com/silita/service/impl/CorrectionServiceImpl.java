@@ -91,11 +91,12 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
                 if(StringUtils.isEmpty(snatchUrlCert.getType())) {
                     snatchUrlCert.setType("OR");
                 }
+                snatchUrlCert.setLicence("yes");
                 snatchUrlCert.setSource(zhaobiaoDetailOthers.getSource());
                 snatchUrlCert.setBlock(zhaobiaoDetailOthers.getBlock());
                 String finalUuid = snatchUrlCert.getFinalUuid();
-                String mainUuid = finalUuid.substring(0, finalUuid.indexOf("|"));
-                String rank = finalUuid.substring(finalUuid.indexOf("|") + 1);
+                String mainUuid = finalUuid.substring(0, finalUuid.indexOf("/"));
+                String rank = finalUuid.substring(finalUuid.indexOf("/") + 1);
                 AptitudeDictionary aptitudeDictionary = aptitudeDictionaryMapper.getAptitudeDictionaryByMajorUUid(mainUuid);
                 snatchUrlCert.setCertificate(aptitudeDictionary.getMajorName() + CommonUtil.spellRank(rank));
                 snatchUrlCert.setCertificateUuid(CommonUtil.spellUuid(mainUuid, rank));
