@@ -93,9 +93,12 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
                     snatchUrlCert.setType("OR");
                 }
                 snatchUrlCert.setLicence("yes");
+                snatchUrlCert.setContId(zhaobiaoDetailOthers.getSnatchUrlId());
                 snatchUrlCert.setSource(zhaobiaoDetailOthers.getSource());
                 snatchUrlCert.setBlock(zhaobiaoDetailOthers.getBlock());
-                String finalUuid = snatchUrlCert.getFinalUuid();
+                //获取别名信息
+                AllZh allZh = allZhMapper.getAllZhByName(snatchUrlCert.getAliasName());
+                String finalUuid = allZh.getFinalUuid();
                 String mainUuid = finalUuid.substring(0, finalUuid.indexOf("/"));
                 String rank = finalUuid.substring(finalUuid.indexOf("/") + 1);
                 AptitudeDictionary aptitudeDictionary = aptitudeDictionaryMapper.getAptitudeDictionaryByMajorUUid(mainUuid);

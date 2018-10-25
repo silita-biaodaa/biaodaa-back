@@ -19,4 +19,8 @@
     WHERE `rank` IS NOT NULL AND `finalUUid` IS NOT NULL AND `name` LIKE CONCAT('%', #{name}, '%')
     LIMIT 0,10
   </select>
+
+  <select id="getAllZhByName" parameterType="String" resultMap="BaseResultMap">
+    SELECT * FROM mishu.all_zh  WHERE `name`= #{name} AND `rank` IS NOT NULL AND `finalUUid` IS NOT NULL
+  </select>
 </mapper>
