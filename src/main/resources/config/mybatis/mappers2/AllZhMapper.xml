@@ -17,6 +17,6 @@
     SELECT *
     FROM mishu.all_zh
     WHERE `rank` IS NOT NULL AND `finalUUid` IS NOT NULL AND `name` LIKE CONCAT('%', #{name}, '%')
-    LIMIT 0,20
+    LIMIT 0,10
   </select>
 </mapper>

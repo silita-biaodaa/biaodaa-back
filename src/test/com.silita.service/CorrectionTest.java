@@ -78,7 +78,7 @@ public class CorrectionTest extends ConfigTest {
     @Test
     public void testController4()throws Exception{
         //"tempMainUuid":"4c7f9474-2934-11e5-a311-63b86f04c8dd",    莲都区城北小学2018年修缮工程
-        String requestBody = "{\"source\":\"zhej\",\"projName\":\"测试修改浙江招标公告\",\"block\":\"1\",\"projDq\":\"衡阳\",\"projXs\":\"珠晖区\",\"pbMode\":\"测试办法\",\"id\":\"1\",\"snatchUrlCerts\":[{\"id\":2,\"finalUuid\":\"1ee70033-293a-11e5-a311-63b86f04c8dd|1\",\"type\":\"AND\",\"block\":\"1\",\"contId\":\"1\"},{\"id\":405,\"finalUuid\":\"1ee70033-293a-11e5-a311-63b86f04c8dd|1\",\"type\":\"OR\",\"block\":\"1\",\"contId\":\"1\"}]}";
+        String requestBody = "{\"source\":\"zhej\", \"snatchUrlId\":\"2\",\"projName\":\"测试修改浙江招标公告\",\"block\":\"1\",\"projDq\":\"衡阳\",\"projXs\":\"珠晖区\",\"pbMode\":\"测试办法\",\"id\":\"1\",\"snatchUrlCerts\":[{\"finalUuid\":\"1ee70033-293a-11e5-a311-63b86f04c8dd/1\",\"type\":\"AND\",\"block\":\"1\",\"contId\":\"2\"},{\"finalUuid\":\"1ee70033-293a-11e5-a311-63b86f04c8dd/1\",\"type\":\"OR\",\"block\":\"1\",\"contId\":\"2\"}]}";
         String responseString = mockMvc.perform(post("/correction/updateZhaobiaoDetail").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

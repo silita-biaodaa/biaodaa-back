@@ -12,17 +12,19 @@
     <result column="licence" property="licence" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="block" property="block" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
   </resultMap>
 
 
   <insert id="batchInsertSnatchUrlCert" parameterType="com.silita.model.SnatchUrlCert">
     INSERT INTO mishu.snatch_url_cert_others (
-    `contId`, `certificate`, `certificateUuid`, `licence`, `type`,
-    `block`, `source`
+      `id`, `contId`, `certificate`, `certificateUuid`, `licence`,
+      `type`, `block`, `source`
     )
     VALUES
     <foreach collection="list" item="temp" index="index" separator=",">
       (
+      #{temp.id},
       #{temp.contId}, #{temp.certificate}, #{temp.certificateUuid}, #{temp.licence}, #{temp.type},
       #{temp.block}, #{temp.source}
       )
@@ -37,16 +39,16 @@
       `type` = #{temp.type},
       `block` = #{temp.block},
       `licence` = #{temp.licence}
-      WHERE `id` = #{temp.id}
+      WHERE `id` = #{temp.id} AND `source` = #{temp.source}
     </foreach>
   </update>
 
   <delete id="deleteSnatchUrlCertById" parameterType="com.silita.model.SnatchUrlCert">
-    DELETE FROM mishu.snatch_url_cert_others WHERE `id` = #{id}
+    DELETE FROM mishu.snatch_url_cert_others WHERE `id` = #{id} AND `source` = #{source}
   </delete>
 
   <delete id="deleteSnatchUrlCertByContId" parameterType="com.silita.model.SnatchUrlCert">
-    DELETE FROM mishu.snatch_url_cert_others WHERE `contId` = #{contId}
+    DELETE FROM mishu.snatch_url_cert_others WHERE `contId` = #{contId} AND `source` = #{source}
   </delete>
 
 </mapper>

@@ -79,17 +79,16 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
 
     @Override
     public Integer updateZhaobiaoDetailById(ZhaobiaoDetailOthers zhaobiaoDetailOthers) {
+        SnatchUrlCert delSnatchUrlCert = new SnatchUrlCert();
+        delSnatchUrlCert.setContId(zhaobiaoDetailOthers.getSnatchUrlId());
+        delSnatchUrlCert.setSource(zhaobiaoDetailOthers.getSource());
+        //删除公告全部资质
+        snatchUrlCertMapper.deleteSnatchUrlCertByContId(delSnatchUrlCert);
         List<SnatchUrlCert> snatchUrlCerts = zhaobiaoDetailOthers.getSnatchUrlCerts();
         if(snatchUrlCerts.size() > 0) {
             List<SnatchUrlCert> insertSnatchUrlCerts = new ArrayList<>(snatchUrlCerts.size());
-            List<SnatchUrlCert> updateSnatchUrlCerts = new ArrayList<>(snatchUrlCerts.size());
             for (int i = 0; i < snatchUrlCerts.size(); i++) {
                 SnatchUrlCert snatchUrlCert = snatchUrlCerts.get(i);
-                if(StringUtils.isEmpty(snatchUrlCert.getFinalUuid())) {
-                    //资质id为空时，删除本条资质
-                    snatchUrlCertMapper.deleteSnatchUrlCertById(snatchUrlCert);
-                    continue;
-                }
                 if(StringUtils.isEmpty(snatchUrlCert.getType())) {
                     snatchUrlCert.setType("OR");
                 }
@@ -102,19 +101,10 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
                 AptitudeDictionary aptitudeDictionary = aptitudeDictionaryMapper.getAptitudeDictionaryByMajorUUid(mainUuid);
                 snatchUrlCert.setCertificate(aptitudeDictionary.getMajorName() + CommonUtil.spellRank(rank));
                 snatchUrlCert.setCertificateUuid(CommonUtil.spellUuid(mainUuid, rank));
-                if(StringUtils.isEmpty(snatchUrlCert.getId())) {
-                    insertSnatchUrlCerts.add(snatchUrlCert);
-                } else {
-                    updateSnatchUrlCerts.add(snatchUrlCert);
-                }
+                insertSnatchUrlCerts.add(snatchUrlCert);
             }
             if(insertSnatchUrlCerts.size() > 0) {
-                //添加
                 snatchUrlCertMapper.batchInsertSnatchUrlCert(insertSnatchUrlCerts);
-            }
-            if(updateSnatchUrlCerts.size() > 0) {
-                //更新
-                snatchUrlCertMapper.batchUpdateSnatchUrlCert(updateSnatchUrlCerts);
             }
         }
         //修改招标编辑明细
@@ -131,11 +121,11 @@ public class CorrectionServiceImpl extends AbstractService implements ICorrectio
 
     @Override
     public List<Map<String, Object>> listCompanyByNameOrPinYin(String queryKey) {
-        List lists = new ArrayList<TbCompany>(20);
+        List lists = new ArrayList<TbCompany>(10);
         TransportClient client = InitESClient.getInit();
         Map sort = new HashMap<String, String>();
         sort.put("px", SortOrder.DESC);
-        PaginationAndSort pageSort = new PaginationAndSort(1, 20, sort);
+        PaginationAndSort pageSort = new PaginationAndSort(1, 10, sort);
 
         List<QuerysModel> querys = new ArrayList();
         if (!StringUtils.isEmpty(queryKey)) {
