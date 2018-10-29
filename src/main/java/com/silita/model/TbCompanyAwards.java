@@ -1,5 +1,6 @@
 package com.silita.model;
 
+import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class TbCompanyAwards {
+public class TbCompanyAwards extends Pagination {
     /**
      * 主键
      */
@@ -54,6 +55,11 @@ public class TbCompanyAwards {
     private String proTypeCode;
 
     /**
+     * 项目类型
+     */
+    private String proTypeName;
+
+    /**
      * 发布日期（yyyy—MM—dd）
      */
     private String issueDate;
@@ -77,4 +83,10 @@ public class TbCompanyAwards {
      * 更新人
      */
     private String updateBy;
+
+    //非表字段
+    /**
+     * 企业名称
+     */
+    private String comName;
 }

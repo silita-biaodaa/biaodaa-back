@@ -70,6 +70,11 @@ public class TbCompanySecurityCert extends Pagination {
     private String certOrigin;
 
     /**
+     * 发布日期
+     */
+    private String issueDate;
+
+    /**
      * 创建时间
      */
     private Date created;

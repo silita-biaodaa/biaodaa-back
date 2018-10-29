@@ -1,5 +1,6 @@
 package com.silita.model;
 
+import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class TbCompanyBad {
+public class TbCompanyBad extends Pagination {
     /**
      * 主键
      */
@@ -68,4 +69,9 @@ public class TbCompanyBad {
      */
     private String updateBy;
 
+    //非表字段
+    /**
+     * 企业名称
+     */
+    private String comName;
 }

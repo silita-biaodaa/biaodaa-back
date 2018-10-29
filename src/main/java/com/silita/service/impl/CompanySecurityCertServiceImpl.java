@@ -112,6 +112,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
         cert.setComName(MapUtils.getString(param, "comName"));
         cert.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
         cert.setPageSize(MapUtils.getInteger(param, "pageSize"));
+        cert.setIssueDate(MapUtils.getString(param,"issueDate"));
         cert.setTabType(MapUtils.getString(param, "tabType"));
         Map<String, Object> result = new HashMap<>();
         Integer total = tbCompanySecurityCertMapper.queryCompanyCertCount(cert);

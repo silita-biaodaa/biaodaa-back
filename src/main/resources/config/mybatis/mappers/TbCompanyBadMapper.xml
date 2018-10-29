@@ -1,21 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.TbCompanyBadMapper" >
-  <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyBad" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
-    <result column="com_id" property="comId" jdbcType="VARCHAR" />
-    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
-    <result column="bad_info" property="badInfo" jdbcType="VARCHAR" />
-    <result column="property" property="property" jdbcType="VARCHAR" />
-    <result column="issue_org" property="issueOrg" jdbcType="VARCHAR" />
-    <result column="issue_date" property="issueDate" jdbcType="VARCHAR" />
-    <result column="expired" property="expired" jdbcType="VARCHAR" />
-    <result column="created" property="created" jdbcType="TIMESTAMP" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-  </resultMap>
+<mapper namespace="com.silita.dao.TbCompanyBadMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyBad">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="com_id" property="comId" jdbcType="VARCHAR"/>
+        <result column="pro_name" property="proName" jdbcType="VARCHAR"/>
+        <result column="bad_info" property="badInfo" jdbcType="VARCHAR"/>
+        <result column="property" property="property" jdbcType="VARCHAR"/>
+        <result column="issue_org" property="issueOrg" jdbcType="VARCHAR"/>
+        <result column="issue_date" property="issueDate" jdbcType="VARCHAR"/>
+        <result column="expired" property="expired" jdbcType="VARCHAR"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryCompanyBadCount" parameterType="com.silita.model.TbCompanyBad" resultType="java.lang.Integer">
+        SELECT
+        Count(1)
+        FROM
+        tb_company t
+        JOIN tb_company_bad t1
+        ON t.`com_id` = t1.`com_id`
+        WHERE 1 = 1
+        <if test="comName != null and comName != ''">
+            AND t.`com_name` LIKE CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="proName != null and proName != ''">
+            AND t1.`pro_name` LIKE CONCAT('%', #{proName}, '%')
+        </if>
+        <if test="badInfo != null and badInfo != ''">
+            AND t1.`bad_info` LIKE CONCAT('%', #{badInfo}, '%')
+        </if>
+        <if test="issueOrg != null and issueOrg != ''">
+            AND t1.`issue_org` LIKE CONCAT('%', #{issueOrg}, '%')
+        </if>
+        <if test="property != null and property != ''">
+            AND t1.`property` = #{property}
+        </if>
+        <if test="issueDate != null and issueDate != ''">
+            AND t1.`issue_date` = #{issueDate}
+        </if>
+        <if test="expired != null and expired != ''">
+            AND t1.`expired` = #{expired}
+        </if>
+        ORDER BY t1.`issue_date` DESC
+    </select>
+
+    <select id="queryCompanyBadList" parameterType="com.silita.model.TbCompanyBad" resultType="java.util.Map">
+        SELECT
+        t.`com_name` AS comName,
+        t1.`pkid` AS pkid,
+        t1.`pro_name` AS proName,
+        t1.`bad_info` AS badInfo,
+        t1.`property` AS property,
+        t1.`issue_org` AS issueOrg,
+        t1.`issue_date` AS issueDate,
+        t1.`expired` AS expired
+        FROM
+        tb_company t
+        JOIN tb_company_bad t1
+        ON t.`com_id` = t1.`com_id`
+        WHERE 1 = 1
+        <if test="comName != null and comName != ''">
+            AND t.`com_name` LIKE CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="proName != null and proName != ''">
+            AND t1.`pro_name` LIKE CONCAT('%', #{proName}, '%')
+        </if>
+        <if test="badInfo != null and badInfo != ''">
+            AND t1.`bad_info` LIKE CONCAT('%', #{badInfo}, '%')
+        </if>
+        <if test="issueOrg != null and issueOrg != ''">
+            AND t1.`issue_org` LIKE CONCAT('%', #{issueOrg}, '%')
+        </if>
+        <if test="property != null and property != ''">
+            AND t1.`property` = #{property}
+        </if>
+        <if test="issueDate != null and issueDate != ''">
+            AND t1.`issue_date` = #{issueDate}
+        </if>
+        <if test="expired != null and expired != ''">
+            AND t1.`expired` = #{expired}
+        </if>
+        ORDER BY t1.`issue_date` DESC
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <delete id="deleteCompanyBad" parameterType="java.lang.String">
+    DELETE
+    FROM `tb_company_bad`
+    WHERE `pkid` = #{pkid};
+  </delete>
 </mapper>

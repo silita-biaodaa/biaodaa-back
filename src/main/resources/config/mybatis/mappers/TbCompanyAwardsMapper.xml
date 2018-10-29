@@ -1,23 +1,110 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.TbCompanyAwardsMapper" >
-  <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyAwards" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
-    <result column="com_id" property="comId" jdbcType="VARCHAR" />
-    <result column="level" property="level" jdbcType="VARCHAR" />
-    <result column="prov_code" property="provCode" jdbcType="VARCHAR" />
-    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
-    <result column="awd_name" property="awdName" jdbcType="VARCHAR" />
-    <result column="year" property="year" jdbcType="VARCHAR" />
-    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
-    <result column="pro_type_code" property="proTypeCode" jdbcType="VARCHAR" />
-    <result column="issue_date" property="issueDate" jdbcType="VARCHAR" />
-    <result column="created" property="created" jdbcType="TIMESTAMP" />
-    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
-    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
-  </resultMap>
+<mapper namespace="com.silita.dao.TbCompanyAwardsMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyAwards">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="com_id" property="comId" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="VARCHAR"/>
+        <result column="prov_code" property="provCode" jdbcType="VARCHAR"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="awd_name" property="awdName" jdbcType="VARCHAR"/>
+        <result column="year" property="year" jdbcType="VARCHAR"/>
+        <result column="pro_name" property="proName" jdbcType="VARCHAR"/>
+        <result column="pro_type_code" property="proTypeCode" jdbcType="VARCHAR"/>
+        <result column="issue_date" property="issueDate" jdbcType="VARCHAR"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryCompanyAwardsCount" resultType="java.lang.Integer"
+            parameterType="com.silita.model.TbCompanyAwards">
+        SELECT
+        count(1)
+        FROM tb_company t
+        JOIN tb_company_awards t1 ON t.`com_id` = t1.`com_id`
+        LEFT JOIN sys_area t2 ON t1.`prov_code` = t2.`area_code`
+        LEFT JOIN sys_area t3 ON t1.`city_code` = t3.`area_code`
+        WHERE 1=1
+        <if test="comName != null and comName != ''">
+            AND t.`com_name` LIKE CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="level != null and level != ''">
+            AND t1.`level` = #{level}
+        </if>
+        <if test="provCode != null and provCode != ''">
+            AND t1.`prov_code` = #{provCode}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND t1.`city_code` = #{cityCode}
+        </if>
+        <if test="awdName != null and awdName != ''">
+            AND t1.`awd_name` LIKE CONCAT('%', #{awdName}, '%')
+        </if>
+        <if test="year != null and year != ''">
+            AND t1.`year` = #{year}
+        </if>
+        <if test="proTypeName != null and proTypeName != ''">
+            AND t1.`pro_type_name` LIKE CONCAT('%', #{proTypeName}, '%')
+        </if>
+        <if test="proName != null and proName != ''">
+            AND t1.`pro_name` LIKE CONCAT('%', #{proName}, '%')
+        </if>
+        ORDER BY t1.`issue_date` DESC
+    </select>
+
+    <select id="queryCompanyAwardsList" resultType="java.util.Map" parameterType="com.silita.model.TbCompanyAwards">
+        SELECT
+        t.`com_name` AS comName
+        ,t1.`pkid` AS pkid
+        ,t1.`level` AS `level`
+        ,t2.`area_name` AS prov
+        ,t3.`area_name` AS city
+        ,t1.`awd_name` AS awdName
+        ,t1.`year` AS `year`
+        ,t1.`pro_name` AS proName
+        ,t1.`pro_type_name` AS proTypeName
+        ,t1.`issue_date` AS issueDate
+        FROM tb_company t
+        JOIN tb_company_awards t1 ON t.`com_id` = t1.`com_id`
+        LEFT JOIN sys_area t2 ON t1.`prov_code` = t2.`area_code`
+        LEFT JOIN sys_area t3 ON t1.`city_code` = t3.`area_code`
+        WHERE 1=1
+        <if test="comName != null and comName != ''">
+            AND t.`com_name` LIKE CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="level != null and level != ''">
+            AND t1.`level` = #{level}
+        </if>
+        <if test="provCode != null and provCode != ''">
+            AND t1.`prov_code` = #{provCode}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND t1.`city_code` = #{cityCode}
+        </if>
+        <if test="awdName != null and awdName != ''">
+            AND t1.`awd_name` LIKE CONCAT('%', #{awdName}, '%')
+        </if>
+        <if test="year != null and year != ''">
+            AND t1.`year` = #{year}
+        </if>
+        <if test="proTypeName != null and proTypeName != ''">
+            AND t1.`pro_type_name` LIKE CONCAT('%', #{proTypeName}, '%')
+        </if>
+        <if test="proName != null and proName != ''">
+            AND t1.`pro_name` LIKE CONCAT('%', #{proName}, '%')
+        </if>
+        ORDER BY t1.`issue_date` DESC
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <delete id="deleteCompanyAwards" parameterType="java.lang.String">
+        DELETE
+        FROM `tb_company_awards`
+        WHERE `pkid` = #{pkid};
+    </delete>
 </mapper>
