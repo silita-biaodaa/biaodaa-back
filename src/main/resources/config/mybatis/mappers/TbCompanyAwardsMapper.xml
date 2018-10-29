@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbCompanyAwardsMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyAwards" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
+    <result column="com_id" property="comId" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="prov_code" property="provCode" jdbcType="VARCHAR" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="awd_name" property="awdName" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="pro_type_code" property="proTypeCode" jdbcType="VARCHAR" />
+    <result column="issue_date" property="issueDate" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

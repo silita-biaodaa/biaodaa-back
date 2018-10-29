@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbCompanyBadMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.TbCompanyBad" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
+    <result column="com_id" property="comId" jdbcType="VARCHAR" />
+    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="bad_info" property="badInfo" jdbcType="VARCHAR" />
+    <result column="property" property="property" jdbcType="VARCHAR" />
+    <result column="issue_org" property="issueOrg" jdbcType="VARCHAR" />
+    <result column="issue_date" property="issueDate" jdbcType="VARCHAR" />
+    <result column="expired" property="expired" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="updated" property="updated" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>
