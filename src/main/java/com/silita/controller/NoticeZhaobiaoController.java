@@ -245,4 +245,9 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(null);
     }
 
+    @RequestMapping(value = "/listTbQuaGroup",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> listTbQuaGroup(@RequestBody TbNtRegexGroup tbNtRegexGroup) {
+        return super.successMap(noticeZhaoBiaoService.listTbQuaGroup(tbNtRegexGroup));
+    }
 }

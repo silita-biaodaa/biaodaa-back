@@ -1,6 +1,7 @@
 package com.silita.service;
 
 import java.text.ParseException;
+import java.util.regex.Pattern;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -39,8 +40,21 @@ public class StringTest {
 //        String[] blockQual = groupRegex.split("\\|");
 //        System.out.println(blockQual.toString());
 
-        String finalUuid = "4c7f9474-2934-11e5-a311-63b86f04c8dd|21";
-        System.out.println(finalUuid.substring(0, finalUuid.indexOf("|")));
-        System.out.println(finalUuid.substring(finalUuid.indexOf("|")));
+//        String finalUuid = "4c7f9474-2934-11e5-a311-63b86f04c8dd|21";
+//        System.out.println(finalUuid.substring(0, finalUuid.indexOf("|")));
+//        System.out.println(finalUuid.substring(finalUuid.indexOf("|")));
+
+        String groupRegex = "1540778640192&1540778640250|1540778640272";
+        Pattern p = Pattern.compile("[^(&)|(\\|)]");
+        String[] strs = p.split("");
+        for (String str : strs) {
+//            System.out.println(str);
+        }
+
+        String grouprRelType = groupRegex.replaceAll("[^(&)|(\\|)]", "");
+        char[] chars = grouprRelType.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            System.out.println(chars[i]);
+        }
     }
 }

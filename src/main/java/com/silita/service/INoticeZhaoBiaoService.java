@@ -156,8 +156,15 @@ public interface INoticeZhaoBiaoService {
     void insertNtRegexQua(TbNtRegexQua tbNtRegexQua);
 
     /**
-     *
+     * 添加资质组关系
      * @param tbNtRegexGroups
      */
     void saveTbNtRegexGroup(List<TbNtRegexGroup> tbNtRegexGroups, Map params);
+
+    /**
+     * 获取资质小组关系
+     * @param tbNtRegexGroup
+     * @return
+     */
+    List<TbNtRegexGroup> listTbQuaGroup(TbNtRegexGroup tbNtRegexGroup);
 }

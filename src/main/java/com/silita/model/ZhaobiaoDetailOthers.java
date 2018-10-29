@@ -247,4 +247,9 @@ public class ZhaobiaoDetailOthers {
      */
     List<SnatchUrlCert> snatchUrlCerts;
 
+    /**
+     * 公告原文链接
+     */
+    private String url;
+
 }

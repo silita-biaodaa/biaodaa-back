@@ -171,7 +171,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController10()throws Exception{
-        String requestBody = "{\"ntId\":\"5\", \"source\":\"hunan\"}";
+        String requestBody = "{\"ntId\":\"3\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/listNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -185,7 +185,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController33()throws Exception{
-        String requestBody = "{\"ntId\":\"1\", \"source\":\"hunan\", \"pkid\":\"41311819ab2e41b88d080e57d739429b\"}";
+        String requestBody = "{\"ntId\":\"3\", \"source\":\"hunan\", \"pkid\":\"3\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/getNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -424,6 +424,20 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
     public void testController26()throws Exception{
         String requestBody = "{\"tbNtRegexGroups\":[{\"tbNtQuaGroups\":[{\"quaId\":\"老板a2\",\"relType\":\"|\"}],\"quaId\":\"老板a1\",\"relType\":\"&\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板b2\",\"relType\":\"&\"},{\"quaId\":\"经理b3\",\"relType\":\"&\"}],\"quaId\":\"老板b1\",\"relType\":\"|\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板c2\",\"relType\":\"|\"}],\"quaId\":\"老板c1\",\"relType\":\"\"}],\"params\":{\"ntId\":\"3\",\"ntEditId\":\"3\",\"userName\":\"gmy\"}}";
         String responseString = mockMvc.perform(post("/zhaobiao/saveTbNtRegexGroup").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
+    public void testController27()throws Exception{
+        String requestBody = "{\"ntId\":\"3\", \"ntEditId\":\"3\"}";
+        String responseString = mockMvc.perform(post("/zhaobiao/listTbQuaGroup").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
                 .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")

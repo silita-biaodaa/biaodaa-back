@@ -1,5 +1,6 @@
 package com.silita.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,8 @@ import java.util.List;
 
 @Getter
 @Setter
+//字段为null时不输出
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TbNtRegexGroup {
     /**
      * 主键

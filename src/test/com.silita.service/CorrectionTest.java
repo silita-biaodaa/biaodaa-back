@@ -63,7 +63,7 @@ public class CorrectionTest extends ConfigTest {
 
     @Test
     public void testController3()throws Exception{
-        String requestBody = "{\"source\":\"zhej\", \"snatchUrlId\":\"1\"}";
+        String requestBody = "{\"source\":\"shand\", \"snatchUrlId\":\"10\"}";
         String responseString = mockMvc.perform(post("/correction/listZhaobiaoDetail").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

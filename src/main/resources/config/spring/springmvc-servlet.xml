@@ -18,19 +18,6 @@
     <!-- 配置注解映射器和注解适配器 -->
     <mvc:annotation-driven/>
 
-    <!-- 配置@ResponseBody使用的转换器 -->
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <property name="messageConverters">
-            <list>
-                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                    <constructor-arg value="UTF-8"/>
-                </bean>
-                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
-                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-            </list>
-        </property>
-    </bean>
-
     <!-- 总错误处理 -->
     <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="defaultErrorView">
@@ -42,13 +29,6 @@
         <property name="warnLogCategory">
             <value>org.springframework.web.servlet.handler.SimpleMappingExceptionResolver</value>
         </property>
-    </bean>
-
-    <!-- 对转向页面的路径解析。prefix：前缀， suffix：后缀 -->
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/"/>
-        <property name="suffix" value=".html"></property>
     </bean>
 
     <!-- 文件上传 -->

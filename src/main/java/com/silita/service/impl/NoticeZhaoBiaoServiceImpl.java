@@ -275,8 +275,15 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         List<TbNtTenders> lists = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
         if (null != lists && lists.size() > 0) {
             TbNtTenders tempTbNtTenders;
+            TbNtRegexGroup tbNtRegexGroup;
             for (int i = 0; i < lists.size(); i++) {
                 tempTbNtTenders = lists.get(i);
+                tbNtRegexGroup = new TbNtRegexGroup();
+                tbNtRegexGroup.setNtId(tempTbNtTenders.getNtId());
+                tbNtRegexGroup.setNtEditId(tempTbNtTenders.getPkid());
+                List<TbNtRegexGroup> tbNtRegexGroups = this.listTbQuaGroup(tbNtRegexGroup);
+                //资质
+                tempTbNtTenders.setTbNtRegexGroups(tbNtRegexGroups);
                 //前端要的特定数据
                 if (!StringUtils.isEmpty(tempTbNtTenders.getCityCodeName())) {
                     SysArea sysArea = new SysArea();
@@ -326,6 +333,12 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             tbNtTenders1.setFieldName(fieldName.substring(0, fieldName.lastIndexOf(",")));
             tbNtTenders1.setFieldValue(fieldValue.substring(0, fieldValue.lastIndexOf(",")));
         }
+        TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+        tbNtRegexGroup.setNtId(tbNtTenders.getNtId());
+        tbNtRegexGroup.setNtEditId(tbNtTenders.getPkid());
+        List<TbNtRegexGroup> tbNtRegexGroups = this.listTbQuaGroup(tbNtRegexGroup);
+        //资质
+        tbNtTenders1.setTbNtRegexGroups(tbNtRegexGroups);
         //前端要的特定数据
         if (!StringUtils.isEmpty(tbNtTenders1.getCityCodeName())) {
             SysArea sysArea = new SysArea();
@@ -644,7 +657,47 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtRegexGroup.setGroupRegex(regexGroup.toString());
         //添加资质组关系
         tbNtRegexGroupMapper.insertNtRegexGroup(tbNtRegexGroup);
-        System.out.println(regexGroup.toString());
+    }
+
+    @Override
+    public List<TbNtRegexGroup> listTbQuaGroup(TbNtRegexGroup tbNtRegexGroup) {
+        TbNtRegexGroup tempRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
+        List<String> groupRegexs = new ArrayList<>();
+        String groupRegex = tempRegexGroup.getGroupRegex();
+        //资质小组关系
+        char[] grouprRelType = groupRegex.replaceAll("[^(&)|(\\|)]", "").toCharArray();
+        Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
+        while (iterator.hasNext()) {
+            groupRegexs.add(iterator.next());
+        }
+        List tbNtRegexGroups = new ArrayList<TbNtRegexGroup>();
+        //遍历资质小组
+        for (int i = 0; i < groupRegexs.size(); i++) {
+            TbNtRegexGroup tempTbNtRegexGroup = new TbNtRegexGroup();
+            List<TbNtQuaGroup> tempTbNtQuaGroup = new ArrayList<>();
+            //获取资质小组信息
+            List<TbNtQuaGroup> tbNtQuaGroups = tbNtQuaGroupMapper.listTbNtQuaGroupByGroupId(groupRegexs.get(i));
+            //遍历单条资质
+            for (int j = 0; j < tbNtQuaGroups.size(); j++) {
+                TbNtQuaGroup tbNtQuaGroup = tbNtQuaGroups.get(j);
+                if(StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
+                    //组内第一条资质
+                    tempTbNtRegexGroup = new TbNtRegexGroup();
+                    tempTbNtRegexGroup.setNtId(tbNtRegexGroup.getNtId());
+                    tempTbNtRegexGroup.setNtEditId(tbNtRegexGroup.getNtEditId());
+                    tempTbNtRegexGroup.setQuaId(tbNtQuaGroup.getQuaId());
+                    //资质小组关系 = 资质小组减1
+                    if(i != groupRegexs.size() - 1) {
+                        tempTbNtRegexGroup.setRelType(String.valueOf(grouprRelType[i]));
+                    }
+                } else {
+                    tempTbNtQuaGroup.add(tbNtQuaGroups.get(j));
+                }
+            }
+            tempTbNtRegexGroup.setTbNtQuaGroups(tempTbNtQuaGroup);
+            tbNtRegexGroups.add(tempTbNtRegexGroup);
+        }
+        return tbNtRegexGroups;
     }
 
 

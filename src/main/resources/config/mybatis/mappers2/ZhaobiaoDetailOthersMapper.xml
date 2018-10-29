@@ -14,6 +14,7 @@
     <result column="projXs" property="projXs" jdbcType="VARCHAR" />
     <result column="pbMode" property="pbMode" jdbcType="VARCHAR" />
     <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
 
     <!-- 资质 -->
     <collection property="snatchUrlCerts" ofType="com.silita.model.SnatchUrlCert">
@@ -31,7 +32,7 @@
 
   <select id="listZhaobiaoDetailOthersBySnatchUrlId" parameterType="com.silita.model.ZhaobiaoDetailOthers" resultMap="BaseResultMap">
     SELECT zhaobiao.id, main.id AS snatchUrlId, main.title AS projName, zhaobiao.block, zhaobiao.projDq, zhaobiao.projXs,
-    zhaobiao.pbMode , main.openDate AS gsDate, main.source,
+    zhaobiao.pbMode , main.openDate AS gsDate, main.source, main.url,
     cert.id AS s_id, cert.contId, cert.certificate, cert.certificateUuid, cert.licence,
     cert.type , cert.block AS s_block, cert.source AS s_source
     FROM mishu.snatchurl_${source} main
