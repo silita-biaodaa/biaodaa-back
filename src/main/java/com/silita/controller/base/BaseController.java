@@ -25,4 +25,16 @@ public class BaseController {
         }
         return resultMap;
     }
+
+    /**
+     * 返回code
+     *
+     * @return
+     */
+    public Map<String, Object> successMap() {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.MSG_SUCCESS);
+        return resultMap;
+    }
 }

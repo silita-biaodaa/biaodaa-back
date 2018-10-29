@@ -15,6 +15,8 @@
         <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
         <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
         <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="com_name" property="comName" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="queryCompanyHigway" parameterType="com.silita.model.TbCompanyHighwayGrade" resultType="java.util.Map">
@@ -165,5 +167,67 @@
         <if test="comId != null and comId != ''">
             and `com_id` = #{comId}
         </if>
+    </select>
+
+    <select id="queryCompanyHigForCompanyList" resultType="java.util.Map"
+            parameterType="com.silita.model.TbCompanyHighwayGrade">
+        SELECT
+        t.`com_name` AS comName,
+        t1.`pkid` AS pkid,
+        t1.`assess_year` AS assessYear,
+        t1.`assess_prov_code` AS assessProvCode,
+        t1.`assess_level` AS assessLevel,
+        #{province} AS province
+        FROM
+        tb_company t
+        JOIN tb_company_highway_grade t1
+        ON t.`com_id` = t1.`com_id`
+        WHERE t1.assess_origin = 2
+        <if test="comName != null and comName != ''">
+            AND t.`com_name` like CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="assessYear != null and assessYear != ''">
+            AND t1.`assess_year` = #{assessYear}
+        </if>
+        <if test="assessProvCode != null and assessProvCode != ''">
+            AND t1.`assess_prov_code` = #{assessProvCode}
+        </if>
+        <!--<if test="province != null and province != ''">-->
+            <!--AND t.`regis_address` = #{province}-->
+        <!--</if>-->
+        <if test="assessLevel != null and assessLevel != ''">
+            AND t1.`assess_level` = #{assessLevel}
+        </if>
+        ORDER BY t1.`assess_year` DESC,
+        t1.`created` DESC
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="queryCompanyHigForCompanyCount" resultType="java.lang.Integer"
+            parameterType="com.silita.model.TbCompanyHighwayGrade">
+        SELECT
+          COUNT(1)
+        FROM
+        tb_company t
+        JOIN tb_company_highway_grade t1
+        ON t.`com_id` = t1.`com_id`
+        WHERE t1.assess_origin = 2
+        <if test="comName != null and comName != ''">
+            AND t.`com_name` like CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="assessYear != null and assessYear != ''">
+            AND t1.`assess_year` = #{assessYear}
+        </if>
+        <if test="assessProvCode != null and assessProvCode != ''">
+            AND t1.`assess_prov_code` = #{assessProvCode}
+        </if>
+        <!--<if test="province != null and province != ''">-->
+            <!--AND t.`regis_address` = #{province}-->
+        <!--</if>-->
+        <if test="assessLevel != null and assessLevel != ''">
+            AND t1.`assess_level` = #{assessLevel}
+        </if>
+        ORDER BY t1.`assess_year` DESC,
+        t1.`created` DESC
     </select>
 </mapper>

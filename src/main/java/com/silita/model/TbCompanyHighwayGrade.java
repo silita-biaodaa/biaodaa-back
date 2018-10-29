@@ -1,5 +1,6 @@
 package com.silita.model;
 
+import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 
 @Setter
 @Getter
-public class TbCompanyHighwayGrade {
+public class TbCompanyHighwayGrade extends Pagination {
     /**
      * 主键
      */
@@ -57,4 +58,16 @@ public class TbCompanyHighwayGrade {
      * 更新人
      */
     private String updateBy;
+
+    //非表字段
+
+    /**
+     * 公司名称
+     */
+    private String comName;
+
+    /**
+     * 省
+     */
+    private String province;
 }

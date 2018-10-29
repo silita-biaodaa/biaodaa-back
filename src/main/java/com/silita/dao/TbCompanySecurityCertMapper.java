@@ -4,6 +4,7 @@ import com.silita.model.TbCompanySecurityCert;
 import com.silita.utils.MyMapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbCompanySecurityCertMapper extends MyMapper<TbCompanySecurityCert> {
 
@@ -48,4 +49,18 @@ public interface TbCompanySecurityCertMapper extends MyMapper<TbCompanySecurityC
      * @return
      */
     Integer queryCertNoCount(String certNo);
+
+    /**
+     * 查询企业安全认证列表
+     * @param companySecurityCert
+     * @return
+     */
+    List<Map<String,Object>> queryCompanyCertList(TbCompanySecurityCert companySecurityCert);
+
+    /**
+     * 查询企业安全认证列表个数
+     * @param companySecurityCert
+     * @return
+     */
+    Integer queryCompanyCertCount(TbCompanySecurityCert companySecurityCert);
 }

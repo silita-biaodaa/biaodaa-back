@@ -36,4 +36,17 @@ public interface ICompanySecurityCertService {
      * @return
      */
     Map<String,Object> addSecurity(TbCompanySecurityCert companySecurityCert,String username);
+
+    /**
+     * 获取企业安全认证列表
+     * @param param
+     * @return
+     */
+    Map<String,Object> listCompanySecurity(Map<String,Object> param);
+
+    /**
+     * 批量删除
+     * @param param
+     */
+    void delCompanySecurity(Map<String,Object> param);
 }

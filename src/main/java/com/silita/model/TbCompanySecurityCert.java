@@ -1,5 +1,6 @@
 package com.silita.model;
 
+import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 
 @Setter
 @Getter
-public class TbCompanySecurityCert {
+public class TbCompanySecurityCert extends Pagination {
     /**
      * 主键
      */
@@ -97,4 +98,12 @@ public class TbCompanySecurityCert {
      * 认证结果str
      */
     private String certResultStr;
+
+    //非表字段
+    private String tabType;
+
+    /**
+     * 公司名称
+     */
+    private String comName;
 }

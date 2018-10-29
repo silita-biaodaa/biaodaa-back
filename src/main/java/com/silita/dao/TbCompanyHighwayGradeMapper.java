@@ -49,4 +49,16 @@ public interface TbCompanyHighwayGradeMapper extends MyMapper<TbCompanyHighwayGr
      * @return
      */
     TbCompanyHighwayGrade queryCompanyHighwanGradeDetail(TbCompanyHighwayGrade grade);
+
+    /**
+     *  企业公路信用等级列表
+     * @return
+     */
+    List<Map<String,Object>> queryCompanyHigForCompanyList(TbCompanyHighwayGrade grade);
+
+    /**
+     *  企业公路信用等级列表
+     * @return
+     */
+    Integer queryCompanyHigForCompanyCount(TbCompanyHighwayGrade grade);
 }

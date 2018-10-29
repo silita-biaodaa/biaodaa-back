@@ -217,4 +217,98 @@
         from tb_company_security_cert
         where cert_no = #{certNo}
     </select>
+
+    <select id="queryCompanyCertList" parameterType="com.silita.model.TbCompanySecurityCert" resultType="java.util.Map">
+        SELECT
+          t.`com_name` AS comName
+          ,t1.`pkid` AS pkid
+          <if test="tabType != null and tabType == 'safety_permission_cert'">
+              ,t1.`cert_no` AS certNo
+          </if>
+          ,t2.`area_name` AS certProv
+          ,DATE_FORMAT(t1.`expired`, '%Y-%m-%d') AS expired
+          <if test="tabType != null and tabType == 'safety_cert'">
+              ,t1.`cert_level` AS certLevel
+              ,t1.`cert_result` AS certResult
+              ,t3.`area_name` AS certCity
+          </if>
+        FROM
+          tb_company t
+          JOIN tb_company_security_cert t1
+            ON t.`com_id` = t1.`com_id`
+          LEFT JOIN sys_area t2
+            ON t2.`area_code` = t1.`cert_prov_code`
+        <if test="tabType != null and tabType == 'safety_cert'">
+          LEFT JOIN sys_area t3
+            ON t3.`area_code` = t1.`cert_city_code`
+        </if>
+        WHERE t1.cert_origin = 2
+          <if test="comName != null and comName != ''">
+              AND t.`com_name` LIKE CONCAT('%', #{comName}, '%')
+          </if>
+          <if test="certNo != null and certNo != ''">
+              AND t1.`cert_no` LIKE CONCAT('%', #{certNo}, '%')
+          </if>
+          <if test="certProvCode != null and certProvCode != ''">
+              AND t1.`cert_prov_code` = #{certProvCode}
+          </if>
+          <if test="certCityCode != null and certCityCode != ''">
+              AND t1.`cert_city_code` = #{certCityCode}
+          </if>
+          <if test="expiredStr != null and expiredStr != ''">
+              AND DATE_FORMAT(t1.`expired`, '%Y-%m-%d') = #{expiredStr}
+          </if>
+          <if test="certLevel != null and certLevel != ''">
+              AND t1.`cert_level` = #{certLevel}
+          </if>
+          <if test="certResult != null and certResult != ''">
+              AND t1.`cert_result` = #{certResult}
+          </if>
+          <if test="tabType != null and tabType == 'safety_permission_cert'">
+              AND t1.`cert_no` is not null AND t1.`cert_no` != ''
+          </if>
+          <if test="tabType != null and tabType == 'safety_cert'">
+              AND (t1.`cert_no` is null OR t1.`cert_no` = '')
+          </if>
+        ORDER BY t1.`expired` DESC
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="queryCompanyCertCount" parameterType="com.silita.model.TbCompanySecurityCert" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+        FROM
+        tb_company t
+        JOIN tb_company_security_cert t1
+        ON t.`com_id` = t1.`com_id`
+        WHERE t1.cert_origin = 2
+        <if test="comName != null and comName != ''">
+            AND t.`com_name` LIKE CONCAT('%', #{comName}, '%')
+        </if>
+        <if test="certNo != null and certNo != ''">
+            AND t1.`cert_no` LIKE CONCAT('%', #{certNo}, '%')
+        </if>
+        <if test="certProvCode != null and certProvCode != ''">
+            AND t1.`cert_prov_code` = #{certProvCode}
+        </if>
+        <if test="certCityCode != null and certCityCode != ''">
+            AND t1.`cert_city_code` = #{certCityCode}
+        </if>
+        <if test="expiredStr != null and expiredStr != ''">
+            AND DATE_FORMAT(t1.`expired`, '%Y-%m-%d') = #{expiredStr}
+        </if>
+        <if test="certLevel != null and certLevel != ''">
+            AND t1.`cert_level` = #{certLevel}
+        </if>
+        <if test="certResult != null and certResult != ''">
+            AND t1.`cert_result` = #{certResult}
+        </if>
+        <if test="tabType != null and tabType == 'safety_permission_cert'">
+            AND t1.`cert_no` is not null AND t1.`cert_no` != ''
+        </if>
+        <if test="tabType != null and tabType == 'safety_cert'">
+            AND (t1.`cert_no` is null OR t1.`cert_no` = '')
+        </if>
+        ORDER BY t1.`expired` DESC
+    </select>
 </mapper>

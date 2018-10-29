@@ -5,6 +5,7 @@ import com.silita.dao.SysAreaMapper;
 import com.silita.dao.TbCompanyHighwayGradeMapper;
 import com.silita.model.TbCompanyHighwayGrade;
 import com.silita.service.ICompanyHighwayGradeService;
+import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.*;
  * tb_company_highway_grade service
  */
 @Service
-public class CompanyHighwayGradeServiceImpl implements ICompanyHighwayGradeService {
+public class CompanyHighwayGradeServiceImpl extends AbstractService implements ICompanyHighwayGradeService {
 
     @Autowired
     TbCompanyHighwayGradeMapper tbCompanyHighwayGradeMapper;
@@ -77,5 +78,34 @@ public class CompanyHighwayGradeServiceImpl implements ICompanyHighwayGradeServi
         resultMap.put("code",Constant.CODE_SUCCESS);
         resultMap.put("msg",Constant.MSG_SUCCESS);
         return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> getCompanyHighwayGradeForCompanyList(Map<String, Object> param) {
+        TbCompanyHighwayGrade grade = new TbCompanyHighwayGrade();
+        grade.setComName(MapUtils.getString(param,"comName"));
+        grade.setAssessLevel(MapUtils.getString(param,"assessLevel"));
+        grade.setAssessProvCode(MapUtils.getString(param,"assessProvCode"));
+        grade.setAssessYear(MapUtils.getInteger(param,"assessYear"));
+        grade.setProvince(MapUtils.getString(param,"province"));
+        grade.setCurrentPage(MapUtils.getInteger(param,"currentPage"));
+        grade.setPageSize(MapUtils.getInteger(param,"pageSize"));
+        Map<String,Object> resultMap = new HashMap<>();
+        Integer total = tbCompanyHighwayGradeMapper.queryCompanyHigForCompanyCount(grade);
+        if(total <= 0){
+            return null;
+        }
+        resultMap.put("list", tbCompanyHighwayGradeMapper.queryCompanyHigForCompanyList(grade));
+        resultMap.put("total",total);
+        return super.handlePageCount(resultMap, grade);
+    }
+
+    @Override
+    public void deleteCompanyHigwagGrade(Map<String, Object> param) {
+        String pkids = MapUtils.getString(param,"pkids");
+        String[] pkidList = pkids.split("\\|");
+        for (String pkid : pkidList){
+            tbCompanyHighwayGradeMapper.deleteCompanyHigway(pkid);
+        }
     }
 }

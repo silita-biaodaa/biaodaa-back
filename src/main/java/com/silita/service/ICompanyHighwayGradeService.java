@@ -31,4 +31,17 @@ public interface ICompanyHighwayGradeService {
      * @return
      */
     Map<String,Object> addHighway(TbCompanyHighwayGrade grade,String username);
+
+    /**
+     * 获取企业公路信用等级
+     * @param param
+     * @return
+     */
+    Map<String,Object> getCompanyHighwayGradeForCompanyList(Map<String,Object> param);
+
+    /**
+     * 删除
+     * @param param
+     */
+    void deleteCompanyHigwagGrade(Map<String,Object> param);
 }
