@@ -328,4 +328,8 @@
     <select id="getNtIdByNtId" parameterType="com.silita.model.TbNtTenders" resultType="String">
         SELECT `nt_id` FROM ${tableName} WHERE pkid = #{pkid}
     </select>
+
+    <select id="getNtIdByEditCode" resultType="Map">
+        SELECT `pkid` AS pkid, `nt_id` AS ntId FROM tb_nt_tenders_${source} WHERE `edit_code` = #{editCode}
+    </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.silita.controller.base.BaseController;
 import com.silita.model.TbNtBids;
 import com.silita.model.TbNtChange;
 import com.silita.model.TbNtMian;
+import com.silita.model.TbNtRegexGroup;
 import com.silita.service.INoticeZhongBiaoService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,4 +129,9 @@ public class NoticeZhongBiaoController extends BaseController {
         return super.successMap(noticeZhongBiaoService.listCompany(String.valueOf(params.get("queryKey"))));
     }
 
+    @RequestMapping(value = "/getQualRelationStr",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> getQualRelationStr(@RequestBody TbNtRegexGroup tbNtRegexGroup) {
+        return super.successMap(noticeZhongBiaoService.getQualRelationStr(tbNtRegexGroup));
+    }
 }

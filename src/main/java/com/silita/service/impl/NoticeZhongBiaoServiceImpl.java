@@ -1,5 +1,6 @@
 package com.silita.service.impl;
 
+import com.google.common.base.Splitter;
 import com.silita.biaodaa.elastic.common.ConstantUtil;
 import com.silita.biaodaa.elastic.common.NativeElasticSearchUtils;
 import com.silita.biaodaa.elastic.model.PaginationAndSort;
@@ -64,6 +65,11 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     TbCompanyInfoHmMapper tbCompanyInfoHmMapper;
     @Autowired
     SysAreaMapper sysAreaMapper;
+
+    @Autowired
+    TbNtRegexGroupMapper tbNtRegexGroupMapper;
+    @Autowired
+    TbNtQuaGroupMapper tbNtQuaGroupMapper;
 
     @Autowired
     private NativeElasticSearchUtils nativeElasticSearchUtils;
@@ -462,6 +468,15 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         }
                     }
                 }
+                //获取中标标段信息
+                Map<String, String> map = tbNtTendersMapper.getNtIdByEditCode(tempNtBids.getTdEditCode(), tbNtBids.getSource());
+                if(map.size() == 2) {
+                    TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+                    tbNtRegexGroup.setNtId(map.get("ntId"));
+                    tbNtRegexGroup.setNtEditId(map.get("pkid"));
+                    //资质
+                    this.getQualRelationStr(tbNtRegexGroup);
+                }
                 //前端要的特定数据
                 if (!StringUtils.isEmpty(tempNtBids.getCityCodeName())) {
                     SysArea sysArea = new SysArea();
@@ -685,6 +700,46 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             }
         }
         return lists;
+    }
+
+    @Override
+    public String getQualRelationStr(TbNtRegexGroup tbNtRegexGroup) {
+        //获取资质组关系表达式
+        TbNtRegexGroup tempRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
+        if(null != tempRegexGroup) {
+            List<String> groupRegexs = new ArrayList<>();
+            String groupRegex = tempRegexGroup.getGroupRegex();
+            //资质小组关系
+            char[] grouprRelType = groupRegex.replaceAll("[^(&)|(\\|)]", "").toCharArray();
+            //资质小组
+            Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
+            while (iterator.hasNext()) {
+                groupRegexs.add(iterator.next());
+            }
+            StringBuilder sb = new StringBuilder();
+            //遍历资质小组
+            for (int i = 0; i < groupRegexs.size(); i++) {
+                sb.append("(");
+                //获取资质小组信息
+                List<TbNtQuaGroup> tbNtQuaGroups = tbNtQuaGroupMapper.listTbNtQuaGroupByGroupId(groupRegexs.get(i));
+                //遍历单条资质
+                for (int j = 0; j < tbNtQuaGroups.size(); j++) {
+                    TbNtQuaGroup tbNtQuaGroup = tbNtQuaGroups.get(j);
+                    if(StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
+                        sb.append(tbNtQuaGroup.getQuaId());
+                    } else {
+                        sb.append(tbNtQuaGroups.get(j).getRelType().equals("&")? "和":"或").append(tbNtQuaGroups.get(j).getQuaId());
+                    }
+                }
+                if(i != groupRegexs.size() - 1) {
+                    sb.append(")").append(String.valueOf(grouprRelType[i]).equals("&")? "和":"或");
+                } else {
+                    sb.append(")");
+                }
+            }
+            return sb.toString();
+        }
+        return null;
     }
 
 }

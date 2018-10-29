@@ -79,4 +79,12 @@ public interface TbNtTendersMapper {
      * @return
      */
     String getNtIdByNtId(TbNtTenders tbNtTenders);
+
+    /**
+     *
+     * @param editCode
+     * @param source
+     * @return
+     */
+    Map<String, String> getNtIdByEditCode(@Param("editCode") String editCode, @Param("source") String source);
 }
