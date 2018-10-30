@@ -468,14 +468,14 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         }
                     }
                 }
-                //获取中标标段信息
+                //获取招标标段信息
                 Map<String, String> map = tbNtTendersMapper.getNtIdByEditCode(tempNtBids.getTdEditCode(), tbNtBids.getSource());
-                if(map.size() == 2) {
+                if(null != map) {
                     TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
                     tbNtRegexGroup.setNtId(map.get("ntId"));
                     tbNtRegexGroup.setNtEditId(map.get("pkid"));
                     //资质
-                    this.getQualRelationStr(tbNtRegexGroup);
+                    tempNtBids.setQualRelationStr(this.getQualRelationStr(tbNtRegexGroup));
                 }
                 //前端要的特定数据
                 if (!StringUtils.isEmpty(tempNtBids.getCityCodeName())) {

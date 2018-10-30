@@ -184,5 +184,10 @@ public class TbNtBids {
      */
     private String binessTypeName;
 
+    /**
+     * 资质关系
+     */
+    private String qualRelationStr;
+
 
 }
