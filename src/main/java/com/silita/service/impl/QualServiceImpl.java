@@ -198,7 +198,7 @@ public class QualServiceImpl implements IQualService {
                     qualGradeMap.put("value",relQuaGrades.get(k).getName());
                     qualGradeList.add(qualGradeMap);
                 }
-                qualMap.put("qualGradeList",qualGradeList);
+                qualMap.put("qualList",qualGradeList);
                 qualList.add(qualMap);
             }
             qualCateMap.put("qualList",qualList);
