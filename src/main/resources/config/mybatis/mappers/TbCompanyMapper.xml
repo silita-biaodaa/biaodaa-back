@@ -90,4 +90,10 @@
         </if>
         order by t1.created desc,t1.change_time desc
     </select>
+
+    <select id="queryComIdByName" parameterType="java.lang.String" resultType="java.lang.String">
+        select com_id
+        from tb_company
+        where com_name = #{comName}
+    </select>
 </mapper>

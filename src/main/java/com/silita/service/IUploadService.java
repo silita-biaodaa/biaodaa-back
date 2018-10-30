@@ -3,6 +3,7 @@ package com.silita.service;
 import com.silita.model.SysFiles;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.rmi.MarshalledObject;
 import java.util.Map;
 
 /**
@@ -22,4 +23,13 @@ public interface IUploadService {
      * @param sysFiles
      */
     void insertZhaoBiaoFiles(MultipartFile[] files, SysFiles sysFiles) throws Exception;
+
+    /**
+     * 上传企业信誉
+     * @param files
+     * @param username
+     * @return
+     * @throws Exception
+     */
+    Map<String,Object> uploadCompanyFile(MultipartFile files,String username,String tabType)throws Exception;
 }

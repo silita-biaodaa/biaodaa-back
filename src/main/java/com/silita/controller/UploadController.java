@@ -2,6 +2,7 @@ package com.silita.controller;
 
 import com.silita.common.Constant;
 import com.silita.commons.shiro.utils.JWTUtil;
+import com.silita.controller.base.BaseController;
 import com.silita.model.SysFiles;
 import com.silita.service.IUploadService;
 import com.silita.utils.PropertiesUtils;
@@ -21,7 +22,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/upload")
-public class UploadController {
+public class UploadController extends BaseController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(UploadController.class);
 
@@ -84,5 +85,27 @@ public class UploadController {
             resultMap.put("msg", Constant.MSG_ERROR_500);
         }
        return resultMap;
+    }
+
+    /**
+     * 企业信誉维护上传
+     * @param request
+     * @param file
+     * @param tabType
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/uploadCompanyFile", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> uploadZhaoBiaoFile(HttpServletRequest request, @RequestParam() MultipartFile file, String tabType) {
+        Map resultMap = new HashMap<String, Object>();
+        String userName = JWTUtil.getUsername(request);
+        try {
+            resultMap = uploadService.uploadCompanyFile(file,userName,tabType);
+        } catch (Exception e) {
+            LOGGER.error("上传文件异常",e);
+            resultMap.put("code", Constant.CODE_ERROR_500);
+            resultMap.put("msg", Constant.MSG_ERROR_500);
+        }
+        return resultMap;
     }
 }

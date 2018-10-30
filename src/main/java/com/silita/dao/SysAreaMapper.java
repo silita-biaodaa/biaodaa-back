@@ -22,6 +22,13 @@ public interface SysAreaMapper {
     String queryAreaName(String code);
 
     /**
+     * 查询名称根据地区code
+     * @param areaName
+     * @return
+     */
+    String queryAreaCode(String areaName);
+
+    /**
      * 添加地区
      * @param area
      * @return

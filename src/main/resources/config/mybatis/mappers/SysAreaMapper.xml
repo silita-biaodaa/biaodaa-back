@@ -33,6 +33,12 @@
       FROM sys_area WHERE area_code = #{code}
   </select>
 
+    <select id="queryAreaCode" parameterType="java.lang.String" resultType="java.lang.String">
+     SELECT
+        area_code
+      FROM sys_area WHERE area_name = #{areaName}
+  </select>
+
     <select id="getPkIdByAreaCode" parameterType="String" resultType="String">
     SELECT `pkid` FROM sys_area WHERE area_code = #{areaCode}
   </select>

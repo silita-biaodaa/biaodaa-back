@@ -31,4 +31,11 @@ public interface TbCompanyAwardsMapper extends MyMapper<TbCompanyAwards> {
      * @return
      */
     int deleteCompanyAwards(String pkid);
+
+    /**
+     * 批量添加获奖信息
+     * @param list
+     * @return
+     */
+    void batchInsertCompanyAwrds(List<Map<String,Object>> list);
 }

@@ -107,4 +107,28 @@
         FROM `tb_company_awards`
         WHERE `pkid` = #{pkid};
     </delete>
+
+    <insert id="batchInsertCompanyAwrds" parameterType="java.util.List">
+        INSERT INTO `tb_company_awards`
+            (`pkid`,
+             `com_id`,
+             `level`,
+             `prov_code`,
+             `city_code`,
+             `awd_name`,
+             `year`,
+             `pro_name`,
+             `pro_type_name`,
+             `issue_date`,
+             `created`,
+             `create_by`)
+        VALUES
+        <foreach collection="list"  item="list" separator=",">
+            (
+              #{list.pkid},#{list.comId},#{list.level},#{list.provCode},#{list.cityCode}
+              ,#{list.awdName},#{list.year},#{list.proName},#{list.proTypeName}
+              ,#{list.issueDate},NOW(),#{list.createBy}
+            )
+        </foreach>
+    </insert>
 </mapper>

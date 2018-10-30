@@ -5,6 +5,7 @@ import com.silita.dao.DicAliasMapper;
 import com.silita.dao.SysFilesMapper;
 import com.silita.model.DicAlias;
 import com.silita.model.SysFiles;
+import com.silita.service.ICompanyAwardsService;
 import com.silita.service.IQualService;
 import com.silita.service.IUploadService;
 import com.silita.utils.DataHandlingUtil;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,22 +41,15 @@ public class UploadServiceImpl implements IUploadService {
     SysFilesMapper sysFilesMapper;
     @Autowired
     PropertiesUtils propertiesUtils;
+    @Autowired
+    ICompanyAwardsService companyAwardsService;
 
     @Override
     public Map<String, Object> analysisQuaGrade(MultipartFile file, Map<String, Object> param) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         InputStream inputStream = file.getInputStream();
         String fileName = file.getOriginalFilename();
-        Workbook workbook = null;
-        if (fileName.endsWith(".xls")) {
-            workbook = new HSSFWorkbook(inputStream);
-        } else if (fileName.endsWith(".xlsx")) {
-            workbook = new XSSFWorkbook(inputStream);
-        } else {
-            resultMap.put("code", Constant.CODE_WARN_405);
-            resultMap.put("msg", Constant.MSG_WARN_405);
-            return resultMap;
-        }
+        Workbook workbook = getWorkbook(fileName, inputStream);
         if (null == workbook) {
             resultMap.put("code", Constant.CODE_WARN_404);
             resultMap.put("msg", Constant.MSG_WARN_404);
@@ -88,6 +83,7 @@ public class UploadServiceImpl implements IUploadService {
                         dicAlias.setName(cell.getStringCellValue());
                         dicAlias.setId(DataHandlingUtil.getUUID());
                         code = "alias_qual_" + PinYinUtil.cn2py(cell.getStringCellValue()) + "_" + System.currentTimeMillis();
+                        dicAlias.setCode(code);
                         dicAliasList.add(dicAlias);
                     }
                 }
@@ -134,5 +130,32 @@ public class UploadServiceImpl implements IUploadService {
             sysFiles.setFilePath(propertiesUtils.getFilePath() + savePathStr);
             sysFilesMapper.insertSysFiles(sysFiles);
         }
+    }
+
+    @Override
+    public Map<String, Object> uploadCompanyFile(MultipartFile file, String username,String tabType) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        InputStream inputStream = file.getInputStream();
+        String fileName = file.getOriginalFilename();
+        Workbook workbook = getWorkbook(fileName, inputStream);
+        if (null == workbook) {
+            resultMap.put("code", Constant.CODE_WARN_404);
+            resultMap.put("msg", Constant.MSG_WARN_404);
+            return resultMap;
+        }
+        if ("win_record".equals(tabType)){
+            resultMap = companyAwardsService.batchExportCompanyAwards(workbook.getSheetAt(0),username,fileName);
+        }
+        return resultMap;
+    }
+
+    private Workbook getWorkbook(String fileName, InputStream inputStream) throws IOException {
+        Workbook workbook = null;
+        if (fileName.endsWith(".xls")) {
+            workbook = new HSSFWorkbook(inputStream);
+        } else if (fileName.endsWith(".xlsx")) {
+            workbook = new XSSFWorkbook(inputStream);
+        }
+        return workbook;
     }
 }

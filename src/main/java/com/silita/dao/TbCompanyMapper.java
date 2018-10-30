@@ -36,4 +36,11 @@ public interface TbCompanyMapper extends MyMapper<TbCompany> {
      * @return
      */
     List<TbCompany> queryCompanyDetailHm(Map<String,Object> param);
+
+    /**
+     * 根据名称查询id
+     * @param comName 企业名称
+     * @return
+     */
+    String queryComIdByName(String comName);
 }
