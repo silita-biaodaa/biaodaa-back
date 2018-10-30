@@ -198,7 +198,7 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController12()throws Exception{
-        String requestBody = "{\"ntId\":\"20\", \"ntEditId\":\"3c2de083a179462c9eaae2df41395b05\"}";
+        String requestBody = "{\"ntId\":\"20\", \"ntEditId\":\"213c8a98fcc641009b2695f22c43fcd8\"}";
         String responseString = mockMvc.perform(post("/zhongbiao/getQualRelationStr").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

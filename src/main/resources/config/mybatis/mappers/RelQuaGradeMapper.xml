@@ -6,6 +6,7 @@
         select t.id as id
                 ,t1.name as `name`
                 ,`code` as gradeCode
+                ,t1.id as gradeId
         from rel_qua_grade t
         left join dic_common t1 on t.grade_code = t1.code and `type`  = 'qua_grade'
         where 1=1

@@ -737,7 +737,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                     String quaGradeName = dicCommonMapper.getCommonNameById(tbNtQuaGroup.getQuaGradeId());
                     if(StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
                         //组内第一条资质
-                        sb.append(quaGradeName).append(quaGradeName);
+                        sb.append(qualName).append(quaGradeName);
                     } else {
                         sb.append(tbNtQuaGroups.get(j).getRelType().equals("&")? "和":"或").append(qualName).append(quaGradeName);
                     }

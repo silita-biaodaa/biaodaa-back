@@ -194,7 +194,7 @@ public class QualServiceImpl implements IQualService {
                 //公告资质等级
                 for(int k = 0;k<relQuaGrades.size();k++){
                     qualGradeMap = new HashMap();
-                    qualGradeMap.put("key",relQuaGrades.get(k).getId());
+                    qualGradeMap.put("key",relQuaGrades.get(k).getGradeId());
                     qualGradeMap.put("value",relQuaGrades.get(k).getName());
                     qualGradeList.add(qualGradeMap);
                 }
