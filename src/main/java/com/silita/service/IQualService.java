@@ -3,7 +3,6 @@ package com.silita.service;
 import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -67,4 +66,6 @@ public interface IQualService {
      * @return
      */
     List<Map<String,Object>> qualGradeList();
+
+    List<Map<String,Object>> listQual();
 }

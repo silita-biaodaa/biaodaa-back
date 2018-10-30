@@ -639,12 +639,19 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 firstQual.setPx("1");
                 firstQual.setHead(true);
                 firstQual.setGroupId(groupId);
-                firstQual.setQuaId(tempRegex.getQuaId());
+                List<String> OneQualIds = tempRegex.getQualIds();
+                firstQual.setQuaCateId(OneQualIds.get(0));
+                firstQual.setQuaId(OneQualIds.get(1));
+                firstQual.setQuaGradeId(OneQualIds.get(2));
                 //其他资质
                 if(tbNtQuaGroupList.size() > 0) {
                     TbNtQuaGroup temp;
                     for (int j = 0; j < tbNtQuaGroupList.size(); j++) {
                         temp = tbNtQuaGroupList.get(j);
+                        List<String> qualIds = temp.getQualIds();
+                        temp.setQuaCateId(qualIds.get(0));
+                        temp.setQuaId(qualIds.get(1));
+                        temp.setQuaGradeId(qualIds.get(2));
                         temp.setPx(String.valueOf(j + 2));
                         temp.setGroupId(groupId);
                         temp.setPkid(DataHandlingUtil.getUUID());

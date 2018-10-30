@@ -57,6 +57,13 @@ public interface INoticeZhongBiaoService {
     Object listTbNtBidsByNtId(TbNtBids tbNtBids);
 
     /**
+     * 根据标段pkid获取中标标段信息（包含中标候选人）
+     * @param tbNtBids
+     * @return
+     */
+    Object getTbNtBidsByNtId(TbNtBids tbNtBids);
+
+    /**
      * 根据标段pkid 批量删除中标编辑明显
      * @param params
      */

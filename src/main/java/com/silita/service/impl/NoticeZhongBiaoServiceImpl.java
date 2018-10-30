@@ -500,6 +500,11 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     }
 
     @Override
+    public Object getTbNtBidsByNtId(TbNtBids tbNtBids) {
+        return null;
+    }
+
+    @Override
     public void deleteTbNtBidsByPkId(Map params) {
         String idStr = (String) params.get("idsStr");
         String source = (String) params.get("source");

@@ -1,5 +1,7 @@
 package com.silita.model;
 
+import java.util.List;
+
 public class TbNtQuaGroup {
     /**
      * 主键
@@ -10,6 +12,11 @@ public class TbNtQuaGroup {
      * 关系分组ID
      */
     private String groupId;
+
+    /**
+     * 资质类型ID
+     */
+    private String quaCateId;
 
     /**
      * 资质ID
@@ -36,6 +43,12 @@ public class TbNtQuaGroup {
      */
     private String px;
 
+    /**
+     * 三级联动id数组（业务）
+     */
+    private List<String> qualIds;
+
+
     public String getPkid() {
         return pkid;
     }
@@ -47,6 +60,12 @@ public class TbNtQuaGroup {
     }
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+    public String getQuaCateId() {
+        return quaCateId;
+    }
+    public void setQuaCateId(String quaCateId) {
+        this.quaCateId = quaCateId;
     }
     public String getQuaId() {
         return quaId;
@@ -77,5 +96,11 @@ public class TbNtQuaGroup {
     }
     public void setPx(String px) {
         this.px = px;
+    }
+    public List<String> getQualIds() {
+        return qualIds;
+    }
+    public void setQualIds(List<String> qualIds) {
+        this.qualIds = qualIds;
     }
 }

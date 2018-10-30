@@ -6,6 +6,7 @@ import com.silita.dao.DicQuaMapper;
 import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
+import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
@@ -26,6 +27,8 @@ public class QualServiceImpl implements IQualService {
     DicAliasMapper dicAliasMapper;
     @Autowired
     RelQuaGradeMapper relQuaGradeMapper;
+    @Autowired
+    RelQuaGradeMapper quaGradeMapper;
 
     @Override
     public Map<String, Object> addQual(DicQua qua, String username) {
@@ -156,5 +159,51 @@ public class QualServiceImpl implements IQualService {
             }
         }
         return qualCradeList;
+    }
+
+    @Override
+    public List<Map<String,Object>> listQual() {
+        List<Map<String,Object>> qualCateList = new ArrayList<>();
+        List<Map<String,Object>> qualList;
+        List<Map<String,Object>> qualGradeList;
+        List<Map<String, Object>> list = dicQuaMapper.queryQualCateList();
+        Map dicMap;
+        Map qualCateMap;
+        Map qualMap;
+        Map qualGradeMap;
+        //资质类型列表
+        for (int i = 0; i < list.size(); i++) {
+            dicMap = new HashMap<String, Object>();
+            dicMap.put("parentId", list.get(i).get("id"));
+            List<DicQua> dicQuas = dicQuaMapper.queryDicQuaList(dicMap);
+            Map gradeMap;
+            qualCateMap = new HashMap();
+            qualList = new ArrayList<>();
+            qualCateMap.put("key",list.get(i).get("id"));
+            qualCateMap.put("value",list.get(i).get("quaName"));
+            //资质名称列表
+            for (int j = 0; j < dicQuas.size(); j++) {
+                qualMap = new HashMap();
+                qualGradeList = new ArrayList<>();
+                qualMap.put("key",dicQuas.get(j).getId());
+                qualMap.put("value",dicQuas.get(j).getQuaName());
+                gradeMap = new HashMap<String, Object>();
+                gradeMap.put("quaCode", dicQuas.get(j).getQuaCode());
+                gradeMap.put("bizType", "1");
+                List<RelQuaGrade> relQuaGrades = quaGradeMapper.queryQuaGrade(gradeMap);
+                //公告资质等级
+                for(int k = 0;k<relQuaGrades.size();k++){
+                    qualGradeMap = new HashMap();
+                    qualGradeMap.put("key",relQuaGrades.get(k).getId());
+                    qualGradeMap.put("value",relQuaGrades.get(k).getName());
+                    qualGradeList.add(qualGradeMap);
+                }
+                qualMap.put("qualGradeList",qualGradeList);
+                qualList.add(qualMap);
+            }
+            qualCateMap.put("qualList",qualList);
+            qualCateList.add(qualCateMap);
+        }
+        return qualCateList;
     }
 }

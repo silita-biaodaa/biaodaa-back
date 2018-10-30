@@ -58,12 +58,27 @@ public class TbNtRegexGroup {
     private String updateBy;
 
     /**
-     *
+     * 资质类型ID（业务）
+     */
+    private String quaCateId;
+
+    /**
+     * 资质ID（业务）
      */
     private String quaId;
 
     /**
-     *
+     * 资质等级ID（业务）
+     */
+    private String quaGradeId;
+
+    /**
+     * 三级联动id数组（业务）
+     */
+    private List<String> qualIds;
+
+    /**
+     * 小组之间关联关系（业务）
      */
     private String relType;
 
