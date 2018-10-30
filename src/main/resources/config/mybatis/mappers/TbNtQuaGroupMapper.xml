@@ -7,6 +7,7 @@
     -->
     <id column="pkid" property="pkid" jdbcType="VARCHAR" />
     <result column="group_id" property="groupId" jdbcType="VARCHAR" />
+    <result column="qua_cate_id" property="quaCateId" jdbcType="VARCHAR" />
     <result column="qua_id" property="quaId" jdbcType="VARCHAR" />
     <result column="qua_grade_id" property="quaGradeId" jdbcType="VARCHAR" />
     <result column="rel_type" property="relType" jdbcType="VARCHAR" />
@@ -27,13 +28,13 @@
 
   <insert id="batchInsertTbNtQuaGroup" parameterType="com.silita.model.TbNtQuaGroup">
     INSERT INTO `tb_nt_qua_group` (
-    `pkid`, `group_id`, `qua_id`, `rel_type`, `is_head`,
-    `px`
+    `pkid`, `group_id`, `qua_cate_id`, `qua_id`, `qua_grade_id`,
+    `rel_type`, `is_head`, `px`
     )
     VALUES
     <foreach collection="list" item="temp" index="index" separator=",">
-      (#{temp.pkid}, #{temp.groupId}, #{temp.quaId}, #{temp.relType}, #{temp.isHead},
-      #{temp.px}
+      (#{temp.pkid}, #{temp.groupId}, #{temp.quaCateId}, #{temp.quaId}, #{temp.quaGradeId},
+      #{temp.relType}, #{temp.isHead}, #{temp.px}
       )
     </foreach>
   </insert>

@@ -231,13 +231,13 @@ public class NoticeZhaobiaoController extends BaseController {
             List<TbNtQuaGroup> tbNtQuaGroups = new ArrayList<>();
             for (int j = 0; j < quaGroupsList.size(); j++) {
                 TbNtQuaGroup tbNtQuaGroup = new TbNtQuaGroup();
-                tbNtQuaGroup.setQuaId((String) quaGroupsList.get(j).get("quaId"));
+//                tbNtQuaGroup.setQuaId((String) quaGroupsList.get(j).get("quaId"));
                 tbNtQuaGroup.setQualIds((List<String>) quaGroupsList.get(j).get("qualIds"));
                 tbNtQuaGroup.setRelType((String) quaGroupsList.get(j).get("relType"));
                 tbNtQuaGroups.add(tbNtQuaGroup);
             }
             tbNtRegexGroup.setTbNtQuaGroups(tbNtQuaGroups);
-            tbNtRegexGroup.setQuaId((String) temp.get("quaId"));
+//            tbNtRegexGroup.setQuaId((String) temp.get("quaId"));
             tbNtRegexGroup.setQualIds((List<String>) temp.get("qualIds"));
             tbNtRegexGroup.setRelType((String) temp.get("relType"));
             tbNtRegexGroups.add(tbNtRegexGroup);

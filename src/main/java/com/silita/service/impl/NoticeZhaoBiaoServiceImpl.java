@@ -695,18 +695,24 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 //遍历单条资质
                 for (int j = 0; j < tbNtQuaGroups.size(); j++) {
                     TbNtQuaGroup tbNtQuaGroup = tbNtQuaGroups.get(j);
+                    List<String> qualIds = new ArrayList<>(4);
+                    qualIds.add(0, tbNtQuaGroup.getQuaCateId());
+                    qualIds.add(1, tbNtQuaGroup.getQuaId());
+                    qualIds.add(2, tbNtQuaGroup.getQuaGradeId());
                     if(StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
                         //组内第一条资质
                         tempTbNtRegexGroup = new TbNtRegexGroup();
                         tempTbNtRegexGroup.setNtId(tbNtRegexGroup.getNtId());
                         tempTbNtRegexGroup.setNtEditId(tbNtRegexGroup.getNtEditId());
-                        tempTbNtRegexGroup.setQuaId(tbNtQuaGroup.getQuaId());
+//                        tempTbNtRegexGroup.setQuaId(tbNtQuaGroup.getQuaId());
+                        tempTbNtRegexGroup.setQualIds(qualIds);
                         //资质小组关系 = 资质小组减1
                         if(i != groupRegexs.size() - 1) {
                             tempTbNtRegexGroup.setRelType(String.valueOf(grouprRelType[i]));
                         }
                     } else {
-                        tempTbNtQuaGroup.add(tbNtQuaGroups.get(j));
+                        tbNtQuaGroup.setQualIds(qualIds);
+                        tempTbNtQuaGroup.add(tbNtQuaGroup);
                     }
                 }
                 tempTbNtRegexGroup.setTbNtQuaGroups(tempTbNtQuaGroup);
