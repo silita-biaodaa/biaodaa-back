@@ -695,6 +695,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 //遍历单条资质
                 for (int j = 0; j < tbNtQuaGroups.size(); j++) {
                     TbNtQuaGroup tbNtQuaGroup = tbNtQuaGroups.get(j);
+                    //3级联动资质id合成list
                     List<String> qualIds = new ArrayList<>(4);
                     qualIds.add(0, tbNtQuaGroup.getQuaCateId());
                     qualIds.add(1, tbNtQuaGroup.getQuaId());

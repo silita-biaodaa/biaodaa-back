@@ -123,4 +123,8 @@
     <select id="getNameByCode" parameterType="String" resultType="String">
        SELECT `name` FROM dic_common WHERE `code` = #{code}
     </select>
+
+    <select id="getCommonNameById" parameterType="String" resultType="String">
+        SELECT `name` FROM `dic_common` WHERE `id` = #{id}
+    </select>
 </mapper>

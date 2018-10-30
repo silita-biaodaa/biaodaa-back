@@ -72,6 +72,9 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     TbNtQuaGroupMapper tbNtQuaGroupMapper;
 
     @Autowired
+    DicQuaMapper dicQuaMapper;
+
+    @Autowired
     private NativeElasticSearchUtils nativeElasticSearchUtils;
 
     SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -730,10 +733,13 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 //遍历单条资质
                 for (int j = 0; j < tbNtQuaGroups.size(); j++) {
                     TbNtQuaGroup tbNtQuaGroup = tbNtQuaGroups.get(j);
+                    String qualName =  dicQuaMapper.queryQualDetailById(tbNtQuaGroup.getQuaId()).getQuaName();
+                    String quaGradeName = dicCommonMapper.getCommonNameById(tbNtQuaGroup.getQuaGradeId());
                     if(StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
-                        sb.append(tbNtQuaGroup.getQuaId());
+                        //组内第一条资质
+                        sb.append(quaGradeName).append(quaGradeName);
                     } else {
-                        sb.append(tbNtQuaGroups.get(j).getRelType().equals("&")? "和":"或").append(tbNtQuaGroups.get(j).getQuaId());
+                        sb.append(tbNtQuaGroups.get(j).getRelType().equals("&")? "和":"或").append(qualName).append(quaGradeName);
                     }
                 }
                 if(i != groupRegexs.size() - 1) {
