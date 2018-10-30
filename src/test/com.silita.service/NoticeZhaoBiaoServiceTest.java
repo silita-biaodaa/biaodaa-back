@@ -422,7 +422,8 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController26()throws Exception{
-        String requestBody = "{\"tbNtRegexGroups\":[{\"tbNtQuaGroups\":[{\"quaId\":\"老板a2\",\"relType\":\"|\"}],\"quaId\":\"老板a1\",\"relType\":\"&\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板b2\",\"relType\":\"&\"},{\"quaId\":\"经理b3\",\"relType\":\"&\"}],\"quaId\":\"老板b1\",\"relType\":\"|\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板c2\",\"relType\":\"|\"}],\"quaId\":\"老板c1\",\"relType\":\"\"}],\"params\":{\"ntId\":\"3\",\"ntEditId\":\"3\",\"userName\":\"gmy\"}}";
+//        String requestBody = "{\"tbNtRegexGroups\":[{\"tbNtQuaGroups\":[{\"quaId\":\"老板a2\",\"relType\":\"|\"}],\"quaId\":\"老板a1\",\"relType\":\"&\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板b2\",\"relType\":\"&\"},{\"quaId\":\"经理b3\",\"relType\":\"&\"}],\"quaId\":\"老板b1\",\"relType\":\"|\"},{\"tbNtQuaGroups\":[{\"quaId\":\"老板c2\",\"relType\":\"|\"}],\"quaId\":\"老板c1\",\"relType\":\"\"}],\"params\":{\"ntId\":\"3\",\"ntEditId\":\"3\",\"userName\":\"gmy\"}}";
+        String requestBody = "{\"tbNtRegexGroups\":[{\"tbNtQuaGroups\":[{\"quaId\":\"老板a2\",\"relType\":\"|\"}],\"quaId\":\"老板a1\",\"relType\":\"&\"},{\"tbNtQuaGroups\":[],\"quaId\":\"老板b1\"}],\"params\":{\"ntId\":\"3\",\"ntEditId\":\"3\",\"userName\":\"gmy\"}}";
         String responseString = mockMvc.perform(post("/zhaobiao/saveTbNtRegexGroup").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

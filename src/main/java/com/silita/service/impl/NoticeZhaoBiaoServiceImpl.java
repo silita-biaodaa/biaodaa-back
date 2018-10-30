@@ -264,6 +264,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         TbNtRegexQua tbNtRegexQua = new TbNtRegexQua();
         tbNtRegexQua.setNtId(tbNtTenders.getNtId());
         tbNtRegexQua.setNtEditId(ntEditId);
+        tbNtRegexQua.setCreateBy(userName);
         this.insertNtRegexQua(tbNtRegexQua);
         return msg;
     }
@@ -652,7 +653,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 tbNtQuaGroupList.add(firstQual);
                 //添加小组资质信息
                 tbNtQuaGroupMapper.batchInsertTbNtQuaGroup(tbNtQuaGroupList);
-                regexGroup.append(groupId).append(tempRegex.getRelType());
+                regexGroup.append(groupId);
+                if(!StringUtils.isEmpty(tempRegex.getRelType())) {
+                    regexGroup.append(tempRegex.getRelType());
+                }
             }
             tbNtRegexGroup.setPkid(DataHandlingUtil.getUUID());
             tbNtRegexGroup.setGroupCode(DataHandlingUtil.getTimeStamp());
