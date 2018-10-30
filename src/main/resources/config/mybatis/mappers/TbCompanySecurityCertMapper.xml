@@ -226,7 +226,7 @@
               ,t1.`cert_no` AS certNo
           </if>
           ,t2.`area_name` AS certProv
-          ,t2.`issue_date` AS issueDate
+          ,t1.`issue_date` AS issueDate
           ,DATE_FORMAT(t1.`expired`, '%Y-%m-%d') AS expired
           <if test="tabType != null and tabType == 'safety_cert'">
               ,t1.`cert_level` AS certLevel
