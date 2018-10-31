@@ -52,18 +52,18 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
                 assessOrigins = MapUtils.getString(map, "assessOrigin").split(",");
                 if (null != assessLevels && assessLevels.length > 0) {
                     for (int i = 0; i < assessOrigins.length; i++) {
-                        if (Constant.SOURCE_PRO.equals(assessOrigins[i])){
-                            highwayMap.put("proAssessLevel",assessLevels[i]);
+                        if (Constant.SOURCE_PRO.equals(assessOrigins[i])) {
+                            highwayMap.put("proAssessLevel", assessLevels[i]);
                             continue;
                         }
-                        highwayMap.put("labAssessLevel",assessLevels[i]);
+                        highwayMap.put("labAssessLevel", assessLevels[i]);
                         continue;
                     }
                 }
-                highwayMap.put("assessProv",sysAreaMapper.queryAreaName(MapUtils.getString(map,"assessProvCode")));
-                highwayMap.put("comId",MapUtils.getString(map,"comId"));
-                highwayMap.put("assessYear",MapUtils.getString(map,"assessYear"));
-                highwayMap.put("assessProvCode",MapUtils.getString(map,"assessProvCode"));
+                highwayMap.put("assessProv", sysAreaMapper.queryAreaName(MapUtils.getString(map, "assessProvCode")));
+                highwayMap.put("comId", MapUtils.getString(map, "comId"));
+                highwayMap.put("assessYear", MapUtils.getString(map, "assessYear"));
+                highwayMap.put("assessProvCode", MapUtils.getString(map, "assessProvCode"));
                 companyHighwayList.add(highwayMap);
             }
         }
@@ -72,7 +72,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
 
     @Override
     public List<Map<String, Object>> getHighwayProv(Map<String, Object> param) {
-        return tbCompanyHighwayGradeMapper.queryAssessPro(MapUtils.getString(param,"comId"));
+        return tbCompanyHighwayGradeMapper.queryAssessPro(MapUtils.getString(param, "comId"));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         //判断是否存在
         grade.setAssessOrigin(Constant.SOURCE_LAB);
         TbCompanyHighwayGrade companyHighwayGrade = tbCompanyHighwayGradeMapper.queryCompanyHighwanGradeDetail(grade);
-        if(null != companyHighwayGrade){
+        if (null != companyHighwayGrade) {
             tbCompanyHighwayGradeMapper.deleteCompanyHigway(companyHighwayGrade.getPkid());
         }
         grade.setPkid(DataHandlingUtil.getUUID());
@@ -88,37 +88,37 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         grade.setCreated(new Date());
         grade.setAssessOrigin(Constant.SOURCE_LAB);
         tbCompanyHighwayGradeMapper.insertCompanyHigway(grade);
-        Map<String,Object> resultMap = new HashMap<>();
-        resultMap.put("code",Constant.CODE_SUCCESS);
-        resultMap.put("msg",Constant.MSG_SUCCESS);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
     }
 
     @Override
     public Map<String, Object> getCompanyHighwayGradeForCompanyList(Map<String, Object> param) {
         TbCompanyHighwayGrade grade = new TbCompanyHighwayGrade();
-        grade.setComName(MapUtils.getString(param,"comName"));
-        grade.setAssessLevel(MapUtils.getString(param,"assessLevel"));
-        grade.setAssessProvCode(MapUtils.getString(param,"assessProvCode"));
-        grade.setAssessYear(MapUtils.getInteger(param,"assessYear"));
-        grade.setProvince(MapUtils.getString(param,"province"));
-        grade.setCurrentPage(MapUtils.getInteger(param,"currentPage"));
-        grade.setPageSize(MapUtils.getInteger(param,"pageSize"));
-        Map<String,Object> resultMap = new HashMap<>();
+        grade.setComName(MapUtils.getString(param, "comName"));
+        grade.setAssessLevel(MapUtils.getString(param, "assessLevel"));
+        grade.setAssessProvCode(MapUtils.getString(param, "assessProvCode"));
+        grade.setAssessYear(MapUtils.getInteger(param, "assessYear"));
+        grade.setProvince(MapUtils.getString(param, "province"));
+        grade.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
+        grade.setPageSize(MapUtils.getInteger(param, "pageSize"));
+        Map<String, Object> resultMap = new HashMap<>();
         Integer total = tbCompanyHighwayGradeMapper.queryCompanyHigForCompanyCount(grade);
-        if(total <= 0){
+        if (total <= 0) {
             return null;
         }
         resultMap.put("list", tbCompanyHighwayGradeMapper.queryCompanyHigForCompanyList(grade));
-        resultMap.put("total",total);
+        resultMap.put("total", total);
         return super.handlePageCount(resultMap, grade);
     }
 
     @Override
     public void deleteCompanyHigwagGrade(Map<String, Object> param) {
-        String pkids = MapUtils.getString(param,"pkids");
+        String pkids = MapUtils.getString(param, "pkids");
         String[] pkidList = pkids.split("\\|");
-        for (String pkid : pkidList){
+        for (String pkid : pkidList) {
             tbCompanyHighwayGradeMapper.deleteCompanyHigway(pkid);
         }
     }
@@ -175,7 +175,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             cell = row.getCell(2);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             if (null != cell.getStringCellValue()) {
-                if(!StringUtils.isNumeric(cell.getStringCellValue())){
+                if (!StringUtils.isNumeric(cell.getStringCellValue())) {
                     sbf.append("，年度格式错误");
                     if (isError) {
                         isError = false;
@@ -204,8 +204,8 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             resultMap.put("data", fileUrl);
             return resultMap;
         }
-        List<Map<String,Object>> list = doWeight(excelList);
-        if(null != list && list.size() > 0){
+        List<Map<String, Object>> list = doWeight(excelList);
+        if (null != list && list.size() > 0) {
             tbCompanyHighwayGradeMapper.batchInsertCompanyHig(list);
         }
         resultMap.put("code", Constant.CODE_SUCCESS);
@@ -246,18 +246,18 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         FileOutputStream fileOut = new FileOutputStream(fileUrl);
         wb.write(fileOut);
         fileOut.close();
-        if("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())){
-            String newFileUrl = propertiesUtils.getLocalhostServer() + propertiesUtils.getFilePath() + "//error_excel//" + fileName;
+        if ("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())) {
+            String newFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
             return newFileUrl;
         }
         return fileUrl;
     }
 
-    private List<Map<String,Object>> doWeight(List<Map<String, Object>> excelList){
+    private List<Map<String, Object>> doWeight(List<Map<String, Object>> excelList) {
         List<Map<String, Object>> resultList = new ArrayList<>();
         for (Map<String, Object> map : excelList) {
             Integer count = tbCompanyHighwayGradeMapper.queryCount(map);
-            if(count <= 0){
+            if (count <= 0) {
                 resultList.add(map);
             }
         }

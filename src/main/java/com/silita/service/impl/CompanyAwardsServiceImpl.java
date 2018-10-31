@@ -289,7 +289,7 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
         wb.write(fileOut);
         fileOut.close();
         if ("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())) {
-            String newFileUrl = propertiesUtils.getLocalhostServer() + propertiesUtils.getFilePath() + "//error_excel//" + fileName;
+            String newFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
             return newFileUrl;
         }
         return fileUrl;
