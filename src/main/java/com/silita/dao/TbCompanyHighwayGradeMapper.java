@@ -67,7 +67,7 @@ public interface TbCompanyHighwayGradeMapper extends MyMapper<TbCompanyHighwayGr
      * @param list
      * @return
      */
-    int batchInsertCompanyHig(List<Map<String,Object>> list);
+    int batchInsertCompanyHig(List<TbCompanyHighwayGrade> list);
 
     /**
      * 查询个数

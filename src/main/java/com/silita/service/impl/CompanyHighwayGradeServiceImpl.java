@@ -198,7 +198,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             resultMap.put("data", fileUrl);
             return resultMap;
         }
-        List<Map<String, Object>> list = doWeight(excelList);
+        List<TbCompanyHighwayGrade> list = doWeight(excelList);
         if (null != list && list.size() > 0) {
             tbCompanyHighwayGradeMapper.batchInsertCompanyHig(list);
         }
@@ -247,12 +247,20 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         return fileUrl;
     }
 
-    private List<Map<String, Object>> doWeight(List<Map<String, Object>> excelList) {
-        List<Map<String, Object>> resultList = new ArrayList<>();
+    private List<TbCompanyHighwayGrade> doWeight(List<Map<String, Object>> excelList) {
+        List<TbCompanyHighwayGrade> resultList = new ArrayList<>();
+        TbCompanyHighwayGrade tbCompanyHighwayGrade;
         for (Map<String, Object> map : excelList) {
             Integer count = tbCompanyHighwayGradeMapper.queryCount(map);
             if (count <= 0) {
-                resultList.add(map);
+                tbCompanyHighwayGrade = new TbCompanyHighwayGrade();
+                tbCompanyHighwayGrade.setPkid(MapUtils.getString(map,"pkid"));
+                tbCompanyHighwayGrade.setComId(MapUtils.getString(map,"comId"));
+                tbCompanyHighwayGrade.setAssessYear(MapUtils.getInteger(map,"year"));
+                tbCompanyHighwayGrade.setAssessLevel(MapUtils.getString(map,"level"));
+                tbCompanyHighwayGrade.setAssessProvCode(MapUtils.getString(map,"provCode"));
+                tbCompanyHighwayGrade.setCreateBy(MapUtils.getString(map,"createdBy"));
+                resultList.add(tbCompanyHighwayGrade);
             }
         }
         return resultList;

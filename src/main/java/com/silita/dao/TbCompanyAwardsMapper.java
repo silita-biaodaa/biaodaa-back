@@ -37,7 +37,7 @@ public interface TbCompanyAwardsMapper extends MyMapper<TbCompanyAwards> {
      * @param list
      * @return
      */
-    void batchInsertCompanyAwrds(List<Map<String,Object>> list);
+    void batchInsertCompanyAwrds(List<TbCompanyAwards> list);
 
     /**
      * 查询个数

@@ -137,9 +137,8 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
                     if (isError) {
                         isError = false;
                     }
-                } else {
-                    excelMap.put("provCode", provCode);
                 }
+                excelMap.put("provCode", provCode);
                 excelMap.put("prov", cell.getStringCellValue());
             }
             //市
@@ -152,9 +151,8 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
                     if (isError) {
                         isError = false;
                     }
-                } else {
-                    excelMap.put("cityCode", cityCode);
                 }
+                excelMap.put("cityCode", cityCode);
                 excelMap.put("city", cell.getStringCellValue());
             }
             //奖项名称
@@ -183,7 +181,7 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             }
             //发布时间
             cell = row.getCell(8);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell && null != cell.getDateCellValue() && !"".equals(cell.getDateCellValue())) {
                 if (DateUtil.isCellDateFormatted(cell)) {
                     issueDate = MyDateUtils.excelTime(cell.getDateCellValue());
                     if (!MyDateUtils.checkDate(issueDate)) {
@@ -220,9 +218,9 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             return resultMap;
         }
         //去重
-        List<Map<String,Object>> list = doWeight(excelList);
+        List<TbCompanyAwards> list = doWeight(excelList);
         if(null != list && list.size() > 0){
-            tbCompanyAwardsMapper.batchInsertCompanyAwrds(doWeight(list));
+            tbCompanyAwardsMapper.batchInsertCompanyAwrds(list);
         }
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -289,12 +287,25 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
         return fileUrl;
     }
 
-    private List<Map<String, Object>> doWeight(List<Map<String, Object>> list) {
-        List<Map<String, Object>> resultList = new ArrayList<>();
+    private List<TbCompanyAwards> doWeight(List<Map<String, Object>> list) {
+        List<TbCompanyAwards> resultList = new ArrayList<>();
+        TbCompanyAwards awards;
         for (Map<String, Object> map : list) {
             Integer count = tbCompanyAwardsMapper.queryAwardsCount(map);
             if(count <= 0){
-                resultList.add(map);
+                awards = new TbCompanyAwards();
+                awards.setCreateBy(MapUtils.getString(map,"createBy"));
+                awards.setIssueDate(MapUtils.getString(map,"issueDate"));
+                awards.setComId(MapUtils.getString(map,"comId"));
+                awards.setLevel(MapUtils.getString(map,"level"));
+                awards.setCityCode(MapUtils.getString(map,"cityCode"));
+                awards.setYear(MapUtils.getString(map,"year"));
+                awards.setAwdName(MapUtils.getString(map,"awdName"));
+                awards.setProTypeName(MapUtils.getString(map,"proTypeName"));
+                awards.setProName(MapUtils.getString(map,"proName"));
+                awards.setProvCode(MapUtils.getString(map,"provCode"));
+                awards.setPkid(MapUtils.getString(map,"pkid"));
+                resultList.add(awards);
             }
         }
         return resultList;
