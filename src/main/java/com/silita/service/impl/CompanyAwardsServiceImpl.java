@@ -10,6 +10,7 @@ import com.silita.model.TbCompanyAwards;
 import com.silita.service.ICompanyAwardsService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
+import com.silita.utils.ExcelUtils;
 import com.silita.utils.PropertiesUtils;
 import com.silita.utils.dateUtils.MyDateUtils;
 import com.silita.utils.stringUtils.StringUtils;
@@ -166,7 +167,7 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             cell = row.getCell(5);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             if (null != cell.getStringCellValue()) {
-                if(!StringUtils.isNumeric(cell.getStringCellValue())){
+                if (!StringUtils.isNumeric(cell.getStringCellValue())) {
                     sbf.append("，获奖年度格式错误");
                     if (isError) {
                         isError = false;
@@ -224,7 +225,11 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             resultMap.put("data", fileUrl);
             return resultMap;
         }
-        tbCompanyAwardsMapper.batchInsertCompanyAwrds(excelList);
+        //去重
+        List<Map<String,Object>> list = doWeight(excelList);
+        if(null != list && list.size() > 0){
+            tbCompanyAwardsMapper.batchInsertCompanyAwrds(doWeight(list));
+        }
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
@@ -232,82 +237,72 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
 
     private String uploadExcel(List<Map<String, Object>> excelList, String fileName) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
-        Sheet sheet = wb.createSheet("公司邮箱");  // 创建第一个Sheet页;
+        Sheet sheet = wb.createSheet("获奖信息");  // 创建第一个Sheet页;
         Row row = sheet.createRow(0); // 创建一个行
         row.setHeightInPoints(30); //设置这一行的高度
-        createCell(wb, row, (short) 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "企业名称"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "奖项级别"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "省"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "市"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "奖项名称"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "获奖年度"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "项目名称"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "项目类型"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 8, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "发文日期"); //要充满屏幕又要中间
-        createCell(wb, row, (short) 9, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "企业名称"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "奖项级别"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "省"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "市"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "奖项名称"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "获奖年度"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "项目名称"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "项目类型"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 8, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "发文日期"); //要充满屏幕又要中间
+        ExcelUtils.createCell(wb, row, (short) 9, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因"); //要充满屏幕又要中间
         for (int i = 0; i < excelList.size(); i++) {
             row = sheet.createRow(i + 1); // 创建一个行
             row.setHeightInPoints(30); //设置这一行的高度
             if (null != excelList.get(i).get("comName")) {
-                createCell(wb, row, 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("comName").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("comName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("levelName")) {
-                createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("levelName").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("levelName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("prov")) {
-                createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("prov").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("prov").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("city")) {
-                createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("city").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("city").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("awdName")) {
-                createCell(wb, row, 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("awdName").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("awdName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("year")) {
-                createCell(wb, row, 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("year").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("year").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("proName")) {
-                createCell(wb, row, 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("proName").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("proName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("proTypeName")) {
-                createCell(wb, row, 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("proTypeName").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("proTypeName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("issueDate")) {
-                createCell(wb, row, 8, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("issueDate").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 8, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("issueDate").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("sdf")) {
-                createCell(wb, row, 9, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("sdf").toString()); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 9, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("sdf").toString()); //要充满屏幕又要中间
             }
         }
         String fileUrl = propertiesUtils.getFilePath() + "//error_excel//" + fileName;
         FileOutputStream fileOut = new FileOutputStream(fileUrl);
         wb.write(fileOut);
         fileOut.close();
+        if ("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())) {
+            String newFileUrl = propertiesUtils.getLocalhostServer() + propertiesUtils.getFilePath() + "//error_excel//" + fileName;
+            return newFileUrl;
+        }
         return fileUrl;
     }
 
-    private static void createCell(XSSFWorkbook wb, Row row, int column, short halign, short valign, String val) {
-        Cell cell = row.createCell(column);  // 创建单元格
-        cell.setCellValue(new XSSFRichTextString(val));  // 设置值
-    }
-
-    private void batchSaveAwards(List<Map<String, Object>> list, String username) {
-        List<TbCompanyAwards> awardsList = new ArrayList<>();
-        TbCompanyAwards awards;
-        for (Map<String, Object> param : list) {
-            awards = new TbCompanyAwards();
-            awards.setPkid(DataHandlingUtil.getUUID());
-            awards.setProvCode(MapUtils.getString(param, ""));
-            awards.setProName(MapUtils.getString(param, ""));
-            awards.setProTypeName(MapUtils.getString(param, ""));
-            awards.setYear(MapUtils.getString(param, ""));
-            awards.setAwdName(MapUtils.getString(param, ""));
-            awards.setCityCode(MapUtils.getString(param, ""));
-            awards.setLevel(MapUtils.getString(param, ""));
-            awards.setComId(MapUtils.getString(param, ""));
-            awards.setIssueDate(MapUtils.getString(param, ""));
-            awards.setCreateBy(username);
-            awardsList.add(awards);
+    private List<Map<String, Object>> doWeight(List<Map<String, Object>> list) {
+        List<Map<String, Object>> resultList = new ArrayList<>();
+        for (Map<String, Object> map : list) {
+            Integer count = tbCompanyAwardsMapper.queryAwardsCount(map);
+            if(count <= 0){
+                resultList.add(map);
+            }
         }
+        return resultList;
     }
 }

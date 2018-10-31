@@ -29,6 +29,10 @@ public class PropertiesUtils {
     private String clusterName;
     @Value("${elasticSearch.port}")
     private int port;
+    @Value("${localhost.server}")
+    private String localhostServer;
+    @Value("${server}")
+    private String server;
 
     @PostConstruct
     public void init() {
@@ -58,10 +62,20 @@ public class PropertiesUtils {
     public String getIp() {
         return ip;
     }
+
     public String getClusterName() {
         return clusterName;
     }
+
     public int getPort() {
         return port;
+    }
+
+    public String getLocalhostServer() {
+        return localhostServer;
+    }
+
+    public String getServer() {
+        return server;
     }
 }

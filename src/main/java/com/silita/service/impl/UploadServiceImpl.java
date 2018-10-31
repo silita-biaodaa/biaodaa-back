@@ -6,6 +6,7 @@ import com.silita.dao.SysFilesMapper;
 import com.silita.model.DicAlias;
 import com.silita.model.SysFiles;
 import com.silita.service.ICompanyAwardsService;
+import com.silita.service.ICompanyHighwayGradeService;
 import com.silita.service.IQualService;
 import com.silita.service.IUploadService;
 import com.silita.utils.DataHandlingUtil;
@@ -43,6 +44,8 @@ public class UploadServiceImpl implements IUploadService {
     PropertiesUtils propertiesUtils;
     @Autowired
     ICompanyAwardsService companyAwardsService;
+    @Autowired
+    ICompanyHighwayGradeService companyHighwayGradeService;
 
     @Override
     public Map<String, Object> analysisQuaGrade(MultipartFile file, Map<String, Object> param) throws Exception {
@@ -145,6 +148,8 @@ public class UploadServiceImpl implements IUploadService {
         }
         if ("win_record".equals(tabType)){
             resultMap = companyAwardsService.batchExportCompanyAwards(workbook.getSheetAt(0),username,fileName);
+        }else if("highway_grade".equals(tabType)){
+            resultMap = companyHighwayGradeService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0),username,fileName);
         }
         return resultMap;
     }

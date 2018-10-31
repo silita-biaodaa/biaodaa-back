@@ -177,11 +177,12 @@
         t1.`assess_year` AS assessYear,
         t1.`assess_prov_code` AS assessProvCode,
         t1.`assess_level` AS assessLevel,
-        #{province} AS province
+        t2.area_name AS province
         FROM
         tb_company t
         JOIN tb_company_highway_grade t1
         ON t.`com_id` = t1.`com_id`
+        left join sys_area t2 on t1.assess_prov_code = t2.area_code
         WHERE t1.assess_origin = 2
         <if test="comName != null and comName != ''">
             AND t.`com_name` like CONCAT('%', #{comName}, '%')
@@ -229,5 +230,43 @@
         </if>
         ORDER BY t1.`assess_year` DESC,
         t1.`created` DESC
+    </select>
+
+    <insert id="batchInsertCompanyHig" parameterType="java.util.List">
+        INSERT INTO `biaodaa_admin`.`tb_company_highway_grade`
+            (`pkid`,
+             `com_id`,
+             `assess_year`,
+             `assess_level`,
+             `assess_prov_code`,
+             `assess_origin`,
+             `created`,
+             `create_by`
+             )
+        VALUES
+        <foreach collection="list" item="list" separator=",">
+            (
+              #{list.pkid},#{list.comId},#{list.year},#{list.level},#{list.provCode},'2',now(),#{list.createdBy}
+            )
+        </foreach>
+    </insert>
+
+    <select id="queryCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+        COUNT(1)
+        FROM tb_company_highway_grade t1
+        WHERE t1.assess_origin = 2
+        <if test="comId != null and comId != ''">
+            AND t1.`com_id` = #{comId}
+        </if>
+        <if test="year != null and year != ''">
+            AND t1.`assess_year` = #{year}
+        </if>
+        <if test="provCode != null and provCode != ''">
+            AND t1.`assess_prov_code` = #{provCode}
+        </if>
+        <if test="level != null and level != ''">
+            AND t1.`assess_level` = #{level}
+        </if>
     </select>
 </mapper>

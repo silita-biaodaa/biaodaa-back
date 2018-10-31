@@ -61,4 +61,18 @@ public interface TbCompanyHighwayGradeMapper extends MyMapper<TbCompanyHighwayGr
      * @return
      */
     Integer queryCompanyHigForCompanyCount(TbCompanyHighwayGrade grade);
+
+    /**
+     * 批量添加
+     * @param list
+     * @return
+     */
+    int batchInsertCompanyHig(List<Map<String,Object>> list);
+
+    /**
+     * 查询个数
+     * @param param
+     * @return
+     */
+    Integer queryCount(Map<String,Object> param);
 }

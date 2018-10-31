@@ -131,4 +131,38 @@
             )
         </foreach>
     </insert>
+
+    <select id="queryAwardsCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM tb_company_awards t1
+        WHERE 1=1
+        <if test="comId != null and comId != ''">
+            AND t1.`com_id` = #{comId}
+        </if>
+        <if test="level != null and level != ''">
+            AND t1.`level` = #{level}
+        </if>
+        <if test="provCode != null and provCode != ''">
+            AND t1.`prov_code` = #{provCode}
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            AND t1.`city_code` = #{cityCode}
+        </if>
+        <if test="awdName != null and awdName != ''">
+            AND t1.`awd_name` = #{awdName}
+        </if>
+        <if test="year != null and year != ''">
+            AND t1.`year` = #{year}
+        </if>
+        <if test="proTypeName != null and proTypeName != ''">
+            AND t1.`pro_type_name`= #{proTypeName}
+        </if>
+        <if test="proName != null and proName != ''">
+            AND t1.`pro_name` = #{proName}
+        </if>
+        <if test="issueDate != null and issueDate != ''">
+            AND t1.`issue_date` = #{issueDate}
+        </if>
+    </select>
 </mapper>
