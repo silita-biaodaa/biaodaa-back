@@ -167,12 +167,6 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             cell = row.getCell(5);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             if (null != cell.getStringCellValue()) {
-                if (!StringUtils.isNumeric(cell.getStringCellValue())) {
-                    sbf.append("，获奖年度格式错误");
-                    if (isError) {
-                        isError = false;
-                    }
-                }
                 excelMap.put("year", cell.getStringCellValue());
             }
             //项目名称

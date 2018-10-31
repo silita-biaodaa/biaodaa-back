@@ -175,12 +175,6 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             cell = row.getCell(2);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             if (null != cell.getStringCellValue()) {
-                if (!StringUtils.isNumeric(cell.getStringCellValue())) {
-                    sbf.append("，年度格式错误");
-                    if (isError) {
-                        isError = false;
-                    }
-                }
                 excelMap.put("year", cell.getStringCellValue());
             }
             //等级

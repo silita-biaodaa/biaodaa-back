@@ -46,7 +46,7 @@
             AND t1.`awd_name` LIKE CONCAT('%', #{awdName}, '%')
         </if>
         <if test="year != null and year != ''">
-            AND t1.`year` = #{year}
+            AND t1.`year` LIKE CONCAT('%', #{year}, '%')
         </if>
         <if test="proTypeName != null and proTypeName != ''">
             AND t1.`pro_type_name` LIKE CONCAT('%', #{proTypeName}, '%')
@@ -61,7 +61,16 @@
         SELECT
         t.`com_name` AS comName
         ,t1.`pkid` AS pkid
-        ,t1.`level` AS `level`
+        (
+            CASE
+            t1.`level`
+            WHEN 1
+            THEN '国家级'
+            WHEN 2
+            THEN '省级'
+            ELSE '市级'
+            END
+        ) AS `level`,
         ,t2.`area_name` AS prov
         ,t3.`area_name` AS city
         ,t1.`awd_name` AS awdName
@@ -90,7 +99,7 @@
             AND t1.`awd_name` LIKE CONCAT('%', #{awdName}, '%')
         </if>
         <if test="year != null and year != ''">
-            AND t1.`year` = #{year}
+            AND t1.`year` LIKE CONCAT('%', #{year}, '%')
         </if>
         <if test="proTypeName != null and proTypeName != ''">
             AND t1.`pro_type_name` LIKE CONCAT('%', #{proTypeName}, '%')
