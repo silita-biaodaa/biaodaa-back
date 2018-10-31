@@ -99,8 +99,8 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             sbf = new StringBuffer();
             //企业名称
             cell = row.getCell(0);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 comId = tbCompanyMapper.queryComIdByName(cell.getStringCellValue());
                 if (comId == null) {
                     sbf.append("企业不存在");
@@ -114,8 +114,8 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             }
             //奖项名称
             cell = row.getCell(1);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 level = ConstantMap.AWARDSMAP.get(cell.getStringCellValue().trim());
                 if (level == null) {
                     sbf.append("，奖项错误");
@@ -129,8 +129,8 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             }
             //省
             cell = row.getCell(2);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 provCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
                 if (null == provCode) {
                     sbf.append("，省份错误");
@@ -144,8 +144,8 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             }
             //市
             cell = row.getCell(3);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 cityCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
                 if (null == cityCode) {
                     sbf.append("，市错误");
@@ -159,31 +159,31 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             }
             //奖项名称
             cell = row.getCell(4);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 excelMap.put("awdName", cell.getStringCellValue());
             }
             //年度
             cell = row.getCell(5);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 excelMap.put("year", cell.getStringCellValue());
             }
             //项目名称
             cell = row.getCell(6);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 excelMap.put("proName", cell.getStringCellValue());
             }
             //项目类型
             cell = row.getCell(7);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 excelMap.put("proTypeName", cell.getStringCellValue());
             }
             //发布时间
             cell = row.getCell(8);
-            if (null != cell) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
                 if (DateUtil.isCellDateFormatted(cell)) {
                     issueDate = MyDateUtils.excelTime(cell.getDateCellValue());
                     if (!MyDateUtils.checkDate(issueDate)) {

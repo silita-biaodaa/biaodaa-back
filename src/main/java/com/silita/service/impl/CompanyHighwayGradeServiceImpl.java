@@ -143,8 +143,8 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             sbf = new StringBuffer();
             //企业名称
             cell = row.getCell(0);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 comId = companyMapper.queryComIdByName(cell.getStringCellValue());
                 if (comId == null) {
                     sbf.append("企业不存在");
@@ -158,8 +158,8 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             }
             //省
             cell = row.getCell(1);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 provCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
                 if (null == provCode) {
                     sbf.append("，省份错误");
@@ -173,14 +173,14 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             }
             //年度
             cell = row.getCell(2);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 excelMap.put("year", cell.getStringCellValue());
             }
             //等级
             cell = row.getCell(3);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
-            if (null != cell.getStringCellValue()) {
+            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 excelMap.put("level", cell.getStringCellValue());
             }
             if (null != sbf && !"".equals(sbf.toString())) {
