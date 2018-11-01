@@ -131,7 +131,7 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
             if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
                 if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
-                    if (null == ConstantMap.PROPERTYMAP.get(cell.getStringCellValue())) {
+                    if (null == ConstantMap.PROPERTYMAP.get(cell.getStringCellValue().trim())) {
                         sbf.append("，性质输入有误");
                         if (isError) {
                             isError = false;
@@ -153,47 +153,29 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
             //发布日期
             cell = row.getCell(5);
             if (null != cell) {
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    String issueDate = null;
-                    if (null != cell.getDateCellValue()) {
-                        issueDate = MyDateUtils.excelTime(cell.getDateCellValue());
-                        if (!MyDateUtils.checkDate(issueDate)) {
-                            sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
-                            if (isError) {
-                                isError = false;
-                            }
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    if (!MyDateUtils.checkDate(cell.getStringCellValue())) {
+                        sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
+                        if (isError) {
+                            isError = false;
                         }
                     }
-                    excelMap.put("issueDate", issueDate);
-                } else {
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
-                    if (isError) {
-                        isError = false;
-                    }
-                    excelMap.put("issueDate", cell.getStringCellValue());
                 }
+                excelMap.put("issueDate", cell.getStringCellValue());
             }
             //有效期至
             cell = row.getCell(6);
             if (null != cell) {
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    String expired = null;
-                    if (null != cell.getDateCellValue()) {
-                        expired = MyDateUtils.excelTime(cell.getDateCellValue());
-                        if (!MyDateUtils.checkDate(expired)) {
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    if (!MyDateUtils.checkDate(cell.getStringCellValue())) {
+                        if (!MyDateUtils.checkDate(cell.getStringCellValue())) {
                             sbf.append("，有效期至格式不正确(yyyy-MM-dd)");
                             if (isError) {
                                 isError = false;
                             }
                         }
-                    }
-                    excelMap.put("expired", expired);
-                } else {
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    sbf.append("，有效期至格式不正确(yyyy-MM-dd)");
-                    if (isError) {
-                        isError = false;
                     }
                     excelMap.put("expired", cell.getStringCellValue());
                 }

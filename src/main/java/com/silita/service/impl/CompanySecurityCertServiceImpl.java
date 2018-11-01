@@ -369,50 +369,30 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
             //发布日期
             cell = row.getCell(5);
             if (null != cell) {
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    String issueDate = null;
-                    if (null != cell.getDateCellValue()) {
-                        issueDate = MyDateUtils.excelTime(cell.getDateCellValue());
-                        if (!MyDateUtils.checkDate(issueDate)) {
-                            sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
-                            if (isError) {
-                                isError = false;
-                            }
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    if (!MyDateUtils.checkDate(cell.getStringCellValue())) {
+                        sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
+                        if (isError) {
+                            isError = false;
                         }
                     }
-                    excelMap.put("issueDate", issueDate);
-                } else {
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
-                    if (isError) {
-                        isError = false;
-                    }
-                    excelMap.put("issueDate", cell.getStringCellValue());
                 }
+                excelMap.put("issueDate", cell.getStringCellValue());
             }
             //有效期至
             cell = row.getCell(6);
             if (null != cell) {
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    String expired = null;
-                    if (null != cell.getDateCellValue()) {
-                        expired = MyDateUtils.excelTime(cell.getDateCellValue());
-                        if (!MyDateUtils.checkDate(expired)) {
-                            sbf.append("，有效期至格式不正确(yyyy-MM-dd)");
-                            if (isError) {
-                                isError = false;
-                            }
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    if (!MyDateUtils.checkDate(cell.getStringCellValue())) {
+                        sbf.append("，有效期至格式不正确(yyyy-MM-dd)");
+                        if (isError) {
+                            isError = false;
                         }
                     }
-                    excelMap.put("expired", expired);
-                } else {
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    sbf.append("，有效期至格式不正确(yyyy-MM-dd)");
-                    if (isError) {
-                        isError = false;
-                    }
-                    excelMap.put("expired", cell.getStringCellValue());
                 }
+                excelMap.put("expired", cell.getStringCellValue());
             }
             if (null != sbf && !"".equals(sbf.toString())) {
                 excelMap.put("sdf", StringUtils.trimFirstAndLastChar(sbf.toString(), '，'));
@@ -430,7 +410,6 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
             resultMap.put("data", fileUrl);
             return resultMap;
         }
-
         List<TbCompanySecurityCert> list = doWeight(excelList);
         if (null != list && list.size() > 0) {
             tbCompanySecurityCertMapper.batchCompanyCert(list);
@@ -454,7 +433,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
             ExcelUtils.createCell(wb, row, (short) 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "发布日期");
             ExcelUtils.createCell(wb, row, (short) 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "有效期至");
             ExcelUtils.createCell(wb, row, (short) 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因");
-        }else {
+        } else {
             ExcelUtils.createCell(wb, row, (short) 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "安全生产许可证号");
             ExcelUtils.createCell(wb, row, (short) 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "省");
             ExcelUtils.createCell(wb, row, (short) 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "发布日期");
@@ -469,16 +448,16 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                 ExcelUtils.createCell(wb, row, 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("comName").toString());
             }
             if ("safety_cert".equals(tabType)) {
-                if(null != excelList.get(i).get("level")){
+                if (null != excelList.get(i).get("level")) {
                     ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("level").toString());
                 }
-                if(null != excelList.get(i).get("result")){
+                if (null != excelList.get(i).get("result")) {
                     ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("result").toString());
                 }
                 if (null != excelList.get(i).get("prov")) {
                     ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("prov").toString());
                 }
-                if(null != excelList.get(i).get("city")){
+                if (null != excelList.get(i).get("city")) {
                     ExcelUtils.createCell(wb, row, 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("city").toString());
                 }
                 if (null != excelList.get(i).get("issueDate")) {
@@ -490,7 +469,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                 if (null != excelList.get(i).get("sdf")) {
                     ExcelUtils.createCell(wb, row, 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("sdf").toString());
                 }
-            }else{
+            } else {
                 if (null != excelList.get(i).get("certNo")) {
                     ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("certNo").toString());
                 }
