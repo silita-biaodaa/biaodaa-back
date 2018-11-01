@@ -57,7 +57,11 @@
         t1.`pkid` AS pkid,
         t1.`pro_name` AS proName,
         t1.`bad_info` AS badInfo,
-        t1.`property` AS property,
+        (
+          case t1.`property` when '1' then '严重'
+          when '2' then '一般'
+          end
+        ) AS property,
         t1.`issue_org` AS issueOrg,
         t1.`issue_date` AS issueDate,
         t1.`expired` AS expired

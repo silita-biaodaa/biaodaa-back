@@ -68,5 +68,16 @@ public interface ICompanySecurityCertService {
      * @return
      * @throws IOException
      */
-    Map<String, Object> batchExportCompanySecurity(Sheet sheet, String username, String fileName) throws IOException;
+    Map<String, Object> batchExportCompanySecurity(Sheet sheet, String username, String fileName,String tabType) throws IOException;
+
+    /**
+     * 安全认证
+     *
+     * @param sheet
+     * @param username
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
+    Map<String, Object> batchExportCompanySafetyCert(Sheet sheet, String username, String fileName,String tabType) throws IOException;
 }

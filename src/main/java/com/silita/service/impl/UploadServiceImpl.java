@@ -152,9 +152,11 @@ public class UploadServiceImpl implements IUploadService {
         } else if ("highway_grade".equals(tabType)) {
             resultMap = companyHighwayGradeService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0), username, fileName);
         } else if ("safety_permission_cert".equals(tabType)) {
-            resultMap = companySecurityCertService.batchExportCompanySecurity(workbook.getSheetAt(0), username, fileName);
+            resultMap = companySecurityCertService.batchExportCompanySecurity(workbook.getSheetAt(0), username, fileName,tabType);
         } else if ("undesirable".equals(tabType)) {
             resultMap = companyBadService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0), username, fileName);
+        }else if("safety_cert".equals(tabType)){
+            resultMap = companySecurityCertService.batchExportCompanySafetyCert(workbook.getSheetAt(0), username, fileName,tabType);
         }
         return resultMap;
     }

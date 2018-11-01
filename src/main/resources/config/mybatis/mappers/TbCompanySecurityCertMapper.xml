@@ -229,8 +229,16 @@
         ,t1.`issue_date` AS issueDate
         ,DATE_FORMAT(t1.`expired`, '%Y-%m-%d') AS expired
         <if test="tabType != null and tabType == 'safety_cert'">
-            ,t1.`cert_level` AS certLevel
-            ,t1.`cert_result` AS certResult
+            ,(
+                CASE t1.`cert_level` WHEN '1' THEN '省级'
+                WHEN '2' THEN '市级'
+                END
+            ) AS certLevel
+            ,(
+                CASE t1.`cert_result` WHEN '1' THEN '优秀'
+                WHEN '2' THEN '合格'
+                END
+            ) AS certResult
             ,t3.`area_name` AS certCity
         </if>
         FROM
