@@ -61,7 +61,7 @@
         SELECT
         t.`com_name` AS comName
         ,t1.`pkid` AS pkid
-        (
+        ,(
             CASE
             t1.`level`
             WHEN 1
@@ -70,7 +70,7 @@
             THEN '省级'
             ELSE '市级'
             END
-        ) AS `level`,
+        ) AS `level`
         ,t2.`area_name` AS prov
         ,t3.`area_name` AS city
         ,t1.`awd_name` AS awdName

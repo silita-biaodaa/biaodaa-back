@@ -63,4 +63,18 @@ public interface TbCompanySecurityCertMapper extends MyMapper<TbCompanySecurityC
      * @return
      */
     Integer queryCompanyCertCount(TbCompanySecurityCert companySecurityCert);
+
+    /**
+     * 批量添加
+     * @param list
+     * @return
+     */
+    Integer batchCompanyCert(List<TbCompanySecurityCert> list);
+
+    /**
+     * 查询个数
+     * @param param
+     * @return
+     */
+    Integer queryCertCount(Map<String,Object> param);
 }

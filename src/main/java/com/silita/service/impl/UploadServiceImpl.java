@@ -5,10 +5,7 @@ import com.silita.dao.DicAliasMapper;
 import com.silita.dao.SysFilesMapper;
 import com.silita.model.DicAlias;
 import com.silita.model.SysFiles;
-import com.silita.service.ICompanyAwardsService;
-import com.silita.service.ICompanyHighwayGradeService;
-import com.silita.service.IQualService;
-import com.silita.service.IUploadService;
+import com.silita.service.*;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
 import com.silita.utils.PropertiesUtils;
@@ -46,6 +43,8 @@ public class UploadServiceImpl implements IUploadService {
     ICompanyAwardsService companyAwardsService;
     @Autowired
     ICompanyHighwayGradeService companyHighwayGradeService;
+    @Autowired
+    ICompanySecurityCertService companySecurityCertService;
 
     @Override
     public Map<String, Object> analysisQuaGrade(MultipartFile file, Map<String, Object> param) throws Exception {
@@ -136,7 +135,7 @@ public class UploadServiceImpl implements IUploadService {
     }
 
     @Override
-    public Map<String, Object> uploadCompanyFile(MultipartFile file, String username,String tabType) throws Exception {
+    public Map<String, Object> uploadCompanyFile(MultipartFile file, String username, String tabType) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         InputStream inputStream = file.getInputStream();
         String fileName = file.getOriginalFilename();
@@ -146,10 +145,12 @@ public class UploadServiceImpl implements IUploadService {
             resultMap.put("msg", Constant.MSG_WARN_404);
             return resultMap;
         }
-        if ("win_record".equals(tabType)){
-            resultMap = companyAwardsService.batchExportCompanyAwards(workbook.getSheetAt(0),username,fileName);
-        }else if("highway_grade".equals(tabType)){
-            resultMap = companyHighwayGradeService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0),username,fileName);
+        if ("win_record".equals(tabType)) {
+            resultMap = companyAwardsService.batchExportCompanyAwards(workbook.getSheetAt(0), username, fileName);
+        } else if ("highway_grade".equals(tabType)) {
+            resultMap = companyHighwayGradeService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0), username, fileName);
+        } else if ("safety_permission_cert".equals(tabType)) {
+            resultMap = companySecurityCertService.batchExportCompanySecurity(workbook.getSheetAt(0), username, fileName);
         }
         return resultMap;
     }

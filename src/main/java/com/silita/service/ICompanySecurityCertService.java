@@ -1,7 +1,9 @@
 package com.silita.service;
 
 import com.silita.model.TbCompanySecurityCert;
+import org.apache.poi.ss.usermodel.Sheet;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -49,4 +51,14 @@ public interface ICompanySecurityCertService {
      * @param param
      */
     void delCompanySecurity(Map<String,Object> param);
+
+    /**
+     * 安全生产许可证上传
+     * @param sheet
+     * @param username
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
+    Map<String,Object> batchExportCompanySecurity(Sheet sheet, String username, String fileName) throws IOException;
 }

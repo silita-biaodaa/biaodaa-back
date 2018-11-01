@@ -35,6 +35,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
     SysAreaMapper sysAreaMapper;
     @Autowired
     TbCompanyMapper companyMapper;
+
     @Autowired
     PropertiesUtils propertiesUtils;
 
@@ -143,45 +144,53 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             sbf = new StringBuffer();
             //企业名称
             cell = row.getCell(0);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                comId = companyMapper.queryComIdByName(cell.getStringCellValue());
-                if (comId == null) {
-                    sbf.append("企业不存在");
-                    if (isError) {
-                        isError = false;
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())){
+                    comId = companyMapper.queryComIdByName(cell.getStringCellValue());
+                    if (comId == null) {
+                        sbf.append("企业不存在");
+                        if (isError) {
+                            isError = false;
+                        }
+                    } else {
+                        excelMap.put("comId", comId);
                     }
-                } else {
-                    excelMap.put("comId", comId);
+                    excelMap.put("comName", cell.getStringCellValue());
                 }
-                excelMap.put("comName", cell.getStringCellValue());
             }
             //省
             cell = row.getCell(1);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                provCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
-                if (null == provCode) {
-                    sbf.append("，省份错误");
-                    if (isError) {
-                        isError = false;
+                if(null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())){
+                    provCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
+                    if (null == provCode) {
+                        sbf.append("，省份错误");
+                        if (isError) {
+                            isError = false;
+                        }
+                    } else {
+                        excelMap.put("provCode", provCode);
                     }
-                } else {
-                    excelMap.put("provCode", provCode);
+                    excelMap.put("prov", cell.getStringCellValue());
                 }
-                excelMap.put("prov", cell.getStringCellValue());
             }
             //年度
             cell = row.getCell(2);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                excelMap.put("year", cell.getStringCellValue());
+                if(null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())){
+                    excelMap.put("year", cell.getStringCellValue());
+                }
             }
             //等级
             cell = row.getCell(3);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                excelMap.put("level", cell.getStringCellValue());
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())){
+                    excelMap.put("level", cell.getStringCellValue());
+                }
             }
             if (null != sbf && !"".equals(sbf.toString())) {
                 excelMap.put("sdf", StringUtils.trimFirstAndLastChar(sbf.toString(), '，'));
