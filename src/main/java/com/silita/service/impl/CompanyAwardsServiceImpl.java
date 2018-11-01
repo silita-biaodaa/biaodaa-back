@@ -99,108 +99,116 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             sbf = new StringBuffer();
             //企业名称
             cell = row.getCell(0);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                comId = tbCompanyMapper.queryComIdByName(cell.getStringCellValue());
-                if (comId == null) {
-                    sbf.append("企业不存在");
-                    if (isError) {
-                        isError = false;
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    comId = tbCompanyMapper.queryComIdByName(cell.getStringCellValue());
+                    if (comId == null) {
+                        sbf.append("企业不存在");
+                        if (isError) {
+                            isError = false;
+                        }
+                    } else {
+                        excelMap.put("comId", comId);
                     }
-                } else {
-                    excelMap.put("comId", comId);
+                    excelMap.put("comName", cell.getStringCellValue());
                 }
-                excelMap.put("comName", cell.getStringCellValue());
             }
             //奖项名称
             cell = row.getCell(1);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                level = ConstantMap.AWARDSMAP.get(cell.getStringCellValue().trim());
-                if (level == null) {
-                    sbf.append("，奖项错误");
-                    if (isError) {
-                        isError = false;
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    level = ConstantMap.AWARDSMAP.get(cell.getStringCellValue().trim());
+                    if (level == null) {
+                        sbf.append("，奖项错误");
+                        if (isError) {
+                            isError = false;
+                        }
+                    } else {
+                        excelMap.put("level", level);
                     }
-                } else {
-                    excelMap.put("level", level);
+                    excelMap.put("levelName", cell.getStringCellValue());
                 }
-                excelMap.put("levelName", cell.getStringCellValue());
             }
             //省
             cell = row.getCell(2);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                provCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
-                if (null == provCode) {
-                    sbf.append("，省份错误");
-                    if (isError) {
-                        isError = false;
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    provCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
+                    if (null == provCode) {
+                        sbf.append("，省份错误");
+                        if (isError) {
+                            isError = false;
+                        }
                     }
+                    excelMap.put("provCode", provCode);
+                    excelMap.put("prov", cell.getStringCellValue());
                 }
-                excelMap.put("provCode", provCode);
-                excelMap.put("prov", cell.getStringCellValue());
             }
             //市
             cell = row.getCell(3);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                cityCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
-                if (null == cityCode) {
-                    sbf.append("，市错误");
-                    if (isError) {
-                        isError = false;
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    cityCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
+                    if (null == cityCode) {
+                        sbf.append("，市错误");
+                        if (isError) {
+                            isError = false;
+                        }
                     }
+                    excelMap.put("cityCode", cityCode);
+                    excelMap.put("city", cell.getStringCellValue());
                 }
-                excelMap.put("cityCode", cityCode);
-                excelMap.put("city", cell.getStringCellValue());
             }
             //奖项名称
             cell = row.getCell(4);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            cell.setCellType(Cell.CELL_TYPE_STRING);
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                excelMap.put("awdName", cell.getStringCellValue());
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    excelMap.put("awdName", cell.getStringCellValue());
+                }
             }
             //年度
             cell = row.getCell(5);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                excelMap.put("year", cell.getStringCellValue());
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    cell.setCellType(Cell.CELL_TYPE_STRING);
+                    excelMap.put("year", cell.getStringCellValue());
+                }
             }
             //项目名称
             cell = row.getCell(6);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                excelMap.put("proName", cell.getStringCellValue());
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    excelMap.put("proName", cell.getStringCellValue());
+                }
             }
             //项目类型
             cell = row.getCell(7);
-            if (null != cell && null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+            if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                excelMap.put("proTypeName", cell.getStringCellValue());
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    excelMap.put("proTypeName", cell.getStringCellValue());
+                }
             }
             //发布时间
             cell = row.getCell(8);
-            if (null != cell && null != cell.getDateCellValue() && !"".equals(cell.getDateCellValue())) {
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    issueDate = MyDateUtils.excelTime(cell.getDateCellValue());
-                    if (!MyDateUtils.checkDate(issueDate)) {
+            if (null != cell) {
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    if (!MyDateUtils.checkDate(cell.getStringCellValue())) {
                         sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
                         if (isError) {
                             isError = false;
                         }
                     }
-                } else {
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
-                        issueDate = cell.getStringCellValue();
-                        sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
-                        if (isError) {
-                            isError = false;
-                        }
-                    }
+                    excelMap.put("issueDate", issueDate);
                 }
-                excelMap.put("issueDate", issueDate);
             }
             if (null != sbf && !"".equals(sbf.toString())) {
                 excelMap.put("sdf", StringUtils.trimFirstAndLastChar(sbf.toString(), '，'));
@@ -219,7 +227,7 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
         }
         //去重
         List<TbCompanyAwards> list = doWeight(excelList);
-        if(null != list && list.size() > 0){
+        if (null != list && list.size() > 0) {
             tbCompanyAwardsMapper.batchInsertCompanyAwrds(list);
         }
         resultMap.put("code", Constant.CODE_SUCCESS);
@@ -292,19 +300,19 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
         TbCompanyAwards awards;
         for (Map<String, Object> map : list) {
             Integer count = tbCompanyAwardsMapper.queryAwardsCount(map);
-            if(count <= 0){
+            if (count <= 0) {
                 awards = new TbCompanyAwards();
-                awards.setCreateBy(MapUtils.getString(map,"createBy"));
-                awards.setIssueDate(MapUtils.getString(map,"issueDate"));
-                awards.setComId(MapUtils.getString(map,"comId"));
-                awards.setLevel(MapUtils.getString(map,"level"));
-                awards.setCityCode(MapUtils.getString(map,"cityCode"));
-                awards.setYear(MapUtils.getString(map,"year"));
-                awards.setAwdName(MapUtils.getString(map,"awdName"));
-                awards.setProTypeName(MapUtils.getString(map,"proTypeName"));
-                awards.setProName(MapUtils.getString(map,"proName"));
-                awards.setProvCode(MapUtils.getString(map,"provCode"));
-                awards.setPkid(MapUtils.getString(map,"pkid"));
+                awards.setCreateBy(MapUtils.getString(map, "createBy"));
+                awards.setIssueDate(MapUtils.getString(map, "issueDate"));
+                awards.setComId(MapUtils.getString(map, "comId"));
+                awards.setLevel(MapUtils.getString(map, "level"));
+                awards.setCityCode(MapUtils.getString(map, "cityCode"));
+                awards.setYear(MapUtils.getString(map, "year"));
+                awards.setAwdName(MapUtils.getString(map, "awdName"));
+                awards.setProTypeName(MapUtils.getString(map, "proTypeName"));
+                awards.setProName(MapUtils.getString(map, "proName"));
+                awards.setProvCode(MapUtils.getString(map, "provCode"));
+                awards.setPkid(MapUtils.getString(map, "pkid"));
                 resultList.add(awards);
             }
         }
