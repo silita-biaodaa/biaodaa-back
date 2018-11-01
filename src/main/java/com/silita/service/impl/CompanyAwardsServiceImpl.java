@@ -165,7 +165,6 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             }
             //奖项名称
             cell = row.getCell(4);
-            cell.setCellType(Cell.CELL_TYPE_STRING);
             if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
                 if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
