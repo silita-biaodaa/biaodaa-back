@@ -675,6 +675,9 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public List<TbNtRegexGroup> listTbQuaGroup(TbNtRegexGroup tbNtRegexGroup) {
+        if(null != tbNtRegexGroup && null == tbNtRegexGroup.getNtId()){
+            return new ArrayList<>();
+        }
         TbNtRegexGroup tempRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
         if(null != tempRegexGroup) {
             List<String> groupRegexs = new ArrayList<>();
