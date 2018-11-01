@@ -31,4 +31,18 @@ public interface TbCompanyBadMapper extends MyMapper<TbCompanyBad> {
      * @return
      */
     int deleteCompanyBad(String pkid);
+
+    /**
+     * 查询个数
+     * @param param
+     * @return
+     */
+    Integer queryBadCount(Map<String,Object> param);
+
+    /**
+     * 批量添加
+     * @param list
+     * @return
+     */
+    int batchInsertCompanyBad(List<TbCompanyBad> list);
 }

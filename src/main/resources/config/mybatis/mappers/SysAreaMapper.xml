@@ -36,7 +36,7 @@
     <select id="queryAreaCode" parameterType="java.lang.String" resultType="java.lang.String">
      SELECT
         area_code
-      FROM sys_area WHERE area_name = #{areaName}
+      FROM sys_area WHERE area_name = #{areaName} limit 1
   </select>
 
     <select id="getPkIdByAreaCode" parameterType="String" resultType="String">

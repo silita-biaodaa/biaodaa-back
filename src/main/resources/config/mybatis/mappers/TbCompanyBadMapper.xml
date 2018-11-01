@@ -96,4 +96,54 @@
     FROM `tb_company_bad`
     WHERE `pkid` = #{pkid};
   </delete>
+
+    <select id="queryBadCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        Count(1)
+        FROM tb_company_bad t1
+        WHERE 1 = 1
+        <if test="comId != null and comId != ''">
+            AND t1.`com_id` = #{comId}
+        </if>
+        <if test="proName != null and proName != ''">
+            AND t1.`pro_name` = #{proName}
+        </if>
+        <if test="badInfo != null and badInfo != ''">
+            AND t1.`bad_info` = #{badInfo}
+        </if>
+        <if test="issueOrg != null and issueOrg != ''">
+            AND t1.`issue_org` = #{issueOrg}
+        </if>
+        <if test="property != null and property != ''">
+            AND t1.`property` = #{property}
+        </if>
+        <if test="issueDate != null and issueDate != ''">
+            AND t1.`issue_date` = #{issueDate}
+        </if>
+        <if test="expired != null and expired != ''">
+            AND t1.`expired` = #{expired}
+        </if>
+    </select>
+
+    <insert id="batchInsertCompanyBad" parameterType="java.util.List">
+        INSERT INTO `tb_company_bad`
+                    (`pkid`,
+                     `com_id`,
+                     `pro_name`,
+                     `bad_info`,
+                     `property`,
+                     `issue_org`,
+                     `issue_date`,
+                     `expired`,
+                     `created`,
+                     `create_by`)
+        VALUES
+        <foreach collection="list" item="list" separator=",">
+            (
+              #{list.pkid},#{list.comId},#{list.proName},#{list.badInfo},
+            #{list.property},#{list.issueOrg},#{list.issueDate},#{list.expired},
+            now(),#{list.createBy}
+            )
+        </foreach>
+    </insert>
 </mapper>

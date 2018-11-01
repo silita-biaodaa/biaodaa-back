@@ -209,47 +209,27 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
             //发布日期
             cell = row.getCell(3);
             if (null != cell) {
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    String issueDate = null;
-                    if (null != cell.getDateCellValue()) {
-                        issueDate = MyDateUtils.excelTime(cell.getDateCellValue());
-                        if (!MyDateUtils.checkDate(issueDate)) {
-                            sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
-                            if (isError) {
-                                isError = false;
-                            }
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    if (!MyDateUtils.checkDate(cell.getStringCellValue())) {
+                        sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
+                        if (isError) {
+                            isError = false;
                         }
                     }
-                    excelMap.put("issueDate", issueDate);
-                } else {
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    sbf.append("，发布日期格式不正确(yyyy-MM-dd)");
-                    if (isError) {
-                        isError = false;
-                    }
-                    excelMap.put("issueDate", cell.getStringCellValue());
                 }
+                excelMap.put("issueDate", cell.getStringCellValue());
             }
             //有效期至
             cell = row.getCell(4);
             if (null != cell) {
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    String expired = null;
-                    if (null != cell.getDateCellValue()) {
-                        expired = MyDateUtils.excelTime(cell.getDateCellValue());
-                        if (!MyDateUtils.checkDate(expired)) {
-                            sbf.append("，有效期至格式不正确(yyyy-MM-dd)");
-                            if (isError) {
-                                isError = false;
-                            }
+                cell.setCellType(Cell.CELL_TYPE_STRING);
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    if (!MyDateUtils.checkDate(cell.getStringCellValue())) {
+                        sbf.append("，有效期至格式不正确(yyyy-MM-dd)");
+                        if (isError) {
+                            isError = false;
                         }
-                    }
-                    excelMap.put("expired", expired);
-                } else {
-                    cell.setCellType(Cell.CELL_TYPE_STRING);
-                    sbf.append("，有效期至格式不正确(yyyy-MM-dd)");
-                    if (isError) {
-                        isError = false;
                     }
                     excelMap.put("expired", cell.getStringCellValue());
                 }
@@ -261,6 +241,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
             excelMap.put("createdBy", username);
             excelList.add(excelMap);
         }
+
         Map<String, Object> resultMap = new HashMap<>();
         if (!isError) {
             String fileUrl = uploadExcel(excelList, fileName, null);
@@ -269,6 +250,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
             resultMap.put("data", fileUrl);
             return resultMap;
         }
+
         List<TbCompanySecurityCert> list = doWeight(excelList);
         if (null != list && list.size() > 0) {
             tbCompanySecurityCertMapper.batchCompanyCert(list);
@@ -338,7 +320,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                 if (null != MapUtils.getString(map, "expired")) {
                     cert.setExpired(MyDateUtils.strToDate(MapUtils.getString(map, "expired"), "yyyy-MM-dd"));
                 }
-                cert.setCertProvCode(MapUtils.getString(map, "certProvCode"));
+                cert.setCertProvCode(MapUtils.getString(map, "provCode"));
                 cert.setCertCityCode(MapUtils.getString(map, "certCityCode"));
                 cert.setIssueDate(MapUtils.getString(map, "issueDate"));
                 cert.setCreateBy(MapUtils.getString(map, "createdBy"));

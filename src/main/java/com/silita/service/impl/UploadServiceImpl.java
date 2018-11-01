@@ -45,6 +45,8 @@ public class UploadServiceImpl implements IUploadService {
     ICompanyHighwayGradeService companyHighwayGradeService;
     @Autowired
     ICompanySecurityCertService companySecurityCertService;
+    @Autowired
+    ICompanyBadService companyBadService;
 
     @Override
     public Map<String, Object> analysisQuaGrade(MultipartFile file, Map<String, Object> param) throws Exception {
@@ -151,6 +153,8 @@ public class UploadServiceImpl implements IUploadService {
             resultMap = companyHighwayGradeService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0), username, fileName);
         } else if ("safety_permission_cert".equals(tabType)) {
             resultMap = companySecurityCertService.batchExportCompanySecurity(workbook.getSheetAt(0), username, fileName);
+        } else if ("undesirable".equals(tabType)) {
+            resultMap = companyBadService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0), username, fileName);
         }
         return resultMap;
     }
