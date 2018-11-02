@@ -182,10 +182,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                         }
                     }
                 }
-                if (!entry.getKey().equals("url")) {
+                if (!"url".equals(entry.getKey())) {
                     HSSFCell cell = row.createCell(indexCell++);
                     //标题要带超链接
-                    if (entry.getKey().equals("title")) {
+                    if ("title".equals(entry.getKey())) {
                         cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
 //                        cell.setCellStyle(linkStyle);
                     } else {
@@ -385,6 +385,32 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 //更新公告状态为 新建
                 tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
             }
+
+            Iterator iter = set.iterator();
+            while (iter.hasNext()) {
+                String ntEditId = String.valueOf(iter.next());
+                TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+                tbNtRegexGroup.setNtId(ntId);
+                tbNtRegexGroup.setNtEditId(ntEditId);
+                TbNtRegexGroup tempTbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
+                if(null != tempTbNtRegexGroup) {
+                    Set groupIds = new HashSet<String>();
+                    String groupRegex = tempTbNtRegexGroup.getGroupRegex();
+                    Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
+                    while (iterator.hasNext()) {
+                        groupIds.add(iterator.next());
+                    }
+                    //删除小组资质
+                    tbNtQuaGroupMapper.batchDeleteTbNtQuaGroupByGroupId(groupIds.toArray());
+                    //删除资质组关系表
+                    tbNtRegexGroupMapper.deleteNtRegexGroupByNtIdAndNtEditId(tempTbNtRegexGroup);
+                }
+                TbNtRegexQua tbNtRegexQua = new TbNtRegexQua();
+                tbNtRegexQua.setNtId(ntId);
+                tbNtRegexQua.setNtEditId(ntEditId);
+                //删除资质算发表达式
+                tbNtRegexQuaMapper.deleteTbNtRegexQuaByNtIdAndNtEditId(tbNtRegexQua);
+            }
         }
     }
 
@@ -466,18 +492,18 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         String source = (String) params.get("source");
         String[] ids = idsStr.split("\\|");
         //数据库中已存在的
-        List<TbNtAssociateGp> TbNtAssociateGps = tbNtAssociateGpMapper.getRelGpByNtIds(ids, DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, source));
+        List<TbNtAssociateGp> tbNtAssociateGps = tbNtAssociateGpMapper.getRelGpByNtIds(ids, DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, source));
         Set set = new HashSet<String>();
-        for (TbNtAssociateGp tbNtAssociateGp : TbNtAssociateGps) {
+        for (TbNtAssociateGp tbNtAssociateGp : tbNtAssociateGps) {
             set.add(tbNtAssociateGp.getNtId());
         }
 
         TbNtMian tbNtMian;
-        TbNtAssociateGp tbNtAssociateGp;
+        TbNtAssociateGp tempTbNtAssociateGp;
         List tbNtAssociateGpList = new ArrayList<TbNtAssociateGp>(ids.length);
         if (set.size() > 0) {
             //数据库中已经存在，则新来的关联公告与已经存在的公告同属一个组
-            String relGp = TbNtAssociateGps.get(0).getRelGp();
+            String relGp = tbNtAssociateGps.get(0).getRelGp();
             for (int i = 0; i < ids.length; i++) {
                 if (!set.contains(ids[i])) {
                     //获取项目类型
@@ -486,14 +512,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                     tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), source));
                     String ntCategory = tbNtMianMapper.getNtCategoryByPkId(tbNtMian);
                     //
-                    tbNtAssociateGp = new TbNtAssociateGp();
-                    tbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
-                    tbNtAssociateGp.setNtId(ids[i]);
-                    tbNtAssociateGp.setRelType(ntCategory);
-                    tbNtAssociateGp.setRelGp(relGp);
-                    tbNtAssociateGp.setPx(String.valueOf(i));
-                    tbNtAssociateGp.setCreateBy(createBy);
-                    tbNtAssociateGpList.add(tbNtAssociateGp);
+                    tempTbNtAssociateGp = new TbNtAssociateGp();
+                    tempTbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
+                    tempTbNtAssociateGp.setNtId(ids[i]);
+                    tempTbNtAssociateGp.setRelType(ntCategory);
+                    tempTbNtAssociateGp.setRelGp(relGp);
+                    tempTbNtAssociateGp.setPx(String.valueOf(i));
+                    tempTbNtAssociateGp.setCreateBy(createBy);
+                    tbNtAssociateGpList.add(tempTbNtAssociateGp);
                 } else {
                     System.out.println("11");
                 }
@@ -508,14 +534,14 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), source));
                 String ntCategory = tbNtMianMapper.getNtCategoryByPkId(tbNtMian);
                 //
-                tbNtAssociateGp = new TbNtAssociateGp();
-                tbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
-                tbNtAssociateGp.setNtId(ids[i]);
-                tbNtAssociateGp.setRelType(ntCategory);
-                tbNtAssociateGp.setRelGp(relGp);
-                tbNtAssociateGp.setPx(String.valueOf(i));
-                tbNtAssociateGp.setCreateBy(createBy);
-                tbNtAssociateGpList.add(tbNtAssociateGp);
+                tempTbNtAssociateGp = new TbNtAssociateGp();
+                tempTbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
+                tempTbNtAssociateGp.setNtId(ids[i]);
+                tempTbNtAssociateGp.setRelType(ntCategory);
+                tempTbNtAssociateGp.setRelGp(relGp);
+                tempTbNtAssociateGp.setPx(String.valueOf(i));
+                tempTbNtAssociateGp.setCreateBy(createBy);
+                tbNtAssociateGpList.add(tempTbNtAssociateGp);
             }
         }
         String tableName = DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, source);
@@ -528,12 +554,12 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     @Override
     public void deleteNtAssociateGp(List<Map<String, Object>> tbNtAssociateGps) {
         for (int i = 0; i < tbNtAssociateGps.size(); i++) {
-            TbNtAssociateGp TbNtAssociateGp = new TbNtAssociateGp();
-            TbNtAssociateGp.setNtId((String) tbNtAssociateGps.get(i).get("ntId"));
-            TbNtAssociateGp.setRelGp((String) tbNtAssociateGps.get(i).get("relGp"));
-            TbNtAssociateGp.setSource((String) tbNtAssociateGps.get(i).get("source"));
-            TbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, TbNtAssociateGp.getSource()));
-            tbNtAssociateGpMapper.deleteNtAssociateGpByNtIdAndRelGp(TbNtAssociateGp);
+            TbNtAssociateGp tbNtAssociateGp = new TbNtAssociateGp();
+            tbNtAssociateGp.setNtId((String) tbNtAssociateGps.get(i).get("ntId"));
+            tbNtAssociateGp.setRelGp((String) tbNtAssociateGps.get(i).get("relGp"));
+            tbNtAssociateGp.setSource((String) tbNtAssociateGps.get(i).get("source"));
+            tbNtAssociateGp.setTableName(DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, tbNtAssociateGp.getSource()));
+            tbNtAssociateGpMapper.deleteNtAssociateGpByNtIdAndRelGp(tbNtAssociateGp);
         }
     }
 
@@ -639,10 +665,10 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 firstQual.setPx("1");
                 firstQual.setHead(true);
                 firstQual.setGroupId(groupId);
-                List<String> OneQualIds = tempRegex.getQualIds();
-                firstQual.setQuaCateId(OneQualIds.get(0));
-                firstQual.setQuaId(OneQualIds.get(1));
-                firstQual.setQuaGradeId(OneQualIds.get(2));
+                List<String> oneQualIds = tempRegex.getQualIds();
+                firstQual.setQuaCateId(oneQualIds.get(0));
+                firstQual.setQuaId(oneQualIds.get(1));
+                firstQual.setQuaGradeId(oneQualIds.get(2));
                 //其他资质
                 if(tbNtQuaGroupList.size() > 0) {
                     TbNtQuaGroup temp;

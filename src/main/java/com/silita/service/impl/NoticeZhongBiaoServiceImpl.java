@@ -70,6 +70,8 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     TbNtRegexGroupMapper tbNtRegexGroupMapper;
     @Autowired
     TbNtQuaGroupMapper tbNtQuaGroupMapper;
+    @Autowired
+    TbNtRegexQuaMapper tbNtRegexQuaMapper;
 
     @Autowired
     DicQuaMapper dicQuaMapper;
@@ -152,19 +154,19 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                                         String tempKey = temp.getKey();
                                         String tempValue = temp.getValue();
                                         if (tempKey.equals(keyName)) {
-                                            if (type.equals("class java.lang.String")) {
+                                            if ("class java.lang.String".equals(type)) {
                                                 Method m = tempTenders.getClass().getMethod("set" + name, String.class);
                                                 m.invoke(tempTenders, String.valueOf(tempValue));
                                             }
-                                            if (type.equals("class java.lang.Double")) {
+                                            if ("class java.lang.Double".equals(type)) {
                                                 Method m = tempTenders.getClass().getMethod("set" + name, Double.class);
                                                 m.invoke(tempTenders, Double.valueOf(tempValue));
                                             }
-                                            if (type.equals("class java.lang.Boolean")) {
+                                            if ("class java.lang.Boolean".equals(type)) {
                                                 Method m = tempTenders.getClass().getMethod("set" + name, Boolean.class);
                                                 m.invoke(tempTenders, Boolean.valueOf(tempValue));
                                             }
-                                            if (type.equals("class java.util.Date")) {
+                                            if ("class java.util.Date".equals(type)) {
                                                 Method m = tempTenders.getClass().getMethod("set" + name, Date.class);
                                                 m.invoke(tempTenders, new Date(Long.parseLong(tempValue)));
                                             }
@@ -215,6 +217,32 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
                 //更新公告状态为 新建
                 tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
+            }
+
+            Iterator iter = set.iterator();
+            while (iter.hasNext()) {
+                String ntEditId = String.valueOf(iter.next());
+                TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+                tbNtRegexGroup.setNtId(ntId);
+                tbNtRegexGroup.setNtEditId(ntEditId);
+                TbNtRegexGroup tempTbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
+                if(null != tempTbNtRegexGroup) {
+                    Set groupIds = new HashSet<String>();
+                    String groupRegex = tempTbNtRegexGroup.getGroupRegex();
+                    Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
+                    while (iterator.hasNext()) {
+                        groupIds.add(iterator.next());
+                    }
+                    //删除小组资质
+                    tbNtQuaGroupMapper.batchDeleteTbNtQuaGroupByGroupId(groupIds.toArray());
+                    //删除资质组关系表
+                    tbNtRegexGroupMapper.deleteNtRegexGroupByNtIdAndNtEditId(tempTbNtRegexGroup);
+                }
+                TbNtRegexQua tbNtRegexQua = new TbNtRegexQua();
+                tbNtRegexQua.setNtId(ntId);
+                tbNtRegexQua.setNtEditId(ntEditId);
+                //删除资质算发表达式
+                tbNtRegexQuaMapper.deleteTbNtRegexQuaByNtIdAndNtEditId(tbNtRegexQua);
             }
         }
     }
@@ -396,17 +424,17 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                     TwfDict twfDict = new TwfDict();
                     Map<String, String> changeField = new HashMap();
                     for (Map<String, Object> map : changeFields) {
-                        String field_name = (String) map.get("field_name");
-                        String field_value = (String) map.get("field_value");
-                        changeField.put(field_name, field_value);
-                        if ("pbMode".equals(field_name)) {
-                            tempNtBids.setPbModeName(dicCommonMapper.getNameByCode(field_value));
-                        } else if ("proType".equals(field_name)) {
-                            twfDict.setCode(field_value);
+                        String fieldName = (String) map.get("field_name");
+                        String fieldValue = (String) map.get("field_value");
+                        changeField.put(fieldName, fieldValue);
+                        if ("pbMode".equals(fieldName)) {
+                            tempNtBids.setPbModeName(dicCommonMapper.getNameByCode(fieldValue));
+                        } else if ("proType".equals(fieldName)) {
+                            twfDict.setCode(fieldValue);
                             twfDict.setType(4);
                             tempNtBids.setProTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
-                        } else if ("binessType".equals(field_name)) {
-                            twfDict.setCode(field_value);
+                        } else if ("binessType".equals(fieldName)) {
+                            twfDict.setCode(fieldValue);
                             twfDict.setType(1);
                             tempNtBids.setBinessTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
                         }
@@ -433,25 +461,25 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         tbNtChange.setNtId(tempNtBidsCand.getNtId());
                         tbNtChange.setNtEditId(tempNtBidsCand.getPkid());
                         List<Map<String, Object>> candChangeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
-                        StringBuilder CandidateSb1 = new StringBuilder();
-                        StringBuilder CandidateSb2 = new StringBuilder();
+                        StringBuilder candidateSb1 = new StringBuilder();
+                        StringBuilder candidateSb2 = new StringBuilder();
                         if (candChangeFields != null && candChangeFields.size() > 0) {
                             Map<String, String> candChangeField = new HashMap();
                             for (Map<String, Object> map : candChangeFields) {
-                                String field_name = (String) map.get("field_name");
-                                String field_value = (String) map.get("field_value");
-                                candChangeField.put(field_name, field_value);
+                                String fieldName = (String) map.get("field_name");
+                                String fieldValue = (String) map.get("field_value");
+                                candChangeField.put(fieldName, fieldValue);
                             }
                             for (Map.Entry<String, String> entry : candChangeField.entrySet()) {
-                                CandidateSb1.append(entry.getKey()).append(",");
-                                CandidateSb2.append(entry.getValue()).append(",");
+                                candidateSb1.append(entry.getKey()).append(",");
+                                candidateSb2.append(entry.getValue()).append(",");
                             }
                         }
-                        String CandidateChangeFieldName = CandidateSb1.toString();
-                        String CandidateChangeFieldValue = CandidateSb2.toString();
-                        if (!StringUtils.isEmpty(CandidateChangeFieldName) && !StringUtils.isEmpty(CandidateChangeFieldValue)) {
-                            tempNtBidsCand.setChangeFieldName(CandidateChangeFieldName.substring(0, CandidateChangeFieldName.lastIndexOf(",")));
-                            tempNtBidsCand.setChangeFieldValue(CandidateChangeFieldValue.substring(0, CandidateChangeFieldValue.lastIndexOf(",")));
+                        String candidateChangeFieldName = candidateSb1.toString();
+                        String candidateChangeFieldValue = candidateSb2.toString();
+                        if (!StringUtils.isEmpty(candidateChangeFieldName) && !StringUtils.isEmpty(candidateChangeFieldValue)) {
+                            tempNtBidsCand.setChangeFieldName(candidateChangeFieldName.substring(0, candidateChangeFieldName.lastIndexOf(",")));
+                            tempNtBidsCand.setChangeFieldValue(candidateChangeFieldValue.substring(0, candidateChangeFieldValue.lastIndexOf(",")));
                         }
                         //拆出3个中标候选人(前端要的)
                         candidate = tempNtBidsCand.getfCandidate();
@@ -641,10 +669,10 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         }
                     }
                 }
-                if (!entry.getKey().equals("url")) {
+                if (!"url".equals(entry.getKey())) {
                     HSSFCell cell = row.createCell(indexCell++);
                     //标题要带超链接
-                    if (entry.getKey().equals("title")) {
+                    if ("title".equals(entry.getKey())) {
                         cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
 //                        cell.setCellStyle(linkStyle);
                     } else {
@@ -739,11 +767,11 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         //组内第一条资质
                         sb.append(qualName).append(quaGradeName);
                     } else {
-                        sb.append(tbNtQuaGroups.get(j).getRelType().equals("&")? "和":"或").append(qualName).append(quaGradeName);
+                        sb.append("&".equals(tbNtQuaGroup.getRelType()) ? "和":"或").append(qualName).append(quaGradeName);
                     }
                 }
                 if(i != groupRegexs.size() - 1) {
-                    sb.append(")").append(String.valueOf(grouprRelType[i]).equals("&")? "和":"或");
+                    sb.append(")").append("&".equals(String.valueOf(grouprRelType[i])) ? "和":"或");
                 } else {
                     sb.append(")");
                 }

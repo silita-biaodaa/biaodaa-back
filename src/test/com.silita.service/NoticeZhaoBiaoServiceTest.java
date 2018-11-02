@@ -142,7 +142,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController8()throws Exception{
-        String requestBody = "{\"ntId\":\"20\",\"segment\":\"1\",\"proSum\":\"1000.0\",\"enrollAddr\":\"测试报名修改地点\",\"openingAddr\":\"测试开修改标地点\",\"enrollEndTime\":\"2018-08-12\",\"bidEndTime\":\"2018-08-12\",\"pbMode\":\"测试评标办法\",\"bidBonds\":\"222\",\"bidBondsEndTime\":\"2018-08-12\",\"keepBonds\":\"222\",\"otherBonds\":\"222\",\"auditTime\":\"2018-08-12\",\"openingPerson\":\"测试开标人\",\"openingFileFee\":\"222.2\",\"otherFee\":\"444.2\",\"tenderee\":\"6666\",\"tenderContactPerson\":\"测试修改\",\"tenderContactInfo\":\"1876666\",\"proxyContactPerson\":\"修改代理联系人\",\"proxyContactInfo\":\"1674444\",\"proPerson\":\"修改项目人要求\",\"socialSecurity\":\"社保有修改要球\",\"achievement\":\"修改业绩要求\",\"enrollMethod\":\"1\",\"proDuration\":\"180\",\"completionTime\":\"2018-08-12\",\"isFlow\":\"true\",\"fundsProvid\":\"修改资金来源\",\"source\":\"hunan\",\"binessType\":\"2\",\"certAuditAddr\":\"资格审查地点\",\"filingPfm\":\"备案平台\",\"controllSum\":\"678\",\"title\":\"我要更新\",\"pubDate\":\"2018-09-04\",\"cityCode\":\"hengyang\",\"countyCode\":\"hengyangxian\",\"ntTdStatus\":\"7\",\"proType\":\"1\",\"pkid\":\"213c8a98fcc641009b2695f22c43fcd8\"," +
+        String requestBody = "{\"ntId\":\"11\",\"segment\":\"1\",\"proSum\":\"1000.0\",\"enrollAddr\":\"测试报名修改地点\",\"openingAddr\":\"测试开修改标地点\",\"enrollEndTime\":\"2018-08-12\",\"bidEndTime\":\"2018-08-12\",\"pbMode\":\"测试评标办法\",\"bidBonds\":\"222\",\"bidBondsEndTime\":\"2018-08-12\",\"keepBonds\":\"222\",\"otherBonds\":\"222\",\"auditTime\":\"2018-08-12\",\"openingPerson\":\"测试开标人\",\"openingFileFee\":\"222.2\",\"otherFee\":\"444.2\",\"tenderee\":\"6666\",\"tenderContactPerson\":\"测试修改\",\"tenderContactInfo\":\"1876666\",\"proxyContactPerson\":\"修改代理联系人\",\"proxyContactInfo\":\"1674444\",\"proPerson\":\"修改项目人要求\",\"socialSecurity\":\"社保有修改要球\",\"achievement\":\"修改业绩要求\",\"enrollMethod\":\"1\",\"proDuration\":\"180\",\"completionTime\":\"2018-08-12\",\"isFlow\":\"true\",\"fundsProvid\":\"修改资金来源\",\"source\":\"hunan\",\"binessType\":\"2\",\"certAuditAddr\":\"资格审查地点\",\"filingPfm\":\"备案平台\",\"controllSum\":\"678\",\"title\":\"我要更新\",\"pubDate\":\"2018-09-04\",\"cityCode\":\"hengyang\",\"countyCode\":\"hengyangxian\",\"ntTdStatus\":\"7\",\"proType\":\"1\",\"pkid\":\"2e8c0a7d09404276b77d78863ac82eee\"," +
                 "\"tbNtRegexGroups\":[{\"tbNtQuaGroups\":[{\"relType\":\"&\",\"qualIds\":[\"zhinanA2\",\"shejiyuanzeA2\",\"fankuiA2\"]},{\"relType\":\"&\",\"qualIds\":[\"zhinanA3\",\"shejiyuanzeA3\",\"fankuiA3\"]}],\"qualIds\":[\"zhinanA1\",\"shejiyuanzeA1\",\"yizhiA1\"],\"relType\":\"&\"},{\"tbNtQuaGroups\":[{\"relType\":\"&\",\"qualIds\":[\"zhinanB2\",\"shejiyuanzeB2\",\"fankuiB2\"]}],\"qualIds\":[\"zhinanB1\",\"shejiyuanzeB1\",\"yizhiB1\"],\"relType\":\"|\"},{\"tbNtQuaGroups\":[],\"qualIds\":[\"zhinanC1\",\"shejiyuanzeC1\",\"yizhiC1\"],\"relType\":\"\"}]}";
         String responseString = mockMvc.perform(post("/zhaobiao/saveNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -157,7 +157,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController9()throws Exception{
-        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"1\", \"title\":\"招标\", \"ntStatus\":\"1\"}";
+        String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"1\", \"title\":\"标题\", \"ntStatus\":\"1\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/exportTendersExcel").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -199,7 +199,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController11()throws Exception{
-        String requestBody = "{\"idsStr\":\"9b83f3ca231c4375a5fc2972c43a53d8\", \"source\":\"hunan\"}";
+        String requestBody = "{\"idsStr\":\"2e8c0a7d09404276b77d78863ac82eee\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/deleteNtTendersByPkId").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -326,7 +326,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController20()throws Exception{
-        String requestBody = "{\"idsStr\":\"1|2\", \"source\":\"hunan\"}";
+        String requestBody = "{\"idsStr\":\"1|11\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/insertNtAssociateGp").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
