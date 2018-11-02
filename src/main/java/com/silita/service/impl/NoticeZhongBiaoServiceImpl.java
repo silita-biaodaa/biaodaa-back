@@ -107,6 +107,11 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         List<TbNtTenders> tbNtTendersList = tbNtTendersMapper.listNtTendersByNtId(tbNtTenders);
                         for (int j = 0; j < tbNtTendersList.size(); j++) {
                             TbNtTenders tempTenders = tbNtTendersList.get(j);
+                            TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+                            tbNtRegexGroup.setNtId(tempTenders.getNtId());
+                            tbNtRegexGroup.setNtEditId(tempTenders.getPkid());
+                            //资质关系字符串
+                            tempTenders.setQualRelationStr(this.getQualRelationStr(tbNtRegexGroup));
                             //获取标段最新的、不重复的变更信息
                             TbNtChange tbNtChange = new TbNtChange();
                             tbNtChange.setNtId(String.valueOf(tempTenders.getNtId()));

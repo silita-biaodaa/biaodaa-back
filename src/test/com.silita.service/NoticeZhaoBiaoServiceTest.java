@@ -171,7 +171,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController10()throws Exception{
-        String requestBody = "{\"ntId\":\"20\", \"source\":\"hunan\"}";
+        String requestBody = "{\"ntId\":\"11\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/listNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -326,7 +326,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController20()throws Exception{
-        String requestBody = "{\"idsStr\":\"1|11\", \"source\":\"hunan\"}";
+        String requestBody = "{\"idsStr\":\"10|11\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhaobiao/insertNtAssociateGp").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

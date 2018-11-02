@@ -34,7 +34,7 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController1()throws Exception{
-        String requestBody = "{\"pkid\":\"2\", \"source\":\"hunan\"}";
+        String requestBody = "{\"pkid\":\"10\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhongbiao/listNtTenders").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -91,7 +91,7 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
     @Test
     public void testController5()throws Exception {
         String requestBody = "{\n" +
-                "\"pkid\":\"7830dfaa271f4fac8acce070b60ea9ac\",\"ntId\":\"2\", \"tdEditCode\":\"td153629015755017\", \"segment\":\"1\", \"controllSum\":\"\", \"proSum\":0, \"proType\":\"\", \"proDuration\":\"666\", \"pbMode\":\"中标更新评标办法\", \"cityCode\":\"ceshi\", \"countyCode\":\"ceshi\", \"source\":\"hunan\", \"binessType\":\"02\",\n" +
+                "\"ntId\":\"10\", \"tdEditCode\":\"td153629015755017\", \"segment\":\"1\", \"controllSum\":\"\", \"proSum\":0, \"proType\":\"\", \"proDuration\":\"666\", \"pbMode\":\"中标更新评标办法\", \"cityCode\":\"ceshi\", \"countyCode\":\"ceshi\", \"source\":\"hunan\", \"binessType\":\"02\",\n" +
                 "\"bidsCands\":\n" +
                 "\t\t\t[\n" +
                 "\t\t\t\t{\"ntId\":\"2\",\"fCandidate\":\"测试更新中标候选人1\",\"fQuote\":310,\"fProLeader\":\"测试项目负责人1\",\"fTechLeader\":\"测试更新技术负责人1\"\n" +
@@ -114,7 +114,7 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
 
     @Test
     public void testController6()throws Exception{
-        String requestBody = "{\"ntId\":\"2\", \"source\":\"hunan\"}";
+        String requestBody = "{\"ntId\":\"352\", \"source\":\"hunan\"}";
         String responseString = mockMvc.perform(post("/zhongbiao/listTbNtBids").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

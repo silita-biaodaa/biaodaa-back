@@ -326,4 +326,9 @@ public class TbNtTenders {
     private String ntTdStatusName;
 
     private List<TbNtRegexGroup> tbNtRegexGroups;
+
+    /**
+     * 资质关系字符串
+     */
+    private String qualRelationStr;
 }
