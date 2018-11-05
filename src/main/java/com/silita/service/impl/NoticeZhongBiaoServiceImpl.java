@@ -117,14 +117,14 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                             tbNtChange.setNtId(String.valueOf(tempTenders.getNtId()));
                             tbNtChange.setNtEditId(String.valueOf(tempTenders.getPkid()));
                             List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
-                            Map<String, String> tempMap = new HashMap();
+                            Map<String, String> changeField = new HashMap();
                             if (fields != null && fields.size() > 0) {
                                 TwfDict twfDict = new TwfDict();
                                 //保留最新的一条变更字段记录
                                 for (Map<String, Object> map : fields) {
-                                    String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
+                                    String tempKey = String.valueOf(map.get("field_name"));
                                     String tempValue = String.valueOf(map.get("field_value"));
-                                    tempMap.put(tempKey, tempValue);
+                                    changeField.put(tempKey, tempValue);
                                     if ("pb_mode".equals(tempKey)) {
                                         tempTenders.setPbModeName(dicCommonMapper.getNameByCode(tempValue));
                                     } else if ("pro_type".equals(tempKey)) {
@@ -148,44 +148,15 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                             }
                             Field[] field = tempTenders.getClass().getDeclaredFields();
                             //遍历field、替换变更后的值
-                            for (int k = 0; k < field.length; k++) {
-                                String name = field[k].getName();
-                                name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                                String keyName = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(name).substring(1);
-                                String type = field[k].getGenericType().toString();
-                                //替换变更后的值
-                                if (tempMap.size() > 0) {
-                                    for (Map.Entry<String, String> temp : tempMap.entrySet()) {
-                                        String tempKey = temp.getKey();
-                                        String tempValue = temp.getValue();
-                                        if (tempKey.equals(keyName)) {
-                                            if ("class java.lang.String".equals(type)) {
-                                                Method m = tempTenders.getClass().getMethod("set" + name, String.class);
-                                                m.invoke(tempTenders, String.valueOf(tempValue));
-                                            }
-                                            if ("class java.lang.Double".equals(type)) {
-                                                Method m = tempTenders.getClass().getMethod("set" + name, Double.class);
-                                                m.invoke(tempTenders, Double.valueOf(tempValue));
-                                            }
-                                            if ("class java.lang.Boolean".equals(type)) {
-                                                Method m = tempTenders.getClass().getMethod("set" + name, Boolean.class);
-                                                m.invoke(tempTenders, Boolean.valueOf(tempValue));
-                                            }
-                                            if ("class java.util.Date".equals(type)) {
-                                                Method m = tempTenders.getClass().getMethod("set" + name, Date.class);
-                                                m.invoke(tempTenders, new Date(Long.parseLong(tempValue)));
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            this.replaceAttribute(field, tempTenders, changeField);
                         }
                         lists.addAll(tbNtTendersList);
                     }
                 }
             }
         } catch (Exception e) {
-            logger.error(e.toString());
+            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return lists;
     }
@@ -231,7 +202,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 tbNtRegexGroup.setNtId(ntId);
                 tbNtRegexGroup.setNtEditId(ntEditId);
                 TbNtRegexGroup tempTbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
-                if(null != tempTbNtRegexGroup) {
+                if (null != tempTbNtRegexGroup) {
                     Set groupIds = new HashSet<String>();
                     String groupRegex = tempTbNtRegexGroup.getGroupRegex();
                     Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
@@ -339,16 +310,16 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                     tbNtBidsCands.get(i).setSource(tbNtBids.getSource());
                     tbNtBidsCands.get(i).setCreateBy(tbNtBids.getCreateBy());
                     //拼凑联合中标候选人
-                    if(!StringUtils.isEmpty(tbNtBidsCands.get(i).getOneCandidate())) {
+                    if (!StringUtils.isEmpty(tbNtBidsCands.get(i).getOneCandidate())) {
                         sb.append(tbNtBidsCands.get(i).getOneCandidate());
                     }
-                    if(!StringUtils.isEmpty(tbNtBidsCands.get(i).getTwoCandidate())) {
+                    if (!StringUtils.isEmpty(tbNtBidsCands.get(i).getTwoCandidate())) {
                         sb.append(",").append(tbNtBidsCands.get(i).getTwoCandidate());
                     }
-                    if(!StringUtils.isEmpty(tbNtBidsCands.get(i).getThreeCandidate())) {
+                    if (!StringUtils.isEmpty(tbNtBidsCands.get(i).getThreeCandidate())) {
                         sb.append(",").append(tbNtBidsCands.get(i).getThreeCandidate());
                     }
-                    tbNtBidsCands.get(i).setfCandidate(sb.toString());
+                    tbNtBidsCands.get(i).setFCandidate(sb.toString());
                 }
                 tbNtBidsCandMapper.batchInsertNtBidsCand(tbNtBidsCands);
             }
@@ -369,18 +340,18 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                     String pkid = tempBidsCand.getPkid();
                     sb = new StringBuilder();
                     //拼凑联合中标候选人
-                    if(!StringUtils.isEmpty(tempBidsCand.getOneCandidate())) {
+                    if (!StringUtils.isEmpty(tempBidsCand.getOneCandidate())) {
                         sb.append(tempBidsCand.getOneCandidate());
                     }
-                    if(!StringUtils.isEmpty(tempBidsCand.getTwoCandidate())) {
+                    if (!StringUtils.isEmpty(tempBidsCand.getTwoCandidate())) {
                         sb.append(",").append(tempBidsCand.getTwoCandidate());
                     }
-                    if(!StringUtils.isEmpty(tempBidsCand.getThreeCandidate())) {
+                    if (!StringUtils.isEmpty(tempBidsCand.getThreeCandidate())) {
                         sb.append(",").append(tempBidsCand.getThreeCandidate());
                     }
-                    tempBidsCand.setfCandidate(sb.toString());
+                    tempBidsCand.setFCandidate(sb.toString());
                     //删除中标候选人
-                    if(StringUtils.isEmpty(tempBidsCand.getNumber())) {
+                    if (StringUtils.isEmpty(tempBidsCand.getNumber())) {
                         tbNtBidsCandMapper.deleteNtBidsCandByPkId(pkid);
                     } else {
                         if (StringUtils.isEmpty(pkid)) {
@@ -401,7 +372,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 if (tempInsertList.size() > 0) {
                     tbNtBidsCandMapper.batchInsertNtBidsCand(tempInsertList);
                 }
-                if(tempUpdateList.size() > 0) {
+                if (tempUpdateList.size() > 0) {
                     tbNtBidsCandMapper.batchUpdateNtBidsCand(tempUpdateList);
                 }
             }
@@ -417,110 +388,97 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         //添加编辑明细变更信息
         if (null != lists && lists.size() > 0) {
             TbNtBids tempNtBids;
-            for (int i = 0; i < lists.size(); i++) {
-                tempNtBids = lists.get(i);
-                TbNtChange tbNtChange = new TbNtChange();
-                tbNtChange.setNtId(tempNtBids.getNtId());
-                tbNtChange.setNtEditId(tempNtBids.getPkid());
-                List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
-                StringBuilder sb1 = new StringBuilder();
-                StringBuilder sb2 = new StringBuilder();
-                if (changeFields != null && changeFields.size() > 0) {
-                    TwfDict twfDict = new TwfDict();
-                    Map<String, String> changeField = new HashMap();
-                    for (Map<String, Object> map : changeFields) {
-                        String fieldName = (String) map.get("field_name");
-                        String fieldValue = (String) map.get("field_value");
-                        changeField.put(fieldName, fieldValue);
-                        if ("pbMode".equals(fieldName)) {
-                            tempNtBids.setPbModeName(dicCommonMapper.getNameByCode(fieldValue));
-                        } else if ("proType".equals(fieldName)) {
-                            twfDict.setCode(fieldValue);
-                            twfDict.setType(4);
-                            tempNtBids.setProTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
-                        } else if ("binessType".equals(fieldName)) {
-                            twfDict.setCode(fieldValue);
-                            twfDict.setType(1);
-                            tempNtBids.setBinessTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
-                        }
-                    }
-                    for (Map.Entry<String, String> entry : changeField.entrySet()) {
-                        sb1.append(entry.getKey()).append(",");
-                        sb2.append(entry.getValue()).append(",");
-                    }
-                }
-                String changeFieldName = sb1.toString();
-                String changeFieldValue = sb2.toString();
-                if (!StringUtils.isEmpty(changeFieldName) && !StringUtils.isEmpty(changeFieldValue)) {
-                    tempNtBids.setChangeFieldName(changeFieldName.substring(0, changeFieldName.lastIndexOf(",")));
-                    tempNtBids.setChangeFieldValue(changeFieldValue.substring(0, changeFieldValue.lastIndexOf(",")));
-                }
-                List<TbNtBidsCand> bidsCands = tempNtBids.getBidsCands();
-                //添加中标候选人编辑明细
-                if (null != bidsCands && bidsCands.size() > 0) {
-                    TbNtBidsCand tempNtBidsCand;
-                    String candidate;
-                    for (int j = 0; j < bidsCands.size(); j++) {
-                        tempNtBidsCand = bidsCands.get(j);
-                        tbNtChange = new TbNtChange();
-                        tbNtChange.setNtId(tempNtBidsCand.getNtId());
-                        tbNtChange.setNtEditId(tempNtBidsCand.getPkid());
-                        List<Map<String, Object>> candChangeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
-                        StringBuilder candidateSb1 = new StringBuilder();
-                        StringBuilder candidateSb2 = new StringBuilder();
-                        if (candChangeFields != null && candChangeFields.size() > 0) {
-                            Map<String, String> candChangeField = new HashMap();
-                            for (Map<String, Object> map : candChangeFields) {
-                                String fieldName = (String) map.get("field_name");
-                                String fieldValue = (String) map.get("field_value");
-                                candChangeField.put(fieldName, fieldValue);
-                            }
-                            for (Map.Entry<String, String> entry : candChangeField.entrySet()) {
-                                candidateSb1.append(entry.getKey()).append(",");
-                                candidateSb2.append(entry.getValue()).append(",");
+            try {
+                for (int i = 0; i < lists.size(); i++) {
+                    tempNtBids = lists.get(i);
+                    TbNtChange tbNtChange = new TbNtChange();
+                    tbNtChange.setNtId(tempNtBids.getNtId());
+                    tbNtChange.setNtEditId(tempNtBids.getPkid());
+                    List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+                    if (changeFields != null && changeFields.size() > 0) {
+                        TwfDict twfDict = new TwfDict();
+                        Map<String, String> changeField = new HashMap();
+                        for (Map<String, Object> map : changeFields) {
+                            String fieldName = (String) map.get("field_name");
+                            String fieldValue = (String) map.get("field_value");
+                            changeField.put(fieldName, fieldValue);
+                            if ("pbMode".equals(fieldName)) {
+                                tempNtBids.setPbModeName(dicCommonMapper.getNameByCode(fieldValue));
+                            } else if ("proType".equals(fieldName)) {
+                                twfDict.setCode(fieldValue);
+                                twfDict.setType(4);
+                                tempNtBids.setProTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
+                            } else if ("binessType".equals(fieldName)) {
+                                twfDict.setCode(fieldValue);
+                                twfDict.setType(1);
+                                tempNtBids.setBinessTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
                             }
                         }
-                        String candidateChangeFieldName = candidateSb1.toString();
-                        String candidateChangeFieldValue = candidateSb2.toString();
-                        if (!StringUtils.isEmpty(candidateChangeFieldName) && !StringUtils.isEmpty(candidateChangeFieldValue)) {
-                            tempNtBidsCand.setChangeFieldName(candidateChangeFieldName.substring(0, candidateChangeFieldName.lastIndexOf(",")));
-                            tempNtBidsCand.setChangeFieldValue(candidateChangeFieldValue.substring(0, candidateChangeFieldValue.lastIndexOf(",")));
-                        }
-                        //拆出3个中标候选人(前端要的)
-                        candidate = tempNtBidsCand.getfCandidate();
-                        if (!StringUtils.isEmpty(candidate)) {
-                            String[] candidates = candidate.split("\\,");
-                            if (candidates.length > 0) {
-                                tempNtBidsCand.setOneCandidate(candidates[0]);
-                                if (candidates.length > 1) {
-                                    tempNtBidsCand.setTwoCandidate(candidates[1]);
-                                    if (candidates.length > 2) {
-                                        tempNtBidsCand.setThreeCandidate(candidates[2]);
-                                    }
+                        Field[] field = tempNtBids.getClass().getDeclaredFields();
+                        //遍历field、替换变更后的值
+                        this.replaceAttribute(field, tempNtBids, changeField);
+                    }
+                    List<TbNtBidsCand> bidsCands = tempNtBids.getBidsCands();
+                    //添加中标候选人编辑明细
+                    if (null != bidsCands && bidsCands.size() > 0) {
+                        TbNtBidsCand tempNtBidsCand;
+                        String candidate;
+                        for (int j = 0; j < bidsCands.size(); j++) {
+                            tempNtBidsCand = bidsCands.get(j);
+                            tbNtChange = new TbNtChange();
+                            tbNtChange.setNtId(tempNtBidsCand.getNtId());
+                            tbNtChange.setNtEditId(tempNtBidsCand.getPkid());
+                            List<Map<String, Object>> candChangeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+                            if (candChangeFields != null && candChangeFields.size() > 0) {
+                                Map<String, String> candChangeField = new HashMap();
+                                for (Map<String, Object> map : candChangeFields) {
+                                    String fieldName = (String) map.get("field_name");
+                                    String fieldValue = (String) map.get("field_value");
+                                    candChangeField.put(fieldName, fieldValue);
                                 }
-                            } else {
-                                tempNtBidsCand.setOneCandidate(candidate);
+                                Field[] field = tempNtBidsCand.getClass().getDeclaredFields();
+                                //遍历field、替换变更后的值
+                                this.replaceAttribute(field, tempNtBidsCand, candChangeField);
+                            }
+                            //拆出3个中标候选人(前端要的)
+                            candidate = tempNtBidsCand.getfCandidate();
+                            if (!StringUtils.isEmpty(candidate)) {
+                                String[] candidates = candidate.split("\\,");
+                                if (candidates.length > 0) {
+                                    tempNtBidsCand.setOneCandidate(candidates[0]);
+                                    if (candidates.length > 1) {
+                                        tempNtBidsCand.setTwoCandidate(candidates[1]);
+                                        if (candidates.length > 2) {
+                                            tempNtBidsCand.setThreeCandidate(candidates[2]);
+                                        }
+                                    }
+                                } else {
+                                    tempNtBidsCand.setOneCandidate(candidate);
+                                }
                             }
                         }
                     }
+                    //获取招标标段信息
+                    Map<String, String> map = tbNtTendersMapper.getNtIdByEditCode(tempNtBids.getTdEditCode(), tbNtBids.getSource());
+                    if (null != map) {
+                        TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+                        tbNtRegexGroup.setNtId(map.get("ntId"));
+                        tbNtRegexGroup.setNtEditId(map.get("pkid"));
+                        //资质
+                        tempNtBids.setQualRelationStr(this.getQualRelationStr(tbNtRegexGroup));
+                    }
+                    //前端要的特定数据
+                    if (!StringUtils.isEmpty(tempNtBids.getCityCodeName())) {
+                        SysArea sysArea = new SysArea();
+                        sysArea.setAreaName(tempNtBids.getCityCodeName());
+                        sysArea.setAreaCode(tempNtBids.getSource());
+                        String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
+                        tempNtBids.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
+                    }
                 }
-                //获取招标标段信息
-                Map<String, String> map = tbNtTendersMapper.getNtIdByEditCode(tempNtBids.getTdEditCode(), tbNtBids.getSource());
-                if(null != map) {
-                    TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
-                    tbNtRegexGroup.setNtId(map.get("ntId"));
-                    tbNtRegexGroup.setNtEditId(map.get("pkid"));
-                    //资质
-                    tempNtBids.setQualRelationStr(this.getQualRelationStr(tbNtRegexGroup));
-                }
-                //前端要的特定数据
-                if (!StringUtils.isEmpty(tempNtBids.getCityCodeName())) {
-                    SysArea sysArea = new SysArea();
-                    sysArea.setAreaName(tempNtBids.getCityCodeName());
-                    sysArea.setAreaCode(tempNtBids.getSource());
-                    String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
-                    tempNtBids.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error(e.getMessage());
             }
             return lists;
         } else {
@@ -627,7 +585,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
                     } else if ("pb_mode".equals(tempKey)) {
                         tempValue = dicCommonMapper.getNameByCode(tempValue);
-                    } else if ("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey)|| "bid_bonds_end_time".equals(tempKey)|| "audit_time".equals(tempKey)|| "completion_time".equals(tempKey)) {
+                    } else if ("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey) || "bid_bonds_end_time".equals(tempKey) || "audit_time".equals(tempKey) || "completion_time".equals(tempKey)) {
                         tempValue = simple.format(new Date(Long.parseLong(tempValue)));
                     }
                     changeField.put(tempKey, tempValue);
@@ -747,7 +705,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     public String getQualRelationStr(TbNtRegexGroup tbNtRegexGroup) {
         //获取资质组关系表达式
         TbNtRegexGroup tempRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
-        if(null != tempRegexGroup) {
+        if (null != tempRegexGroup) {
             List<String> groupRegexs = new ArrayList<>();
             String groupRegex = tempRegexGroup.getGroupRegex();
             //资质小组关系
@@ -766,17 +724,17 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 //遍历单条资质
                 for (int j = 0; j < tbNtQuaGroups.size(); j++) {
                     TbNtQuaGroup tbNtQuaGroup = tbNtQuaGroups.get(j);
-                    String qualName =  dicQuaMapper.queryQualDetailById(tbNtQuaGroup.getQuaId()).getQuaName();
+                    String qualName = dicQuaMapper.queryQualDetailById(tbNtQuaGroup.getQuaId()).getQuaName();
                     String quaGradeName = dicCommonMapper.getCommonNameById(tbNtQuaGroup.getQuaGradeId());
-                    if(StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
+                    if (StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
                         //组内第一条资质
                         sb.append(qualName).append(quaGradeName);
                     } else {
-                        sb.append("&".equals(tbNtQuaGroup.getRelType()) ? "和":"或").append(qualName).append(quaGradeName);
+                        sb.append("&".equals(tbNtQuaGroup.getRelType()) ? "和" : "或").append(qualName).append(quaGradeName);
                     }
                 }
-                if(i != groupRegexs.size() - 1) {
-                    sb.append(")").append("&".equals(String.valueOf(grouprRelType[i])) ? "和":"或");
+                if (i != groupRegexs.size() - 1) {
+                    sb.append(")").append("&".equals(String.valueOf(grouprRelType[i])) ? "和" : "或");
                 } else {
                     sb.append(")");
                 }
@@ -797,6 +755,41 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             changeFields.add(map.get("field_name"));
         }
         return changeFields;
+    }
+
+    private Object replaceAttribute(Field[] field, Object model, Map<String, String> changeField) throws Exception {
+        for (int k = 0; k < field.length; k++) {
+            String name = field[k].getName();
+            name = name.substring(0, 1).toUpperCase() + name.substring(1);
+            String keyName = name.substring(0, 1).toLowerCase() + name.substring(1);
+            String type = field[k].getGenericType().toString();
+            //替换变更后的值
+            if (changeField.size() > 0) {
+                for (Map.Entry<String, String> temp : changeField.entrySet()) {
+                    String tempKey = temp.getKey();
+                    String tempValue = temp.getValue();
+                    if (tempKey.equals(keyName)) {
+                        if ("class java.lang.String".equals(type)) {
+                            Method m = model.getClass().getDeclaredMethod("set" + name, String.class);
+                            m.invoke(model, String.valueOf(tempValue));
+                        }
+                        if ("class java.lang.Double".equals(type)) {
+                            Method m = model.getClass().getDeclaredMethod("set" + name, Double.class);
+                            m.invoke(model, Double.valueOf(tempValue));
+                        }
+                        if ("class java.lang.Boolean".equals(type)) {
+                            Method m = model.getClass().getDeclaredMethod("set" + name, Boolean.class);
+                            m.invoke(model, Boolean.valueOf(tempValue));
+                        }
+                        if ("class java.util.Date".equals(type)) {
+                            Method m = model.getClass().getDeclaredMethod("set" + name, Date.class);
+                            m.invoke(model, new Date(Long.parseLong(tempValue)));
+                        }
+                    }
+                }
+            }
+        }
+        return model;
     }
 
 }

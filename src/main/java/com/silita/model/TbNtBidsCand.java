@@ -111,112 +111,146 @@ public class TbNtBidsCand {
      */
     private String threeCandidate = "";
 
-
     public String getPkid() {
         return pkid;
     }
+
     public void setPkid(String pkid) {
         this.pkid = pkid;
     }
+
     public String getNtId() {
         return ntId;
     }
+
     public void setNtId(String ntId) {
         this.ntId = ntId;
     }
+
     public String getNtBidsId() {
         return ntBidsId;
     }
+
     public void setNtBidsId(String ntBidsId) {
         this.ntBidsId = ntBidsId;
     }
+
     public String getfCandidate() {
         return fCandidate;
     }
-    public void setfCandidate(String fCandidate) {
+
+    public void setFCandidate(String fCandidate) {
         this.fCandidate = fCandidate;
     }
-    public Double getfQuote() {
+
+    public Double getFQuote() {
         return fQuote;
     }
-    public void setfQuote(Double fQuote) {
+
+    public void setFQuote(Double fQuote) {
         this.fQuote = fQuote;
     }
-    public String getfProLeader() {
+
+    public String getFProLeader() {
         return fProLeader;
     }
-    public void setfProLeader(String fProLeader) {
+
+    public void setFProLeader(String fProLeader) {
         this.fProLeader = fProLeader;
     }
-    public String getfTechLeader() {
+
+    public String getFTechLeader() {
         return fTechLeader;
     }
-    public void setfTechLeader(String fTechLeader) {
+
+    public void setFTechLeader(String fTechLeader) {
         this.fTechLeader = fTechLeader;
     }
-    public String getfBuilder() {
+
+    public String getFBuilder() {
         return fBuilder;
     }
-    public void setfBuilder(String fBuilder) {
+
+    public void setFBuilder(String fBuilder) {
         this.fBuilder = fBuilder;
     }
-    public String getfSafety() {
+
+    public String getFSafety() {
         return fSafety;
     }
-    public void setfSafety(String fSafety) {
+
+    public void setFSafety(String fSafety) {
         this.fSafety = fSafety;
     }
-    public String getfQuality() {
+
+    public String getFQuality() {
         return fQuality;
     }
-    public void setfQuality(String fQuality) {
+
+    public void setFQuality(String fQuality) {
         this.fQuality = fQuality;
     }
+
     public Integer getNumber() {
         return number;
     }
+
     public void setNumber(Integer number) {
         this.number = number;
     }
+
     public Date getCreated() {
         return created;
     }
+
     public void setCreated(Date created) {
         this.created = created;
     }
+
     public String getCreateBy() {
         return createBy;
     }
+
     public void setCreateBy(String createBy) {
         this.createBy = createBy;
     }
+
     public Date getUpdated() {
         return updated;
     }
+
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
+
     public String getUpdateBy() {
         return updateBy;
     }
+
     public void setUpdateBy(String updateBy) {
         this.updateBy = updateBy;
     }
+
     public String getSource() {
         return source;
     }
+
     public void setSource(String source) {
         this.source = source;
     }
+
     public String getChangeFieldName() {
         return changeFieldName;
     }
+
     public void setChangeFieldName(String changeFieldName) {
         this.changeFieldName = changeFieldName;
     }
+
     public String getChangeFieldValue() {
         return changeFieldValue;
     }
+
     public void setChangeFieldValue(String changeFieldValue) {
         this.changeFieldValue = changeFieldValue;
     }
@@ -224,18 +258,23 @@ public class TbNtBidsCand {
     public String getOneCandidate() {
         return oneCandidate;
     }
+
     public void setOneCandidate(String oneCandidate) {
         this.oneCandidate = oneCandidate;
     }
+
     public String getTwoCandidate() {
         return twoCandidate;
     }
+
     public void setTwoCandidate(String twoCandidate) {
         this.twoCandidate = twoCandidate;
     }
+
     public String getThreeCandidate() {
         return threeCandidate;
     }
+
     public void setThreeCandidate(String threeCandidate) {
         this.threeCandidate = threeCandidate;
     }
