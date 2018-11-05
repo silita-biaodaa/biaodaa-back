@@ -99,4 +99,11 @@ public interface INoticeZhongBiaoService {
      * @return
      */
     String getQualRelationStr(TbNtRegexGroup tbNtRegexGroup);
+
+    /**
+     * 获取中标编辑明显 有变更的字段
+     * @param tbNtBids
+     * @return
+     */
+    List<String> listDetailChangeFields(TbNtBids tbNtBids);
 }

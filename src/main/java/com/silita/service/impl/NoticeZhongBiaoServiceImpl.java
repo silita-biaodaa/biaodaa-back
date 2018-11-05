@@ -120,7 +120,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                             Map<String, String> tempMap = new HashMap();
                             if (fields != null && fields.size() > 0) {
                                 TwfDict twfDict = new TwfDict();
-                                //去除旧的变更信息
+                                //保留最新的一条变更字段记录
                                 for (Map<String, Object> map : fields) {
                                     String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
                                     String tempValue = String.valueOf(map.get("field_value"));
@@ -784,6 +784,19 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             return sb.toString();
         }
         return null;
+    }
+
+    @Override
+    public List<String> listDetailChangeFields(TbNtBids tbNtBids) {
+        TbNtChange tbNtChange = new TbNtChange();
+        tbNtChange.setNtId(tbNtBids.getNtId());
+        tbNtChange.setNtEditId(tbNtBids.getPkid());
+        List<Map<String, Object>> fields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+        List changeFields = new ArrayList(fields.size());
+        for (Map<String, Object> map : fields) {
+            changeFields.add(map.get("field_name"));
+        }
+        return changeFields;
     }
 
 }

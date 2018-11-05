@@ -134,4 +134,10 @@ public class NoticeZhongBiaoController extends BaseController {
     public Map<String,Object> getQualRelationStr(@RequestBody TbNtRegexGroup tbNtRegexGroup) {
         return super.successMap(noticeZhongBiaoService.getQualRelationStr(tbNtRegexGroup));
     }
+
+    @RequestMapping(value = "/listDetailChangeFields", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> listDetailChangeFields(@RequestBody TbNtBids tbNtBids) {
+        return super.successMap(noticeZhongBiaoService.listDetailChangeFields(tbNtBids));
+    }
 }
