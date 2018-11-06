@@ -458,6 +458,14 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                             }
                         }
                     }
+                    //前端要的特定数据
+                    if (!StringUtils.isEmpty(tempNtBids.getCityCodeName())) {
+                        SysArea sysArea = new SysArea();
+                        sysArea.setAreaName(tempNtBids.getCityCodeName());
+                        sysArea.setAreaCode(tempNtBids.getSource());
+                        String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
+                        tempNtBids.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
+                    }
                     //获取招标标段信息
                     Map<String, String> map = tbNtTendersMapper.getNtIdByEditCode(tempNtBids.getTdEditCode(), tbNtBids.getSource());
                     if (null != map) {
@@ -466,14 +474,6 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                         tbNtRegexGroup.setNtEditId(map.get("pkid"));
                         //资质
                         tempNtBids.setQualRelationStr(this.getQualRelationStr(tbNtRegexGroup));
-                    }
-                    //前端要的特定数据
-                    if (!StringUtils.isEmpty(tempNtBids.getCityCodeName())) {
-                        SysArea sysArea = new SysArea();
-                        sysArea.setAreaName(tempNtBids.getCityCodeName());
-                        sysArea.setAreaCode(tempNtBids.getSource());
-                        String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
-                        tempNtBids.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
                     }
                 }
             } catch (Exception e) {
