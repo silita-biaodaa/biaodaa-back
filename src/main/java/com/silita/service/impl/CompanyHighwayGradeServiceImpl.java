@@ -299,6 +299,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         if (null != param.get("currentPage")) {
             grade.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
             grade.setPageSize(MapUtils.getInteger(param, "pageSize"));
+            grade.setIsLimit("true");
         }
         return grade;
     }

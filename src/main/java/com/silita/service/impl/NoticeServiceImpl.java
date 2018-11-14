@@ -27,16 +27,16 @@ public class NoticeServiceImpl implements INoticeService {
             return new HashMap<>();
         }
         Map<String, Object> resultMap = new HashMap<>();
+        mian.setTableName(DataHandlingUtil.SplicingTable(mian.getClass(), mian.getSource()));
+        mian.setNtStatus("1");
+        mian.setIsEnable("1");
+        mian.setPkid(DataHandlingUtil.getUUID());
         int cunt = tbNtMianMapper.queryNtMainCount(mian);
         if (cunt > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
             resultMap.put("msg", Constant.MSG_WARN_400);
             return resultMap;
         }
-        mian.setTableName(DataHandlingUtil.SplicingTable(mian.getClass(), mian.getSource()));
-        mian.setNtStatus("1");
-        mian.setIsEnable("1");
-        mian.setPkid(DataHandlingUtil.getUUID());
         int count = tbNtMianMapper.insertNtMian(mian);
         if (count > 0) {
             TbNtText tbNtText = new TbNtText();

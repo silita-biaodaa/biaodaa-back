@@ -545,6 +545,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
         if (null != param.get("currentPage")) {
             cert.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
             cert.setPageSize(MapUtils.getInteger(param, "pageSize"));
+            cert.setIsLimit("true");
         }
         return cert;
     }

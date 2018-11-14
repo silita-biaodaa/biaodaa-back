@@ -266,31 +266,31 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             row = sheet.createRow(i + 1); // 创建一个行
             row.setHeightInPoints(30); //设置这一行的高度
             if (null != excelList.get(i).get("comName")) {
-                ExcelUtils.createCell(wb, row, 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "comName"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("comName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("levelName")) {
-                ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "levelName"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("levelName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("prov")) {
-                ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "prov"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("prov").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("city")) {
-                ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "city"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("city").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("awdName")) {
-                ExcelUtils.createCell(wb, row, 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "awdName"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("awdName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("year")) {
-                ExcelUtils.createCell(wb, row, 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "year"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("year").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("proName")) {
-                ExcelUtils.createCell(wb, row, 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "proName"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("proName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("proTypeName")) {
-                ExcelUtils.createCell(wb, row, 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "proTypeName"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("proTypeName").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("issueDate")) {
-                ExcelUtils.createCell(wb, row, 8, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "issueDate"); //要充满屏幕又要中间
+                ExcelUtils.createCell(wb, row, 8, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("issueDate").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("sdf")) {
                 ExcelUtils.createCell(wb, row, 9, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("sdf").toString()); //要充满屏幕又要中间
@@ -334,6 +334,7 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
     private TbCompanyAwards mapToClass(Map<String, Object> param) {
         TbCompanyAwards companyAwards = new TbCompanyAwards();
         if (null != MapUtils.getInteger(param, "currentPage")) {
+            companyAwards.setIsLimit("true");
             companyAwards.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
             companyAwards.setPageSize(MapUtils.getInteger(param, "pageSize"));
         }

@@ -292,6 +292,7 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
     private TbCompanyBad mapToClass(Map<String, Object> param) {
         TbCompanyBad companyBad = new TbCompanyBad();
         if (null != param.get("currentPage")) {
+            companyBad.setIsLimit("true");
             companyBad.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
             companyBad.setPageSize(MapUtils.getInteger(param, "pageSize"));
         }

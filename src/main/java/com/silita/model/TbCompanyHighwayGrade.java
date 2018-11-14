@@ -70,4 +70,9 @@ public class TbCompanyHighwayGrade extends Pagination {
      * 省
      */
     private String province;
+
+    /**
+     * 非表字段:是否分页
+     */
+    private String isLimit;
 }

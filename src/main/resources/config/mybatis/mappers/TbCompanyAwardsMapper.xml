@@ -118,7 +118,7 @@
             AND t1.`pro_name` LIKE CONCAT('%', #{proName}, '%')
         </if>
         ORDER BY t1.`issue_date` DESC
-        <if test="currentPage != null and currentPage != ''">
+        <if test="isLimit != null and isLimit == 'true'">
             LIMIT #{start}, #{pageSize}
         </if>
     </select>

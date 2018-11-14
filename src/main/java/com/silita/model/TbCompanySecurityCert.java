@@ -111,4 +111,9 @@ public class TbCompanySecurityCert extends Pagination {
      * 公司名称
      */
     private String comName;
+
+    /**
+     * 非表字段:是否分页
+     */
+    private String isLimit;
 }
