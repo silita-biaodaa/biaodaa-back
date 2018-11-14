@@ -65,12 +65,17 @@
     </select>
 
     <select id="listTendersDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
-        SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过' WHEN 5 then '已处理' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date,
-        (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code,
-        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = tenders.pro_type) AS pro_type, '资质', tenders.controll_sum,
-        tenders.pro_sum, tenders.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = tenders.pb_mode) AS pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
+        SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过'
+        WHEN 5 then '已处理' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date,
+        (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code, (SELECT `area_name` FROM
+        sys_area WHERE area_code = main.county_code) AS county_code,
+        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type, (SELECT `name` FROM
+        twf_dict WHERE `type` = 4 AND code = tenders.pro_type) AS pro_type, '资质', tenders.controll_sum,
+        tenders.pro_sum, tenders.pro_duration, (SELECT `name` FROM dic_common WHERE `code` = tenders.pb_mode) AS
+        pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
         tenders.enroll_end_time,tenders.enroll_addr, tenders.audit_time, tenders.bid_end_time, tenders.opening_addr,
-        (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = tenders.filing_pfm) AS filing_pfm, (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = tenders.nt_td_status) AS nt_td_status, tenders.opening_person,
+        (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = tenders.filing_pfm) AS filing_pfm, (SELECT `name` FROM
+        twf_dict WHERE `type` = 2 AND code = tenders.nt_td_status) AS nt_td_status, tenders.opening_person,
         main.url, tenders.pkid, tenders.nt_id
         FROM tb_nt_mian_${source} AS main
         LEFT JOIN tb_nt_tenders_${source} AS tenders ON main.pkid = tenders.nt_id
@@ -104,8 +109,10 @@
 
     <select id="listBidsDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
         SELECT main.title, CONCAT(bids.segment, '标段') AS segment, main.pub_date, bids.controll_sum, bids.pro_sum,
-        bids.pro_duration, '计划竣工时间', (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code, (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code, bids.pb_mode,
-        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type, (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = bids.pro_type) AS pro_type, '资质', main.url, bids.pkid,
+        bids.pro_duration, '计划竣工时间', (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code,
+        (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code, bids.pb_mode,
+        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type, (SELECT `name` FROM
+        twf_dict WHERE `type` = 4 AND code = bids.pro_type) AS pro_type, '资质', main.url, bids.pkid,
         bids.nt_id
         FROM tb_nt_mian_${source} AS main
         LEFT JOIN tb_nt_bids_${source} AS bids ON main.pkid = bids.nt_id
@@ -138,12 +145,12 @@
     </select>
 
     <!--<delete id="deleteNtMainByPkId" parameterType="com.silita.model.TbNtMian">-->
-        <!--DELETE FROM ${tableName} WHERE pkid = #{pkid}-->
+    <!--DELETE FROM ${tableName} WHERE pkid = #{pkid}-->
     <!--</delete>-->
 
     <update id="deleteNtMainByPkId" parameterType="com.silita.model.TbNtMian">
-       update ${tableName}
-       set
+        update ${tableName}
+        set
         <choose>
             <when test="isEnable != null and isEnable != ''">
                 is_enable = #{isEnable},
@@ -154,7 +161,7 @@
         </choose>
         `updated` = NOW(),
         `update_by` = #{updateBy}
-       WHERE pkid = #{pkid}
+        WHERE pkid = #{pkid}
     </update>
 
     <update id="updateCategoryAndStatusByPkId" parameterType="com.silita.model.TbNtMian">
@@ -172,19 +179,19 @@
     <update id="updateNtMainByPkId" parameterType="com.silita.model.TbNtMian">
         UPDATE ${tableName} SET
         <if test="binessType !=null and binessType!=''">
-          `biness_type` = #{binessType},
+            `biness_type` = #{binessType},
         </if>
         <if test="ntCategory !=null and ntCategory!=''">
-          `nt_category` = #{ntCategory},
+            `nt_category` = #{ntCategory},
         </if>
         <if test="title !=null and title!=''">
-          `title` = #{title},
+            `title` = #{title},
         </if>
         <if test="pubDate !=null and pubDate!=''">
-          `pub_date` = #{pubDate},
+            `pub_date` = #{pubDate},
         </if>
         <if test="url !=null and url!=''">
-          `url` = #{url},
+            `url` = #{url},
         </if>
         `nt_type` = #{ntType},
         `city_code` = #{cityCode},
@@ -226,4 +233,122 @@
         FROM ${tableName}
         WHERE pkid = #{pkid}
     </select>
+
+    <insert id="insertNtMian" parameterType="com.silita.model.TbNtMian">
+        INSERT INTO ${tableName}
+        (
+        <if test="pkid != null and pkid != ''">
+            `pkid`,
+        </if>
+        <if test="title != null and title != ''">
+            `title`,
+        </if>
+        <if test="url != null and url != ''">
+            `url`,
+        </if>
+        <if test="segCount != null and segCount != ''">
+            `seg_count`,
+        </if>
+        <if test="proviceCode != null and proviceCode != ''">
+            `provice_code`,
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            `city_code`,
+        </if>
+        <if test="countyCode != null and countyCode != ''">
+            `county_code`,
+        </if>
+        <if test="binessType != null and binessType != ''">
+            `biness_type`,
+        </if>
+        <if test="ntCategory != null and ntCategory != ''">
+            `nt_category`,
+        </if>
+        <if test="ntType != null and ntType != ''">
+            `nt_type`,
+        </if>
+        <if test="year != null and year != ''">
+            `year`,
+        </if>
+        <if test="pubDate != null and pubDate != ''">
+            `pub_date`,
+        </if>
+        <if test="srcSite != null and srcSite != ''">
+            `src_site`,
+        </if>
+        <if test="source != null and source != ''">
+            `source`,
+        </if>
+        <if test="isEnable != null and isEnable != ''">
+            `is_enable`,
+        </if>
+        <if test="ntStatus != null and ntStatus != ''">
+            `nt_status`,
+        </if>
+        <if test="px != null and px != ''">
+            `px`,
+        </if>
+        <if test="createBy != null and createBy != ''">
+            `create_by`,
+        </if>
+        `created`
+        )
+        VALUES (
+        <if test="pkid != null and pkid != ''">
+            #{pkid},
+        </if>
+        <if test="title != null and title != ''">
+            #{title},
+        </if>
+        <if test="url != null and url != ''">
+            #{url},
+        </if>
+        <if test="segCount != null and segCount != ''">
+            #{segCount},
+        </if>
+        <if test="proviceCode != null and proviceCode != ''">
+            #{proviceCode},
+        </if>
+        <if test="cityCode != null and cityCode != ''">
+            #{cityCode},
+        </if>
+        <if test="countyCode != null and countyCode != ''">
+            #{countyCode},
+        </if>
+        <if test="binessType != null and binessType != ''">
+            #{binessType},
+        </if>
+        <if test="ntCategory != null and ntCategory != ''">
+            #{ntCategory},
+        </if>
+        <if test="ntType != null and ntType != ''">
+            #{ntType},
+        </if>
+        <if test="year != null and year != ''">
+            #{year},
+        </if>
+        <if test="pubDate != null and pubDate != ''">
+            #{pubDate},
+        </if>
+        <if test="srcSite != null and srcSite != ''">
+            #{srcSite},
+        </if>
+        <if test="source != null and source != ''">
+            #{source},
+        </if>
+        <if test="isEnable != null and isEnable != ''">
+            #{isEnable},
+        </if>
+        <if test="ntStatus != null and ntStatus != ''">
+            #{ntStatus},
+        </if>
+        <if test="px != null and px != ''">
+            #{px},
+        </if>
+        <if test="createBy != null and createBy != ''">
+            #{createBy},
+        </if>
+        now()
+        )
+    </insert>
 </mapper>

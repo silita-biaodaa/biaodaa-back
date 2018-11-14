@@ -18,4 +18,11 @@ public interface TbNtTextHunanMapper extends MyMapper<TbNtText> {
      * @return
      */
     Integer updateNtText(TbNtText ntTextHunan);
+
+    /**
+     * 添加公告原文
+     * @param tbNtText
+     * @return
+     */
+    int inertNtText(TbNtText tbNtText);
 }

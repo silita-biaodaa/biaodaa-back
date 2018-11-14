@@ -178,4 +178,9 @@ public class TbNtMian extends Pagination{
      * 拼接表名称
      */
     private String tableName;
+
+    /**
+     * 非表字段:(公告内容)
+     */
+    private String content;
 }

@@ -283,7 +283,7 @@
             AND (t1.`cert_no` is null OR t1.`cert_no` = '')
         </if>
         ORDER BY t1.`expired` DESC
-        <if test="start != null and start != '' and pageSize != null and pageSize != ''">
+        <if test="pageSize != null and pageSize != ''">
             LIMIT #{start}, #{pageSize}
         </if>
     </select>

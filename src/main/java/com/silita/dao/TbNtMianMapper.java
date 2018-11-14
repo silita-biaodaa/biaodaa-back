@@ -80,4 +80,11 @@ public interface TbNtMianMapper {
      * @return
      */
     public String getNtStatusByPkId(TbNtMian tbNtMian);
+
+    /**
+     * 添加
+     * @param tbNtMian
+     * @return
+     */
+    int insertNtMian(TbNtMian tbNtMian);
 }

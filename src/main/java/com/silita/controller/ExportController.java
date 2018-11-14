@@ -6,7 +6,6 @@ import com.silita.service.ICompanyAwardsService;
 import com.silita.service.ICompanyBadService;
 import com.silita.service.ICompanyHighwayGradeService;
 import com.silita.service.ICompanySecurityCertService;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,12 +36,11 @@ public class ExportController extends BaseController {
     /**
      * 公司维护信息导出
      *
-     * @param response
      * @param param
      */
     @ResponseBody
     @RequestMapping(value = "/exportExcel", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String,Object> companyCorpExport(@RequestBody Map<String, Object> param, HttpServletResponse response) {
+    public Map<String,Object> companyCorpExport(@RequestBody Map<String, Object> param) {
         String fileUrl = null;
         try {
             if ("highway_grade".equals(param.get("tabType"))) {

@@ -201,7 +201,7 @@
         </if>
         ORDER BY t1.`assess_year` DESC,
         t1.`created` DESC
-        <if test="start != null and start != '' and pageSize != null and pageSize != ''">
+        <if test="pageSize != null and pageSize != ''">
             LIMIT #{start}, #{pageSize}
         </if>
     </select>
