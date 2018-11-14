@@ -351,4 +351,11 @@
         now()
         )
     </insert>
+
+    <select id="queryNtMainCount" parameterType="com.silita.model.TbNtMian" resultType="java.lang.Integer">
+        select
+          count(1)
+        from ${tableName}
+        where `title` = #{title}
+    </select>
 </mapper>

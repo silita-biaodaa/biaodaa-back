@@ -30,7 +30,6 @@ public class NoticeController extends BaseController {
     @RequestMapping("/add")
     public Map<String, Object> addNotice(@RequestBody TbNtMian tbNtMian, HttpServletRequest request) {
         tbNtMian.setCreateBy(JWTUtil.getUsername(request));
-        noticeService.addNotice(tbNtMian);
-        return successMap();
+        return noticeService.addNotice(tbNtMian);
     }
 }

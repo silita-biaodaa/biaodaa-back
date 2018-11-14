@@ -87,4 +87,11 @@ public interface TbNtMianMapper {
      * @return
      */
     int insertNtMian(TbNtMian tbNtMian);
+
+    /**
+     * 查询公告唯一性
+     * @param tbNtMian
+     * @return
+     */
+    int  queryNtMainCount(TbNtMian tbNtMian);
 }

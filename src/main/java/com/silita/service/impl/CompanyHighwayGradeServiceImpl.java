@@ -221,9 +221,9 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
     @Override
     public String batchExportCompanyHighwayGrade(Map<String, Object> param) throws IOException {
         TbCompanyHighwayGrade grade = mapToClass(param);
-        List<Map<String, Object>> list = tbCompanyHighwayGradeMapper.queryCompanyHigway(grade);
+        List<Map<String, Object>> list = tbCompanyHighwayGradeMapper.queryCompanyHigForCompanyList(grade);
         if (null != list && list.size() > 0) {
-            return uploadExcel(list, "exprot", "企业公路信用等级_"+DataHandlingUtil.getUUID()+".xlsx");
+            return uploadExcel(list, "export", "企业公路信用等级_"+DataHandlingUtil.getUUID()+".xlsx");
         }
         return null;
     }

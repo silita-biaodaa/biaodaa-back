@@ -262,6 +262,7 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
         fileOut.close();
         if ("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())) {
             String proFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
+            return proFileUrl;
         }
         return fileUrl;
     }
