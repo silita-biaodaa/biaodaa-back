@@ -71,6 +71,16 @@
             ELSE '市级'
             END
         ) AS `level`
+        ,(
+            CASE
+            t1.`level`
+            WHEN 1
+            THEN '国家级'
+            WHEN 2
+            THEN '省级'
+            ELSE '市级'
+            END
+        ) AS `levelName`
         ,t2.`area_name` AS prov
         ,t3.`area_name` AS city
         ,t1.`awd_name` AS awdName
@@ -108,7 +118,9 @@
             AND t1.`pro_name` LIKE CONCAT('%', #{proName}, '%')
         </if>
         ORDER BY t1.`issue_date` DESC
-        LIMIT #{start}, #{pageSize}
+        <if test="start != null and start != '' and pageSize != null and pageSize != ''">
+            LIMIT #{start}, #{pageSize}
+        </if>
     </select>
 
     <delete id="deleteCompanyAwards" parameterType="java.lang.String">
@@ -174,4 +186,14 @@
             AND t1.`issue_date` = #{issueDate}
         </if>
     </select>
+
+    <delete id="deleteCompanyAwardsForParam" parameterType="java.util.List">
+        DELETE
+        FROM `tb_company_awards`
+        WHERE `pkid` in (
+            <foreach collection="list" item="list" separator=",">
+                #{list.pkid}
+            </foreach>
+        )
+    </delete>
 </mapper>

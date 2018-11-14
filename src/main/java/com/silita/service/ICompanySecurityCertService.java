@@ -60,6 +60,13 @@ public interface ICompanySecurityCertService {
     void delCompanySecurity(Map<String, Object> param);
 
     /**
+     * 全选删除
+     *
+     * @param param
+     */
+    void checkAllDelCompanySecurity(Map<String, Object> param);
+
+    /**
      * 安全生产许可证上传
      *
      * @param sheet
@@ -68,7 +75,7 @@ public interface ICompanySecurityCertService {
      * @return
      * @throws IOException
      */
-    Map<String, Object> batchExportCompanySecurity(Sheet sheet, String username, String fileName,String tabType) throws IOException;
+    Map<String, Object> batchImportCompanySecurity(Sheet sheet, String username, String fileName, String tabType) throws IOException;
 
     /**
      * 安全认证
@@ -79,5 +86,13 @@ public interface ICompanySecurityCertService {
      * @return
      * @throws IOException
      */
-    Map<String, Object> batchExportCompanySafetyCert(Sheet sheet, String username, String fileName,String tabType) throws IOException;
+    Map<String, Object> batchImportCompanySafetyCert(Sheet sheet, String username, String fileName, String tabType) throws IOException;
+
+    /**
+     * 批量导出
+     * @param param
+     * @return
+     * @throws IOException
+     */
+    String batchExportCompanySecu(Map<String,Object> param) throws IOException;
 }

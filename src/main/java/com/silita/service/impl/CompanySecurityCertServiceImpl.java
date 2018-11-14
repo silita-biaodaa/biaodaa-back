@@ -5,7 +5,6 @@ import com.silita.common.ConstantMap;
 import com.silita.dao.SysAreaMapper;
 import com.silita.dao.TbCompanyMapper;
 import com.silita.dao.TbCompanySecurityCertMapper;
-import com.silita.model.TbCompanyHighwayGrade;
 import com.silita.model.TbCompanySecurityCert;
 import com.silita.service.ICompanySecurityCertService;
 import com.silita.service.abs.AbstractService;
@@ -113,18 +112,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
 
     @Override
     public Map<String, Object> listCompanySecurity(Map<String, Object> param) {
-        TbCompanySecurityCert cert = new TbCompanySecurityCert();
-        cert.setCertProvCode(MapUtils.getString(param, "certProvCode"));
-        cert.setExpiredStr(MapUtils.getString(param, "expired"));
-        cert.setCertNo(MapUtils.getString(param, "certNo"));
-        cert.setCertCityCode(MapUtils.getString(param, "certCityCode"));
-        cert.setCertLevel(MapUtils.getString(param, "certLevel"));
-        cert.setCertResult(MapUtils.getString(param, "certResult"));
-        cert.setComName(MapUtils.getString(param, "comName"));
-        cert.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
-        cert.setPageSize(MapUtils.getInteger(param, "pageSize"));
-        cert.setIssueDate(MapUtils.getString(param, "issueDate"));
-        cert.setTabType(MapUtils.getString(param, "tabType"));
+        TbCompanySecurityCert cert = mapToClass(param);
         Map<String, Object> result = new HashMap<>();
         Integer total = tbCompanySecurityCertMapper.queryCompanyCertCount(cert);
         if (total <= 0) {
@@ -145,7 +133,16 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
     }
 
     @Override
-    public Map<String, Object> batchExportCompanySecurity(Sheet sheet, String username, String fileName, String tabType) throws IOException {
+    public void checkAllDelCompanySecurity(Map<String, Object> param) {
+        TbCompanySecurityCert cert = mapToClass(param);
+        List<Map<String, Object>> list = tbCompanySecurityCertMapper.queryCompanyCertList(cert);
+        if (null != list && list.size() > 0){
+            tbCompanySecurityCertMapper.batchDeleteCompanySecurity(list);
+        }
+    }
+
+    @Override
+    public Map<String, Object> batchImportCompanySecurity(Sheet sheet, String username, String fileName, String tabType) throws IOException {
         int rowCount = sheet.getLastRowNum();
         if (rowCount < 1) {
             return null;
@@ -245,13 +242,11 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
 
         Map<String, Object> resultMap = new HashMap<>();
         if (!isError) {
-            String fileUrl = uploadExcel(excelList, fileName, tabType);
             resultMap.put("code", Constant.CODE_WARN_405);
             resultMap.put("msg", Constant.MSG_WARN_405);
-            resultMap.put("data", fileUrl);
+            resultMap.put("data", uploadExcel(excelList, "import", tabType,fileName));
             return resultMap;
         }
-
         List<TbCompanySecurityCert> list = doWeight(excelList);
         if (null != list && list.size() > 0) {
             tbCompanySecurityCertMapper.batchCompanyCert(list);
@@ -262,7 +257,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
     }
 
     @Override
-    public Map<String, Object> batchExportCompanySafetyCert(Sheet sheet, String username, String fileName, String tabType) throws IOException {
+    public Map<String, Object> batchImportCompanySafetyCert(Sheet sheet, String username, String fileName, String tabType) throws IOException {
         int rowCount = sheet.getLastRowNum();
         if (rowCount < 1) {
             return null;
@@ -404,10 +399,9 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
 
         Map<String, Object> resultMap = new HashMap<>();
         if (!isError) {
-            String fileUrl = uploadExcel(excelList, fileName, tabType);
             resultMap.put("code", Constant.CODE_WARN_405);
             resultMap.put("msg", Constant.MSG_WARN_405);
-            resultMap.put("data", fileUrl);
+            resultMap.put("data", uploadExcel(excelList, "import", tabType,fileName));
             return resultMap;
         }
         List<TbCompanySecurityCert> list = doWeight(excelList);
@@ -419,7 +413,17 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
         return resultMap;
     }
 
-    private String uploadExcel(List<Map<String, Object>> excelList, String fileName, String tabType) throws IOException {
+    @Override
+    public String batchExportCompanySecu(Map<String, Object> param) throws IOException {
+        TbCompanySecurityCert cert = mapToClass(param);
+        List<Map<String, Object>> list = tbCompanySecurityCertMapper.queryCompanyCertList(cert);
+        if (null != list && list.size() > 0) {
+            return uploadExcel(list, "exprot", cert.getTabType(),"企业安全信息_"+DataHandlingUtil.getUUID()+".xlsx");
+        }
+        return null;
+    }
+
+    private String uploadExcel(List<Map<String, Object>> excelList, String type, String tabType,String fileName) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("安全认证");  // 创建第一个Sheet页;
         Row row = sheet.createRow(0); // 创建一个行
@@ -432,13 +436,17 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
             ExcelUtils.createCell(wb, row, (short) 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "市");
             ExcelUtils.createCell(wb, row, (short) 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "发布日期");
             ExcelUtils.createCell(wb, row, (short) 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "有效期至");
-            ExcelUtils.createCell(wb, row, (short) 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因");
+            if ("import".equals(type)) {
+                ExcelUtils.createCell(wb, row, (short) 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因");
+            }
         } else {
             ExcelUtils.createCell(wb, row, (short) 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "安全生产许可证号");
             ExcelUtils.createCell(wb, row, (short) 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "省");
             ExcelUtils.createCell(wb, row, (short) 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "发布日期");
             ExcelUtils.createCell(wb, row, (short) 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "有效期至");
-            ExcelUtils.createCell(wb, row, (short) 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因");
+            if ("import".equals(type)) {
+                ExcelUtils.createCell(wb, row, (short) 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因");
+            }
         }
 
         for (int i = 0; i < excelList.size(); i++) {
@@ -492,8 +500,8 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
         wb.write(fileOut);
         fileOut.close();
         if ("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())) {
-            String newFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
-            return newFileUrl;
+            String proFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
+            return proFileUrl;
         }
         return fileUrl;
     }
@@ -521,5 +529,23 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
             }
         }
         return resultList;
+    }
+
+    private TbCompanySecurityCert mapToClass(Map<String, Object> param) {
+        TbCompanySecurityCert cert = new TbCompanySecurityCert();
+        cert.setCertProvCode(MapUtils.getString(param, "certProvCode"));
+        cert.setExpiredStr(MapUtils.getString(param, "expired"));
+        cert.setCertNo(MapUtils.getString(param, "certNo"));
+        cert.setCertCityCode(MapUtils.getString(param, "certCityCode"));
+        cert.setCertLevel(MapUtils.getString(param, "certLevel"));
+        cert.setCertResult(MapUtils.getString(param, "certResult"));
+        cert.setComName(MapUtils.getString(param, "comName"));
+        cert.setIssueDate(MapUtils.getString(param, "issueDate"));
+        cert.setTabType(MapUtils.getString(param, "tabType"));
+        if (null != param.get("currentPage")) {
+            cert.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
+            cert.setPageSize(MapUtils.getInteger(param, "pageSize"));
+        }
+        return cert;
     }
 }

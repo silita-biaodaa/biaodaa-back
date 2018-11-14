@@ -194,20 +194,22 @@
             AND t1.`assess_prov_code` = #{assessProvCode}
         </if>
         <!--<if test="province != null and province != ''">-->
-            <!--AND t.`regis_address` = #{province}-->
+        <!--AND t.`regis_address` = #{province}-->
         <!--</if>-->
         <if test="assessLevel != null and assessLevel != ''">
             AND t1.`assess_level` = #{assessLevel}
         </if>
         ORDER BY t1.`assess_year` DESC,
         t1.`created` DESC
-        LIMIT #{start}, #{pageSize}
+        <if test="start != null and start != '' and pageSize != null and pageSize != ''">
+            LIMIT #{start}, #{pageSize}
+        </if>
     </select>
 
     <select id="queryCompanyHigForCompanyCount" resultType="java.lang.Integer"
             parameterType="com.silita.model.TbCompanyHighwayGrade">
         SELECT
-          COUNT(1)
+        COUNT(1)
         FROM
         tb_company t
         JOIN tb_company_highway_grade t1
@@ -223,7 +225,7 @@
             AND t1.`assess_prov_code` = #{assessProvCode}
         </if>
         <!--<if test="province != null and province != ''">-->
-            <!--AND t.`regis_address` = #{province}-->
+        <!--AND t.`regis_address` = #{province}-->
         <!--</if>-->
         <if test="assessLevel != null and assessLevel != ''">
             AND t1.`assess_level` = #{assessLevel}
@@ -234,19 +236,19 @@
 
     <insert id="batchInsertCompanyHig" parameterType="java.util.List">
         INSERT INTO `biaodaa_admin`.`tb_company_highway_grade`
-            (`pkid`,
-             `com_id`,
-             `assess_year`,
-             `assess_level`,
-             `assess_prov_code`,
-             `assess_origin`,
-             `created`,
-             `create_by`
-             )
+        (`pkid`,
+        `com_id`,
+        `assess_year`,
+        `assess_level`,
+        `assess_prov_code`,
+        `assess_origin`,
+        `created`,
+        `create_by`
+        )
         VALUES
         <foreach collection="list" item="list" separator=",">
             (
-              #{list.pkid},#{list.comId},#{list.assessYear},#{list.assessLevel},#{list.assessProvCode},'2',now(),#{list.createBy}
+            #{list.pkid},#{list.comId},#{list.assessYear},#{list.assessLevel},#{list.assessProvCode},'2',now(),#{list.createBy}
             )
         </foreach>
     </insert>
@@ -269,4 +271,13 @@
             AND t1.`assess_level` = #{level}
         </if>
     </select>
+
+    <delete id="deleteCompanyHigwayForParam" parameterType="java.util.List">
+        delete from tb_company_highway_grade
+        where pkid in (
+            <foreach collection="list" item="list" separator=",">
+                #{list.pkid}
+            </foreach>
+        )
+    </delete>
 </mapper>

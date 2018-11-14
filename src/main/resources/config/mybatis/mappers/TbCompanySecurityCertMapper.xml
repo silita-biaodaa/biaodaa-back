@@ -60,8 +60,8 @@
     </select>
 
     <delete id="deleteCompanySecurity" parameterType="java.lang.String">
-    delete from tb_company_security_cert where pkid = #{pkid}
-  </delete>
+      delete from tb_company_security_cert where pkid = #{pkid}
+    </delete>
 
     <insert id="insertCompanySecurity" parameterType="com.silita.model.TbCompanySecurityCert">
         INSERT INTO `tb_company_security_cert`
@@ -283,7 +283,9 @@
             AND (t1.`cert_no` is null OR t1.`cert_no` = '')
         </if>
         ORDER BY t1.`expired` DESC
-        LIMIT #{start}, #{pageSize}
+        <if test="start != null and start != '' and pageSize != null and pageSize != ''">
+            LIMIT #{start}, #{pageSize}
+        </if>
     </select>
 
     <select id="queryCompanyCertCount" parameterType="com.silita.model.TbCompanySecurityCert"
@@ -382,4 +384,13 @@
             AND t1.`cert_result` = #{certResult}
         </if>
     </select>
+
+    <delete id="batchDeleteCompanySecurity" parameterType="java.util.List">
+        delete from tb_company_security_cert
+        where pkid in (
+            <foreach collection="list" item="list" separator=",">
+                #{list.pkid}
+            </foreach>
+        )
+    </delete>
 </mapper>

@@ -42,23 +42,14 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
 
     @Override
     public Map<String, Object> getCompanyBadList(Map<String, Object> param) {
-        TbCompanyBad companyBad = new TbCompanyBad();
-        companyBad.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
-        companyBad.setPageSize(MapUtils.getInteger(param, "pageSize"));
-        companyBad.setComName(MapUtils.getString(param, "comName"));
-        companyBad.setProName(MapUtils.getString(param, "proName"));
-        companyBad.setBadInfo(MapUtils.getString(param, "badInfo"));
-        companyBad.setIssueOrg(MapUtils.getString(param, "issueOrg"));
-        companyBad.setProperty(MapUtils.getString(param, "property"));
-        companyBad.setIssueDate(MapUtils.getString(param, "issueDate"));
-        companyBad.setExpired(MapUtils.getString(param, "expired"));
+        TbCompanyBad companyBad = mapToClass(param);
         Integer total = tbCompanyBadMapper.queryCompanyBadCount(companyBad);
         if (total <= 0) {
             return null;
         }
         Map<String, Object> result = new HashMap<>();
         result.put("list", tbCompanyBadMapper.queryCompanyBadList(companyBad));
-        result.put("total", tbCompanyBadMapper.queryCompanyBadCount(companyBad));
+        result.put("total", total);
         return super.handlePageCount(result, companyBad);
     }
 
@@ -72,7 +63,16 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
     }
 
     @Override
-    public Map<String, Object> batchExportCompanyHighwayGrade(Sheet sheet, String username, String fileName) throws IOException {
+    public void checkAllDelCompanyBad(Map<String, Object> param) {
+        TbCompanyBad bad = mapToClass(param);
+        List<Map<String, Object>> list = tbCompanyBadMapper.queryCompanyBadList(bad);
+        if (null != list && list.size() > 0) {
+            tbCompanyBadMapper.batchDeleteCompanyBad(list);
+        }
+    }
+
+    @Override
+    public Map<String, Object> batchImportCompanyBad(Sheet sheet, String username, String fileName) throws IOException {
         int rowCount = sheet.getLastRowNum();
         if (rowCount < 1) {
             return null;
@@ -189,10 +189,9 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
         }
         Map<String, Object> resultMap = new HashMap<>();
         if (!isError) {
-            String fileUrl = uploadExcel(excelList, fileName);
             resultMap.put("code", Constant.CODE_WARN_405);
             resultMap.put("msg", Constant.MSG_WARN_405);
-            resultMap.put("data", fileUrl);
+            resultMap.put("data", uploadExcel(excelList, "import", fileName));
             return resultMap;
         }
         List<TbCompanyBad> list = doWeight(excelList);
@@ -204,7 +203,17 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
         return resultMap;
     }
 
-    private String uploadExcel(List<Map<String, Object>> excelList, String fileName) throws IOException {
+    @Override
+    public String batchExportCompanyBad(Map<String, Object> param) throws IOException {
+        TbCompanyBad bad = mapToClass(param);
+        List<Map<String, Object>> list = tbCompanyBadMapper.queryCompanyBadList(bad);
+        if (null != list && list.size() > 0) {
+            return this.uploadExcel(list, "exprort", "企业不良信息_" + DataHandlingUtil.getUUID() + ".xlsx");
+        }
+        return null;
+    }
+
+    private String uploadExcel(List<Map<String, Object>> excelList, String type, String fileName) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("不良记录");  // 创建第一个Sheet页;
         Row row = sheet.createRow(0); // 创建一个行
@@ -216,8 +225,9 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
         ExcelUtils.createCell(wb, row, (short) 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "性质");
         ExcelUtils.createCell(wb, row, (short) 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "发布日期");
         ExcelUtils.createCell(wb, row, (short) 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "有效期至");
-        ExcelUtils.createCell(wb, row, (short) 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因");
-
+        if ("import".equals(type)) {
+            ExcelUtils.createCell(wb, row, (short) 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因");
+        }
         for (int i = 0; i < excelList.size(); i++) {
             row = sheet.createRow(i + 1); // 创建一个行
             row.setHeightInPoints(30); //设置这一行的高度
@@ -251,8 +261,7 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
         wb.write(fileOut);
         fileOut.close();
         if ("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())) {
-            String newFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
-            return newFileUrl;
+            String proFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
         }
         return fileUrl;
     }
@@ -277,5 +286,21 @@ public class CompanyBadServiceImpl extends AbstractService implements ICompanyBa
             }
         }
         return resultList;
+    }
+
+    private TbCompanyBad mapToClass(Map<String, Object> param) {
+        TbCompanyBad companyBad = new TbCompanyBad();
+        if (null != param.get("currentPage")) {
+            companyBad.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
+            companyBad.setPageSize(MapUtils.getInteger(param, "pageSize"));
+        }
+        companyBad.setComName(MapUtils.getString(param, "comName"));
+        companyBad.setProName(MapUtils.getString(param, "proName"));
+        companyBad.setBadInfo(MapUtils.getString(param, "badInfo"));
+        companyBad.setIssueOrg(MapUtils.getString(param, "issueOrg"));
+        companyBad.setProperty(MapUtils.getString(param, "property"));
+        companyBad.setIssueDate(MapUtils.getString(param, "issueDate"));
+        companyBad.setExpired(MapUtils.getString(param, "expired"));
+        return companyBad;
     }
 }
