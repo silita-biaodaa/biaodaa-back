@@ -183,7 +183,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
                 if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
-                    excelMap.put("year", cell.getStringCellValue());
+                    excelMap.put("assessYear", cell.getStringCellValue());
                 }
             }
             //等级
@@ -249,8 +249,8 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             if (null != excelList.get(i).get("province")) {
                 ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("province").toString()); //要充满屏幕又要中间
             }
-            if (null != excelList.get(i).get("year")) {
-                ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("year").toString()); //要充满屏幕又要中间
+            if (null != excelList.get(i).get("assessYear")) {
+                ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("assessYear").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("assessLevel")) {
                 ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("assessLevel").toString()); //要充满屏幕又要中间
@@ -279,7 +279,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
                 tbCompanyHighwayGrade = new TbCompanyHighwayGrade();
                 tbCompanyHighwayGrade.setPkid(MapUtils.getString(map, "pkid"));
                 tbCompanyHighwayGrade.setComId(MapUtils.getString(map, "comId"));
-                tbCompanyHighwayGrade.setAssessYear(MapUtils.getInteger(map, "year"));
+                tbCompanyHighwayGrade.setAssessYear(MapUtils.getInteger(map, "assessYear"));
                 tbCompanyHighwayGrade.setAssessLevel(MapUtils.getString(map, "level"));
                 tbCompanyHighwayGrade.setAssessProvCode(MapUtils.getString(map, "provCode"));
                 tbCompanyHighwayGrade.setCreateBy(MapUtils.getString(map, "createdBy"));

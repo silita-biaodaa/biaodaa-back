@@ -306,9 +306,9 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                             isError = false;
                         }
                     } else {
-                        excelMap.put("certLevel", ConstantMap.CERTLEVELMAP.get(cell.getStringCellValue()));
+                        excelMap.put("level", ConstantMap.CERTLEVELMAP.get(cell.getStringCellValue()));
                     }
-                    excelMap.put("level", cell.getStringCellValue());
+                    excelMap.put("certLevel", cell.getStringCellValue());
                 }
             }
             //认证结果
@@ -322,9 +322,9 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                             isError = false;
                         }
                     } else {
-                        excelMap.put("certResult", ConstantMap.CERTRESULTMAP.get(cell.getStringCellValue()));
+                        excelMap.put("result", ConstantMap.CERTRESULTMAP.get(cell.getStringCellValue()));
                     }
-                    excelMap.put("result", cell.getStringCellValue());
+                    excelMap.put("certResult", cell.getStringCellValue());
                 }
             }
             //省
@@ -341,7 +341,7 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                     } else {
                         excelMap.put("provCode", provCode);
                     }
-                    excelMap.put("prov", cell.getStringCellValue());
+                    excelMap.put("certProv", cell.getStringCellValue());
                 }
             }
             //市
@@ -351,14 +351,14 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                 if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
                     cityCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
                     if (null == cityCode) {
-                        sbf.append("，省份错误");
+                        sbf.append("，市错误");
                         if (isError) {
                             isError = false;
                         }
                     } else {
                         excelMap.put("cityCode", cityCode);
                     }
-                    excelMap.put("city", cell.getStringCellValue());
+                    excelMap.put("certCity", cell.getStringCellValue());
                 }
             }
             //发布日期
@@ -456,17 +456,17 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                 ExcelUtils.createCell(wb, row, 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("comName").toString());
             }
             if ("safety_cert".equals(tabType)) {
-                if (null != excelList.get(i).get("level")) {
-                    ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("level").toString());
+                if (null != excelList.get(i).get("certLevel")) {
+                    ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("certLevel").toString());
                 }
-                if (null != excelList.get(i).get("result")) {
-                    ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("result").toString());
+                if (null != excelList.get(i).get("certResult")) {
+                    ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("certResult").toString());
                 }
-                if (null != excelList.get(i).get("prov")) {
-                    ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("prov").toString());
+                if (null != excelList.get(i).get("certProv")) {
+                    ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("certProv").toString());
                 }
-                if (null != excelList.get(i).get("city")) {
-                    ExcelUtils.createCell(wb, row, 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("city").toString());
+                if (null != excelList.get(i).get("certCity")) {
+                    ExcelUtils.createCell(wb, row, 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("certCity").toString());
                 }
                 if (null != excelList.get(i).get("issueDate")) {
                     ExcelUtils.createCell(wb, row, 5, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("issueDate").toString());
@@ -481,8 +481,8 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                 if (null != excelList.get(i).get("certNo")) {
                     ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("certNo").toString());
                 }
-                if (null != excelList.get(i).get("prov")) {
-                    ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("prov").toString());
+                if (null != excelList.get(i).get("certProv")) {
+                    ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("certProv").toString());
                 }
                 if (null != excelList.get(i).get("issueDate")) {
                     ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("issueDate").toString());
@@ -516,8 +516,8 @@ public class CompanySecurityCertServiceImpl extends AbstractService implements I
                 cert.setPkid(MapUtils.getString(map, "pkid"));
                 cert.setComId(MapUtils.getString(map, "comId"));
                 cert.setCertNo(MapUtils.getString(map, "certNo"));
-                cert.setCertLevel(MapUtils.getString(map, "certLevel"));
-                cert.setCertResult(MapUtils.getString(map, "certResult"));
+                cert.setCertLevel(MapUtils.getString(map, "level"));
+                cert.setCertResult(MapUtils.getString(map, "result"));
                 if (null != MapUtils.getString(map, "expired")) {
                     cert.setExpired(MyDateUtils.strToDate(MapUtils.getString(map, "expired"), "yyyy-MM-dd"));
                 }
