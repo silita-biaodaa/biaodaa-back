@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbFeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.TbFeedback" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
+    <result column="fb_user_id" property="fbUserId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="queryFeedbackList" parameterType="com.silita.model.TbFeedback" resultType="java.util.Map">
+    select
+        t1.pkid as pkid
+        ,t1.`type` as `type`
+        ,t1.content as content
+        ,DATE_FORMAT(t1.`created`,'%Y-%m-%d') as created
+        ,(
+          case when t2.user_name is not null then t2.user_name
+          else
+            t2.nike_name
+          end
+        ) as userName
+        ,t2.phone_no as phone
+    from tb_feedback t1
+    join sys_user_info t2 on t1.fb_user_id = t2.pkid and t2.is_enable = 1
+    order by t1.created desc
+    limit #{start},#{pageSize}
+  </select>
+
+  <select id="queryFeedbackCount" parameterType="com.silita.model.TbFeedback" resultType="java.lang.Integer">
+    select
+        count(1)
+    from tb_feedback t1
+    join sys_user_info t2 on t1.fb_user_id = t2.pkid and t2.is_enable = 1
+    order by t1.created desc
+  </select>
+</mapper>

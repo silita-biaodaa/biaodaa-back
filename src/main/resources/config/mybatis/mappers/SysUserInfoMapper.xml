@@ -91,6 +91,7 @@
             t.pkid as pkid
             ,t.nike_name AS nikeName
             ,t.user_name as userName
+            ,t.is_enable as isEnable
             ,(
               case t.sex when 1 then '男'
               when 2 then '女'

@@ -168,9 +168,9 @@ public class UploadServiceImpl implements IUploadService {
         resultMap.put("msg", Constant.MSG_SUCCESS);
         String fileName = file.getOriginalFilename();
         String path = System.currentTimeMillis() + fileName;
-        File uploadFile = new File(propertiesUtils.getFilePath() + "img" + path);
+        File uploadFile = new File(propertiesUtils.getFilePath() + "/img/" + path);
         file.transferTo(uploadFile);
-        String proFileUrl = propertiesUtils.getLocalhostServer() + "img" + path;
+        String proFileUrl = propertiesUtils.getLocalhostServer() + "/img/" + path;
         resultMap.put("data", proFileUrl);
         return resultMap;
     }
