@@ -148,16 +148,30 @@ public class UploadServiceImpl implements IUploadService {
             return resultMap;
         }
         if ("win_record".equals(tabType)) {
-            resultMap = companyAwardsService.batchExportCompanyAwards(workbook.getSheetAt(0), username, fileName);
+            resultMap = companyAwardsService.batchImportCompanyAwards(workbook.getSheetAt(0), username, fileName);
         } else if ("highway_grade".equals(tabType)) {
-            resultMap = companyHighwayGradeService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0), username, fileName);
+            resultMap = companyHighwayGradeService.batchImportCompanyHighwayGrade(workbook.getSheetAt(0), username, fileName);
         } else if ("safety_permission_cert".equals(tabType)) {
-            resultMap = companySecurityCertService.batchExportCompanySecurity(workbook.getSheetAt(0), username, fileName,tabType);
+            resultMap = companySecurityCertService.batchImportCompanySecurity(workbook.getSheetAt(0), username, fileName, tabType);
         } else if ("undesirable".equals(tabType)) {
-            resultMap = companyBadService.batchExportCompanyHighwayGrade(workbook.getSheetAt(0), username, fileName);
-        }else if("safety_cert".equals(tabType)){
-            resultMap = companySecurityCertService.batchExportCompanySafetyCert(workbook.getSheetAt(0), username, fileName,tabType);
+            resultMap = companyBadService.batchImportCompanyBad(workbook.getSheetAt(0), username, fileName);
+        } else if ("safety_cert".equals(tabType)) {
+            resultMap = companySecurityCertService.batchImportCompanySafetyCert(workbook.getSheetAt(0), username, fileName, tabType);
         }
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> uploadImage(MultipartFile file) throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
+        String fileName = file.getOriginalFilename();
+        String path = System.currentTimeMillis() + fileName;
+        File uploadFile = new File(propertiesUtils.getFilePath() + "img" + path);
+        file.transferTo(uploadFile);
+        String proFileUrl = propertiesUtils.getLocalhostServer() + "img" + path;
+        resultMap.put("data", proFileUrl);
         return resultMap;
     }
 

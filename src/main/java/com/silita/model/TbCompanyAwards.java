@@ -89,4 +89,9 @@ public class TbCompanyAwards extends Pagination {
      * 企业名称
      */
     private String comName;
+
+    /**
+     * 是否分页
+     */
+    private String isLimit;
 }

@@ -97,14 +97,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
 
     @Override
     public Map<String, Object> getCompanyHighwayGradeForCompanyList(Map<String, Object> param) {
-        TbCompanyHighwayGrade grade = new TbCompanyHighwayGrade();
-        grade.setComName(MapUtils.getString(param, "comName"));
-        grade.setAssessLevel(MapUtils.getString(param, "assessLevel"));
-        grade.setAssessProvCode(MapUtils.getString(param, "assessProvCode"));
-        grade.setAssessYear(MapUtils.getInteger(param, "assessYear"));
-        grade.setProvince(MapUtils.getString(param, "province"));
-        grade.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
-        grade.setPageSize(MapUtils.getInteger(param, "pageSize"));
+        TbCompanyHighwayGrade grade = mapToClass(param);
         Map<String, Object> resultMap = new HashMap<>();
         Integer total = tbCompanyHighwayGradeMapper.queryCompanyHigForCompanyCount(grade);
         if (total <= 0) {
@@ -125,7 +118,16 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
     }
 
     @Override
-    public Map<String, Object> batchExportCompanyHighwayGrade(Sheet sheet, String username, String fileName) throws IOException {
+    public void checkAllDeleteCompanyHigwagGrade(Map<String, Object> param) {
+        TbCompanyHighwayGrade grade = mapToClass(param);
+        List<Map<String, Object>> list = tbCompanyHighwayGradeMapper.queryCompanyHigForCompanyList(grade);
+        if (null != list && list.size() > 0) {
+            tbCompanyHighwayGradeMapper.deleteCompanyHigwayForParam(list);
+        }
+    }
+
+    @Override
+    public Map<String, Object> batchImportCompanyHighwayGrade(Sheet sheet, String username, String fileName) throws IOException {
         int rowCount = sheet.getLastRowNum();
         if (rowCount < 1) {
             return null;
@@ -146,7 +148,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             cell = row.getCell(0);
             if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())){
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
                     comId = companyMapper.queryComIdByName(cell.getStringCellValue());
                     if (comId == null) {
                         sbf.append("企业不存在");
@@ -163,7 +165,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             cell = row.getCell(1);
             if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                if(null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())){
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
                     provCode = sysAreaMapper.queryAreaCode(cell.getStringCellValue());
                     if (null == provCode) {
                         sbf.append("，省份错误");
@@ -173,23 +175,23 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
                     } else {
                         excelMap.put("provCode", provCode);
                     }
-                    excelMap.put("prov", cell.getStringCellValue());
+                    excelMap.put("province", cell.getStringCellValue());
                 }
             }
             //年度
             cell = row.getCell(2);
             if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                if(null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())){
-                    excelMap.put("year", cell.getStringCellValue());
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    excelMap.put("assessYear", cell.getStringCellValue());
                 }
             }
             //等级
             cell = row.getCell(3);
             if (null != cell) {
                 cell.setCellType(Cell.CELL_TYPE_STRING);
-                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())){
-                    excelMap.put("level", cell.getStringCellValue());
+                if (null != cell.getStringCellValue() && !"".equals(cell.getStringCellValue())) {
+                    excelMap.put("assessLevel", cell.getStringCellValue());
                 }
             }
             if (null != sbf && !"".equals(sbf.toString())) {
@@ -201,7 +203,7 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         }
         Map<String, Object> resultMap = new HashMap<>();
         if (!isError) {
-            String fileUrl = uploadExcel(excelList, fileName);
+            String fileUrl = uploadExcel(excelList, "import", fileName);
             resultMap.put("code", Constant.CODE_WARN_405);
             resultMap.put("msg", Constant.MSG_WARN_405);
             resultMap.put("data", fileUrl);
@@ -216,7 +218,17 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         return resultMap;
     }
 
-    private String uploadExcel(List<Map<String, Object>> excelList, String fileName) throws IOException {
+    @Override
+    public String batchExportCompanyHighwayGrade(Map<String, Object> param) throws IOException {
+        TbCompanyHighwayGrade grade = mapToClass(param);
+        List<Map<String, Object>> list = tbCompanyHighwayGradeMapper.queryCompanyHigForCompanyList(grade);
+        if (null != list && list.size() > 0) {
+            return uploadExcel(list, "export", "企业公路信用等级_"+DataHandlingUtil.getUUID()+".xlsx");
+        }
+        return null;
+    }
+
+    private String uploadExcel(List<Map<String, Object>> excelList, String type, String fileName) throws IOException {
         XSSFWorkbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("公路信用等级");  // 创建第一个Sheet页;
         Row row = sheet.createRow(0); // 创建一个行
@@ -225,21 +237,23 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         ExcelUtils.createCell(wb, row, (short) 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "省"); //要充满屏幕又要中间
         ExcelUtils.createCell(wb, row, (short) 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "年度"); //要充满屏幕又要中间
         ExcelUtils.createCell(wb, row, (short) 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "等级"); //要充满屏幕又要中间
-        ExcelUtils.createCell(wb, row, (short) 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因"); //要充满屏幕又要中间
+        if ("import".equals(type)) {
+            ExcelUtils.createCell(wb, row, (short) 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因"); //要充满屏幕又要中间
+        }
         for (int i = 0; i < excelList.size(); i++) {
             row = sheet.createRow(i + 1); // 创建一个行
             row.setHeightInPoints(30); //设置这一行的高度
             if (null != excelList.get(i).get("comName")) {
                 ExcelUtils.createCell(wb, row, 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("comName").toString()); //要充满屏幕又要中间
             }
-            if (null != excelList.get(i).get("prov")) {
-                ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("prov").toString()); //要充满屏幕又要中间
+            if (null != excelList.get(i).get("province")) {
+                ExcelUtils.createCell(wb, row, 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("province").toString()); //要充满屏幕又要中间
             }
-            if (null != excelList.get(i).get("year")) {
-                ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("year").toString()); //要充满屏幕又要中间
+            if (null != excelList.get(i).get("assessYear")) {
+                ExcelUtils.createCell(wb, row, 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("assessYear").toString()); //要充满屏幕又要中间
             }
-            if (null != excelList.get(i).get("level")) {
-                ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("level").toString()); //要充满屏幕又要中间
+            if (null != excelList.get(i).get("assessLevel")) {
+                ExcelUtils.createCell(wb, row, 3, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("assessLevel").toString()); //要充满屏幕又要中间
             }
             if (null != excelList.get(i).get("sdf")) {
                 ExcelUtils.createCell(wb, row, 4, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, excelList.get(i).get("sdf").toString()); //要充满屏幕又要中间
@@ -250,8 +264,8 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
         wb.write(fileOut);
         fileOut.close();
         if ("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())) {
-            String newFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
-            return newFileUrl;
+            String proFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
+            return proFileUrl;
         }
         return fileUrl;
     }
@@ -263,15 +277,30 @@ public class CompanyHighwayGradeServiceImpl extends AbstractService implements I
             Integer count = tbCompanyHighwayGradeMapper.queryCount(map);
             if (count <= 0) {
                 tbCompanyHighwayGrade = new TbCompanyHighwayGrade();
-                tbCompanyHighwayGrade.setPkid(MapUtils.getString(map,"pkid"));
-                tbCompanyHighwayGrade.setComId(MapUtils.getString(map,"comId"));
-                tbCompanyHighwayGrade.setAssessYear(MapUtils.getInteger(map,"year"));
-                tbCompanyHighwayGrade.setAssessLevel(MapUtils.getString(map,"level"));
-                tbCompanyHighwayGrade.setAssessProvCode(MapUtils.getString(map,"provCode"));
-                tbCompanyHighwayGrade.setCreateBy(MapUtils.getString(map,"createdBy"));
+                tbCompanyHighwayGrade.setPkid(MapUtils.getString(map, "pkid"));
+                tbCompanyHighwayGrade.setComId(MapUtils.getString(map, "comId"));
+                tbCompanyHighwayGrade.setAssessYear(MapUtils.getInteger(map, "assessYear"));
+                tbCompanyHighwayGrade.setAssessLevel(MapUtils.getString(map, "level"));
+                tbCompanyHighwayGrade.setAssessProvCode(MapUtils.getString(map, "provCode"));
+                tbCompanyHighwayGrade.setCreateBy(MapUtils.getString(map, "createdBy"));
                 resultList.add(tbCompanyHighwayGrade);
             }
         }
         return resultList;
+    }
+
+    private TbCompanyHighwayGrade mapToClass(Map<String, Object> param) {
+        TbCompanyHighwayGrade grade = new TbCompanyHighwayGrade();
+        grade.setComName(MapUtils.getString(param, "comName"));
+        grade.setAssessLevel(MapUtils.getString(param, "assessLevel"));
+        grade.setAssessProvCode(MapUtils.getString(param, "assessProvCode"));
+        grade.setAssessYear(MapUtils.getInteger(param, "assessYear"));
+        grade.setProvince(MapUtils.getString(param, "province"));
+        if (null != param.get("currentPage")) {
+            grade.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
+            grade.setPageSize(MapUtils.getInteger(param, "pageSize"));
+            grade.setIsLimit("true");
+        }
+        return grade;
     }
 }

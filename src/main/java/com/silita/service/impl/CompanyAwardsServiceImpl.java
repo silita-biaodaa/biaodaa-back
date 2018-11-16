@@ -15,16 +15,17 @@ import com.silita.utils.PropertiesUtils;
 import com.silita.utils.dateUtils.MyDateUtils;
 import com.silita.utils.stringUtils.StringUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,18 +48,7 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
 
     @Override
     public Map<String, Object> getCompanyAwardsList(Map<String, Object> param) {
-        TbCompanyAwards companyAwards = new TbCompanyAwards();
-        companyAwards.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
-        companyAwards.setPageSize(MapUtils.getInteger(param, "pageSize"));
-        companyAwards.setComName(MapUtils.getString(param, "comName"));
-        companyAwards.setLevel(MapUtils.getString(param, "level"));
-        companyAwards.setProTypeCode(MapUtils.getString(param, "proTypeCode"));
-        companyAwards.setCityCode(MapUtils.getString(param, "cityCode"));
-        companyAwards.setProvCode(MapUtils.getString(param, "provCode"));
-        companyAwards.setAwdName(MapUtils.getString(param, "awdName"));
-        companyAwards.setYear(MapUtils.getString(param, "year"));
-        companyAwards.setProTypeName(MapUtils.getString(param, "proTypeName"));
-        companyAwards.setProName(MapUtils.getString(param, "proName"));
+        TbCompanyAwards companyAwards = mapToClass(param);
         Integer total = tbCompanyAwardsMapper.queryCompanyAwardsCount(companyAwards);
         if (total <= 0) {
             return null;
@@ -79,7 +69,16 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
     }
 
     @Override
-    public Map<String, Object> batchExportCompanyAwards(Sheet sheet, String username, String fileName) throws IOException {
+    public void checkAllDelCompanyAwards(Map<String, Object> param) {
+        TbCompanyAwards awards = mapToClass(param);
+        List<Map<String, Object>> list = tbCompanyAwardsMapper.queryCompanyAwardsList(awards);
+        if (null != list && list.size() > 0) {
+            tbCompanyAwardsMapper.deleteCompanyAwardsForParam(list);
+        }
+    }
+
+    @Override
+    public Map<String, Object> batchImportCompanyAwards(Sheet sheet, String username, String fileName) throws Exception {
         int rowCount = sheet.getLastRowNum();
         if (rowCount < 1) {
             return null;
@@ -220,7 +219,7 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
         }
         Map<String, Object> resultMap = new HashMap<>();
         if (!isError) {
-            String fileUrl = uploadExcel(excelList, fileName);
+            String fileUrl = uploadExcel(excelList, "import",fileName);
             resultMap.put("code", Constant.CODE_WARN_405);
             resultMap.put("msg", Constant.MSG_WARN_405);
             resultMap.put("data", fileUrl);
@@ -236,11 +235,21 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
         return resultMap;
     }
 
-    private String uploadExcel(List<Map<String, Object>> excelList, String fileName) throws IOException {
+    @Override
+    public String batchExprotAwards(Map<String, Object> param) throws Exception {
+        TbCompanyAwards awards = mapToClass(param);
+        List<Map<String, Object>> awardsList = tbCompanyAwardsMapper.queryCompanyAwardsList(awards);
+        if (null != awardsList && awardsList.size() > 0) {
+            return uploadExcel(awardsList, "export", "企业获奖信息_"+DataHandlingUtil.getUUID()+".xlsx");
+        }
+        return null;
+    }
+
+    private String uploadExcel(List<Map<String, Object>> excelList, String type, String fileName) throws Exception {
         XSSFWorkbook wb = new XSSFWorkbook();
-        Sheet sheet = wb.createSheet("获奖信息");  // 创建第一个Sheet页;
-        Row row = sheet.createRow(0); // 创建一个行
-        row.setHeightInPoints(30); //设置这一行的高度
+        Sheet sheet = wb.createSheet("获奖信息");
+        Row row = sheet.createRow(0);
+        row.setHeightInPoints(30);
         ExcelUtils.createCell(wb, row, (short) 0, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "企业名称"); //要充满屏幕又要中间
         ExcelUtils.createCell(wb, row, (short) 1, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "奖项级别"); //要充满屏幕又要中间
         ExcelUtils.createCell(wb, row, (short) 2, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "省"); //要充满屏幕又要中间
@@ -250,7 +259,9 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
         ExcelUtils.createCell(wb, row, (short) 6, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "项目名称"); //要充满屏幕又要中间
         ExcelUtils.createCell(wb, row, (short) 7, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "项目类型"); //要充满屏幕又要中间
         ExcelUtils.createCell(wb, row, (short) 8, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "发文日期"); //要充满屏幕又要中间
-        ExcelUtils.createCell(wb, row, (short) 9, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因"); //要充满屏幕又要中间
+        if ("import".equals(type)) {
+            ExcelUtils.createCell(wb, row, (short) 9, CellStyle.ALIGN_FILL, CellStyle.VERTICAL_CENTER, "错误原因"); //要充满屏幕又要中间
+        }
         for (int i = 0; i < excelList.size(); i++) {
             row = sheet.createRow(i + 1); // 创建一个行
             row.setHeightInPoints(30); //设置这一行的高度
@@ -290,8 +301,8 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
         wb.write(fileOut);
         fileOut.close();
         if ("pre".equals(propertiesUtils.getServer()) || "pro".equals(propertiesUtils.getServer())) {
-            String newFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
-            return newFileUrl;
+            String proFileUrl = propertiesUtils.getLocalhostServer() + "/error_excel/" + fileName;
+            return proFileUrl;
         }
         return fileUrl;
     }
@@ -318,5 +329,24 @@ public class CompanyAwardsServiceImpl extends AbstractService implements ICompan
             }
         }
         return resultList;
+    }
+
+    private TbCompanyAwards mapToClass(Map<String, Object> param) {
+        TbCompanyAwards companyAwards = new TbCompanyAwards();
+        if (null != MapUtils.getInteger(param, "currentPage")) {
+            companyAwards.setIsLimit("true");
+            companyAwards.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
+            companyAwards.setPageSize(MapUtils.getInteger(param, "pageSize"));
+        }
+        companyAwards.setComName(MapUtils.getString(param, "comName"));
+        companyAwards.setLevel(MapUtils.getString(param, "level"));
+        companyAwards.setProTypeCode(MapUtils.getString(param, "proTypeCode"));
+        companyAwards.setCityCode(MapUtils.getString(param, "cityCode"));
+        companyAwards.setProvCode(MapUtils.getString(param, "provCode"));
+        companyAwards.setAwdName(MapUtils.getString(param, "awdName"));
+        companyAwards.setYear(MapUtils.getString(param, "year"));
+        companyAwards.setProTypeName(MapUtils.getString(param, "proTypeName"));
+        companyAwards.setProName(MapUtils.getString(param, "proName"));
+        return companyAwards;
     }
 }

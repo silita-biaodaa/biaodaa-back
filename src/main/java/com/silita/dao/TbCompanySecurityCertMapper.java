@@ -37,6 +37,13 @@ public interface TbCompanySecurityCertMapper extends MyMapper<TbCompanySecurityC
     Integer deleteCompanySecurity(String pkid);
 
     /**
+     * 批量删除
+     * @param list
+     * @return
+     */
+    int batchDeleteCompanySecurity(List<Map<String,Object>> list);
+
+    /**
      * 查询详情
      * @param companySecurityCert
      * @return

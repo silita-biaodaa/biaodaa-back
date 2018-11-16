@@ -108,4 +108,23 @@ public class UploadController extends BaseController {
         }
         return resultMap;
     }
+
+    /**
+     * 图片上传
+     * @param file
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/uploadImage", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> uploadImage(@RequestParam() MultipartFile file) {
+        Map resultMap = new HashMap<String, Object>();
+        try {
+            resultMap = uploadService.uploadImage(file);
+        } catch (Exception e) {
+            LOGGER.error("上传图片异常",e);
+            resultMap.put("code", Constant.CODE_ERROR_500);
+            resultMap.put("msg", Constant.MSG_ERROR_500);
+        }
+        return resultMap;
+    }
 }

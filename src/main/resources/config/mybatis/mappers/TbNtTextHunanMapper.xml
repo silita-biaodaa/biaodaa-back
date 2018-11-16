@@ -30,4 +30,15 @@
         </if>
         WHERE `pkid` = #{pkid}
     </update>
+
+    <insert id="inertNtText" parameterType="com.silita.model.TbNtText">
+        INSERT INTO ${tableName}
+            (`pkid`,
+             `nt_id`,
+             `content`
+             )
+        VALUES (
+            #{pkid},#{ntId},#{content}
+        )
+    </insert>
 </mapper>

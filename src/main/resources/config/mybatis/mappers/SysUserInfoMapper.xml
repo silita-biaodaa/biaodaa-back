@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.SysUserInfoMapper">
+    <resultMap id="BaseResultMap" type="com.silita.model.SysUserInfo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pkid" property="pkid" jdbcType="VARCHAR"/>
+        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+        <result column="login_pwd" property="loginPwd" jdbcType="VARCHAR"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="phone_no" property="phoneNo" jdbcType="VARCHAR"/>
+        <result column="channel" property="channel" jdbcType="VARCHAR"/>
+        <result column="nike_name" property="nikeName" jdbcType="VARCHAR"/>
+        <result column="cert_type" property="certType" jdbcType="INTEGER"/>
+        <result column="cert_no" property="certNo" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="birth_year" property="birthYear" jdbcType="VARCHAR"/>
+        <result column="in_city" property="inCity" jdbcType="VARCHAR"/>
+        <result column="in_company" property="inCompany" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="VARCHAR"/>
+        <result column="image_url" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="wx_open_id" property="wxOpenId" jdbcType="VARCHAR"/>
+        <result column="qq_open_id" property="qqOpenId" jdbcType="VARCHAR"/>
+        <result column="is_enable" property="isEnable" jdbcType="BIT"/>
+        <result column="created" property="created" jdbcType="TIMESTAMP"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <update id="lockUser" parameterType="java.util.Map">
+        update sys_user_info set is_enable = #{isEnable} where pkid = #{pkid}
+    </update>
+
+    <select id="queryUserCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM sys_user_info t
+        WHERE t.`is_enable` = 1 AND t.`channel` = 'APP'
+        <if test="provCode != null and provCode != ''">
+            AND t.`in_city` IN
+            (
+            SELECT t1.`area_code` FROM sys_area t1
+            WHERE t1.`area_level` = 2 AND t1.`area_parent_id` =
+            (
+            SELECT t2.`pkid` FROM sys_area t2 WHERE t2.`area_code` = #{provCode} AND t2.`area_level` = 1
+            )
+            )
+        </if>
+        AND DATE_FORMAT(t.`created`,'%Y-%m-%d') = #{date}
+  </select>
+
+    <select id="queryUserTotal" resultType="java.lang.Integer" parameterType="com.silita.model.SysUserInfo">
+        SELECT COUNT(1)
+        FROM sys_user_info t
+        WHERE t.`is_enable` = 1
+        <choose>
+            <when test="cityCode != null and cityCode != ''">
+                AND t.`in_city` = #{cityCode}
+            </when>
+            <otherwise>
+                <if test="provCode != null and provCode != ''">
+                    AND t.`in_city` IN
+                    (
+                    SELECT t1.`area_code` FROM sys_area t1
+                    WHERE t1.`area_level` = 2 AND t1.`area_parent_id` =
+                    (
+                      SELECT t2.`pkid` FROM sys_area t2 WHERE t2.`area_code` = #{provCode} AND t2.`area_level` = 1
+                    )
+                    )
+                </if>
+            </otherwise>
+        </choose>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            AND DATE_FORMAT(t.`created`,'%Y-%m-%d') &gt;= #{startDate}
+            AND DATE_FORMAT(t.`created`,'%Y-%m-%d') &lt;= #{endDate}
+        </if>
+        <if test="sex != null and sex != ''">
+           and t.sex = #{sex}
+        </if>
+        <if test="keyWord != null and keyWord != ''">
+            and (t.user_name LIKE CONCAT('%', #{keyWord}, '%') or t.nike_name LIKE CONCAT('%', #{keyWord}, '%') or t.in_company LIKE CONCAT('%', #{keyWord}, '%')
+                  or t.phone_no LIKE CONCAT('%', #{keyWord}, '%') or t.position LIKE CONCAT('%', #{keyWord}, '%')
+            )
+        </if>
+    </select>
+
+    <select id="queryUserList" resultType="java.util.Map" parameterType="com.silita.model.SysUserInfo">
+        SELECT
+            t.pkid as pkid
+            ,t.nike_name AS nikeName
+            ,t.user_name as userName
+            ,(
+              case t.sex when 1 then '男'
+              when 2 then '女'
+              else '其他'
+              end
+            ) as `sex`
+            ,t.phone_no as phoneNo
+            ,DATE_FORMAT(t.`created`,'%Y-%m-%d') as created
+            ,t1.area_name as city
+            ,(SELECT t3.`area_name` FROM sys_area t3 WHERE t3.`area_level` = 1 AND t3.`pkid` =
+              (SELECT t4.`area_parent_id` FROM sys_area t4 WHERE t4.`area_code` = t.in_city AND t4.`area_level` = 2)) AS province
+        FROM sys_user_info t
+        left join sys_area t1 on t.in_city = t1.area_code and t1.area_level = 2
+        WHERE t.`is_enable` = 1
+        <choose>
+            <when test="cityCode != null and cityCode != ''">
+                AND t.`in_city` = #{cityCode}
+            </when>
+            <otherwise>
+                <if test="provCode != null and provCode != ''">
+                    AND t.`in_city` IN
+                    (
+                        SELECT t1.`area_code` FROM sys_area t1
+                        WHERE t1.`area_level` = 2 AND t1.`area_parent_id` =
+                        (
+                          SELECT t2.`pkid` FROM sys_area t2 WHERE t2.`area_code` = #{provCode} AND t2.`area_level` = 1
+                        )
+                    )
+                </if>
+            </otherwise>
+        </choose>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            AND DATE_FORMAT(t.`created`,'%Y-%m-%d') &gt;= #{startDate}
+            AND DATE_FORMAT(t.`created`,'%Y-%m-%d') &lt;= #{endDate}
+        </if>
+        <if test="sex != null and sex != ''">
+           and t.sex = #{sex}
+        </if>
+        <if test="keyWord != null and keyWord != ''">
+            and (t.user_name LIKE CONCAT('%', #{keyWord}, '%') or t.nike_name LIKE CONCAT('%', #{keyWord}, '%') or t.in_company LIKE CONCAT('%', #{keyWord}, '%')
+            or t.phone_no LIKE CONCAT('%', #{keyWord}, '%') or t.position LIKE CONCAT('%', #{keyWord}, '%')
+            )
+        </if>
+        Order by t.created desc
+        limit #{start},#{pageSize}
+    </select>
+</mapper>

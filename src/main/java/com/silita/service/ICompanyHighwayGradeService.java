@@ -53,6 +53,13 @@ public interface ICompanyHighwayGradeService {
     void deleteCompanyHigwagGrade(Map<String, Object> param);
 
     /**
+     * 删除
+     *
+     * @param param
+     */
+    void checkAllDeleteCompanyHigwagGrade(Map<String, Object> param);
+
+    /**
      * 批量导入企业信息
      *
      * @param sheet    excel页
@@ -60,5 +67,13 @@ public interface ICompanyHighwayGradeService {
      * @param fileName 文件名
      * @return
      */
-    Map<String, Object> batchExportCompanyHighwayGrade(Sheet sheet, String username, String fileName) throws IOException;
+    Map<String, Object> batchImportCompanyHighwayGrade(Sheet sheet, String username, String fileName) throws IOException;
+
+    /**
+     * 批量导出excel
+     * @param param
+     * @return
+     * @throws IOException
+     */
+    String batchExportCompanyHighwayGrade(Map<String,Object> param) throws IOException;
 }

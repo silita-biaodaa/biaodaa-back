@@ -62,6 +62,11 @@
           when '2' then '一般'
           end
         ) AS property,
+        (
+        case t1.`property` when '1' then '严重'
+        when '2' then '一般'
+        end
+        ) AS propertyName,
         t1.`issue_org` AS issueOrg,
         t1.`issue_date` AS issueDate,
         t1.`expired` AS expired
@@ -92,7 +97,9 @@
             AND t1.`expired` = #{expired}
         </if>
         ORDER BY t1.`issue_date` DESC
-        LIMIT #{start}, #{pageSize}
+        <if test="isLimit != null and isLimit == 'true'">
+          LIMIT #{start}, #{pageSize}
+        </if>
     </select>
 
     <delete id="deleteCompanyBad" parameterType="java.lang.String">
@@ -150,4 +157,14 @@
             )
         </foreach>
     </insert>
+
+    <delete id="batchDeleteCompanyBad" parameterType="java.util.List">
+        DELETE
+        FROM `tb_company_bad`
+        WHERE `pkid` in (
+            <foreach collection="list" item="list" separator=",">
+                #{list.pkid}
+            </foreach>
+        )
+    </delete>
 </mapper>

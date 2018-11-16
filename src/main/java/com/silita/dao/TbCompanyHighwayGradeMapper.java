@@ -37,6 +37,13 @@ public interface TbCompanyHighwayGradeMapper extends MyMapper<TbCompanyHighwayGr
     Integer deleteCompanyHigway(String pkid);
 
     /**
+     * 根据条件删除
+     * @param list
+     * @return
+     */
+    Integer deleteCompanyHigwayForParam(List<Map<String,Object>> list);
+
+    /**
      * 查询企业的信用等级评定地区
      * @param comId
      * @return

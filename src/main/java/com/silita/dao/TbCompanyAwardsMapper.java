@@ -19,7 +19,7 @@ public interface TbCompanyAwardsMapper extends MyMapper<TbCompanyAwards> {
     Integer queryCompanyAwardsCount(TbCompanyAwards companyAwards);
 
     /**
-     * 查询企业列表个数
+     * 查询企业列表
      * @param companyAwards
      * @return
      */
@@ -31,6 +31,13 @@ public interface TbCompanyAwardsMapper extends MyMapper<TbCompanyAwards> {
      * @return
      */
     int deleteCompanyAwards(String pkid);
+
+    /**
+     * 根据条件删除删除
+     * @param list
+     * @return
+     */
+    int deleteCompanyAwardsForParam(List<Map<String,Object>> list);
 
     /**
      * 批量添加获奖信息
