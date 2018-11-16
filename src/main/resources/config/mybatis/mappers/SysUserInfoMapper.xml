@@ -92,6 +92,8 @@
             ,t.nike_name AS nikeName
             ,t.user_name as userName
             ,t.is_enable as isEnable
+            ,t.in_company as company
+            ,t.position as `position`
             ,(
               case t.sex when 1 then '男'
               when 2 then '女'
