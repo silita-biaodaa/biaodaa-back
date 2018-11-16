@@ -16,11 +16,17 @@
   <select id="queryFeedbackList" parameterType="com.silita.model.TbFeedback" resultType="java.util.Map">
     select
         t1.pkid as pkid
-        ,t1.`type` as `type`
+        ,(
+          case t1.`type` when '1' then '程序错误'
+          when '2' then '产品建议'
+          when '3' then '吐槽'
+          end
+        ) as `type`
         ,t1.content as content
         ,DATE_FORMAT(t1.`created`,'%Y-%m-%d') as created
         ,(
-          case when t2.user_name is not null then t2.user_name
+          CASE WHEN t2.user_name IS NOT NULL AND t2.user_name != '' THEN t2.user_name
+          when t2.user_name != '' then t2.user_name
           else
             t2.nike_name
           end
