@@ -27,7 +27,7 @@
         <javaClientGenerator targetPackage="com.silita.dao" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="tb_feecback">
+        <table tableName="tb_fin_service">
             <!--mysql 配置-->
             <generatedKey column="pkid" sqlStatement="Mysql" identity="true"/>
             <!--oracle 配置-->

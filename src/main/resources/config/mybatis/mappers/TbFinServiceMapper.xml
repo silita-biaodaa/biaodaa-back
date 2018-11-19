@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbFinServiceMapper" >
+  <resultMap id="BaseResultMap" type="com.silita.model.TbFinService" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="pkid" property="pkid" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="pro_name" property="proName" jdbcType="VARCHAR" />
+    <result column="pro_open_time" property="proOpenTime" jdbcType="VARCHAR" />
+    <result column="pro_region" property="proRegion" jdbcType="VARCHAR" />
+    <result column="borrower" property="borrower" jdbcType="VARCHAR" />
+    <result column="borrower_phone" property="borrowerPhone" jdbcType="VARCHAR" />
+    <result column="borrower_time" property="borrowerTime" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="listFinService" parameterType="com.silita.model.TbFinService" resultMap="BaseResultMap">
+    SELECT * FROM `tb_fin_service`
+    WHERE 1 = 1
+    <if test="created !=null and created!=''">
+      AND `created` &gt;= #{created}
+    </if>
+    <if test="createdTwo !=null and createdTwo!=''">
+      AND `created` &lt; #{createdTwo}
+    </if>
+    <if test="proName !=null and proName!=''">
+      AND (pro_name LIKE CONCAT('%',#{proName},'%') OR borrower LIKE CONCAT('%',#{proName},'%'))
+    </if>
+    <!--UNION  ALL-->
+    <!--SELECT * FROM `tb_fin_service`-->
+    <!--WHERE 1 = 1-->
+    <!--<if test="created !=null and created!=''">-->
+      <!--AND created &gt;= #{created}-->
+    <!--</if>-->
+    <!--<if test="createdTwo !=null and createdTwo!=''">-->
+      <!--AND created &lt;= #{createdTwo}-->
+    <!--</if>-->
+    <!--<if test="proName !=null and proName!=''">-->
+      <!--AND borrower &lt;= #{proName}-->
+    <!--</if>-->
+  </select>
+
+  <select id="countFinService" parameterType="com.silita.model.TbFinService" resultType="Integer">
+    SELECT COUNT(*) FROM `tb_fin_service`
+    WHERE 1 = 1
+    <if test="created !=null and created!=''">
+      AND `created` &gt;= #{created}
+    </if>
+    <if test="createdTwo !=null and createdTwo!=''">
+      AND `created` &lt; #{createdTwo}
+    </if>
+    <if test="proName !=null and proName!=''">
+      AND (pro_name LIKE CONCAT('%',#{proName},'%') OR borrower LIKE CONCAT('%',#{proName},'%'))
+    </if>
+  </select>
+
+</mapper>
