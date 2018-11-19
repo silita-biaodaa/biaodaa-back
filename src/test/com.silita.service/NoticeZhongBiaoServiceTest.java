@@ -127,6 +127,20 @@ public class NoticeZhongBiaoServiceTest extends ConfigTest {
     }
 
     @Test
+    public void testController14()throws Exception{
+        String requestBody = "{\"pkid\":\"7db79915dec14ba69d734f4b1d9514d8\", \"source\":\"hunan\"}";
+        String responseString = mockMvc.perform(post("/zhongbiao/getTbNtBids").characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody.getBytes())
+                .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")
+        )
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("-----返回的json = " + responseString);
+    }
+
+    @Test
     public void testController7()throws Exception{
         String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"2\", \"title\":\"中标公告\"}";
         String responseString = mockMvc.perform(post("/zhongbiao/exportBidsDetail").characterEncoding("UTF-8")

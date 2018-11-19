@@ -83,7 +83,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
 
 
     @Override
-    public List<TbNtTenders> listNtTenders(TbNtMian tbNtMian) {
+    public List<TbNtTenders> listNtTenders(TbNtMian tbNtMian) throws Exception {
         List lists = null;
         try {
             // 1、根据中标公告id获取关联的招标公告id
@@ -156,7 +156,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error(e.getMessage());
+            throw new RuntimeException();
         }
         return lists;
     }
@@ -381,7 +381,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     }
 
     @Override
-    public Object listTbNtBidsByNtId(TbNtBids tbNtBids) {
+    public Object listTbNtBidsByNtId(TbNtBids tbNtBids) throws Exception {
         tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
         //获取中标编辑明细
         List<TbNtBids> lists = tbNtBidsMapper.listNtBidsByNtId(tbNtBids);
@@ -478,7 +478,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                logger.error(e.getMessage());
+                throw new RuntimeException();
             }
             return lists;
         } else {
@@ -494,8 +494,100 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     }
 
     @Override
-    public Object getTbNtBidsByNtId(TbNtBids tbNtBids) {
-        return null;
+    public Object getTbNtBidsByNtId(TbNtBids tbNtBids) throws Exception {
+        tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
+        //获取中标编辑明细
+        TbNtBids tempNtBids = tbNtBidsMapper.getNtBidsByPkid(tbNtBids);
+        try {
+            TbNtChange tbNtChange = new TbNtChange();
+            tbNtChange.setNtId(tempNtBids.getNtId());
+            tbNtChange.setNtEditId(tempNtBids.getPkid());
+            List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+            if (changeFields != null && changeFields.size() > 0) {
+                TwfDict twfDict = new TwfDict();
+                Map<String, String> changeField = new HashMap();
+                for (Map<String, Object> map : changeFields) {
+                    String fieldName = (String) map.get("field_name");
+                    String fieldValue = (String) map.get("field_value");
+                    changeField.put(fieldName, fieldValue);
+                    if ("pbMode".equals(fieldName)) {
+                        tempNtBids.setPbModeName(dicCommonMapper.getNameByCode(fieldValue));
+                    } else if ("proType".equals(fieldName)) {
+                        twfDict.setCode(fieldValue);
+                        twfDict.setType(4);
+                        tempNtBids.setProTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
+                    } else if ("binessType".equals(fieldName)) {
+                        twfDict.setCode(fieldValue);
+                        twfDict.setType(1);
+                        tempNtBids.setBinessTypeName(twfDictMapper.getNameByCodeAndType(twfDict));
+                    }
+                }
+                Field[] field = tempNtBids.getClass().getDeclaredFields();
+                //遍历field、替换变更后的值
+                this.replaceAttribute(field, tempNtBids, changeField);
+            }
+            List<TbNtBidsCand> bidsCands = tempNtBids.getBidsCands();
+            //添加中标候选人编辑明细
+            if (null != bidsCands && bidsCands.size() > 0) {
+                TbNtBidsCand tempNtBidsCand;
+                String candidate;
+                for (int j = 0; j < bidsCands.size(); j++) {
+                    tempNtBidsCand = bidsCands.get(j);
+                    tbNtChange = new TbNtChange();
+                    tbNtChange.setNtId(tempNtBidsCand.getNtId());
+                    tbNtChange.setNtEditId(tempNtBidsCand.getPkid());
+                    List<Map<String, Object>> candChangeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+                    if (candChangeFields != null && candChangeFields.size() > 0) {
+                        Map<String, String> candChangeField = new HashMap();
+                        for (Map<String, Object> map : candChangeFields) {
+                            String fieldName = (String) map.get("field_name");
+                            String fieldValue = (String) map.get("field_value");
+                            candChangeField.put(fieldName, fieldValue);
+                        }
+                        Field[] field = tempNtBidsCand.getClass().getDeclaredFields();
+                        //遍历field、替换变更后的值
+                        this.replaceAttribute(field, tempNtBidsCand, candChangeField);
+                    }
+                    //拆出3个中标候选人(前端要的)
+                    candidate = tempNtBidsCand.getfCandidate();
+                    if (!StringUtils.isEmpty(candidate)) {
+                        String[] candidates = candidate.split("\\,");
+                        if (candidates.length > 0) {
+                            tempNtBidsCand.setOneCandidate(candidates[0]);
+                            if (candidates.length > 1) {
+                                tempNtBidsCand.setTwoCandidate(candidates[1]);
+                                if (candidates.length > 2) {
+                                    tempNtBidsCand.setThreeCandidate(candidates[2]);
+                                }
+                            }
+                        } else {
+                            tempNtBidsCand.setOneCandidate(candidate);
+                        }
+                    }
+                }
+            }
+            //前端要的特定数据
+            if (!StringUtils.isEmpty(tempNtBids.getCityCodeName())) {
+                SysArea sysArea = new SysArea();
+                sysArea.setAreaName(tempNtBids.getCityCodeName());
+                sysArea.setAreaCode(tempNtBids.getSource());
+                String areaPkId = sysAreaMapper.getPkIdByAreaNameAndParentId(sysArea);
+                tempNtBids.setCountys(sysAreaMapper.listCodeAndNameByParentId(areaPkId));
+            }
+            //获取招标标段信息
+            Map<String, String> map = tbNtTendersMapper.getNtIdByEditCode(tempNtBids.getTdEditCode(), tbNtBids.getSource());
+            if (null != map) {
+                TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+                tbNtRegexGroup.setNtId(map.get("ntId"));
+                tbNtRegexGroup.setNtEditId(map.get("pkid"));
+                //资质
+                tempNtBids.setQualRelationStr(this.getQualRelationStr(tbNtRegexGroup));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+        return tempNtBids;
     }
 
     @Override

@@ -36,7 +36,14 @@ public class NoticeZhongBiaoController extends BaseController {
     @RequestMapping(value = "/listNtTenders",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> listNtTenders(@RequestBody TbNtMian tbNtMian) {
-        return super.successMap(noticeZhongBiaoService.listNtTenders(tbNtMian));
+        Map result = new HashMap<String,Object>();
+        try {
+            return super.successMap(noticeZhongBiaoService.listNtTenders(tbNtMian));
+        } catch (Exception e) {
+            result.put("code",0);
+            result.put("msg",e.getMessage());
+        }
+        return result;
     }
 
     @RequestMapping(value = "/deleteNtTenders",method = RequestMethod.POST,produces="application/json;charset=utf-8")
@@ -78,7 +85,27 @@ public class NoticeZhongBiaoController extends BaseController {
     @RequestMapping(value = "/listTbNtBids",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> listTbNtBids(@RequestBody TbNtBids tbNtBids) {
-        return super.successMap(noticeZhongBiaoService.listTbNtBidsByNtId(tbNtBids));
+        Map result = new HashMap<String,Object>();
+        try {
+            return super.successMap(noticeZhongBiaoService.listTbNtBidsByNtId(tbNtBids));
+        } catch (Exception e) {
+            result.put("code",0);
+            result.put("msg",e.getMessage());
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/getTbNtBids",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> getTbNtBids(@RequestBody TbNtBids tbNtBids) {
+        Map result = new HashMap<String,Object>();
+        try {
+            return super.successMap(noticeZhongBiaoService.getTbNtBidsByNtId(tbNtBids));
+        } catch (Exception e) {
+            result.put("code",0);
+            result.put("msg",e.getMessage());
+        }
+        return result;
     }
 
     @RequestMapping(value = "/deleteTbNtBids",method = RequestMethod.POST,produces="application/json;charset=utf-8")

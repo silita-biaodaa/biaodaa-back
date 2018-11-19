@@ -36,6 +36,13 @@ public interface TbNtBidsMapper {
     List<TbNtBids> listNtBidsByNtId(TbNtBids tbNtBids);
 
     /**
+     * 根据标段pkid获取TbNtBids
+     * @param tbNtBids
+     * @return
+     */
+    TbNtBids getNtBidsByPkid(TbNtBids tbNtBids);
+
+    /**
      * 根据中标标段pkid删除NtBids
      * @return
      */

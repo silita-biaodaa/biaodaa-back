@@ -41,7 +41,7 @@
       AND `created` &gt;= #{created}
     </if>
     <if test="createdTwo !=null and createdTwo!=''">
-      AND `created` &lt; #{createdTwo}
+      AND `created` &lt;= #{createdTwo}
     </if>
     <if test="proName !=null and proName!=''">
       AND (pro_name LIKE CONCAT('%',#{proName},'%') OR borrower LIKE CONCAT('%',#{proName},'%'))
@@ -55,7 +55,7 @@
       AND `created` &gt;= #{created}
     </if>
     <if test="createdTwo !=null and createdTwo!=''">
-      AND `created` &lt; #{createdTwo}
+      AND `created` &lt;= #{createdTwo}
     </if>
     <if test="proName !=null and proName!=''">
       AND (pro_name LIKE CONCAT('%',#{proName},'%') OR borrower LIKE CONCAT('%',#{proName},'%'))

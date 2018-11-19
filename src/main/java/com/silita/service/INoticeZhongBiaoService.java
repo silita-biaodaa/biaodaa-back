@@ -20,7 +20,7 @@ public interface INoticeZhongBiaoService {
      * @param tbNtMian
      * @return
      */
-    List<TbNtTenders> listNtTenders(TbNtMian tbNtMian);
+    List<TbNtTenders> listNtTenders(TbNtMian tbNtMian) throws Exception ;
 
     /**
      * 根据招标编辑明细pkid 批量删除标段信息
@@ -54,14 +54,14 @@ public interface INoticeZhongBiaoService {
      * 根据公告pkid获取中标标段信息（包含中标候选人）
      * @return
      */
-    Object listTbNtBidsByNtId(TbNtBids tbNtBids);
+    Object listTbNtBidsByNtId(TbNtBids tbNtBids) throws Exception ;
 
     /**
      * 根据标段pkid获取中标标段信息（包含中标候选人）
      * @param tbNtBids
      * @return
      */
-    Object getTbNtBidsByNtId(TbNtBids tbNtBids);
+    Object getTbNtBidsByNtId(TbNtBids tbNtBids) throws Exception;
 
     /**
      * 根据标段pkid 批量删除中标编辑明显
