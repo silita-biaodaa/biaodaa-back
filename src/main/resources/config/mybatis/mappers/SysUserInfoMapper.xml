@@ -37,7 +37,7 @@
     <select id="queryUserCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1)
         FROM sys_user_info t
-        WHERE t.`is_enable` = 1 AND t.`channel` = 'APP'
+        WHERE t.`is_enable` = 1
         <if test="provCode != null and provCode != ''">
             AND t.`in_city` IN
             (
