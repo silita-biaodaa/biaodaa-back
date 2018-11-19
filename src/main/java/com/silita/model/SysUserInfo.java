@@ -150,4 +150,9 @@ public class SysUserInfo extends Pagination {
      * 非表字段(城市code)
      */
     private String cityCode;
+
+    /**
+     * 非表字段查询类型
+     */
+    private String type;
 }

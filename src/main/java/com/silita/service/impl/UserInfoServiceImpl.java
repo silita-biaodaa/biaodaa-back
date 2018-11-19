@@ -32,6 +32,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         resultMap.put("yesterdayCount", sysUserInfoMapper.queryUserCount(param));
         //总数
         SysUserInfo user = new SysUserInfo();
+        user.setType("count");
         if (null != param.get("provCode")) {
             user.setProvCode(MapUtils.getString(param, "provCode"));
         }

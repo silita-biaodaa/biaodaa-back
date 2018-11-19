@@ -54,7 +54,15 @@
     <select id="queryUserTotal" resultType="java.lang.Integer" parameterType="com.silita.model.SysUserInfo">
         SELECT COUNT(1)
         FROM sys_user_info t
-        WHERE t.`is_enable` = 1
+        WHERE
+        <choose>
+            <when test="type != null and type == 'count'">
+                t.`is_enable` = 1
+            </when>
+            <otherwise>
+                1=1
+            </otherwise>
+        </choose>
         <choose>
             <when test="cityCode != null and cityCode != ''">
                 AND t.`in_city` = #{cityCode}
@@ -107,7 +115,7 @@
               (SELECT t4.`area_parent_id` FROM sys_area t4 WHERE t4.`area_code` = t.in_city AND t4.`area_level` = 2)) AS province
         FROM sys_user_info t
         left join sys_area t1 on t.in_city = t1.area_code and t1.area_level = 2
-        WHERE t.`is_enable` = 1
+        WHERE 1 = 1
         <choose>
             <when test="cityCode != null and cityCode != ''">
                 AND t.`in_city` = #{cityCode}
