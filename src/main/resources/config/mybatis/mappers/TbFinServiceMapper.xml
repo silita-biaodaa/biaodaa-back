@@ -31,18 +31,21 @@
     <if test="proName !=null and proName!=''">
       AND (pro_name LIKE CONCAT('%',#{proName},'%') OR borrower LIKE CONCAT('%',#{proName},'%'))
     </if>
-    <!--UNION  ALL-->
-    <!--SELECT * FROM `tb_fin_service`-->
-    <!--WHERE 1 = 1-->
-    <!--<if test="created !=null and created!=''">-->
-      <!--AND created &gt;= #{created}-->
-    <!--</if>-->
-    <!--<if test="createdTwo !=null and createdTwo!=''">-->
-      <!--AND created &lt;= #{createdTwo}-->
-    <!--</if>-->
-    <!--<if test="proName !=null and proName!=''">-->
-      <!--AND borrower &lt;= #{proName}-->
-    <!--</if>-->
+    LIMIT #{start}, #{pageSize}
+  </select>
+
+  <select id="listAllFinService" parameterType="com.silita.model.TbFinService" resultMap="BaseResultMap">
+    SELECT * FROM `tb_fin_service`
+    WHERE 1 = 1
+    <if test="created !=null and created!=''">
+      AND `created` &gt;= #{created}
+    </if>
+    <if test="createdTwo !=null and createdTwo!=''">
+      AND `created` &lt; #{createdTwo}
+    </if>
+    <if test="proName !=null and proName!=''">
+      AND (pro_name LIKE CONCAT('%',#{proName},'%') OR borrower LIKE CONCAT('%',#{proName},'%'))
+    </if>
   </select>
 
   <select id="countFinService" parameterType="com.silita.model.TbFinService" resultType="Integer">

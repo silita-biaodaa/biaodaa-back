@@ -53,7 +53,7 @@ public class FinServiceImpl extends AbstractService implements IFinService {
         for (int i = 0; i < headers.length; i++) {
             row.createCell(i).setCellValue(headers[i]);
         }
-        List<TbFinService> tbFinServiceList = tbFinServiceMapper.listFinService(tbFinService);
+        List<TbFinService> tbFinServiceList = tbFinServiceMapper.listAllFinService(tbFinService);
         TbFinService tempTbFinService;
         //一行数据
         for (int i = 0; i < tbFinServiceList.size(); i++) {
