@@ -35,7 +35,7 @@ public class TbFinServiceServiceTest extends ConfigTest {
 
     @Test
     public void testController1()throws Exception{
-        String requestBody = "{\"proName\":\"测试\", \"created\":\"2018-11-19\", \"createdTwo\":\"2018-11-29\"}";
+        String requestBody = "{\"proName\":\"测试\", \"created\":\"2018-11-19\", \"createdTwo\":\"2018-11-19\"}";
         String responseString = mockMvc.perform(post("/FinService/listFinService").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
@@ -49,7 +49,7 @@ public class TbFinServiceServiceTest extends ConfigTest {
 
     @Test
     public void testController2()throws Exception{
-        String requestBody = "{\"proName\":\"测试\", \"created\":\"2018-11-19\", \"createdTwo\":\"2018-11-29\"}";
+        String requestBody = "{\"proName\":\"测试\", \"created\":\"2018-11-19\", \"createdTwo\":\"2018-11-19\"}";
         String responseString = mockMvc.perform(post("/FinService/exportFinService").characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())

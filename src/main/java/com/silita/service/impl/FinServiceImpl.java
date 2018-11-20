@@ -56,33 +56,38 @@ public class FinServiceImpl extends AbstractService implements IFinService {
         List<TbFinService> tbFinServiceList = tbFinServiceMapper.listAllFinService(tbFinService);
         TbFinService tempTbFinService;
         //一行数据
-        for (int i = 0; i < tbFinServiceList.size(); i++) {
-            int indexCell = 0;
-            row = sheet.createRow(indexRow++);
-            tempTbFinService = tbFinServiceList.get(i);
-            //一列数据
-            for (Field field : tempTbFinService.getClass().getDeclaredFields()) {
-                String name = field.getName();
-                if("pkid".equals(name) || "userId".equals(name) || "createBy".equals(name) || "createdTwo".equals(name)) {
-                    continue;
-                }
-                name = name.substring(0, 1).toUpperCase() + name.substring(1);
-                HSSFCell cell = row.createCell(indexCell++);
-                String type = field.getGenericType().toString();
-                Method m = null;
-                if ("class java.lang.String".equals(type)) {
-                    m = tempTbFinService.getClass().getDeclaredMethod("get" + name);
-                    cell.setCellValue((String) m.invoke(tempTbFinService));
-                }
-                if ("class java.lang.Double".equals(type)) {
-                    m = tempTbFinService.getClass().getDeclaredMethod("get" + name);
-                    cell.setCellValue((Double) m.invoke(tempTbFinService));
-                }
-                if ("class java.util.Date".equals(type)) {
-                    m = tempTbFinService.getClass().getDeclaredMethod("get" + name);
-                    cell.setCellValue(new Date(Long.parseLong((String) m.invoke(tempTbFinService))));
+        try {
+            for (int i = 0; i < tbFinServiceList.size(); i++) {
+                int indexCell = 0;
+                row = sheet.createRow(indexRow++);
+                tempTbFinService = tbFinServiceList.get(i);
+                //一列数据
+                for (Field field : tempTbFinService.getClass().getDeclaredFields()) {
+                    String name = field.getName();
+                    if("pkid".equals(name) || "userId".equals(name) || "createBy".equals(name) || "createdTwo".equals(name)) {
+                        continue;
+                    }
+                    name = name.substring(0, 1).toUpperCase() + name.substring(1);
+                    HSSFCell cell = row.createCell(indexCell++);
+                    String type = field.getGenericType().toString();
+                    Method m = null;
+                    if ("class java.lang.String".equals(type)) {
+                        m = tempTbFinService.getClass().getDeclaredMethod("get" + name);
+                        cell.setCellValue((String) m.invoke(tempTbFinService));
+                    }
+                    if ("class java.lang.Double".equals(type)) {
+                        m = tempTbFinService.getClass().getDeclaredMethod("get" + name);
+                        cell.setCellValue((Double) m.invoke(tempTbFinService));
+                    }
+                    if ("class java.util.Date".equals(type)) {
+                        m = tempTbFinService.getClass().getDeclaredMethod("get" + name);
+                        cell.setCellValue(new Date(Long.parseLong((String) m.invoke(tempTbFinService))));
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
         }
         return wb;
     }
