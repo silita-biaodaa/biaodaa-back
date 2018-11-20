@@ -31,7 +31,7 @@
     </resultMap>
 
     <update id="lockUser" parameterType="java.util.Map">
-        update sys_user_info set is_enable = #{isEnable} where pkid = #{pkid}
+        update sys_user_info set is_enable = #{isEnable},updated = now() where pkid = #{pkid}
     </update>
 
     <select id="queryUserCount" parameterType="java.util.Map" resultType="java.lang.Integer">
