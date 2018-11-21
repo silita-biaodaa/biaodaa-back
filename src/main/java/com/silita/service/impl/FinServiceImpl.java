@@ -47,7 +47,7 @@ public class FinServiceImpl extends AbstractService implements IFinService {
         HSSFRow row = sheet.createRow(indexRow++);
         String[] headers = {
                 "项目名称", "开标时间", "项目地区", "借款人名称", "借款人电话号码",
-                "借款时间", "申请金额", "借款状态", "提交时间"
+                "借款时间", "申请金额", "提交时间"
         };
         //创建标题
         for (int i = 0; i < headers.length; i++) {
@@ -64,7 +64,8 @@ public class FinServiceImpl extends AbstractService implements IFinService {
                 //一列数据
                 for (Field field : tempTbFinService.getClass().getDeclaredFields()) {
                     String name = field.getName();
-                    if("pkid".equals(name) || "userId".equals(name) || "createBy".equals(name) || "createdTwo".equals(name)) {
+                    //这些字段不要
+                    if("pkid".equals(name) || "userId".equals(name) || "createBy".equals(name) || "createdTwo".equals(name) || "status".equals(name)) {
                         continue;
                     }
                     name = name.substring(0, 1).toUpperCase() + name.substring(1);
