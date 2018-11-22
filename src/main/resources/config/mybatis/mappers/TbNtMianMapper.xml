@@ -110,7 +110,8 @@
     <select id="listBidsDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
         SELECT main.title, CONCAT(bids.segment, '标段') AS segment, main.pub_date, bids.controll_sum, bids.pro_sum,
         bids.pro_duration, '计划竣工时间', (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code,
-        (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code, bids.pb_mode,
+        (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code,
+        (SELECT `name` FROM dic_common WHERE `code` = bids.pb_mode) AS pb_mode,
         (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type,
         (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = bids.pro_type) AS pro_type,
         'qualStr', main.url, bids.pkid, bids.nt_id, bids.td_edit_code

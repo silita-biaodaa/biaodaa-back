@@ -502,35 +502,43 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         //数据库中已存在的
         List<TbNtAssociateGp> tbNtAssociateGps = tbNtAssociateGpMapper.getRelGpByNtIds(ids, DataHandlingUtil.SplicingTable(TbNtAssociateGp.class, source));
         Set set = new HashSet<String>();
+        Set groupSet = new HashSet<String>();
         for (TbNtAssociateGp tbNtAssociateGp : tbNtAssociateGps) {
             set.add(tbNtAssociateGp.getNtId());
+            groupSet.add(tbNtAssociateGp.getRelGp());
         }
 
         TbNtMian tbNtMian;
         TbNtAssociateGp tempTbNtAssociateGp;
         List tbNtAssociateGpList = new ArrayList<TbNtAssociateGp>(ids.length);
+        //数据库中已经存在，则新来的关联公告与已经存在的公告同属一个组
         if (set.size() > 0) {
-            //数据库中已经存在，则新来的关联公告与已经存在的公告同属一个组
-            String relGp = tbNtAssociateGps.get(0).getRelGp();
-            for (int i = 0; i < ids.length; i++) {
-                if (!set.contains(ids[i])) {
-                    //获取项目类型
-                    tbNtMian = new TbNtMian();
-                    tbNtMian.setPkid(String.valueOf(ids[i]));
-                    tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), source));
-                    String ntCategory = tbNtMianMapper.getNtCategoryByPkId(tbNtMian);
-                    //
-                    tempTbNtAssociateGp = new TbNtAssociateGp();
-                    tempTbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
-                    tempTbNtAssociateGp.setNtId(ids[i]);
-                    tempTbNtAssociateGp.setRelType(ntCategory);
-                    tempTbNtAssociateGp.setRelGp(relGp);
-                    tempTbNtAssociateGp.setPx(String.valueOf(i));
-                    tempTbNtAssociateGp.setCreateBy(createBy);
-                    tbNtAssociateGpList.add(tempTbNtAssociateGp);
-                } else {
-                    System.out.println("11");
+            //已存在公告属于同一组才进行关联
+            if(groupSet.size() == 1) {
+                String relGp = tbNtAssociateGps.get(0).getRelGp();
+                for (int i = 0; i < ids.length; i++) {
+                    if (!set.contains(ids[i])) {
+                        //获取项目类型
+                        tbNtMian = new TbNtMian();
+                        tbNtMian.setPkid(String.valueOf(ids[i]));
+                        tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), source));
+                        String ntCategory = tbNtMianMapper.getNtCategoryByPkId(tbNtMian);
+                        //
+                        tempTbNtAssociateGp = new TbNtAssociateGp();
+                        tempTbNtAssociateGp.setPkid(DataHandlingUtil.getUUID());
+                        tempTbNtAssociateGp.setNtId(ids[i]);
+                        tempTbNtAssociateGp.setRelType(ntCategory);
+                        tempTbNtAssociateGp.setRelGp(relGp);
+                        tempTbNtAssociateGp.setPx(String.valueOf(i));
+                        tempTbNtAssociateGp.setCreateBy(createBy);
+                        tbNtAssociateGpList.add(tempTbNtAssociateGp);
+                    } else {
+                        //已存在关联不关联
+                        System.out.println("关联表已存在该记录，跳过该公告！" + ids[i]);
+                    }
                 }
+            } else {
+                msg = "已选关联公告，有公告不属于同一组，请检测数据！";
             }
         } else {
             //时间戳 + 随机数
