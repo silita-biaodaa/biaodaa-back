@@ -684,12 +684,14 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             }
             //获取关联招标标段信息
             Map<String, String> tendersMap = tbNtTendersMapper.getNtIdByEditCode(String.valueOf(detail.get("td_edit_code")), tbNtMian.getSource());
-            TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
-            tbNtRegexGroup.setNtId(tendersMap.get("ntId"));
-            tbNtRegexGroup.setNtEditId(tendersMap.get("pkid"));
-            //获取资质关系
-            String qualStr = this.getQualRelationStr(tbNtRegexGroup);
-            detail.put("qualStr", qualStr);
+            if(tendersMap != null && tendersMap.size() > 0) {
+                TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+                tbNtRegexGroup.setNtId(tendersMap.get("ntId"));
+                tbNtRegexGroup.setNtEditId(tendersMap.get("pkid"));
+                //获取资质关系
+                String qualStr = this.getQualRelationStr(tbNtRegexGroup);
+                detail.put("qualStr", qualStr);
+            }
             //拼接3个中标候选人数据
             for (int j = 1; j < 4; j++) {
                 TbNtBidsCand tbNtBidsCand = new TbNtBidsCand();
