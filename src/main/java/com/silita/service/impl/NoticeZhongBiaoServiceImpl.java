@@ -654,7 +654,6 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             int indexCell = 0;
             row = sheet.createRow(indexRow++);
             Map<String, Object> detail = details.get(i);
-
             //获取中标编辑明细变更信息
             TbNtChange tbNtChange = new TbNtChange();
             tbNtChange.setNtId(String.valueOf(detail.get("nt_id")));
@@ -683,6 +682,14 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
                     changeField.put(tempKey, tempValue);
                 }
             }
+            //获取关联招标标段信息
+            Map<String, String> tendersMap = tbNtTendersMapper.getNtIdByEditCode(String.valueOf(detail.get("td_edit_code")), tbNtMian.getSource());
+            TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+            tbNtRegexGroup.setNtId(tendersMap.get("ntId"));
+            tbNtRegexGroup.setNtEditId(tendersMap.get("pkid"));
+            //获取资质关系
+            String qualStr = this.getQualRelationStr(tbNtRegexGroup);
+            detail.put("qualStr", qualStr);
             //拼接3个中标候选人数据
             for (int j = 1; j < 4; j++) {
                 TbNtBidsCand tbNtBidsCand = new TbNtBidsCand();
@@ -712,6 +719,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
             }
             detail.remove("pkid");
             detail.remove("nt_id");
+            detail.remove("td_edit_code");
             //一列数据
             for (Map.Entry<String, Object> entry : detail.entrySet()) {
                 //替换变更后的值

@@ -103,7 +103,7 @@ public class DataHandlingUtil {
      * @param length
      * @return
      */
-    public static String getNumberRandom(int length) {
+    public synchronized static String getNumberRandom(int length) {
         StringBuilder val = new StringBuilder();
         Random random = new Random();
         //参数length，表示生成几位随机数

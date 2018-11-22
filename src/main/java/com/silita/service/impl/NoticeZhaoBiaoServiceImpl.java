@@ -58,11 +58,13 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtQuaGroupMapper tbNtQuaGroupMapper;
     @Autowired
     TbNtRegexQuaMapper tbNtRegexQuaMapper;
+    @Autowired
+    DicQuaMapper dicQuaMapper;
 
     SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    @Cacheable(value = "TwfDictNameCache")
+    @Cacheable(value = "listFixedEditDataCache")
     public Map<String, Object> listFixedEditData() {
         Map result = new HashMap<String, Object>();
         //开标人员
@@ -117,7 +119,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         HSSFRow row = sheet.createRow(indexRow++);
         String[] headers = {
                 "项目名称", "公告状态", "标段", "公示日期", "项目地区",
-                "项目县市", "招标类型", "项目类型", "资质", "招标控制价",
+                "项目县市", "招标类型", "项目类型", "资质要求", "招标控制价",
                 "项目金额", "项目工期", "评标办法", "保证金金额", "保证金截至时间",
                 "报名截止时间", "报名地点", "资格审查截止时间", "投标截止时间",
                 "开标地点", "平台备案要求", "招标状态", "开标人员要求"
@@ -168,6 +170,12 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                     changeField.put(tempKey, tempValue);
                 }
             }
+            //获取资质关系
+            TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
+            tbNtRegexGroup.setNtId(String.valueOf(detail.get("nt_id")));
+            tbNtRegexGroup.setNtEditId(String.valueOf(detail.get("pkid")));
+            String qualStr = this.getQualRelationStr(tbNtRegexGroup);
+            detail.put("qualStr", qualStr);
             detail.remove("pkid");
             detail.remove("nt_id");
             //一列数据
@@ -866,6 +874,48 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 }
             }
             return result;
+        }
+        return null;
+    }
+
+    private String getQualRelationStr(TbNtRegexGroup tbNtRegexGroup) {
+        //获取资质组关系表达式
+        TbNtRegexGroup tempRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
+        if (null != tempRegexGroup) {
+            List<String> groupRegexs = new ArrayList<>();
+            String groupRegex = tempRegexGroup.getGroupRegex();
+            //资质小组关系
+            char[] grouprRelType = groupRegex.replaceAll("[^(&)|(\\|)]", "").toCharArray();
+            //资质小组
+            Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
+            while (iterator.hasNext()) {
+                groupRegexs.add(iterator.next());
+            }
+            StringBuilder sb = new StringBuilder();
+            //遍历资质小组
+            for (int i = 0; i < groupRegexs.size(); i++) {
+                sb.append("(");
+                //获取资质小组信息
+                List<TbNtQuaGroup> tbNtQuaGroups = tbNtQuaGroupMapper.listTbNtQuaGroupByGroupId(groupRegexs.get(i));
+                //遍历单条资质
+                for (int j = 0; j < tbNtQuaGroups.size(); j++) {
+                    TbNtQuaGroup tbNtQuaGroup = tbNtQuaGroups.get(j);
+                    String qualName = dicQuaMapper.queryQualDetailById(tbNtQuaGroup.getQuaId()).getQuaName();
+                    String quaGradeName = dicCommonMapper.getCommonNameById(tbNtQuaGroup.getQuaGradeId());
+                    if (StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
+                        //组内第一条资质
+                        sb.append(qualName).append(quaGradeName);
+                    } else {
+                        sb.append("&".equals(tbNtQuaGroup.getRelType()) ? "和" : "或").append(qualName).append(quaGradeName);
+                    }
+                }
+                if (i != groupRegexs.size() - 1) {
+                    sb.append(")").append("&".equals(String.valueOf(grouprRelType[i])) ? "和" : "或");
+                } else {
+                    sb.append(")");
+                }
+            }
+            return sb.toString();
         }
         return null;
     }

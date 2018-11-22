@@ -158,7 +158,7 @@ public class NoticeZhaoBiaoServiceTest extends ConfigTest {
     @Test
     public void testController9()throws Exception{
         String requestBody = "{\"source\":\"hunan\", \"proviceCode\":\"hunan\", \"ntCategory\":\"1\", \"title\":\"我要更新\", \"ntStatus\":\"1\"}";
-        String responseString = mockMvc.perform(post("/zhaobiao/exportTendersExcel").characterEncoding("UTF-8")
+        String responseString = mockMvc.perform(post("/zhaobiao/exportTendersExcel").characterEncoding("UTFTwfDictNameCache-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody.getBytes())
                 .header("Authorization", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImdlbWluZ3lpIiwiZXhwIjoxNTM1NDA1OTU2fQ.pcCP9aQedZ5hTnK9n3FzDNtzK4lUxRoxE6lxuHfPArw")

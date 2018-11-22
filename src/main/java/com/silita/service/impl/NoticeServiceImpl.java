@@ -124,7 +124,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     }
 
     @Override
-    @Cacheable(value = "TwfDictNameCache")
+    @Cacheable(value = "listFixedEditDataCache")
     public Map<String, Object> listFixedEditData() {
         Map result = new HashMap<String, Object>();
         //开标人员

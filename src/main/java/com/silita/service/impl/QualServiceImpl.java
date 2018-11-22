@@ -11,6 +11,7 @@ import com.silita.service.IQualService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -162,6 +163,7 @@ public class QualServiceImpl implements IQualService {
     }
 
     @Override
+    @Cacheable(value = "listQualCache")
     public List<Map<String,Object>> listQual() {
         List<Map<String,Object>> qualCateList = new ArrayList<>();
         List<Map<String,Object>> qualList;
