@@ -95,4 +95,11 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     String getCommonNameById(@Param("id") String id);
+
+    /**
+     * 根据名称查询资质信息
+     * @param name
+     * @return
+     */
+    DicCommon queryQuaGrade(String name);
 }

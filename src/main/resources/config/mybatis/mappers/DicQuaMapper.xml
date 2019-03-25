@@ -3,22 +3,22 @@
 <mapper namespace="com.silita.dao.DicQuaMapper">
 
     <resultMap id="BaseResultMap" type="com.silita.model.DicQua">
-        <id column="id" property="id" jdbcType="VARCHAR" />
-        <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
-        <result column="qua_name" property="quaName" jdbcType="VARCHAR" />
-        <result column="grade_type" property="gradeType" jdbcType="VARCHAR" />
-        <result column="qua_code" property="quaCode" jdbcType="VARCHAR" />
-        <result column="order_no" property="orderNo" jdbcType="INTEGER" />
-        <result column="level" property="level" jdbcType="VARCHAR" />
-        <result column="biz_type" property="bizType" jdbcType="VARCHAR" />
-        <result column="expired" property="expired" jdbcType="VARCHAR" />
-        <result column="is_leaf" property="isLeaf" jdbcType="INTEGER" />
-        <result column="remark" property="remark" jdbcType="VARCHAR" />
-        <result column="desc" property="desc" jdbcType="VARCHAR" />
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+        <result column="qua_name" property="quaName" jdbcType="VARCHAR"/>
+        <result column="grade_type" property="gradeType" jdbcType="VARCHAR"/>
+        <result column="qua_code" property="quaCode" jdbcType="VARCHAR"/>
+        <result column="order_no" property="orderNo" jdbcType="INTEGER"/>
+        <result column="level" property="level" jdbcType="VARCHAR"/>
+        <result column="biz_type" property="bizType" jdbcType="VARCHAR"/>
+        <result column="expired" property="expired" jdbcType="VARCHAR"/>
+        <result column="is_leaf" property="isLeaf" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="desc" property="desc" jdbcType="VARCHAR"/>
         <!--<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />-->
         <!--<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />-->
-        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
-        <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insertDicQual" parameterType="com.silita.model.DicQua">
@@ -178,14 +178,14 @@
 
     <select id="queryDicQuaList" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT
-            t.*
-            ,t1.`qua_name` AS parentName
+        t.*
+        ,t1.`qua_name` AS parentName
         FROM
         dic_qua t
         LEFT JOIN dic_qua t1 ON t.`parent_id` = t1.`id` and t1.`level` = 1
         where t.`level` = 2
         <if test="parentId != null and parentId != ''">
-           and  t.parent_id = #{parentId}
+            and t.parent_id = #{parentId}
         </if>
         <if test="quaName != null and quaName != ''">
             and t.qua_name like CONCAT('%',#{quaName},'%')
@@ -207,10 +207,10 @@
         where 1=1
         and qua_name = #{quaName}
         <if test="parentId != null and parentId != ''">
-            and  parent_id = #{parentId}
+            and parent_id = #{parentId}
         </if>
         <if test="id != null and id != ''">
-            and  id != #{id}
+            and id != #{id}
         </if>
     </select>
 
@@ -218,6 +218,20 @@
         select *
         from dic_qua
         where qua_code = #{quaCode}
+    </select>
+
+    <select id="queryQualDetailName" parameterType="com.silita.model.DicQua" resultMap="BaseResultMap">
+        select *
+        from dic_qua
+        where qua_name = #{quaName}
+        AND `parent_id` = #{parentId}
+    </select>
+
+    <select id="queryQualDetailParentName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from dic_qua
+        where qua_name = #{quaName}
+        AND `parent_id` is null
     </select>
 
     <select id="queryQualDetailById" parameterType="java.lang.String" resultMap="BaseResultMap">

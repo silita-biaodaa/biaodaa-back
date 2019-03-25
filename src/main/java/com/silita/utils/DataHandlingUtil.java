@@ -17,6 +17,7 @@ public class DataHandlingUtil {
 
     /**
      * 返回省份code
+     *
      * @return
      */
     public static Map<String, String> getpProvinceCode() {
@@ -57,6 +58,7 @@ public class DataHandlingUtil {
 
     /**
      * 公告状态
+     *
      * @return
      */
     public static Map<String, Object> getBulletinStatus() {
@@ -72,20 +74,17 @@ public class DataHandlingUtil {
 
     /**
      * 生成uuid
+     *
      * @return
      */
     public synchronized static String getUUID() {
         String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return uuid;
     }
 
     /**
      * 获取时间戳
+     *
      * @return
      */
     public synchronized static String getTimeStamp() {
@@ -100,6 +99,7 @@ public class DataHandlingUtil {
 
     /**
      * 生成随机数
+     *
      * @param length
      * @return
      */
@@ -115,21 +115,22 @@ public class DataHandlingUtil {
 
     /**
      * 拼接表名称
+     *
      * @param model
      * @param source
      * @return
      */
     public static String SplicingTable(Class<?> model, String source) {
         String tableName = null;
-        if(model.getName().equals(TbNtMian.class.getName())) {
+        if (model.getName().equals(TbNtMian.class.getName())) {
             tableName = "tb_nt_mian_" + source;
-        } else if(model.getName().equals(TbNtTenders.class.getName())) {
+        } else if (model.getName().equals(TbNtTenders.class.getName())) {
             tableName = "tb_nt_tenders_" + source;
-        } else if(model.getName().equals(TbNtAssociateGp.class.getName())) {
+        } else if (model.getName().equals(TbNtAssociateGp.class.getName())) {
             tableName = "tb_nt_associate_gp_" + source;
-        } else if(model.getName().equals(TbNtText.class.getName())) {
+        } else if (model.getName().equals(TbNtText.class.getName())) {
             tableName = "tb_nt_text_" + source;
-        } else if(model.getName().equals(TbNtBids.class.getName())) {
+        } else if (model.getName().equals(TbNtBids.class.getName())) {
             tableName = "tb_nt_bids_" + source;
         }
         return tableName;

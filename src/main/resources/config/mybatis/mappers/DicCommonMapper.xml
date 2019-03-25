@@ -127,4 +127,11 @@
     <select id="getCommonNameById" parameterType="String" resultType="String">
         SELECT `name` FROM `dic_common` WHERE `id` = #{id}
     </select>
+
+    <select id="queryQuaGrade" resultType="com.silita.model.DicCommon" parameterType="java.lang.String">
+        select *
+        from dic_common
+        where `name` = #{name}
+        AND `type` = 'qua_grade'
+    </select>
 </mapper>

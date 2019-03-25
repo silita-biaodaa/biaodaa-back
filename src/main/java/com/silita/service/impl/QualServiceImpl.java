@@ -10,6 +10,7 @@ import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
+import com.silita.utils.stringUtils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -37,10 +38,13 @@ public class QualServiceImpl implements IQualService {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> param = new HashMap<>();
         param.put("quaName", qua.getQuaName());
-        if (null != qua.getParentId()) {
-            qua.setLevel(Constant.QUAL_LEVEL_SUB);
-        } else {
-            qua.setLevel(Constant.QUAL_LEVEL_PARENT);
+        param.put("parentId",qua.getParentId());
+        if (null == qua.getLevel()){
+            if (null != qua.getParentId()) {
+                qua.setLevel(Constant.QUAL_LEVEL_SUB);
+            } else {
+                qua.setLevel(Constant.QUAL_LEVEL_PARENT);
+            }
         }
         if (null != qua.getId()) {
             param.put("id", qua.getId());
@@ -63,7 +67,9 @@ public class QualServiceImpl implements IQualService {
             qua.setCreateBy(username);
             String qualCode = "qual" + "_" + PinYinUtil.cn2py(qua.getQuaName()) + "_" + System.currentTimeMillis();
             qua.setQuaCode(qualCode);
-            qua.setBizType(Constant.BIZ_TYPE_ALL);
+            if (null == qua.getBizType()){
+                qua.setBizType(Constant.BIZ_TYPE_ALL);
+            }
             qua.setId(DataHandlingUtil.getUUID());
             qua.setCreateTime(new Date());
             dicQuaMapper.insertDicQual(qua);

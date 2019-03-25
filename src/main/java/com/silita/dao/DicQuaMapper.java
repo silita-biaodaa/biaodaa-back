@@ -62,4 +62,18 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * @return
      */
     DicQua queryQualDetailById(String pkid);
+
+    /**
+     * 根据资质code查询详情
+     * @param quaName
+     * @return
+     */
+    DicQua queryQualDetailName(DicQua quaName);
+
+    /**
+     * 根据资质code查询详情
+     * @param quaName
+     * @return
+     */
+    DicQua queryQualDetailParentName(String quaName);
 }
