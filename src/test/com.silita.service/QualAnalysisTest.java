@@ -339,7 +339,7 @@ public class QualAnalysisTest extends ConfigTest {
         String eighteenValuue = strings[18];
         String pkid = "";
         String quaCode = "";
-        if (StringUtils.isEmpty(twoValue)) {
+        if (StringUtils.isEmpty(twoValue) && StringUtils.isEmpty(threeValue)) {
             DicQua result1 = dicQuaMapper.queryQualDetailParentName(zeroValue);
             DicQua dicQua1 = new DicQua();
             dicQua1.setQuaName(oneValue);
@@ -347,7 +347,7 @@ public class QualAnalysisTest extends ConfigTest {
             DicQua result2 = dicQuaMapper.queryQualDetailName(dicQua1);
             pkid = result2.getId();
             quaCode = result2.getQuaCode();
-        } else if (StringUtils.isEmpty(threeValue)) {
+        }else {
             DicQua result1 = dicQuaMapper.queryQualDetailParentName(zeroValue);
             DicQua dicQua1 = new DicQua();
             dicQua1.setQuaName(oneValue);
@@ -369,9 +369,6 @@ public class QualAnalysisTest extends ConfigTest {
                 quaCode = result3.getQuaCode();
             }
         }
-        DicQua dic = new DicQua();
-        dic.setId(pkid);
-        dic.setBenchName(fourValue);
 
         StringBuffer grade = new StringBuffer();
         if (StringUtils.isNotEmpty(fiveValuue)) {
@@ -419,6 +416,9 @@ public class QualAnalysisTest extends ConfigTest {
         if (StringUtils.isNotEmpty(eighteenValuue)) {
             grade.append("|").append(dicCommonMapper.queryQuaGrade(eighteenValuue).getCode());
         }
+        DicQua dic = new DicQua();
+        dic.setId(pkid);
+        dic.setBenchName(fourValue);
         dicQuaMapper.updateQual(dic);
         RelQuaGrade relQuaGrade = new RelQuaGrade();
         relQuaGrade.setGradeCode(grade.toString());
