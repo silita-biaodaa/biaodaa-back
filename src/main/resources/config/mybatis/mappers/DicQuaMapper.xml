@@ -172,6 +172,13 @@
         where `id` = #{id}
     </update>
 
+    <update id="updateQual" parameterType="com.silita.model.DicQua">
+        update `dic_qua`
+        set
+          bench_name = #{benchName}
+        where `id` = #{id}
+    </update>
+
     <delete id="delDicQual" parameterType="java.lang.String">
         delete from `dic_qua` where `id` = #{id};
     </delete>

@@ -50,6 +50,11 @@ public class DicQua {
     private String bizType;
 
     /**
+     * 资质标准名称
+     */
+    private String benchName;
+
+    /**
      * 过期时间
      */
     private String expired;

@@ -23,6 +23,13 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
     int updateDicQual(DicQua qua);
 
     /**
+     * 修改资质
+     * @param qua
+     * @return
+     */
+    int updateQual(DicQua qua);
+
+    /**
      * 删除资质
      * @param id
      * @return
