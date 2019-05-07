@@ -37,7 +37,7 @@
     <select id="queryUserCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1)
         FROM sys_user_info t
-        WHERE t.`is_enable` = 1
+        WHERE 1 = 1
         <if test="provCode != null and provCode != ''">
             AND t.`in_city` IN
             (
@@ -57,7 +57,7 @@
         WHERE
         <choose>
             <when test="type != null and type == 'count'">
-                t.`is_enable` = 1
+                1=1
             </when>
             <otherwise>
                 1=1
@@ -99,7 +99,7 @@
             t.pkid as pkid
             ,t.nike_name AS nikeName
             ,t.user_name as userName
-            ,t.is_enable as isEnable
+            ,1 as isEnable
             ,t.in_company as company
             ,t.position as `position`
             ,(
