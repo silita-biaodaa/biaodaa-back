@@ -36,7 +36,7 @@
 
     <select id="queryUserCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1)
-        FROM sys_user_info t
+        FROM mishu_write.sys_user_info t
         WHERE 1 = 1
         <if test="provCode != null and provCode != ''">
             AND t.`in_city` IN
@@ -53,7 +53,7 @@
 
     <select id="queryUserTotal" resultType="java.lang.Integer" parameterType="com.silita.model.SysUserInfo">
         SELECT COUNT(1)
-        FROM sys_user_info t
+        FROM mishu_write.sys_user_info t
         WHERE
         <choose>
             <when test="type != null and type == 'count'">
@@ -113,7 +113,7 @@
             ,t1.area_name as city
             ,(SELECT t3.`area_name` FROM sys_area t3 WHERE t3.`area_level` = 1 AND t3.`pkid` =
               (SELECT t4.`area_parent_id` FROM sys_area t4 WHERE t4.`area_code` = t.in_city AND t4.`area_level` = 2)) AS province
-        FROM sys_user_info t
+        FROM mishu_write.sys_user_info t
         left join sys_area t1 on t.in_city = t1.area_code and t1.area_level = 2
         WHERE 1 = 1
         <choose>
