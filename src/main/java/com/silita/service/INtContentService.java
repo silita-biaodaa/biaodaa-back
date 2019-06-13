@@ -2,6 +2,9 @@ package com.silita.service;
 
 import com.silita.model.TbNtText;
 
+import java.io.IOException;
+import java.util.Map;
+
 /**
  * tb_nt_text service
  */
@@ -13,4 +16,6 @@ public interface INtContentService {
      * @return
      */
     TbNtText getNtContent(TbNtText ntText);
+
+    String queryCentent(Map<String,Object> param) throws IOException;
 }

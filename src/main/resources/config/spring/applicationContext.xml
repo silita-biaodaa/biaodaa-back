@@ -41,4 +41,7 @@
     <import resource="applicationContext-redis.xml"/>
     <!-- 引入shiro配置 -->
     <import resource="applicationContext-shiro.xml"/>
+    <!--&lt;!&ndash;hbase&ndash;&gt;
+    <import resource="spring-hbase.xml"/>-->
+
 </beans>

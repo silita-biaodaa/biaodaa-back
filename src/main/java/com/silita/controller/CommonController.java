@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RequestMapping("/common")
@@ -39,13 +40,14 @@ public class CommonController extends BaseController {
 
     /**
      * 获取公告原文详情
-     * @param textHunan
+     * @param param
      * @return
      */
     @RequestMapping(value = "/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String,Object> recycelDetail(@RequestBody TbNtText textHunan){
-        return successMap(ntContentService.getNtContent(textHunan));
+    public Map<String,Object> recycelDetail(@RequestBody Map<String,Object> param) throws IOException {
+
+        return successMap(ntContentService.queryCentent(param));
     }
 
     @RequestMapping(value = "/listRelevantNotice", method = RequestMethod.POST, produces = "application/json;charset=utf-8")

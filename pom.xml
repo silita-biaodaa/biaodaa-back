@@ -60,6 +60,12 @@
 
         <webSourceDirectory>src/main/webapp</webSourceDirectory>
         <minimizedResource>true</minimizedResource>
+
+        <!--hbase-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <hbase.version>1.2.2</hbase.version>
+        <spring-data-hadoop.version>2.4.0.RELEASE</spring-data-hadoop.version>
+
     </properties>
 
     <!-- 私有仓库 -->
@@ -372,6 +378,33 @@
             <artifactId>druid</artifactId>
             <version>1.0.16</version>
         </dependency>
+
+     <!--   &lt;!&ndash;hbase&ndash;&gt;
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>${hbase.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-hadoop</artifactId>
+            <version>${spring-data-hadoop.version}</version>
+        </dependency>-->
+
+        <!-- hbase-client -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-hadoop</artifactId>
+            <version>${spring-data-hadoop.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
