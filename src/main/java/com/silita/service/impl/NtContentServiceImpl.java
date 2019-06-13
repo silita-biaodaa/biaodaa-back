@@ -31,13 +31,19 @@ public class NtContentServiceImpl implements INtContentService {
     @Autowired
     TbNtTextHunanMapper tbNtTextHunanMapper;
 
-
     private String hBaseTableName="notice";
 
     @Autowired
     private Connection connection;
 
-
+    @Override
+    public TbNtText getNtContent(TbNtText ntText) {
+        TbNtText nt = tbNtTextHunanMapper.queryNtTextDetail(ntText);
+        if (null == nt) {
+            return new TbNtText();
+        }
+        return nt;
+    }
 
     /**
      * 获取公告详情
@@ -49,7 +55,7 @@ public class NtContentServiceImpl implements INtContentService {
      */
 
     public String queryCentent(Map<String, Object> param) throws IOException {
-        String snatchId = MapUtils.getString(param, "snatchId");
+        String snatchId = tbNtTextHunanMapper.getSnatchid(param);
         String content = "";
         Map<String, Object> map = new HashMap<String, Object>();
         TableName tableName = TableName.valueOf(hBaseTableName);
