@@ -18,6 +18,20 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="NtContentServiceImpl.java" pinned="false" current-in-tab="false">
@@ -62,8 +76,8 @@
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="29" selection-start-line="29" selection-end-line="29" />
+            <state relative-caret-position="263">
+              <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -175,6 +189,13 @@
     <option name="CUSTOM_FILTER" />
   </component>
   <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\java\repository" />
+        <option name="mavenHome" value="D:/apache-maven-3.5.4" />
+        <option name="userSettingsFile" value="D:\java\maven\apache-maven-3.6.1\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="importAutomatically" value="true" />
@@ -344,6 +365,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.52279204" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -461,7 +483,7 @@
       <window_info anchor="right" id="Maven Projects" order="5" visible="true" weight="0.3297587" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" anchor="bottom" id="Run" order="4" visible="true" weight="0.6958982" />
+      <window_info active="true" anchor="bottom" id="Run" order="4" visible="true" weight="0.446959" />
       <window_info anchor="bottom" id="Spring" order="0" />
       <window_info id="Designer" order="5" />
       <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.288874" />
@@ -489,7 +511,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="#公告原文  公告原文接口修改" />
     <MESSAGE value="#公告原文  新增查找爬取id接口" />
-    <option name="LAST_COMMIT_MESSAGE" value="#公告原文  新增查找爬取id接口" />
+    <MESSAGE value="#版本  版本更改" />
+    <option name="LAST_COMMIT_MESSAGE" value="#版本  版本更改" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -836,8 +859,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
+        <state relative-caret-position="263">
+          <caret line="28" column="17" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
         </state>
       </provider>
     </entry>
