@@ -10,12 +10,12 @@ import java.util.Map;
  */
 public interface INtContentService {
 
-    /**
-     * 获取公告原文详情
-     * @param ntText
-     * @return
-     */
-    TbNtText getNtContent(TbNtText ntText);
 
+    /**
+     * 获取公告原文
+     * @param param
+     * @return
+     * @throws IOException
+     */
     String queryCentent(Map<String,Object> param) throws IOException;
 }

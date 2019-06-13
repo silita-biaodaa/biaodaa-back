@@ -32,19 +32,12 @@ public class NtContentServiceImpl implements INtContentService {
     TbNtTextHunanMapper tbNtTextHunanMapper;
 
 
-    private String hBaseTableName="nocite";
+    private String hBaseTableName="notice";
 
     @Autowired
     private Connection connection;
 
-    @Override
-    public TbNtText getNtContent(TbNtText ntText) {
-        TbNtText nt = tbNtTextHunanMapper.queryNtTextDetail(ntText);
-        if (null == nt) {
-            return new TbNtText();
-        }
-        return nt;
-    }
+
 
     /**
      * 获取公告详情
