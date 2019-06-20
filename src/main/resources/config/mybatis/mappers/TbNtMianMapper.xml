@@ -4,7 +4,7 @@
 
     <select id="listNtMain" parameterType="com.silita.model.TbNtMian" resultType="java.util.Map">
         SELECT `pkid`, `title`, `pub_date` AS pubDate,<![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX(src_site,'&',2),'&',-1)]]> as srcSite, `nt_status` AS ntStatus
-        FROM tb_nt_mian_hunan
+        FROM ${tableName}
         WHERE 1=1 AND is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
             AND provice_code = #{proviceCode}
