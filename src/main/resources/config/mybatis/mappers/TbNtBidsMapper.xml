@@ -85,7 +85,7 @@
         WHERE `nt_id` = #{ntId} AND `segment` = #{segment}
     </update>
 
-    <select id="countNtBidsByNtIdAndSegment" parameterType="com.silita.model.TbNtBids" resultType="Integer">
+    <select id="countNtBidsByNtIdAndSegment" parameterType="com.silita.model.TbNtBids" resultType="java.lang.Integer">
       SELECT COUNT(*) FROM ${tableName} WHERE `nt_id` = #{ntId} AND `segment` = #{segment}
     </select>
 
@@ -140,11 +140,11 @@
         </where>
     </delete>
 
-    <select id="countNtTendersByNtId" parameterType="com.silita.model.TbNtBids" resultType="Integer">
+    <select id="countNtTendersByNtId" parameterType="com.silita.model.TbNtBids" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM ${tableName} WHERE nt_id = #{ntId}
     </select>
 
-    <select id="getNtIdByNtId" parameterType="com.silita.model.TbNtBids" resultType="String">
+    <select id="getNtIdByNtId" parameterType="com.silita.model.TbNtBids" resultType="java.lang.String">
         SELECT `nt_id` FROM ${tableName} WHERE pkid = #{pkid}
     </select>
 </mapper>

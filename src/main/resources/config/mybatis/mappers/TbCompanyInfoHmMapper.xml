@@ -252,7 +252,7 @@
         order by created desc
     </select>
 
-    <select id="listComNameCountByNameOrPinYin" parameterType="String" resultType="Map">
+    <select id="listComNameCountByNameOrPinYin" parameterType="map" resultType="java.util.Map">
         SELECT `com_name` AS companyName, `credit_code` AS creditCode
         FROM tb_company_info_hm
         WHERE 1 = 1

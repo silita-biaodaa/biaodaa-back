@@ -152,8 +152,8 @@ public class NoticeZhongBiaoController extends BaseController {
 
     @RequestMapping(value = "/listCompany", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String, Object> listCompany(@RequestBody Map params) {
-        return super.successMap(noticeZhongBiaoService.listCompany(String.valueOf(params.get("queryKey"))));
+    public Map<String, Object> listCompany(@RequestBody Map<String,Object> param) {
+        return super.successMap(noticeZhongBiaoService.listCompany(param));
     }
 
     @RequestMapping(value = "/getQualRelationStr",method = RequestMethod.POST,produces="application/json;charset=utf-8")

@@ -11,7 +11,7 @@
     </resultMap>
 
 
-    <select id="listPermissionByUserName" parameterType="String" resultType="String">
+    <select id="listPermissionByUserName" parameterType="String" resultType="java.lang.String">
 		SELECT permission_name
 		FROM tb_user u
 		LEFT JOIN tb_user_role ur ON u.uid = ur.uid

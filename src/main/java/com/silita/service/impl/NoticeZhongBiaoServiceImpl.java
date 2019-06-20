@@ -11,6 +11,7 @@ import com.silita.model.*;
 import com.silita.service.INoticeZhongBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
+import org.apache.commons.collections.MapUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -771,7 +772,8 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
     }
 
     @Override
-    public List<Map<String, Object>> listCompany(String queryKey) {
+    public List<Map<String, Object>> listCompany(Map<String,Object> param) {
+        String queryKey = MapUtils.getString(param, "queryKey");
         List lists = new ArrayList<TbCompany>(20);
         TransportClient client = InitESClient.getInit();
         Map sort = new HashMap<String, String>();
@@ -795,7 +797,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         if (!StringUtils.isEmpty(queryKey)) {
             queryKey = queryKey.toLowerCase();
             //获取手动录入数据
-            List<Map<String, Object>> tempList = tbCompanyInfoHmMapper.listComNameCountByNameOrPinYin(queryKey);
+            List<Map<String, Object>> tempList = tbCompanyInfoHmMapper.listComNameCountByNameOrPinYin(param);
             if (tempList.size() > 0) {
                 lists.addAll(tempList);
             }

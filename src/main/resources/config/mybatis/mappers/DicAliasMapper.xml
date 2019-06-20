@@ -60,7 +60,7 @@
         order by create_time desc
     </select>
 
-    <select id="getDicAliasCountByStdCode" parameterType="com.silita.model.DicAlias" resultType="Integer">
+    <select id="getDicAliasCountByStdCode" parameterType="com.silita.model.DicAlias" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM dic_alias WHERE `std_code` = #{stdCode}
     </select>
 

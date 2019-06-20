@@ -91,7 +91,7 @@ public interface INoticeZhongBiaoService {
     /**
      * 根据关键字或拼音获取公司信息
      */
-    List<Map<String, Object>> listCompany(String queryKey);
+    List<Map<String, Object>> listCompany(Map<String,Object> param);
 
     /**
      * 获取资质关系字符串

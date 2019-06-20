@@ -52,7 +52,7 @@
         LIMIT #{start}, #{pageSize}
     </select>
 
-    <select id="getDicCommonCountByType" parameterType="com.silita.model.DicCommon" resultType="Integer">
+    <select id="getDicCommonCountByType" parameterType="com.silita.model.DicCommon" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM dic_common WHERE `type` = #{type}
     </select>
 

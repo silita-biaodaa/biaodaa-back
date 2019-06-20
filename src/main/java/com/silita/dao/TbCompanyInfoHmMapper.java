@@ -88,8 +88,8 @@ public interface TbCompanyInfoHmMapper extends MyMapper<TbCompanyInfoHm> {
 
     /**
      * 根据企业名称或拼音获取信息
-     * @param queryKey
+     * @param param
      * @return
      */
-    List<Map<String, Object>> listComNameCountByNameOrPinYin(@Param("queryKey") String queryKey);
+    List<Map<String, Object>> listComNameCountByNameOrPinYin(Map<String,Object> param);
 }

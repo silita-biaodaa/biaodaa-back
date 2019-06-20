@@ -10,7 +10,7 @@
         <result property="desc" column="desc"/>
     </resultMap>
 
-    <select id="listRoleByUserName" parameterType="String" resultType="String">
+    <select id="listRoleByUserName" parameterType="String" resultType="java.lang.String">
         SELECT r.role_name
         FROM tb_user u
         LEFT JOIN tb_user_role ur ON u.uid = ur.uid
