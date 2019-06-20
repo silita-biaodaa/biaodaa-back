@@ -110,8 +110,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     public Map<String, Object> listNtMain(TbNtMian tbNtMian) {
         tbNtMian.setTableName(DataHandlingUtil.SplicingTable(tbNtMian.getClass(), tbNtMian.getSource()));
         //去除标题中的特殊字符
-        String reg = "[^\u4e00-\u9fa5]";
-        tbNtMian.setTitle(tbNtMian.getTitle().replaceAll(reg, ""));
+        tbNtMian.setTitle(tbNtMian.getTitle().replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", "%"));
         Map result = new HashMap<String, Object>();
         result.put("areaCode", sysAreaMapper.getPkIdByAreaCode(tbNtMian.getSource()));
         result.put("datas", tbNtMianMapper.listNtMain(tbNtMian));

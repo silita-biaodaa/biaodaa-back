@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.TbNtMianMapper">
 
-    <select id="listNtMain" parameterType="com.silita.model.TbNtMian" resultType="Map">
-        SELECT `pkid`, `title`, `pub_date` AS pubDate, `src_site` AS srcSite, `nt_status` AS ntStatus
+    <select id="listNtMain" parameterType="com.silita.model.TbNtMian" resultType="java.util.Map">
+        SELECT `pkid`, `title`, `pub_date` AS pubDate, SUBSTRING_INDEX(SUBSTRING_INDEX(src_site,<![CDATA[&]]>,2),<![CDATA[&]]>,-1) as srcSite, `nt_status` AS ntStatus
         FROM ${tableName}
         WHERE 1=1 AND is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
@@ -34,7 +34,7 @@
         LIMIT #{start}, #{pageSize}
     </select>
 
-    <select id="countNtMian" parameterType="com.silita.model.TbNtMian" resultType="Integer">
+    <select id="countNtMian" parameterType="com.silita.model.TbNtMian" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM ${tableName}
         WHERE 1=1 AND is_enable = 1
