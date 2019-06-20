@@ -54,7 +54,7 @@ public class NtContentServiceImpl implements INtContentService {
      * @throws IOException
      */
 
-    public String queryCentent(Map<String, Object> param) throws IOException {
+    public Map queryCentent(Map<String, Object> param) throws IOException {
         String snatchId = tbNtTextHunanMapper.getSnatchid(param);
         String content = "";
         Map<String, Object> map = new HashMap<String, Object>();
@@ -68,11 +68,15 @@ public class NtContentServiceImpl implements INtContentService {
             String value = Bytes.toString(CellUtil.cloneValue(cell));
             switch (key) {
                 case "content": //获取内容
-                    content = value;
+                    content =value;
                     break;
             }
         }
-        return content;
+        String ntId = MapUtils.getString(param, "ntId");
+        map.put("content",content);
+        map.put("ntId",ntId);
+        map.put("pkid",snatchId);
+        return map;
     }
 
 }

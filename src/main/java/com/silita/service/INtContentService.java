@@ -17,5 +17,5 @@ public interface INtContentService {
      */
     TbNtText getNtContent(TbNtText ntText);
 
-    String queryCentent(Map<String,Object> param) throws IOException;
+    Map queryCentent(Map<String,Object> param) throws IOException;
 }
