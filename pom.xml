@@ -26,7 +26,7 @@
     <name>biaodaa-back</name>
     <groupId>com.biaodaa</groupId>
     <artifactId>biaodaa-back</artifactId>
-    <version>1.4.12</version>
+    <version>1.4.15</version>
 
     <properties>
         <spring.version>4.1.6.RELEASE</spring.version>
@@ -63,8 +63,6 @@
 
         <!--hbase-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hbase.version>1.2.2</hbase.version>
-
     </properties>
 
     <!-- 私有仓库 -->
@@ -100,7 +98,13 @@
         <dependency>
             <groupId>com.silita</groupId>
             <artifactId>elasticSearch</artifactId>
-            <version>1.1.6</version>
+            <version>1.1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>x-pack-transport</artifactId>
+            <version>5.5.2</version>
         </dependency>
 
         <!--ehcache -->
@@ -385,6 +389,12 @@
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-client</artifactId>
             <version>1.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.13.Final</version>
         </dependency>
     </dependencies>
 
