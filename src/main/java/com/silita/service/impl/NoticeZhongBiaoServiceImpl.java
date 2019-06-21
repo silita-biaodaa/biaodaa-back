@@ -773,6 +773,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
 
     @Override
     public List<Map<String, Object>> listCompany(Map<String,Object> param) {
+
         String queryKey = MapUtils.getString(param, "queryKey");
         List lists = new ArrayList<TbCompany>(20);
         TransportClient client = InitESClient.getInit();
