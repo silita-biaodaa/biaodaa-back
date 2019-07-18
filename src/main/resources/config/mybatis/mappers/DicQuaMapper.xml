@@ -246,4 +246,18 @@
         from dic_qua
         where id = #{pkid}
     </select>
+
+    <select id="queryQualCodeByBenchName" parameterType="java.lang.String" resultType="java.lang.String">
+      SELECT t.`qua_code` FROM dic_qua t WHERE t.`bench_name` = #{quaName} AND t.`level` != '1'
+    </select>
+
+    <!--查询资质标准名-->
+    <select id="queryBenchName" resultType="java.util.Map">
+        SELECT
+          t.`qua_code` AS quaCode,
+          t.`bench_name` AS benchName
+        FROM
+          dic_qua t
+        WHERE t.`bench_name` IS NOT NULL
+    </select>
 </mapper>

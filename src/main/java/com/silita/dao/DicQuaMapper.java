@@ -83,4 +83,17 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * @return
      */
     DicQua queryQualDetailParentName(String quaName);
+
+    /**
+     * 根据标准名称查询资质code
+     * @param quaName
+     * @return
+     */
+    String queryQualCodeByBenchName(String quaName);
+
+    /**
+     * 查询资质标准名
+     * @return
+     */
+    List<Map<String,Object>> queryBenchName();
 }

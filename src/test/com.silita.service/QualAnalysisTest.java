@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static com.sun.corba.se.spi.activation.IIOP_CLEAR_TEXT.value;
@@ -347,7 +348,7 @@ public class QualAnalysisTest extends ConfigTest {
             DicQua result2 = dicQuaMapper.queryQualDetailName(dicQua1);
             pkid = result2.getId();
             quaCode = result2.getQuaCode();
-        }else {
+        } else {
             DicQua result1 = dicQuaMapper.queryQualDetailParentName(zeroValue);
             DicQua dicQua1 = new DicQua();
             dicQua1.setQuaName(oneValue);
@@ -357,14 +358,14 @@ public class QualAnalysisTest extends ConfigTest {
             dicQua1.setQuaName(twoValue);
             dicQua1.setParentId(result2.getId());
             DicQua result3 = dicQuaMapper.queryQualDetailName(dicQua1);
-            if (StringUtils.isNotEmpty(threeValue)){
+            if (StringUtils.isNotEmpty(threeValue)) {
                 dicQua1 = new DicQua();
                 dicQua1.setQuaName(threeValue);
                 dicQua1.setParentId(result3.getId());
                 DicQua result4 = dicQuaMapper.queryQualDetailName(dicQua1);
                 pkid = result4.getId();
                 quaCode = result4.getQuaCode();
-            }else {
+            } else {
                 pkid = result3.getId();
                 quaCode = result3.getQuaCode();
             }
@@ -425,6 +426,34 @@ public class QualAnalysisTest extends ConfigTest {
         relQuaGrade.setQuaCode(quaCode);
         if (StringUtils.isNotEmpty(grade)) {
             relQuaGradeService.addQuaGrade(relQuaGrade);
+        }
+    }
+
+    @Test
+    public void qualNotGrade() {
+        File file = new File("E:\\朱帅\\耀邦\\资质不分等级.xlsx");
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+            Sheet sheet = workbook.getSheet("Sheet1");
+            int rows = sheet.getLastRowNum();
+            for (int i = 1; i <= rows; i++) {
+                Row row = sheet.getRow(i);
+                Cell cell = row.getCell(4);
+                if (null != cell){
+                    String qualCode = dicQuaMapper.queryQualCodeByBenchName(cell.getStringCellValue());
+                    if (StringUtils.isNotEmpty(qualCode)){
+                        RelQuaGrade relQuaGrade = new RelQuaGrade();
+                        relQuaGrade.setQuaCode(qualCode);
+                        relQuaGrade.setGradeCode("0");
+                        relQuaGradeService.addQuaGrade(relQuaGrade);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
