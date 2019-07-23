@@ -59,6 +59,9 @@
         <if test="desc != null and desc != ''">
             `desc`,
         </if>
+        <if test="benchName != null and benchName != ''">
+            `bench_name`,
+        </if>
         <if test="createBy != null and createBy != ''">
             `create_by`,
         </if>
@@ -108,6 +111,9 @@
         </if>
         <if test="desc != null and desc != ''">
             #{desc},
+        </if>
+        <if test="benchName != null and benchName != ''">
+            #{benchName},
         </if>
         <if test="createBy != null and createBy != ''">
             #{createBy},

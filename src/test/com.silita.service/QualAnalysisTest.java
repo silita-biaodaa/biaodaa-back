@@ -456,4 +456,23 @@ public class QualAnalysisTest extends ConfigTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void addQualGonglu(){
+//        DicQua qua = new DicQua();
+//        qua.setBenchName("公路养护计算机系统维护");
+//        qua.setParentId("6fc925f5b8464cdd9edc28bb24f40793");
+//        qua.setBizType("0");
+//        qua.setLevel("2");
+//        qua.setQuaName("计算机系统维护");
+//        qualService.addQual(qua,null);
+
+        String qualCode = dicQuaMapper.queryQualCodeByBenchName("公路养护机电专项");
+        if (StringUtils.isNotEmpty(qualCode)){
+            RelQuaGrade relQuaGrade = new RelQuaGrade();
+            relQuaGrade.setQuaCode(qualCode);
+            relQuaGrade.setGradeCode("0");
+            relQuaGradeService.addQuaGrade(relQuaGrade);
+        }
+    }
 }
