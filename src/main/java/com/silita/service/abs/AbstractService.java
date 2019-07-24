@@ -32,7 +32,7 @@ public abstract class AbstractService {
      */
     public Map<String, Object> handlePageCount(Map<String, Object> params, Pagination<? extends Pagination> page) {
         int pageCount = 0;
-        int total = (int) params.get("total");
+        int total = (Integer) params.get("total");
         if(total % page.getPageSize() == 0) {
             pageCount = total / page.getPageSize();
         } else {

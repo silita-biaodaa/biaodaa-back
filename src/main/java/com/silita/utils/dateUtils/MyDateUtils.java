@@ -782,7 +782,7 @@ public class MyDateUtils {
      * @return
      */
     public static List<Date> getDateList(Date startDate, Date endDate) {
-        List<Date> dateList = new ArrayList<>();
+        List<Date> dateList = new ArrayList();
         Calendar tempStart = Calendar.getInstance();
         tempStart.setTime(startDate);
         while (startDate.getTime() <= endDate.getTime()) {

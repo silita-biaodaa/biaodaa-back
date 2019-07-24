@@ -32,7 +32,7 @@
 
     <select id="queryCompanyCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbCompany">
         select count(1)
-        from tb_company
+        from mishu.tb_company
         where 1=1
         <if test="comName != null and comName != ''">
             and com_name like CONCAT('%', #{comName}, '%')
@@ -50,7 +50,7 @@
         select *
               ,DATE_FORMAT(created, '%Y年%m月%h日') as create_date
               ,DATE_FORMAT(updated, '%Y年%m月%h日') as update_date
-        from tb_company
+        from mishu.tb_company
         where 1=1
         <if test="comName != null and comName != ''">
             and com_name like CONCAT('%', #{comName}, '%')
