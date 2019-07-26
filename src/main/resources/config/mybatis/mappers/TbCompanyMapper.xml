@@ -93,7 +93,8 @@
 
     <select id="queryComIdByName" parameterType="java.lang.String" resultType="java.lang.String">
         select com_id
-        from tb_company
+        from mishu.tb_company
         where com_name = #{comName}
+        limit 1
     </select>
 </mapper>

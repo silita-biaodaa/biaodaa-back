@@ -102,4 +102,9 @@ public class TbCompanyQualification {
      * 来源
      */
     private String source;
+
+    /**
+     * 是否有效
+     */
+    private Integer isValid;
 }

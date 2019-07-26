@@ -4,6 +4,7 @@ import com.silita.model.TbCompanyQualification;
 import com.silita.utils.MyMapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbCompanyQualificationMapper extends MyMapper<TbCompanyQualification> {
 
@@ -41,4 +42,10 @@ public interface TbCompanyQualificationMapper extends MyMapper<TbCompanyQualific
      * @return
      */
     Integer deleteCompanyQual(String pkid);
+
+    /**
+     * 根据企业名称和资质类型查询
+     * @return
+     */
+    Map<String,Object> queryCompanyQualType(String comName);
 }

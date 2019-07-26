@@ -475,4 +475,28 @@ public class QualAnalysisTest extends ConfigTest {
             relQuaGradeService.addQuaGrade(relQuaGrade);
         }
     }
+
+    @Test
+    public void addQualCate(){
+        DicQua dicQua = new DicQua();
+        dicQua.setQuaName("设计");
+        dicQua.setBizType(Constant.BIZ_TYPE_ALL);
+        dicQua.setParentId("4d0d03b0abd74d1abc64f391397bfb9d");
+        dicQua.setBenchName("地质灾害防治单位设计");
+        dicQua.setLevel("2");
+        qualService.addQual(dicQua,null);
+
+    }
+
+
+    @Test
+    public void addQualGrade(){
+        String grade = "grade_jj_1553245789116|grade_yj_1553245789137|grade_bj_1553245789155|grade_yjjys_1554256688513|grade_bjjys_1554256688521";
+        RelQuaGrade relQuaGrade = new RelQuaGrade();
+        relQuaGrade.setGradeCode(grade);
+        relQuaGrade.setQuaCode("qual_sj_1563940740229");
+        if (StringUtils.isNotEmpty(grade)) {
+            relQuaGradeService.addQuaGrade(relQuaGrade);
+        }
+    }
 }

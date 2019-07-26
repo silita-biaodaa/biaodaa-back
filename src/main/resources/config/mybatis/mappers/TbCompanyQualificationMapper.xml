@@ -20,6 +20,7 @@
         <result column="created" property="created" jdbcType="TIMESTAMP"/>
         <result column="updated" property="updated" jdbcType="TIMESTAMP"/>
         <result column="channel" property="channel" jdbcType="INTEGER"/>
+        <result column="is_valid" property="isValid" jdbcType="INTEGER"/>
         <result column="qual_name" property="qualName" jdbcType="LONGVARCHAR"/>
         <result column="range" property="range" jdbcType="LONGVARCHAR"/>
         <result column="url" property="url" jdbcType="LONGVARCHAR"/>
@@ -42,7 +43,7 @@
   </select>
 
     <select id="insertCompanyQual" parameterType="com.silita.model.TbCompanyQualification">
-        INSERT INTO `tb_company_qualification`(
+        INSERT INTO mishu.`tb_company_qualification`(
         <if test="pkid != null and pkid != ''">
             `pkid`,
         </if>
@@ -88,14 +89,15 @@
         <if test="qualId != null and qualId != ''">
             `qual_id`,
         </if>
-        <if test="created != null and created != ''">
-            `created`,
-        </if>
+        `created`,
         <if test="updated != null and updated != ''">
             `updated`,
         </if>
-        <if test="channel != null and channel != ''">
-            `channel`
+        <if test="channel != null">
+            `channel`,
+        </if>
+        <if test="isValid != null">
+            `is_valid`
         </if>
         )
         VALUES (
@@ -144,20 +146,21 @@
         <if test="qualId != null and qualId != ''">
             #{qualId},
         </if>
-        <if test="created != null and created != ''">
-            #{created},
-        </if>
+        now(),
         <if test="updated != null and updated != ''">
             #{updated},
         </if>
-        <if test="channel != null and channel != ''">
-            #{channel}
+        <if test="channel != null">
+            #{channel},
+        </if>
+        <if test="isValid != null">
+            #{isValid}
         </if>
         )
     </select>
 
     <update id="updateCompanyQual" parameterType="com.silita.model.TbCompanyQualification">
-        UPDATE `tb_company_qualification`
+        UPDATE mishu.`tb_company_qualification`
         SET
         <if test="md5 != null and md5 != ''">
             `md5` = #{md5},
@@ -207,9 +210,7 @@
         <if test="channel != null and channel != ''">
             `channel` = #{channel},
         </if>
-        <if test="updated != null and updated != ''">
-            `updated` = #{updated}
-        </if>
+            `updated` = now()
         WHERE `pkid` = #{pkid};
     </update>
 
@@ -218,4 +219,16 @@
         FROM `tb_company_qualification`
         WHERE `pkid` = #{pkid}
     </delete>
+
+    <!--根据企业名称和资质类型查询-->
+    <select id="queryCompanyQualType" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+          t.`qual_name`,
+          t.`pkid`
+        FROM
+          mishu.tb_company_qualification t
+        WHERE t.`com_name` = #{comName}
+          AND t.`qual_type` = '地质灾害'
+        limit 1
+    </select>
 </mapper>
