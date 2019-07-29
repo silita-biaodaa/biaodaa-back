@@ -30,7 +30,7 @@ public class AliasTest extends ConfigTest {
         for (Map<String, Object> map : qualList) {
             StringBuffer qualCode = new StringBuffer(MapUtils.getString(map, "quaCode"));
             StringBuffer benchName = new StringBuffer(MapUtils.getString(map, "benchName"));
-            param.put("name", benchName.toString());
+            param.put("name", "工程设计综合");
             int count = dicAliasMapper.queryAliasByName(param);
             if (count > 0) {
                 continue;
