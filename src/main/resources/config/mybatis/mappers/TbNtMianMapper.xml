@@ -194,6 +194,9 @@
         <if test="url !=null and url!=''">
             `url` = #{url},
         </if>
+        <if test="ntStatus !=null and ntStatus!=''">
+            `nt_status` = #{ntStatus},
+        </if>
         `nt_type` = #{ntType},
         `city_code` = #{cityCode},
         `county_code` = #{countyCode},

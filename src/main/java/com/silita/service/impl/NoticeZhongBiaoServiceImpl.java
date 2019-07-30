@@ -275,6 +275,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         tbNtMian.setPubDate(tbNtBids.getPubDate());
         tbNtMian.setCityCode(tbNtBids.getCityCode());
         tbNtMian.setCountyCode(tbNtBids.getCountyCode());
+        tbNtMian.setNtStatus("1");
         tbNtMianMapper.updateNtMainByPkId(tbNtMian);
         //更新招标标段表信息
         TbNtTenders tbNtTenders = new TbNtTenders();
@@ -292,7 +293,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         tbNtBids.setTableName(DataHandlingUtil.SplicingTable(tbNtBids.getClass(), tbNtBids.getSource()));
         Integer count = tbNtBidsMapper.countNtBidsByNtIdAndSegment(tbNtBids);
         if (count == 0) {
-            tbNtMian.setNtStatus("1");
+
             //公告状态改为未审核
             tbNtMianMapper.updateCategoryAndStatusByPkId(tbNtMian);
             //添加中标标段基本信息
@@ -327,6 +328,7 @@ public class NoticeZhongBiaoServiceImpl extends AbstractService implements INoti
         } else {
             tbNtBids.setUpdateBy(tbNtBids.getCreateBy());
             msg = "更新标段信息成功！";
+
             //更新中标标段基本信息
             tbNtBidsMapper.updateTbNtBidsByNtIdAndSegment(tbNtBids);
             //批量添加或更新中标候选人
