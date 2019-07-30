@@ -37,8 +37,40 @@
     </resultMap>
 
     <select id="queryNtRecycleList" parameterType="com.silita.model.TbNtRecycle" resultMap="BaseResultMap">
-        select *
-        from tb_nt_recycle_${source}
+        SELECT
+            pkid,
+            del_type,
+            nt_id,
+            title,
+            url,
+            controll_sum,
+            pro_sum,
+            pro_duration,
+            pb_mode,
+            provice_code,
+            city_code,
+            county_code,
+            biness_type,
+            nt_category,
+            nt_type,
+            YEAR,
+            pub_date,
+        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX(src_site,'&',2),'&',-1)]]> as srcSite,
+            source,
+            is_enable,
+            nt_status,
+            px,
+            snatch_id,
+            snatch_batch,
+            snatch_time,
+            analysis_id,
+            analysis_time,
+            created,
+            create_by,
+            updated,
+            update_by
+        FROM
+        tb_nt_recycle_${source}
         where 1=1 and is_enable = 1
         <if test="title != null and title != ''">
             and title like CONCAT('%', #{title}, '%')
