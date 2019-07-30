@@ -99,7 +99,7 @@
             t.pkid as pkid
             ,t.nike_name AS nikeName
             ,t.user_name as userName
-            ,1 as isEnable
+            ,t.ENABLE as isEnable
             ,t.in_company as company
             ,t.position as `position`
             ,(
