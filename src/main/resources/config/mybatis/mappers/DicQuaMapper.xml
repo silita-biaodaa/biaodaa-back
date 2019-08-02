@@ -265,6 +265,6 @@
         FROM
           dic_qua t
         WHERE t.`bench_name` IS NOT NULL
-        AND t.`bench_name` = '工程设计综合资质'
+        AND t.`bench_name` = '工程设计建筑行业（建筑工程）'
     </select>
 </mapper>
