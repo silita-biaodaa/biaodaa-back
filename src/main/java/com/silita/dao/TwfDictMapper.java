@@ -19,4 +19,11 @@ public interface TwfDictMapper {
      * @return
      */
     public String getNameByCodeAndType(TwfDict twfDict);
+
+    /**
+     * 获取项目类型
+     * @param proType
+     * @return
+     */
+    String queryProType(String proType);
 }

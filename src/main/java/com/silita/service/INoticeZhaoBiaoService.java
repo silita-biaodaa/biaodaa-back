@@ -50,10 +50,10 @@ public interface INoticeZhaoBiaoService {
 
     /**
      * 根据查询条件生成excel
-     * @param tbNtMian
+     * @param param
      * @return
      */
-    HSSFWorkbook listTendersDetail(TbNtMian tbNtMian);
+    HSSFWorkbook listTendersDetail(Map<String,Object> param);
 
     /**
      * 更新公告状态

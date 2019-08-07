@@ -96,4 +96,24 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * @return
      */
     List<Map<String,Object>> queryBenchName();
+
+
+
+
+    /**
+     * 获取资质大类
+     */
+
+    List<Map<String,Object>> queryQuaOne(Map<String,Object> param);
+
+    /**
+     * 获取资质最后一级标准名称-
+     */
+    List<Map<String,Object>> queryQuaTwo(Map<String,Object> param);
+
+    List<Map<String,Object>> queryQuaparentId(Map<String,Object> param);
+
+    Integer queryQuaparentIdIsNull(Map<String,Object> param);
+
+    List<Map<String,Object>> queryDicQuaBenchNameListMap(Map<String,Object> param);
 }

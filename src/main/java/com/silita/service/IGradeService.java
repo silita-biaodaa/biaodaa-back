@@ -20,6 +20,13 @@ public interface IGradeService {
     List<Map<String, Object>> getGradeList(Map<String, Object> param);
 
     /**
+     * 等级
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> getDicCommonGradeList(Map<String,Object> param);
+
+    /**
      * 保存
      *
      * @param dicCommon
@@ -56,6 +63,20 @@ public interface IGradeService {
      * @return
      */
     List<Map<String, Object>> getSecQualGradeList(Map<String, Object> param);
+
+    /**
+     * 获取符合该资质的等级
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> getGradeListMap(Map<String,Object> param);
+
+    /**
+     * 资质等级下拉选项
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> gitGradePullDownListMap(Map<String,Object> param);
 
     /**
      * 修改等级别名

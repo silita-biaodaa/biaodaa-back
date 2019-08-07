@@ -65,7 +65,9 @@
     </select>
 
     <select id="listTendersDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
-        SELECT main.title, CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过'
+        SELECT
+        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX( main.title,'"',2),'"',-1)]]> as title,
+        CASE main.nt_status WHEN 0 THEN '未编辑' WHEN 1 then '已编辑' WHEN 2 then '已审核' WHEN 4 then '未通过'
         WHEN 5 then '已处理' ELSE '未审核' END AS nt_status, CONCAT(tenders.segment,'标段') AS segment, main.pub_date,
         (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code,
         (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code,
@@ -78,7 +80,7 @@
         (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = tenders.nt_td_status) AS nt_td_status,
         tenders.opening_person, main.url, tenders.pkid, tenders.nt_id
         FROM tb_nt_mian_${source} AS main
-        LEFT JOIN tb_nt_tenders_${source} AS tenders ON main.pkid = tenders.nt_id
+        JOIN tb_nt_tenders_${source} AS tenders ON main.pkid = tenders.nt_id
         WHERE 1=1 AND main.is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
             AND main.provice_code = #{proviceCode}
@@ -362,4 +364,115 @@
         from ${tableName}
         where `title` = #{title}
     </select>
+    <select id="queryZhaoBiaoExcel" resultType="java.util.LinkedHashMap" parameterType="map">
+         SELECT
+        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX( a.title,'"',2),'"',-1)]]> as title,
+        <include refid="ntStatus"/>,
+          CONCAT(b.segment, '标段') AS segment,
+          a.pub_date as pubDate,
+          a.city_code as cityCode,
+          a.county_code as countyCode,
+        <include refid="binessType"/>,
+         b.pro_type as proType,
+          b.`qua_name` as quaName,
+          b.controll_sum as controllSum,
+          b.pro_sum as proSum,
+          b.pro_duration as proDuration,
+          b.`pb_mode` as pbMode,
+          b.bid_bonds as bidBonds,
+          b.bid_bonds_end_time as bidBondsEndTime,
+          b.enroll_end_time as enrollEndTime,
+          b.enroll_addr as enrollAddr,
+          b.audit_time as auditTime,
+          b.bid_end_time as bidEndTime,
+          b.opening_addr as openingAddr,
+        <include refid="filingPfm"/>,
+        <include refid="ntTdStatus"/>,
+          b.opening_person as openingPerson,
+          a.url,
+          b.pkid as pkid,
+          b.nt_id as ntId
+        FROM
+          tb_nt_mian_${source} a
+        LEFT JOIN tb_nt_tenders_${source} b
+        ON a.pkid = b.`nt_id`
+        WHERE 1=1 AND a.is_enable = 1
+        <if test="proviceCode !=null and proviceCode!=''">
+            AND a.provice_code = #{proviceCode}
+        </if>
+        <if test="cityCode !=null and cityCode!=''">
+            AND a.city_code = #{cityCode}
+        </if>
+        <if test="countyCode !=null and countyCode!=''">
+            AND a.county_code = #{countyCode}
+        </if>
+        <if test="pubDate !=null and pubDate!=''">
+            AND a.pub_date &gt;= #{pubDate}
+        </if>
+        <if test="pubEndDate !=null and pubEndDate!=''">
+            AND a.pub_date &lt;= #{pubEndDate}
+        </if>
+        <if test="title !=null and title!=''">
+            AND a.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="ntCategory !=null and ntCategory!=''">
+            AND a.nt_category = #{ntCategory}
+        </if>
+        <if test="ntStatus !=null and ntStatus!=''">
+            AND a.nt_status = #{ntStatus}
+        </if>
+        LIMIT #{start},#{pageSize}
+    </select>
+    <sql id="ntStatus">
+       ( CASE
+        a.nt_status
+        WHEN 0 THEN '未编辑'
+        WHEN 1 THEN '已编辑'
+        WHEN 2 THEN '已审核'
+        WHEN 4 THEN '未通过'
+        WHEN 5 THEN '已处理'
+        ELSE '未审核' END) AS ntStatus
+    </sql>
+
+    <sql id="binessType">
+       ( case a.biness_type
+        when '01' then '施工'
+        when '02' then '监理'
+        when '03' then '设计'
+        when '04' then '勘察'
+        when '05' then '采购'
+        when '06' then '其他'
+        when '07' then 'PPP'
+        when '08' then '设计施工'
+        when '09' then 'EPC'
+        when '10' then '检测'
+        when '11' then '施工采购'
+        when '12' then '造价咨询'
+        when '13' then '招标代理'
+        else '其他' end) as projectType
+    </sql>
+
+    <sql id="ntTdStatus">
+       ( case b.nt_td_status
+        when '1' then '未开标'
+        when '2' then '流标'
+        when '3' then '重新招标'
+        when '4' then '终止'
+        when '5' then '中止'
+        when '6' then '废标'
+        when '7' then '延期'
+        when '8' then '已开标'
+        else '' end) as ntTdStatus
+    </sql>
+
+    <sql id="filingPfm">
+       ( case b.filing_pfm
+        when 'filing_pfm_wsrxba_1560496812146' then '外省入湘备案'
+        when 'filing_pfm_cssggzyjyzxba_1560496812146' then '湘西公共资源交易中心备案'
+        when 'filing_pfm_zzsggzyjyzxba_1560496812146' then '湘西公共资源交易中心备案'
+        when 'filing_pfm_xtsggzyjyzxba_1560496812146' then '湘西公共资源交易中心备案'
+        when 'filing_pfm_zjjsggzyjyzxba_1560496812146' then '湘西公共资源交易中心备案'
+        when 'filing_pfm_xxggzyjyzxba_1560496812146' then '湘西公共资源交易中心备案'
+        else '' end) as filingPfm
+    </sql>
 </mapper>

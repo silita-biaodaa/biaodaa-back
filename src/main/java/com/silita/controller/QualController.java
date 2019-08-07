@@ -1,5 +1,6 @@
 package com.silita.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.model.DicAlias;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,6 +57,23 @@ public class QualController extends BaseController {
     public Map<String, Object> list(@RequestBody Map param) {
         return successMap(qualService.getDicQuaList(param));
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> listMap(@RequestBody Map param) {
+
+        return successMap(qualService.getDicQuaListMap(param));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/listMaps", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> listMaps(@RequestBody Map param) {
+
+        return successMap(qualService.getDicQuaListMaps(param));
+    }
+
+
+
 
     /**
      * 添加

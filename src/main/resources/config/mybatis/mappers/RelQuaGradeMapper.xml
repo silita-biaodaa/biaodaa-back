@@ -40,4 +40,15 @@
         where 1=1
         and grade_code = #{gradeCode}
     </select>
+
+    <!--通过子级code找到对应的等级-->
+    <select id="queryRelQuaGrade" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+        ifnull(count(0),0)
+        FROM `dic_common` c
+        JOIN `rel_qua_grade` r
+        ON c.code=r.grade_code
+        WHERE r.qua_code=#{quaCode}
+        order by order_no
+    </select>
 </mapper>

@@ -22,6 +22,13 @@ public interface TbNtMianMapper {
     public List<LinkedHashMap<String, Object>> listTendersDetail(TbNtMian tbNtMian);
 
     /**
+     * 招标导出Excel
+     * @param param
+     * @return
+     */
+    List<LinkedHashMap<String, Object>> queryZhaoBiaoExcel(Map<String,Object> param);
+
+    /**
      * 根据查询条件获取公告列表及中标标段
      * @param tbNtMian
      * @return

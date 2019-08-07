@@ -13,6 +13,7 @@ import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,17 @@ public class GradeServiceImpl implements IGradeService {
             paren.put("gradeList", gradeList);
         }
         return parentList;
+    }
+
+    /**
+     * 等级列表
+     * @param param
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getDicCommonGradeList(Map<String, Object> param) {
+
+        return dicCommonMapper.queryDicCommonGradeList(param);
     }
 
     @Override
@@ -124,6 +136,20 @@ public class GradeServiceImpl implements IGradeService {
         return resultMap;
     }
 
+
+   /* @Override
+    public List<Map<String, Object>> getQualGradeList(Map<String, Object> param) {
+        //TODO:
+        List<Map<String, Object>> parentList = dicCommonMapper.queryParentGrade();
+        return parentList;
+    }*/
+
+    /**
+     * 等级下拉选项
+     * 要求：该资质没有的等级
+     * @param param
+     * @return
+     */
     @Override
     public List<Map<String, Object>> getQualGradeList(Map<String, Object> param) {
         //TODO:
@@ -136,6 +162,38 @@ public class GradeServiceImpl implements IGradeService {
         List<Map<String, Object>> gradeList = dicCommonMapper.queryGradeList(param);
         return gradeList;
     }
+
+    /**
+     * 获取符合该资质的等级
+     * @param param
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> getGradeListMap(Map<String, Object> param) {
+        List<Map<String, Object>> list = dicCommonMapper.queryGradeListMap(param);
+        return list;
+    }
+
+    /**
+     * 资质等级下拉选项
+     * @param param
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> gitGradePullDownListMap(Map<String, Object> param) {
+        List<Map<String, Object>> gradeListMap = getGradeListMap(param);
+        List<Map<String,Object>> listMap = new ArrayList<>();
+        for (Map<String, Object> map : gradeListMap) {
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("code",map.get("code"));
+            listMap.add(map1);
+            param.put("parentId",map.get("parentId"));
+        }
+        param.put("listMapCode",listMap);
+        List<Map<String, Object>> list1 = dicCommonMapper.queryGradePullDownListMap(param);
+        return list1;
+    }
+
 
     @Override
     public Map<String, Object> updateGradeAlias(DicAlias dicAlias) {

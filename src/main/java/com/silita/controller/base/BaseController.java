@@ -1,5 +1,6 @@
 package com.silita.controller.base;
 
+import com.github.pagehelper.PageInfo;
 import com.silita.common.Constant;
 
 import java.util.HashMap;
@@ -25,6 +26,20 @@ public class BaseController {
         }
         return resultMap;
     }
+
+    public void seccussMap(Map resultMap, PageInfo pageInfo) {
+        resultMap.put("code",Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.MSG_SUCCESS);
+        if (pageInfo != null) {
+            resultMap.put("data", pageInfo.getList());
+            resultMap.put("pageNo", pageInfo.getPageNum());
+            resultMap.put("pageSize", pageInfo.getPageSize());
+            resultMap.put("total", pageInfo.getTotal());
+            resultMap.put("pages", pageInfo.getPages());
+        }
+    }
+
+
 
     /**
      * 返回code

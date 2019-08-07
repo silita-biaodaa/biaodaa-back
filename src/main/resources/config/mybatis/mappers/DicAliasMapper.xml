@@ -13,6 +13,24 @@
           #{desc}, #{remark}, NOW(), #{createBy}
         )
     </insert>
+    <insert id="insertAilas" parameterType="java.util.List">
+        INSERT INTO dic_alias (
+        `id`,
+        `name`,
+        `code`,
+        `std_code`,
+        `std_type`,
+        `create_time`,
+        `create_by`
+        )
+        VALUES
+        <foreach collection="list"  item="list" separator=",">
+        (
+        #{list.id}, #{list.name}, #{list.code}, #{list.stdCode}, #{list.stdType},
+        NOW(), #{list.createBy}
+        )
+        </foreach>
+    </insert>
 
     <update id="updateDicAliasById" parameterType="com.silita.model.DicAlias">
         UPDATE dic_alias SET
@@ -68,7 +86,7 @@
         DELETE FROM dic_alias
         <where>
             id IN
-            <foreach collection="array" open="(" close=")" separator="," item="ele">
+            <foreach collection="array" open="(" separator="," close=")" item="ele">
                 #{ele}
             </foreach>
         </where>
@@ -89,6 +107,19 @@
             and id != #{id}
         </if>
     </select>
+    <select id="queryAliasListCode" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t.id,
+          t.name,
+          t.std_code as stdCode
+        FROM
+          biaodaa_admin.`dic_alias` t
+        WHERE t.std_code = #{code}
+        and t.std_type='1'
+        <if test="name != null and name != ''">
+           and t.name like CONCAT('%',#{name},'%')
+        </if>
+    </select>
 
     <delete id="deleteDicAliasByStdCodes" parameterType="String">
         DELETE FROM dic_alias
@@ -96,6 +127,15 @@
             std_code IN
             <foreach collection="array" open="(" close=")" separator="," item="ele">
                 #{ele}
+            </foreach>
+        </where>
+    </delete>
+    <delete id="delAilasByIds" parameterType="map">
+        delete from dic_alias
+        <where>
+            id IN
+            <foreach collection="ids" open="(" close=")" separator="," item="ids">
+                #{ids}
             </foreach>
         </where>
     </delete>

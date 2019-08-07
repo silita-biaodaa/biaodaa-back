@@ -1,5 +1,6 @@
 package com.silita.service;
 
+import com.github.pagehelper.PageInfo;
 import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 
@@ -40,6 +41,13 @@ public interface IQualService {
      * @return
      */
     List<DicQua> getDicQuaList(Map<String, Object> param);
+
+    List<Map<String, Object>> getDicQuaListMap(Map<String,Object> param);
+
+    List<Map<String,Object>> getDicQuaListMaps(Map<String,Object> param);
+
+
+
 
     /**
      * 添加资质别名

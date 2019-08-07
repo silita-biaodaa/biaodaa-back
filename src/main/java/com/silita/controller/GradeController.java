@@ -38,6 +38,18 @@ public class GradeController extends BaseController {
 
 
     /**
+     * 等级列表
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> listMap(@RequestBody Map<String,Object> param) {
+        return this.successMap(gradeService.getDicCommonGradeList(param));
+    }
+
+
+    /**
      * 保存等级
      *
      * @param dicCommon
@@ -103,6 +115,17 @@ public class GradeController extends BaseController {
     }
 
     /**
+     * 资质等级下拉选项
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/cate/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> cateListMap(@RequestBody Map<String, Object> param) {
+        return this.successMap(gradeService.gitGradePullDownListMap(param));
+    }
+
+    /**
      * 二级等级列表
      *
      * @param param
@@ -113,4 +136,17 @@ public class GradeController extends BaseController {
     public Map<String, Object> secList(@RequestBody Map<String, Object> param) {
         return this.successMap(gradeService.getSecQualGradeList(param));
     }
+
+    /**
+     * 获取符合该资质的等级
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/sec/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> secListMap(@RequestBody Map<String, Object> param) {
+        return this.successMap(gradeService.getGradeListMap(param));
+    }
+
+
 }

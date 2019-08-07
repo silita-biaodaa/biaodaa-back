@@ -16,6 +16,10 @@ public interface INtContentService {
      * @return
      */
     TbNtText getNtContent(TbNtText ntText);
-
+/**
+ * 获取公告原文详情
+ * @param param
+ * @return
+ */
     Map queryCentent(Map<String,Object> param) throws IOException;
 }

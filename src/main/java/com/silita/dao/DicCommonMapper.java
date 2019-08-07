@@ -47,12 +47,30 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      */
     List<Map<String,Object>> queryParentGrade();
 
+    //List<Map<String,Object>> queryParentGrade();
+
     /**
      * 获取所有等级
      * @param param
      * @return
      */
     List<Map<String,Object>> queryGradeList(Map<String,Object> param);
+
+    /**
+     * 获取符合该资质的等级
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> queryGradeListMap(Map<String,Object> param);
+
+    List<Map<String,Object>> queryDicCommonGradeList(Map<String,Object> param);
+
+    /**
+     * 资质等级下拉选项
+     * @param param
+     */
+    List<Map<String,Object>> queryGradePullDownListMap(Map<String,Object> param);
+
 
     /**
      * 查询名称个数
@@ -102,4 +120,13 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     DicCommon queryQuaGrade(String name);
+
+    /**
+     * 获取评标办法名称
+     * @param pbMode
+     * @return
+     */
+    String queryPbMode(String pbMode);
+
+
 }

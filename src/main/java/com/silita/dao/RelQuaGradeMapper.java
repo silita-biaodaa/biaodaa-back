@@ -49,4 +49,11 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      * @return
      */
     Integer quaryGradeCountByCode(String gradeCode);
+
+
+    /**
+     * 通过子级code找到对应的等级code
+     * @return
+     */
+    Integer queryRelQuaGrade(String quaCode);
 }

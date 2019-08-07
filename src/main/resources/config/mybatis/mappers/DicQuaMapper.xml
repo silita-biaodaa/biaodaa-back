@@ -211,7 +211,7 @@
                 ,qua_name as quaName
         from dic_qua
         where `level` = 1
-        order by create_time desc
+        order by order_no
     </select>
 
     <select id="queryQualCountByName" parameterType="java.util.Map" resultType="java.lang.Integer">
@@ -267,4 +267,78 @@
         WHERE t.`bench_name` IS NOT NULL
         AND t.`bench_name` = '工程设计综合资质'
     </select>
+
+    <!--获取资质大类-->
+    <select id="queryQuaOne" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.qua_name AS quaName,
+        d.qua_code AS quaCode
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE d.level = '1'
+        <if test="id != null and id != ''">
+            and d.id = #{id}
+        </if>
+        <if test="parentId != null and parentId != ''">
+            and d.id=#{parentId}
+        </if>
+        order by order_no
+    </select>
+    <!--获取资质最后一级标准名称-->
+    <select id="queryQuaTwo" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode,
+        d.parent_id AS parentId
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE d.level = #{noticeLevel}
+        <if test="benchName != null and benchName != ''">
+            and d.bench_name like CONCAT('%',#{benchName},'%')
+        </if>
+        order by order_no
+    </select>
+    <!--获取资质最后一级标准名称-->
+    <select id="queryQuaparentId" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode,
+        d.parent_id AS parentId
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE d.level = #{noticeLevel}
+        and d.id=#{parentId}
+        <if test="benchName != null and benchName != ''">
+            and d.bench_name like CONCAT('%',#{benchName},'%')
+        </if>
+        order by order_no
+    </select>
+
+    <select id="queryQuaparentIdIsNull" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+        ifnull(count(0),0)
+        FROM
+        biaodaa_admin.dic_qua d
+        where
+        d.parent_id=#{zid}
+    </select>
+    <select id="queryDicQuaBenchNameListMap" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.qua_name as quaName,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode,
+        d.parent_id AS parentId
+        FROM
+        biaodaa_admin.dic_qua d
+        <if test="parentId != null and parentId != ''">
+            WHERE d.id=#{parentId}
+        </if>
+        order by order_no
+    </select>
+
+
 </mapper>

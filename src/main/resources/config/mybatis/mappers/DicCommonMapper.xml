@@ -66,6 +66,15 @@
         </where>
     </delete>
 
+   <!-- <select id="queryParentGrade" resultType="java.util.Map">
+        select id as id
+                ,`name` as `name`
+                ,`code` as `code`
+        from dic_common
+        where `type` = 'qua_grade'
+        AND (parent_id IS NULL OR parent_id = '')
+    </select>-->
+
     <select id="queryParentGrade" resultType="java.util.Map">
         select id as id
                 ,`name` as `name`
@@ -83,6 +92,22 @@
         where `type` = 'qua_grade'
         and parent_id = #{parentId}
         order by create_time desc
+    </select>
+
+    <select id="queryDicCommonGradeList" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t.id,
+          t.parent_id AS typology,
+          t.name,
+          t.code
+        FROM
+          biaodaa_admin.dic_common t
+        WHERE t.type = 'qua_grade'
+        <if test="name != null and name != ''">
+            and t.name = #{name}
+        </if>
+        ORDER BY t.parent_id,
+          t.order_no
     </select>
 
     <select id="queryDicCommCountByName" resultType="java.lang.Integer" parameterType="java.util.Map">
@@ -134,4 +159,41 @@
         where `name` = #{name}
         AND `type` = 'qua_grade'
     </select>
+    <!--通过子级code找到对应的等级-->
+    <select id="queryGradeListMap" resultType="java.util.Map" parameterType="map">
+        SELECT
+        c.name,
+        c.code as code,
+        c.parent_id AS parentId
+        FROM `dic_common` c
+        JOIN `rel_qua_grade` r
+        ON c.code=r.grade_code
+        WHERE r.qua_code=#{code}
+        order by order_no
+    </select>
+    <!--资质等级下拉选项-->
+    <select id="queryGradePullDownListMap" resultType="java.util.Map" parameterType="map">
+        SELECT
+          c.name,
+          c.code
+        FROM
+          dic_common c
+        WHERE c.type = 'qua_grade'
+        <if test="parentId != null and parentId != ''">
+            AND c.parent_id = #{parentId}
+        </if>
+        <if test="listMapCode != null and listMapCode.size >0">
+            AND (
+            <foreach collection="listMapCode" item="list" separator="or">
+                c.code &lt;&gt; #{list.code}
+            </foreach>
+            )
+        </if>
+
+
+    </select>
+    <select id="queryPbMode" resultType="java.lang.String" parameterType="map">
+        SELECT t.name FROM `dic_common` t WHERE t.code=#{pbMode}
+    </select>
+
 </mapper>

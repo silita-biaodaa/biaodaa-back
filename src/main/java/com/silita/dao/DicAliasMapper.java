@@ -1,6 +1,7 @@
 package com.silita.dao;
 
 import com.silita.model.DicAlias;
+import com.silita.model.TbCompanyAwards;
 import com.silita.utils.MyMapper;
 
 import java.util.List;
@@ -30,6 +31,13 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      */
     public List<DicAlias> listDicAliasByStdCode(DicAlias dicAlias);
 
+    /***
+     * 根据stdCode获取词典别名列表
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> queryAliasListCode(Map<String,Object> param);
+
     /**
      * 根据stdCode获取词典别名个数
      *
@@ -45,6 +53,8 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      */
     public void deleteDicAliasByIds(Object[] ids);
 
+    void delAilasByIds(Map<String,Object> param);
+
     /**
      * 根据名称查询
      *
@@ -57,5 +67,7 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      * 根据std_code批量删除词典别名
      */
     public void deleteDicAliasByStdCodes(Object[] ids);
+
+    void insertAilas(List<DicAlias> list);
 
 }

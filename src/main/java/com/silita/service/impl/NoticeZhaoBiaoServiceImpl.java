@@ -1,12 +1,15 @@
 package com.silita.service.impl;
 
 import com.google.common.base.Splitter;
+import com.silita.common.BasePageModel;
+import com.silita.common.PageBean;
 import com.silita.dao.*;
 import com.silita.model.*;
 import com.silita.service.INoticeZhaoBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.WordProcessingUtil;
+import org.apache.commons.collections.MapUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -17,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -111,8 +115,9 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         return super.handlePageCount(result, tbNtMian);
     }
 
+
     @Override
-    public HSSFWorkbook listTendersDetail(TbNtMian tbNtMian) {
+    public HSSFWorkbook listTendersDetail(Map<String, Object> param) {
         int indexRow = 0;
         HSSFWorkbook wb = new HSSFWorkbook();
         HSSFSheet sheet = wb.createSheet();
@@ -128,7 +133,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         for (int i = 0; i < headers.length; i++) {
             row.createCell(i).setCellValue(headers[i]);
         }
-        List<LinkedHashMap<String, Object>> details = tbNtMianMapper.listTendersDetail(tbNtMian);
+        List<LinkedHashMap<String, Object>> details = tbNtMianMapper.queryZhaoBiaoExcel(param);
         //一行数据
         for (int i = 0; i < details.size(); i++) {
             int indexCell = 0;
@@ -136,7 +141,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             Map<String, Object> detail = details.get(i);
             //获取招标编辑明细变更信息
             TbNtChange tbNtChange = new TbNtChange();
-            tbNtChange.setNtId(String.valueOf(detail.get("nt_id")));
+            tbNtChange.setNtId(String.valueOf(detail.get("ntId")));
             tbNtChange.setNtEditId(String.valueOf(detail.get("pkid")));
             List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
             Map<String, String> changeField = new HashMap();
@@ -170,14 +175,9 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                     changeField.put(tempKey, tempValue);
                 }
             }
-            //获取资质关系
-            TbNtRegexGroup tbNtRegexGroup = new TbNtRegexGroup();
-            tbNtRegexGroup.setNtId(String.valueOf(detail.get("nt_id")));
-            tbNtRegexGroup.setNtEditId(String.valueOf(detail.get("pkid")));
-            String qualStr = this.getQualRelationStr(tbNtRegexGroup);
-            detail.put("qualStr", qualStr);
+            // 去除 pkid 和 ntId
             detail.remove("pkid");
-            detail.remove("nt_id");
+            detail.remove("ntId");
             //一列数据
             for (Map.Entry<String, Object> entry : detail.entrySet()) {
                 //替换变更后的值
@@ -201,10 +201,138 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                     }
                 }
             }
+
+            String cityCode = (String) detail.get("cityCode");
+            String s1 = sysAreaMapper.queryAreaName(cityCode);
+            if (StringUtil.isNotEmpty(s1)) {
+                row.getCell(4).setCellValue(s1);
+            }
+            String countyCode = (String) detail.get("countyCode");
+            String s2 = sysAreaMapper.queryAreaName(countyCode);
+            if (StringUtil.isNotEmpty(s2)) {
+                row.getCell(5).setCellValue(s2);
+            }
+            String proType = (String) detail.get("proType");
+            String s = twfDictMapper.queryProType(proType);
+            if (StringUtil.isNotEmpty(s)) {
+                row.getCell(7).setCellValue(s);
+            }
+            String pbMode = (String) detail.get("pbMode");
+            String s3 = dicCommonMapper.queryPbMode(pbMode);
+            if (StringUtil.isNotEmpty(s3)) {
+                row.getCell(12).setCellValue(s3);
+            }
+
             row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title")) + "\")");
+
         }
+       /* if (details.size() <= 10000){
+            Excel(details,param,row,sheet,indexRow);
+        }
+        if(details.size() > 10000 && details.size() <= 20000){
+            param.put("start",10001);
+            param.put("pageSize",20000);
+            List<LinkedHashMap<String, Object>> details2 = tbNtMianMapper.queryZhaoBiaoExcel(param);
+            Excel(details2,param,row,sheet,indexRow);
+        }*/
         return wb;
     }
+
+/*
+    public void Excel(List<LinkedHashMap<String, Object>> details, Map<String, Object> param, HSSFRow row, HSSFSheet sheet, int indexRow) {
+        //一行数据
+        for (int i = 0; i < details.size(); i++) {
+            int indexCell = 0;
+            row = sheet.createRow(indexRow++);
+            Map<String, Object> detail = details.get(i);
+            //获取招标编辑明细变更信息
+            TbNtChange tbNtChange = new TbNtChange();
+            tbNtChange.setNtId(String.valueOf(detail.get("ntId")));
+            tbNtChange.setNtEditId(String.valueOf(detail.get("pkid")));
+            List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+            Map<String, String> changeField = new HashMap();
+            if (changeFields != null && changeFields.size() > 0) {
+                TwfDict twfDict = new TwfDict();
+                //去除旧的变更信息
+                for (Map<String, Object> map : changeFields) {
+                    String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
+                    String tempValue = String.valueOf(map.get("field_value"));
+                    if ("biness_type".equals(tempKey)) {
+                        twfDict.setCode(tempValue);
+                        twfDict.setType(1);
+                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                    } else if ("pro_type".equals(tempKey)) {
+                        twfDict.setCode(tempValue);
+                        twfDict.setType(4);
+                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                    } else if ("filing_pfm".equals(tempKey)) {
+                        twfDict.setCode(tempValue);
+                        twfDict.setType(6);
+                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                    } else if ("nt_type".equals(tempKey)) {
+                        twfDict.setCode(tempValue);
+                        twfDict.setType(2);
+                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                    } else if ("pb_mode".equals(tempKey)) {
+                        tempValue = dicCommonMapper.getNameByCode(tempValue);
+                    } else if ("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey) || "bid_bonds_end_time".equals(tempKey) || "audit_time".equals(tempKey) || "completion_time".equals(tempKey)) {
+                        tempValue = simple.format(new Date(Long.parseLong(tempValue)));
+                    }
+                    changeField.put(tempKey, tempValue);
+                }
+            }
+            // 去除 pkid 和 ntId
+            detail.remove("pkid");
+            detail.remove("ntId");
+            //一列数据
+            for (Map.Entry<String, Object> entry : detail.entrySet()) {
+                //替换变更后的值
+                if (changeField.size() > 0) {
+                    for (Map.Entry<String, String> temp : changeField.entrySet()) {
+                        String tempKey = temp.getKey();
+                        String tempValue = temp.getValue();
+                        if (tempKey.equals(entry.getKey())) {
+                            entry.setValue(tempValue);
+                        }
+                    }
+                }
+                if (!"url".equals(entry.getKey())) {
+                    HSSFCell cell = row.createCell(indexCell++);
+                    //标题要带超链接
+                    if ("title".equals(entry.getKey())) {
+                        cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
+//                        cell.setCellStyle(linkStyle);
+                    } else {
+                        cell.setCellValue(String.valueOf(entry.getValue()));
+                    }
+                }
+            }
+
+            String cityCode = (String) detail.get("cityCode");
+            String s1 = sysAreaMapper.queryAreaName(cityCode);
+            if (StringUtil.isNotEmpty(s1)) {
+                row.getCell(4).setCellValue(s1);
+            }
+            String countyCode = (String) detail.get("countyCode");
+            String s2 = sysAreaMapper.queryAreaName(countyCode);
+            if (StringUtil.isNotEmpty(s2)) {
+                row.getCell(5).setCellValue(s2);
+            }
+            String proType = (String) detail.get("proType");
+            String s = twfDictMapper.queryProType(proType);
+            if (StringUtil.isNotEmpty(s)) {
+                row.getCell(7).setCellValue(s);
+            }
+            String pbMode = (String) detail.get("pbMode");
+            String s3 = dicCommonMapper.queryPbMode(pbMode);
+            if (StringUtil.isNotEmpty(s3)) {
+                row.getCell(12).setCellValue(s3);
+            }
+
+            row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title")) + "\")");
+
+        }
+    }*/
 
     @Override
     public void updateNtMainStatus(TbNtMian tbNtMian) {
@@ -401,7 +529,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 tbNtRegexGroup.setNtId(ntId);
                 tbNtRegexGroup.setNtEditId(ntEditId);
                 TbNtRegexGroup tempTbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
-                if(null != tempTbNtRegexGroup) {
+                if (null != tempTbNtRegexGroup) {
                     Set groupIds = new HashSet<String>();
                     String groupRegex = tempTbNtRegexGroup.getGroupRegex();
                     Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
@@ -514,7 +642,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         //数据库中已经存在，则新来的关联公告与已经存在的公告同属一个组
         if (set.size() > 0) {
             //已存在公告属于同一组才进行关联
-            if(groupSet.size() == 1) {
+            if (groupSet.size() == 1) {
                 String relGp = tbNtAssociateGps.get(0).getRelGp();
                 for (int i = 0; i < ids.length; i++) {
                     if (!set.contains(ids[i])) {
@@ -599,7 +727,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tempRegexGroup.setNtEditId(tbNtRegexQua.getNtEditId());
         //获取资质组关系表达式
         TbNtRegexGroup tbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tempRegexGroup);
-        if(null != tbNtRegexGroup) {
+        if (null != tbNtRegexGroup) {
             String groupRegex = tbNtRegexGroup.getGroupRegex();
             List qualRegexList = new ArrayList(20);
             //1、把资质组关系表达式 拆分成资质组块表达式 （G1&G2&G4|G3 = G1&G2&G4  G3）
@@ -657,7 +785,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
         tbNtRegexGroup.setCreateBy(String.valueOf(params.get("userName")));
         //保存前删除原资质
         TbNtRegexGroup tempTbNtRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
-        if(null != tempTbNtRegexGroup) {
+        if (null != tempTbNtRegexGroup) {
             Set set = new HashSet<String>();
             String groupRegex = tempTbNtRegexGroup.getGroupRegex();
             Iterator<String> iterator = Splitter.onPattern("\\||\\&").omitEmptyStrings().trimResults().split(groupRegex).iterator();
@@ -669,7 +797,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             //删除资质组关系表
             tbNtRegexGroupMapper.deleteNtRegexGroupByNtIdAndNtEditId(tempTbNtRegexGroup);
         }
-        if(tbNtRegexGroups.size() > 0) {
+        if (tbNtRegexGroups.size() > 0) {
             StringBuilder regexGroup = new StringBuilder();
             for (int i = 0; i < tbNtRegexGroups.size(); i++) {
                 String groupId = DataHandlingUtil.getTimeStamp();
@@ -686,7 +814,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 firstQual.setQuaId(oneQualIds.get(1));
                 firstQual.setQuaGradeId(oneQualIds.get(2));
                 //其他资质
-                if(tbNtQuaGroupList.size() > 0) {
+                if (tbNtQuaGroupList.size() > 0) {
                     TbNtQuaGroup temp;
                     for (int j = 0; j < tbNtQuaGroupList.size(); j++) {
                         temp = tbNtQuaGroupList.get(j);
@@ -703,7 +831,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                 //添加小组资质信息
                 tbNtQuaGroupMapper.batchInsertTbNtQuaGroup(tbNtQuaGroupList);
                 regexGroup.append(groupId);
-                if(!StringUtils.isEmpty(tempRegex.getRelType())) {
+                if (!StringUtils.isEmpty(tempRegex.getRelType())) {
                     regexGroup.append(tempRegex.getRelType());
                 }
             }
@@ -717,11 +845,11 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     @Override
     public List<TbNtRegexGroup> listTbQuaGroup(TbNtRegexGroup tbNtRegexGroup) {
-        if(null != tbNtRegexGroup && null == tbNtRegexGroup.getNtId()){
+        if (null != tbNtRegexGroup && null == tbNtRegexGroup.getNtId()) {
             return new ArrayList<>();
         }
         TbNtRegexGroup tempRegexGroup = tbNtRegexGroupMapper.getNtRegexGroupByNtIdAndNtEditId(tbNtRegexGroup);
-        if(null != tempRegexGroup) {
+        if (null != tempRegexGroup) {
             List<String> groupRegexs = new ArrayList<>();
             String groupRegex = tempRegexGroup.getGroupRegex();
             //资质小组关系
@@ -745,7 +873,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                     qualIds.add(0, tbNtQuaGroup.getQuaCateId());
                     qualIds.add(1, tbNtQuaGroup.getQuaId());
                     qualIds.add(2, tbNtQuaGroup.getQuaGradeId());
-                    if(StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
+                    if (StringUtils.isEmpty(tbNtQuaGroup.getRelType())) {
                         //组内第一条资质
                         tempTbNtRegexGroup = new TbNtRegexGroup();
                         tempTbNtRegexGroup.setNtId(tbNtRegexGroup.getNtId());
@@ -753,7 +881,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 //                        tempTbNtRegexGroup.setQuaId(tbNtQuaGroup.getQuaId());
                         tempTbNtRegexGroup.setQualIds(qualIds);
                         //资质小组关系 = 资质小组减1
-                        if(i != groupRegexs.size() - 1) {
+                        if (i != groupRegexs.size() - 1) {
                             tempTbNtRegexGroup.setRelType(String.valueOf(grouprRelType[i]));
                         }
                     } else {
@@ -766,7 +894,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
             }
             return tbNtRegexGroups;
         }
-       return null;
+        return null;
     }
 
 
@@ -791,20 +919,21 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
     /**
      * 组合小组内关系 返回list（A1&A2&A3 = A1A2A3， B1|B2|B3 = B1,B2,B3）
+     *
      * @param tbNtQuaGroups
      * @return
      */
     private List mergeSingleQualGroup(List<TbNtQuaGroup> tbNtQuaGroups) {
         List<String> result = new ArrayList<>(10);
-        if(null != tbNtQuaGroups && tbNtQuaGroups.size() > 0) {
+        if (null != tbNtQuaGroups && tbNtQuaGroups.size() > 0) {
             TbNtQuaGroup tbNtQuaGroup;
-            if(tbNtQuaGroups.size() == 1) {
+            if (tbNtQuaGroups.size() == 1) {
                 tbNtQuaGroup = tbNtQuaGroups.get(0);
                 result.add(tbNtQuaGroup.getQuaId());
             } else {
                 TbNtQuaGroup tbNtQuaGroup1;
                 String relType = tbNtQuaGroups.get(tbNtQuaGroups.size() - 1).getRelType();
-                if("&".equals(relType)) {
+                if ("&".equals(relType)) {
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < tbNtQuaGroups.size(); i++) {
                         tbNtQuaGroup1 = tbNtQuaGroups.get(i);

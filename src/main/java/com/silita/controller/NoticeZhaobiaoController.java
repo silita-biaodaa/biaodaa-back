@@ -10,8 +10,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,12 +67,19 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(noticeZhaoBiaoService.listNtMain(tbNtMian));
     }
 
-    @RequestMapping(value = "/exportTendersExcel",method = RequestMethod.POST,produces="application/json;charset=utf-8")
+    @RequestMapping(value = "/exportTendersExcel",produces="application/json;charset=utf-8")
     @ResponseBody
-    public void listTendersDetail(@RequestBody TbNtMian tbNtMian, HttpServletResponse response) {
+    public void listTendersDetail( HttpServletResponse response) {
+       Map<String,Object> param = new HashMap<>();
+        param.put("source","hunan");
+        param.put("ntCategory","1");
+        param.put("start",1);
+        param.put("pageSize",10000);
+
         try {
-            HSSFWorkbook work = noticeZhaoBiaoService.listTendersDetail(tbNtMian);
-            response.setContentType("application/octet-stream;charset=ISO8859-1");
+
+            HSSFWorkbook work = noticeZhaoBiaoService.listTendersDetail(param);
+            response.setContentType("application/octet-stream;charset=utf-8");
             response.setHeader("Content-Disposition", "attachment;filename="+ System.currentTimeMillis());
             response.addHeader("Pargam", "no-cache");
             response.addHeader("Cache-Control", "no-cache");
@@ -82,6 +91,26 @@ public class NoticeZhaobiaoController extends BaseController {
             e.printStackTrace();
         }
     }
+
+/*
+    @RequestMapping(value = "/doExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public void doExcel(HttpServletResponse response,HttpServletRequest request) throws Exception {
+        TbNtMian tbNtMian = new TbNtMian();
+        tbNtMian.setSource("hunan");
+        tbNtMian.setProviceCode("hunan");
+        tbNtMian.setCityCode("");
+        tbNtMian.setNtStatus("");
+        tbNtMian.setNtCategory("1");
+        tbNtMian.setPubDate("2019-03-01");
+        tbNtMian.setPubEndDate("2019-08-06");
+        tbNtMian.setCurrentPage(1);
+        tbNtMian.setPageSize(15);
+        HSSFWorkbook work = noticeZhaoBiaoService.listTendersDetail(tbNtMian);
+        new ExportExcel<TbNtMian>().doExcel(response, work, "黑白淡奶");
+    }*/
+
+
 
     @RequestMapping(value = "/updateNtMainStatus",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
