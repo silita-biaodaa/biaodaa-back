@@ -1,19 +1,23 @@
 package com.silita.service.impl;
 
 import com.google.common.base.Splitter;
-import com.silita.common.BasePageModel;
-import com.silita.common.PageBean;
+import com.silita.common.MyRedisTemplate;
 import com.silita.dao.*;
 import com.silita.model.*;
 import com.silita.service.INoticeZhaoBiaoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.WordProcessingUtil;
-import org.apache.commons.collections.MapUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellReference;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +68,11 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
     TbNtRegexQuaMapper tbNtRegexQuaMapper;
     @Autowired
     DicQuaMapper dicQuaMapper;
+    @Autowired
+    MyRedisTemplate myRedisTemplate;
 
     SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     @Override
     @Cacheable(value = "listFixedEditDataCache")
@@ -117,222 +124,180 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
 
 
     @Override
-    public HSSFWorkbook listTendersDetail(Map<String, Object> param) {
-        int indexRow = 0;
-        HSSFWorkbook wb = new HSSFWorkbook();
-        HSSFSheet sheet = wb.createSheet();
-        HSSFRow row = sheet.createRow(indexRow++);
-        String[] headers = {
-                "项目名称", "公告状态", "标段", "公示日期", "项目地区",
-                "项目县市", "招标类型", "项目类型", "资质要求", "招标控制价",
-                "项目金额", "项目工期", "评标办法", "保证金金额", "保证金截至时间",
-                "报名截止时间", "报名地点", "资格审查截止时间", "投标截止时间",
-                "开标地点", "平台备案要求", "招标状态", "开标人员要求"
-        };
-        //创建标题
-        for (int i = 0; i < headers.length; i++) {
-            row.createCell(i).setCellValue(headers[i]);
-        }
-        List<LinkedHashMap<String, Object>> details = tbNtMianMapper.queryZhaoBiaoExcel(param);
-        //一行数据
-        for (int i = 0; i < details.size(); i++) {
-            int indexCell = 0;
-            row = sheet.createRow(indexRow++);
-            Map<String, Object> detail = details.get(i);
-            //获取招标编辑明细变更信息
-            TbNtChange tbNtChange = new TbNtChange();
-            tbNtChange.setNtId(String.valueOf(detail.get("ntId")));
-            tbNtChange.setNtEditId(String.valueOf(detail.get("pkid")));
-            List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
-            Map<String, String> changeField = new HashMap();
-            if (changeFields != null && changeFields.size() > 0) {
-                TwfDict twfDict = new TwfDict();
-                //去除旧的变更信息
-                for (Map<String, Object> map : changeFields) {
-                    String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
-                    String tempValue = String.valueOf(map.get("field_value"));
-                    if ("biness_type".equals(tempKey)) {
-                        twfDict.setCode(tempValue);
-                        twfDict.setType(1);
-                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if ("pro_type".equals(tempKey)) {
-                        twfDict.setCode(tempValue);
-                        twfDict.setType(4);
-                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if ("filing_pfm".equals(tempKey)) {
-                        twfDict.setCode(tempValue);
-                        twfDict.setType(6);
-                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if ("nt_type".equals(tempKey)) {
-                        twfDict.setCode(tempValue);
-                        twfDict.setType(2);
-                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if ("pb_mode".equals(tempKey)) {
-                        tempValue = dicCommonMapper.getNameByCode(tempValue);
-                    } else if ("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey) || "bid_bonds_end_time".equals(tempKey) || "audit_time".equals(tempKey) || "completion_time".equals(tempKey)) {
-                        tempValue = simple.format(new Date(Long.parseLong(tempValue)));
-                    }
-                    changeField.put(tempKey, tempValue);
-                }
+    public SXSSFWorkbook listTendersDetail(Map<String, Object> param) {
+        Map<String, Object> regionMap = new HashMap<>();
+        Map<String, Object> proTypeMap = new HashMap<>();
+        Map<String, Object> pbModeMap = new HashMap<>();
+        String key = "sys_area_region";
+        Object obj = myRedisTemplate.getObject(key);
+        if (null == obj) {
+            List<Map<String, Object>> list = sysAreaMapper.queryAreaNameListMap();
+            for (Map<String, Object> map : list) {
+                String areaCode = (String) map.get("areaCode");
+                regionMap.put(areaCode, map.get("areaName"));
             }
-            // 去除 pkid 和 ntId
-            detail.remove("pkid");
-            detail.remove("ntId");
-            //一列数据
-            for (Map.Entry<String, Object> entry : detail.entrySet()) {
-                //替换变更后的值
-                if (changeField.size() > 0) {
-                    for (Map.Entry<String, String> temp : changeField.entrySet()) {
-                        String tempKey = temp.getKey();
-                        String tempValue = temp.getValue();
-                        if (tempKey.equals(entry.getKey())) {
-                            entry.setValue(tempValue);
+            myRedisTemplate.setObject(key, regionMap);
+        } else if (null != obj) {
+            regionMap = (Map<String, Object>) obj;
+        }
+        String proTypeKey = "twf_dict_protype";
+        Object proTypeObj = myRedisTemplate.getObject(proTypeKey);
+        if (null == proTypeObj) {
+            List<Map<String, Object>> list1 = twfDictMapper.queryProType();
+            for (Map<String, Object> map : list1) {
+                String code = (String) map.get("code");
+                proTypeMap.put(code, map.get("name"));
+            }
+            myRedisTemplate.setObject(proTypeKey, proTypeMap);
+        } else if (null != proTypeObj) {
+            proTypeMap = (Map<String, Object>) proTypeObj;
+        }
+        String pbModeKey = "dic_common_pbmode";
+        Object pbModeObj = myRedisTemplate.getObject(pbModeKey);
+        if (null == pbModeObj) {
+            List<Map<String, Object>> list2 = dicCommonMapper.queryPbMode();
+            for (Map<String, Object> map : list2) {
+                String code = (String) map.get("code");
+                pbModeMap.put(code, map.get("name"));
+            }
+            myRedisTemplate.setObject(pbModeKey, pbModeMap);
+        } else if (null != pbModeKey) {
+            pbModeMap = (Map<String, Object>) pbModeObj;
+        }
+        int rowaccess = 10;//内存中缓存记录行数
+        SXSSFWorkbook wb = new SXSSFWorkbook(rowaccess);
+        try {
+            int start = 1;
+            int pageSize = 10000;
+            //Integer integer = tbNtMianMapper.queryExcelCount(param);
+            Integer integer = 150000;
+            int count = 0;
+            int a = 0;
+            String s = "";
+            if (integer != 0) {
+                if (integer % 10000 == 0) {
+                    count = (integer) / 10000;
+                } else {
+                    count = (integer + 10000) / 10000;
+                }
+                for (int i = 1; i <= count; i++) {
+                    param.put("start", start);
+                    param.put("pageSize", pageSize);
+                    List<LinkedHashMap<String, Object>> details = tbNtMianMapper.queryZhaoBiaoExcel(param);
+                    int indexRow = 0;
+                    a = a + 1;
+                    s = "sheet" + a;
+                    Sheet sheet = wb.createSheet(s);
+                    Row row = sheet.createRow(indexRow++);
+                    String[] headers = {
+                            "项目名称", "公告状态", "标段", "公示日期", "项目地区",
+                            "项目县市", "招标类型", "项目类型", "资质要求", "招标控制价",
+                            "项目金额", "项目工期", "评标办法", "保证金金额", "保证金截至时间",
+                            "报名截止时间", "报名地点", "资格审查截止时间", "投标截止时间",
+                            "开标地点", "平台备案要求", "招标状态", "开标人员要求"
+                    };
+                    //创建标题
+                    for (int j = 0; j < headers.length; j++) {
+                        row.createCell(j).setCellValue(headers[j]);
+                    }
+                    //一行数据
+                    for (int k = 0; k < details.size(); k++) {
+                        int indexCell = 0;
+                        row = sheet.createRow(indexRow++);
+                        Map<String, Object> detail = details.get(k);
+                        //获取招标编辑明细变更信息
+                        TbNtChange tbNtChange = new TbNtChange();
+                        tbNtChange.setNtId(String.valueOf(detail.get("ntId")));
+                        tbNtChange.setNtEditId(String.valueOf(detail.get("pkid")));
+                        List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
+                        Map<String, String> changeField = new HashMap();
+                        if (changeFields != null && changeFields.size() > 0) {
+                            TwfDict twfDict = new TwfDict();
+                            //去除旧的变更信息
+                            for (Map<String, Object> map : changeFields) {
+                                String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
+                                String tempValue = String.valueOf(map.get("field_value"));
+                                if ("biness_type".equals(tempKey)) {
+                                    twfDict.setCode(tempValue);
+                                    twfDict.setType(1);
+                                    tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                                } else if ("pro_type".equals(tempKey)) {
+                                    twfDict.setCode(tempValue);
+                                    twfDict.setType(4);
+                                    tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                                } else if ("filing_pfm".equals(tempKey)) {
+                                    twfDict.setCode(tempValue);
+                                    twfDict.setType(6);
+                                    tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                                } else if ("nt_type".equals(tempKey)) {
+                                    twfDict.setCode(tempValue);
+                                    twfDict.setType(2);
+                                    tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
+                                } else if ("pb_mode".equals(tempKey)) {
+                                    tempValue = dicCommonMapper.getNameByCode(tempValue);
+                                } else if ("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey) || "bid_bonds_end_time".equals(tempKey) || "audit_time".equals(tempKey) || "completion_time".equals(tempKey)) {
+                                    tempValue = simple.format(new Date(Long.parseLong(tempValue)));
+                                }
+                                changeField.put(tempKey, tempValue);
+                            }
+                        }
+                        // 去除 pkid 和 ntId
+                        detail.remove("pkid");
+                        detail.remove("ntId");
+                        //一列数据
+                        for (Map.Entry<String, Object> entry : detail.entrySet()) {
+                            //替换变更后的值
+                            if (changeField.size() > 0) {
+                                for (Map.Entry<String, String> temp : changeField.entrySet()) {
+                                    String tempKey = temp.getKey();
+                                    String tempValue = temp.getValue();
+                                    if (tempKey.equals(entry.getKey())) {
+                                        entry.setValue(tempValue);
+                                    }
+                                }
+                                changeField = null;
+                            }
+                            if (!"url".equals(entry.getKey())) {
+                                Cell cell = row.createCell(indexCell++);
+                                //标题要带超链接
+                                if ("title".equals(entry.getKey())) {
+                                    cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
+                                } else {
+                                    cell.setCellValue(String.valueOf(entry.getValue()));
+                                }
+                            }
+                        }
+                        String cityCode = (String) regionMap.get(detail.get("cityCode"));
+                        if (StringUtil.isNotEmpty(cityCode)) {
+                            row.getCell(4).setCellValue(cityCode);
+                        }
+                        String countyCode = (String) regionMap.get(detail.get("countyCode"));
+                        if (StringUtil.isNotEmpty(countyCode)) {
+                            row.getCell(5).setCellValue(countyCode);
+                        }
+                        String proType = (String) proTypeMap.get(detail.get("proType"));
+                        if (StringUtil.isNotEmpty(proType)) {
+                            row.getCell(7).setCellValue(proType);
+                        }
+                        String pbMode = (String) pbModeMap.get(detail.get("pbMode"));
+                        if (StringUtil.isNotEmpty(pbMode)) {
+                            row.getCell(12).setCellValue(pbMode);
+                        }
+                        row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title")) + "\")");
+                        if (k % rowaccess == 0) {
+                            ((SXSSFSheet) sheet).flushRows();
                         }
                     }
+                    start = start + 10000;
                 }
-                if (!"url".equals(entry.getKey())) {
-                    HSSFCell cell = row.createCell(indexCell++);
-                    //标题要带超链接
-                    if ("title".equals(entry.getKey())) {
-                        cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
-//                        cell.setCellStyle(linkStyle);
-                    } else {
-                        cell.setCellValue(String.valueOf(entry.getValue()));
-                    }
-                }
+                return wb;
             }
-
-            String cityCode = (String) detail.get("cityCode");
-            String s1 = sysAreaMapper.queryAreaName(cityCode);
-            if (StringUtil.isNotEmpty(s1)) {
-                row.getCell(4).setCellValue(s1);
-            }
-            String countyCode = (String) detail.get("countyCode");
-            String s2 = sysAreaMapper.queryAreaName(countyCode);
-            if (StringUtil.isNotEmpty(s2)) {
-                row.getCell(5).setCellValue(s2);
-            }
-            String proType = (String) detail.get("proType");
-            String s = twfDictMapper.queryProType(proType);
-            if (StringUtil.isNotEmpty(s)) {
-                row.getCell(7).setCellValue(s);
-            }
-            String pbMode = (String) detail.get("pbMode");
-            String s3 = dicCommonMapper.queryPbMode(pbMode);
-            if (StringUtil.isNotEmpty(s3)) {
-                row.getCell(12).setCellValue(s3);
-            }
-
-            row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title")) + "\")");
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-       /* if (details.size() <= 10000){
-            Excel(details,param,row,sheet,indexRow);
-        }
-        if(details.size() > 10000 && details.size() <= 20000){
-            param.put("start",10001);
-            param.put("pageSize",20000);
-            List<LinkedHashMap<String, Object>> details2 = tbNtMianMapper.queryZhaoBiaoExcel(param);
-            Excel(details2,param,row,sheet,indexRow);
-        }*/
         return wb;
     }
 
-/*
-    public void Excel(List<LinkedHashMap<String, Object>> details, Map<String, Object> param, HSSFRow row, HSSFSheet sheet, int indexRow) {
-        //一行数据
-        for (int i = 0; i < details.size(); i++) {
-            int indexCell = 0;
-            row = sheet.createRow(indexRow++);
-            Map<String, Object> detail = details.get(i);
-            //获取招标编辑明细变更信息
-            TbNtChange tbNtChange = new TbNtChange();
-            tbNtChange.setNtId(String.valueOf(detail.get("ntId")));
-            tbNtChange.setNtEditId(String.valueOf(detail.get("pkid")));
-            List<Map<String, Object>> changeFields = tbNtChangeMapper.listFieldNameAndFieldValueByNtEditId(tbNtChange);
-            Map<String, String> changeField = new HashMap();
-            if (changeFields != null && changeFields.size() > 0) {
-                TwfDict twfDict = new TwfDict();
-                //去除旧的变更信息
-                for (Map<String, Object> map : changeFields) {
-                    String tempKey = com.silita.utils.stringUtils.StringUtils.HumpToUnderline(String.valueOf(map.get("field_name")));
-                    String tempValue = String.valueOf(map.get("field_value"));
-                    if ("biness_type".equals(tempKey)) {
-                        twfDict.setCode(tempValue);
-                        twfDict.setType(1);
-                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if ("pro_type".equals(tempKey)) {
-                        twfDict.setCode(tempValue);
-                        twfDict.setType(4);
-                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if ("filing_pfm".equals(tempKey)) {
-                        twfDict.setCode(tempValue);
-                        twfDict.setType(6);
-                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if ("nt_type".equals(tempKey)) {
-                        twfDict.setCode(tempValue);
-                        twfDict.setType(2);
-                        tempValue = twfDictMapper.getNameByCodeAndType(twfDict);
-                    } else if ("pb_mode".equals(tempKey)) {
-                        tempValue = dicCommonMapper.getNameByCode(tempValue);
-                    } else if ("enroll_end_time".equals(tempKey) || "bid_end_time".equals(tempKey) || "bid_bonds_end_time".equals(tempKey) || "audit_time".equals(tempKey) || "completion_time".equals(tempKey)) {
-                        tempValue = simple.format(new Date(Long.parseLong(tempValue)));
-                    }
-                    changeField.put(tempKey, tempValue);
-                }
-            }
-            // 去除 pkid 和 ntId
-            detail.remove("pkid");
-            detail.remove("ntId");
-            //一列数据
-            for (Map.Entry<String, Object> entry : detail.entrySet()) {
-                //替换变更后的值
-                if (changeField.size() > 0) {
-                    for (Map.Entry<String, String> temp : changeField.entrySet()) {
-                        String tempKey = temp.getKey();
-                        String tempValue = temp.getValue();
-                        if (tempKey.equals(entry.getKey())) {
-                            entry.setValue(tempValue);
-                        }
-                    }
-                }
-                if (!"url".equals(entry.getKey())) {
-                    HSSFCell cell = row.createCell(indexCell++);
-                    //标题要带超链接
-                    if ("title".equals(entry.getKey())) {
-                        cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
-//                        cell.setCellStyle(linkStyle);
-                    } else {
-                        cell.setCellValue(String.valueOf(entry.getValue()));
-                    }
-                }
-            }
-
-            String cityCode = (String) detail.get("cityCode");
-            String s1 = sysAreaMapper.queryAreaName(cityCode);
-            if (StringUtil.isNotEmpty(s1)) {
-                row.getCell(4).setCellValue(s1);
-            }
-            String countyCode = (String) detail.get("countyCode");
-            String s2 = sysAreaMapper.queryAreaName(countyCode);
-            if (StringUtil.isNotEmpty(s2)) {
-                row.getCell(5).setCellValue(s2);
-            }
-            String proType = (String) detail.get("proType");
-            String s = twfDictMapper.queryProType(proType);
-            if (StringUtil.isNotEmpty(s)) {
-                row.getCell(7).setCellValue(s);
-            }
-            String pbMode = (String) detail.get("pbMode");
-            String s3 = dicCommonMapper.queryPbMode(pbMode);
-            if (StringUtil.isNotEmpty(s3)) {
-                row.getCell(12).setCellValue(s3);
-            }
-
-            row.getCell(0).setCellFormula("HYPERLINK(\"" + String.valueOf(detail.get("url")) + "\",\"" + String.valueOf(detail.get("title")) + "\")");
-
-        }
-    }*/
 
     @Override
     public void updateNtMainStatus(TbNtMian tbNtMian) {

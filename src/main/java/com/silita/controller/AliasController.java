@@ -1,12 +1,7 @@
 package com.silita.controller;
 
-import com.github.pagehelper.PageInfo;
-import com.silita.common.BasePageModel;
-import com.silita.common.PageBean;
 import com.silita.controller.base.BaseController;
-import com.silita.model.DicAlias;
 import com.silita.service.IAliasService;
-import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

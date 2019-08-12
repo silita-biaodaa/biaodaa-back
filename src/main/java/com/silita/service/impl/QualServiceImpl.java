@@ -2,7 +2,6 @@ package com.silita.service.impl;
 
 import com.silita.common.BasePageModel;
 import com.silita.common.Constant;
-import com.silita.common.PageBean;
 import com.silita.dao.DicAliasMapper;
 import com.silita.dao.DicQuaMapper;
 import com.silita.dao.RelQuaGradeMapper;
@@ -10,6 +9,7 @@ import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
+import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
 import org.apache.commons.collections.MapUtils;
@@ -24,7 +24,7 @@ import java.util.*;
  * 资质实现类
  */
 @Service
-public class QualServiceImpl implements IQualService {
+public class QualServiceImpl extends AbstractService implements IQualService {
 
     @Autowired
     DicQuaMapper dicQuaMapper;
@@ -199,7 +199,7 @@ public class QualServiceImpl implements IQualService {
 
 
     @Override
-    public List<Map<String,Object>> getDicQuaListMaps(Map<String, Object> param) {
+    public Map<String,Object> getDicQuaListMaps(Map<String, Object> param) {
         List<Map<String, Object>> dicQuaListMap = new ArrayList<>();
 
         List<Map<String, Object>> list = dicQuaMapper.queryDicQuaBenchNameListMap(param);
@@ -256,17 +256,11 @@ public class QualServiceImpl implements IQualService {
                 }
             }
         }
-
-        //再对集合进行分页
-        BasePageModel basePageModel = new BasePageModel();
         Integer pageNo = MapUtils.getInteger(param, "pageNo");
         Integer pageSize = MapUtils.getInteger(param, "pageSize");
-        basePageModel.setPage(pageNo);//起始页是第一页
-        basePageModel.setRows(pageSize);//一页5行
-        List<Map<String,Object>> pageList = PageBean.getPageListMap(dicQuaListMap,basePageModel);
 
 
-        return pageList;
+        return super.getPagingResultMap(dicQuaListMap,pageNo,pageSize);
     }
 
     @Override

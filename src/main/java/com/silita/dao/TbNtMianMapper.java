@@ -28,12 +28,16 @@ public interface TbNtMianMapper {
      */
     List<LinkedHashMap<String, Object>> queryZhaoBiaoExcel(Map<String,Object> param);
 
+    Integer queryExcelCount(Map<String,Object> param);
+
     /**
      * 根据查询条件获取公告列表及中标标段
-     * @param tbNtMian
+     * @param param
      * @return
      */
-    public List<LinkedHashMap<String, Object>> listBidsDetail(TbNtMian tbNtMian);
+    List<LinkedHashMap<String, Object>> listBidsDetail(Map<String,Object> param);
+
+    Integer queryExcelCountZhongBiao(Map<String,Object> param);
 
     /**
      * 根据查询条件获取公告条数

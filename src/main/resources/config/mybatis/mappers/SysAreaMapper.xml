@@ -29,8 +29,10 @@
 
     <select id="queryAreaName" parameterType="java.lang.String" resultType="java.lang.String">
      SELECT
-        area_name as areaName
-      FROM sys_area WHERE area_code = #{code}
+      area_name as areaName
+    FROM
+      `sys_area`
+    WHERE area_code={code}
   </select>
 
     <select id="queryAreaCode" parameterType="java.lang.String" resultType="java.lang.String">
@@ -150,5 +152,14 @@
                 area_parent_id = #{areaParentId}
             </otherwise>
         </choose>
+    </select>
+    <select id="queryAreaNameListMap" resultType="java.util.Map" parameterType="map">
+          SELECT
+      area_name AS areaName,
+      area_code AS areaCode
+    FROM
+      `sys_area`
+    WHERE area_level = 2
+      OR area_level = 3
     </select>
 </mapper>

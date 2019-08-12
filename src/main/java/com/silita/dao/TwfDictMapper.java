@@ -22,8 +22,8 @@ public interface TwfDictMapper {
 
     /**
      * 获取项目类型
-     * @param proType
+     * @param
      * @return
      */
-    String queryProType(String proType);
+    List<Map<String,Object>> queryProType();
 }

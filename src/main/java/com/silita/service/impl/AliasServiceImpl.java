@@ -1,27 +1,16 @@
 package com.silita.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.silita.common.BasePageModel;
 import com.silita.common.Constant;
-import com.silita.common.ConstantMap;
-import com.silita.common.PageBean;
 import com.silita.dao.DicAliasMapper;
 import com.silita.model.DicAlias;
-import com.silita.model.TbCompanyAwards;
 import com.silita.service.IAliasService;
-import com.silita.utils.DataHandlingUtil;
-import com.silita.utils.dateUtils.MyDateUtils;
-import com.silita.utils.stringUtils.StringUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.sql.Array;
 import java.util.*;
 
 @Service
@@ -55,8 +44,8 @@ public class AliasServiceImpl implements IAliasService {
         Integer pageSize = MapUtils.getInteger(param, "pageSize");
         basePageModel.setPage(pageNo);//起始页是第一页
         basePageModel.setRows(pageSize);//一页5行
-        List<Map<String, Object>> pageListMap = PageBean.getPageListMap(list, basePageModel);
-        return pageListMap;
+       // List<Map<String, Object>> pageListMap = PageBean.getPageListMap(list, basePageModel);
+        return null;
     }
 
     @Override

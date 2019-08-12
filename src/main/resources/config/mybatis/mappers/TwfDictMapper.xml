@@ -9,12 +9,12 @@
   <select id="getNameByCodeAndType" parameterType="com.silita.model.TwfDict" resultType="String">
     SELECT `name` FROM twf_dict WHERE `type` = #{type} AND code = #{code}
   </select>
-  <select id="queryProType" resultType="java.lang.String" parameterType="map">
+  <select id="queryProType" resultType="java.util.Map" parameterType="map">
     SELECT
-      t.`name`
+      t.`name`,
+      t.code
     FROM
       twf_dict t
     WHERE t.`type` = 4
-      AND t.code = #{proType}
   </select>
 </mapper>

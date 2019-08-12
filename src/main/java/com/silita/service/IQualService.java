@@ -44,7 +44,7 @@ public interface IQualService {
 
     List<Map<String, Object>> getDicQuaListMap(Map<String,Object> param);
 
-    List<Map<String,Object>> getDicQuaListMaps(Map<String,Object> param);
+    Map<String,Object> getDicQuaListMaps(Map<String,Object> param);
 
 
 

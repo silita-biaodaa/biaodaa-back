@@ -123,10 +123,10 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
 
     /**
      * 获取评标办法名称
-     * @param pbMode
+     * @param
      * @return
      */
-    String queryPbMode(String pbMode);
+    List<Map<String,Object>> queryPbMode();
 
 
 }

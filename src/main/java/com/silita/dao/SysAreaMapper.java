@@ -21,6 +21,8 @@ public interface SysAreaMapper {
      */
     String queryAreaName(String code);
 
+    List<Map<String,Object>> queryAreaNameListMap();
+
     /**
      * 查询名称根据地区code
      * @param areaName

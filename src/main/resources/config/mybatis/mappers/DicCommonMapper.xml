@@ -192,8 +192,8 @@
 
 
     </select>
-    <select id="queryPbMode" resultType="java.lang.String" parameterType="map">
-        SELECT t.name FROM `dic_common` t WHERE t.code=#{pbMode}
+    <select id="queryPbMode" resultType="java.util.Map" parameterType="map">
+        SELECT t.name,t.name FROM `dic_common` t WHERE t.type &lt;&gt; 'qua_grade'
     </select>
 
 </mapper>

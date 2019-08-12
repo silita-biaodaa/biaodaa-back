@@ -106,45 +106,55 @@
         <if test="ntStatus !=null and ntStatus!=''">
             AND nt_status = #{ntStatus}
         </if>
-        ORDER BY main.pub_date DESC
+        ORDER BY mian.pub_date DESC
     </select>
 
-    <select id="listBidsDetail" parameterType="com.silita.model.TbNtMian" resultType="java.util.LinkedHashMap">
-        SELECT main.title, CONCAT(bids.segment, '标段') AS segment, main.pub_date, bids.controll_sum, bids.pro_sum,
-        bids.pro_duration, '计划竣工时间', (SELECT `area_name` FROM sys_area WHERE area_code = main.city_code) AS city_code,
-        (SELECT `area_name` FROM sys_area WHERE area_code = main.county_code) AS county_code,
-        (SELECT `name` FROM dic_common WHERE `code` = bids.pb_mode) AS pb_mode,
-        (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type,
-        (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = bids.pro_type) AS pro_type,
-        'qualStr', main.url, bids.pkid, bids.nt_id, bids.td_edit_code
-        FROM tb_nt_mian_${source} AS main
-        LEFT JOIN tb_nt_bids_${source} AS bids ON main.pkid = bids.nt_id
-        WHERE 1=1 AND main.is_enable = 1
+    <select id="listBidsDetail" parameterType="map" resultType="java.util.LinkedHashMap">
+        SELECT
+        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX( mian.title,'"',2),'"',-1)]]> as title,
+        CONCAT(bids.segment, '标段') AS segment,
+        mian.pub_date as pubDate,
+        bids.controll_sum as controllSum,
+        bids.pro_sum as proSum,
+        bids.pro_duration,
+        '计划竣工时间',
+        mian.city_code AS cityCode,
+        mian.county_code as countyCode,
+        bids.pb_mode AS pbMode,
+        <include refid="binessType"/>,
+        bids.pro_type as proType,
+        'qualStr',
+        mian.url, bids.pkid,
+        bids.nt_id as ntId,
+        bids.td_edit_code as tdEditCode
+        FROM tb_nt_mian_${source} AS mian
+        LEFT JOIN tb_nt_bids_${source} AS bids ON mian.pkid = bids.nt_id
+        WHERE 1=1 AND mian.is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
-            AND main.provice_code = #{proviceCode}
+            AND mian.provice_code = #{proviceCode}
         </if>
         <if test="cityCode !=null and cityCode!=''">
-            AND main.city_code = #{cityCode}
+            AND mian.city_code = #{cityCode}
         </if>
         <if test="countyCode !=null and countyCode!=''">
-            AND main.county_code = #{countyCode}
+            AND mian.county_code = #{countyCode}
         </if>
         <if test="pubDate !=null and pubDate!=''">
-            AND main.pub_date &gt;= #{pubDate}
+            AND mian.pub_date &gt;= #{pubDate}
         </if>
         <if test="pubEndDate !=null and pubEndDate!=''">
-            AND main.pub_date &lt;= #{pubEndDate}
+            AND mian.pub_date &lt;= #{pubEndDate}
         </if>
         <if test="title !=null and title!=''">
-            AND main.title LIKE CONCAT('%', #{title}, '%')
+            AND mian.title LIKE CONCAT('%', #{title}, '%')
         </if>
         <if test="ntCategory !=null and ntCategory!=''">
-            AND main.nt_category = #{ntCategory}
+            AND mian.nt_category = #{ntCategory}
         </if>
         <if test="ntStatus !=null and ntStatus!=''">
-            AND nt_status = #{ntStatus}
+            AND mian.nt_status = #{ntStatus}
         </if>
-        ORDER BY main.pub_date DESC
+        LIMIT #{start},#{pageSize}
     </select>
 
     <!--<delete id="deleteNtMainByPkId" parameterType="com.silita.model.TbNtMian">-->
@@ -366,14 +376,14 @@
     </select>
     <select id="queryZhaoBiaoExcel" resultType="java.util.LinkedHashMap" parameterType="map">
          SELECT
-        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX( a.title,'"',2),'"',-1)]]> as title,
-        <include refid="ntStatus"/>,
+          <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX( mian.title,'"',2),'"',-1)]]> as title,
+          <include refid="ntStatus"/>,
           CONCAT(b.segment, '标段') AS segment,
-          a.pub_date as pubDate,
-          a.city_code as cityCode,
-          a.county_code as countyCode,
-        <include refid="binessType"/>,
-         b.pro_type as proType,
+          mian.pub_date as pubDate,
+          mian.city_code as cityCode,
+          mian.county_code as countyCode,
+          <include refid="binessType"/>,
+          b.pro_type as proType,
           b.`qua_name` as quaName,
           b.controll_sum as controllSum,
           b.pro_sum as proSum,
@@ -389,43 +399,107 @@
         <include refid="filingPfm"/>,
         <include refid="ntTdStatus"/>,
           b.opening_person as openingPerson,
-          a.url,
+          mian.url,
           b.pkid as pkid,
           b.nt_id as ntId
         FROM
-          tb_nt_mian_${source} a
+          tb_nt_mian_${source} mian
         LEFT JOIN tb_nt_tenders_${source} b
-        ON a.pkid = b.`nt_id`
-        WHERE 1=1 AND a.is_enable = 1
+        ON mian.pkid = b.`nt_id`
+        WHERE 1=1 AND mian.is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
-            AND a.provice_code = #{proviceCode}
+            AND mian.provice_code = #{proviceCode}
         </if>
         <if test="cityCode !=null and cityCode!=''">
-            AND a.city_code = #{cityCode}
+            AND mian.city_code = #{cityCode}
         </if>
         <if test="countyCode !=null and countyCode!=''">
-            AND a.county_code = #{countyCode}
+            AND mian.county_code = #{countyCode}
         </if>
         <if test="pubDate !=null and pubDate!=''">
-            AND a.pub_date &gt;= #{pubDate}
+            AND mian.pub_date &gt;= #{pubDate}
         </if>
         <if test="pubEndDate !=null and pubEndDate!=''">
-            AND a.pub_date &lt;= #{pubEndDate}
+            AND mian.pub_date &lt;= #{pubEndDate}
         </if>
         <if test="title !=null and title!=''">
-            AND a.title LIKE CONCAT('%', #{title}, '%')
+            AND mian.title LIKE CONCAT('%', #{title}, '%')
         </if>
         <if test="ntCategory !=null and ntCategory!=''">
-            AND a.nt_category = #{ntCategory}
+            AND mian.nt_category = #{ntCategory}
         </if>
         <if test="ntStatus !=null and ntStatus!=''">
-            AND a.nt_status = #{ntStatus}
+            AND mian.nt_status = #{ntStatus}
         </if>
         LIMIT #{start},#{pageSize}
     </select>
+    <select id="queryExcelCount" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+        ifnull(count(0),0)
+        FROM
+          tb_nt_mian_${source} mian
+        LEFT JOIN tb_nt_tenders_${source} b
+        ON mian.pkid = b.`nt_id`
+        WHERE 1=1 AND mian.is_enable = 1
+        <if test="proviceCode !=null and proviceCode!=''">
+            AND mian.provice_code = #{proviceCode}
+        </if>
+        <if test="cityCode !=null and cityCode!=''">
+            AND mian.city_code = #{cityCode}
+        </if>
+        <if test="countyCode !=null and countyCode!=''">
+            AND mian.county_code = #{countyCode}
+        </if>
+        <if test="pubDate !=null and pubDate!=''">
+            AND mian.pub_date &gt;= #{pubDate}
+        </if>
+        <if test="pubEndDate !=null and pubEndDate!=''">
+            AND mian.pub_date &lt;= #{pubEndDate}
+        </if>
+        <if test="title !=null and title!=''">
+            AND mian.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="ntCategory !=null and ntCategory!=''">
+            AND mian.nt_category = #{ntCategory}
+        </if>
+        <if test="ntStatus !=null and ntStatus!=''">
+            AND mian.nt_status = #{ntStatus}
+        </if>
+    </select>
+    <select id="queryExcelCountZhongBiao" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+        ifnull(count(0),0)
+        FROM tb_nt_mian_${source} AS mian
+        LEFT JOIN tb_nt_bids_${source} AS bids ON mian.pkid = bids.nt_id
+        WHERE 1=1 AND mian.is_enable = 1
+        <if test="proviceCode !=null and proviceCode!=''">
+            AND mian.provice_code = #{proviceCode}
+        </if>
+        <if test="cityCode !=null and cityCode!=''">
+            AND mian.city_code = #{cityCode}
+        </if>
+        <if test="countyCode !=null and countyCode!=''">
+            AND mian.county_code = #{countyCode}
+        </if>
+        <if test="pubDate !=null and pubDate!=''">
+            AND mian.pub_date &gt;= #{pubDate}
+        </if>
+        <if test="pubEndDate !=null and pubEndDate!=''">
+            AND mian.pub_date &lt;= #{pubEndDate}
+        </if>
+        <if test="title !=null and title!=''">
+            AND mian.title LIKE CONCAT('%', #{title}, '%')
+        </if>
+        <if test="ntCategory !=null and ntCategory!=''">
+            AND mian.nt_category = #{ntCategory}
+        </if>
+        <if test="ntStatus !=null and ntStatus!=''">
+            AND mian.nt_status = #{ntStatus}
+        </if>
+    </select>
     <sql id="ntStatus">
        ( CASE
-        a.nt_status
+        mian.nt_status
         WHEN 0 THEN '未编辑'
         WHEN 1 THEN '已编辑'
         WHEN 2 THEN '已审核'
@@ -435,7 +509,7 @@
     </sql>
 
     <sql id="binessType">
-       ( case a.biness_type
+       ( case mian.biness_type
         when '01' then '施工'
         when '02' then '监理'
         when '03' then '设计'

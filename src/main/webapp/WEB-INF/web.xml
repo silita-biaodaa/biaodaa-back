@@ -72,7 +72,6 @@
         <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
-
     <!-- 添加对springmvc的支持 -->
     <servlet>
         <servlet-name>springmvc</servlet-name>

@@ -2,6 +2,7 @@ package com.silita.service;
 
 import com.silita.model.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import java.util.List;
 import java.util.Map;
@@ -71,10 +72,10 @@ public interface INoticeZhongBiaoService {
 
     /**
      * 导出中标编辑明细
-     * @param tbNtMian
+     * @param param
      * @return
      */
-    HSSFWorkbook listBids(TbNtMian tbNtMian);
+    SXSSFWorkbook outPutTestExcel(Map<String,Object> param);
 
     /**
      * 添加中标编辑明细 变更信息

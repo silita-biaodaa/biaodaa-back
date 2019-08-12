@@ -2,7 +2,9 @@ package com.silita.service;
 
 import com.silita.model.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +55,9 @@ public interface INoticeZhaoBiaoService {
      * @param param
      * @return
      */
-    HSSFWorkbook listTendersDetail(Map<String,Object> param);
+    SXSSFWorkbook listTendersDetail(Map<String,Object> param) throws IOException;
+
+
 
     /**
      * 更新公告状态

@@ -7,13 +7,16 @@ import com.silita.model.TbNtChange;
 import com.silita.model.TbNtMian;
 import com.silita.model.TbNtRegexGroup;
 import com.silita.service.INoticeZhongBiaoService;
+import org.apache.commons.collections.MapUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,21 +120,24 @@ public class NoticeZhongBiaoController extends BaseController {
 
     @RequestMapping(value = "/exportBidsDetail",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
-    public void exportBidsDetail(@RequestBody TbNtMian tbNtMian, HttpServletResponse response) {
-        try{
-            HSSFWorkbook work = noticeZhongBiaoService.listBids(tbNtMian);
-            response.setContentType("application/octet-stream;charset=ISO8859-1");
-            response.setHeader("Content-Disposition", "attachment;filename="+ System.currentTimeMillis());
-            response.addHeader("Pargam", "no-cache");
-            response.addHeader("Cache-Control", "no-cache");
-            OutputStream out=response.getOutputStream();
-            work.write(out);
-            out.flush();
-            out.close();
+    public void exportBidsDetail(@RequestBody Map<String,Object> param) {
+        String storeAddress = MapUtils.getString(param, "storeAddress");
+        try {
+            //long curr_time = System.currentTimeMillis();
+            SXSSFWorkbook wb = noticeZhongBiaoService.outPutTestExcel(param);
+            /*写数据到文件中*/
+            FileOutputStream os = new FileOutputStream(storeAddress);
+            wb.write(os);
+            os.flush();
+            os.close();
+            /*计算耗时*/
+            //System.out.println("耗时:" + (System.currentTimeMillis() - curr_time) / 1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 
     @RequestMapping(value = "/insertTbNtChange", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
