@@ -1,6 +1,8 @@
 package com.silita.service.abs;
 
+import com.silita.common.Constant;
 import com.silita.utils.split.Pagination;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,6 +71,9 @@ public abstract class AbstractService {
     }
 
 
+
+
+
     /**
      *  * @currPageNo  页面传入的页号，从一开始
      *  * @pageSize    每页记录数
@@ -76,8 +81,10 @@ public abstract class AbstractService {
      */
     public <T> Map<String, Object> getPagingResultMap(List<T> list, Integer currPageNo, Integer pageSize) {
         Map<String, Object> retMap = new HashMap<>();
+        retMap.put("code", Constant.CODE_SUCCESS);
+        retMap.put("msg",Constant.MSG_SUCCESS);
         if (list.isEmpty()) {
-            retMap.put("result", Collections.emptyList());
+            retMap.put("data", Collections.emptyList());
             retMap.put("pageNo", 0);
             retMap.put("pageRowNum", 0);
             retMap.put("totalRowNum", 0);
@@ -101,13 +108,15 @@ public abstract class AbstractService {
 
         List<T> result = list.subList(fromIdx, toIdx);
 
-        retMap.put("result", result);
+        retMap.put("data", result);
         retMap.put("pageNo", realPageNo);
-        retMap.put("pageRowNum", result.size());
-        retMap.put("totalRowNum", totalRowNum);
-        retMap.put("totalPageNum", totalPageNum);
+        retMap.put("pageSize", result.size());
+        retMap.put("total", totalRowNum);
+        retMap.put("pages", totalPageNum);
 
         return retMap;
     }
+
+
 
 }

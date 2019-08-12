@@ -1,6 +1,7 @@
 package com.silita.dao;
 
 import com.silita.model.DicCommon;
+import com.silita.model.RelQuaGrade;
 import com.silita.utils.MyMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -58,13 +59,32 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
 
     /**
      * 获取符合该资质的等级
-     * @param param
+     * @param relQuaGrade
      * @return
      */
-    List<Map<String,Object>> queryGradeListMap(Map<String,Object> param);
+    List<Map<String,Object>> queryGradeListMap(RelQuaGrade relQuaGrade);
 
-    List<Map<String,Object>> queryDicCommonGradeList(Map<String,Object> param);
 
+    //统计资质等级
+    Integer queryGradeListMapCount(RelQuaGrade relQuaGrade);
+
+    /**
+     * 等级维护 等级列表
+     * @param relQuaGrade
+     * @return
+     */
+    List<Map<String,Object>> queryDicCommonGradeList(RelQuaGrade relQuaGrade);
+
+    /**
+     * 统计等级列表
+     * @return
+     */
+    Integer queryDicCommonGradeListCount(RelQuaGrade relQuaGrade);
+
+
+
+    //用于下拉选项
+    List<Map<String,Object>> queryGradeListMapPullDown(RelQuaGrade relQuaGrade);
     /**
      * 资质等级下拉选项
      * @param param

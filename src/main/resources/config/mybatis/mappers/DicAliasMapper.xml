@@ -107,6 +107,7 @@
             and id != #{id}
         </if>
     </select>
+
     <select id="queryAliasListCode" resultType="java.util.Map" parameterType="map">
         SELECT
           t.id,
@@ -114,10 +115,25 @@
           t.std_code as stdCode
         FROM
           biaodaa_admin.`dic_alias` t
-        WHERE t.std_code = #{code}
+        WHERE t.std_code = #{stdCode}
         and t.std_type='1'
         <if test="name != null and name != ''">
            and t.name like CONCAT('%',#{name},'%')
+        </if>
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="queryAliasListCodeCount" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+          ifnull(count(1),0)
+        FROM
+          biaodaa_admin.`dic_alias` t
+        WHERE t.std_code = #{stdCode}
+        <if test="stdType != null and stdType != ''">
+            and t.std_type='1'
+        </if>
+        <if test="name != null and name != ''">
+            and t.name like CONCAT('%',#{name},'%')
         </if>
     </select>
 

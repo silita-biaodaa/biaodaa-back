@@ -2,6 +2,7 @@ package com.silita.service;
 
 import com.silita.model.DicAlias;
 import com.silita.model.DicCommon;
+import com.silita.model.RelQuaGrade;
 
 import java.util.List;
 import java.util.Map;
@@ -21,10 +22,10 @@ public interface IGradeService {
 
     /**
      * 等级
-     * @param param
+     * @param relQuaGrade
      * @return
      */
-    List<Map<String,Object>> getDicCommonGradeList(Map<String,Object> param);
+    Map<String,Object> getDicCommonGradeList(RelQuaGrade relQuaGrade);
 
     /**
      * 保存
@@ -66,10 +67,10 @@ public interface IGradeService {
 
     /**
      * 获取符合该资质的等级
-     * @param param
+     * @param relQuaGrade
      * @return
      */
-    List<Map<String,Object>> getGradeListMap(Map<String,Object> param);
+    Map<String,Object> getGradeListMap(RelQuaGrade relQuaGrade);
 
     /**
      * 资质等级下拉选项

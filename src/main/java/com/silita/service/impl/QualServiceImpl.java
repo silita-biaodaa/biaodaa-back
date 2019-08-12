@@ -92,112 +92,12 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         return dicQuaMapper.queryQualCateList();
     }
 
-    @Override
-    public List<DicQua> getDicQuaList(Map<String, Object> param) {
-        return dicQuaMapper.queryDicQuaList(param);
-    }
-
     /**
      * 获取资质列表
      *
      * @param param
      * @return
      */
-    @Override
-    public List<Map<String, Object>> getDicQuaListMap(Map<String, Object> param) {
-
-        /**
-         * 先判断是否是最后一级
-         * 如果是旧直接往上查就是
-         *
-         */
-
-        List<Map<String, Object>> dicQuaListMap = new ArrayList<>();
-
-        param.put("noticeLevel", "4");
-        List<Map<String, Object>> listone = dicQuaMapper.queryQuaTwo(param);
-        for (Map<String, Object> map : listone) {
-            String quaCode = (String) map.get("quaCode");
-            Integer integer = relQuaGradeMapper.queryRelQuaGrade(quaCode);
-            param.put("zid", map.get("id"));
-            Integer integer1 = dicQuaMapper.queryQuaparentIdIsNull(param);
-            if ((integer != 0 && integer > 0) || integer1 == 0) {
-                param.put("parentId", map.get("parentId"));
-                param.put("noticeLevel", "3");
-                List<Map<String, Object>> list1 = dicQuaMapper.queryQuaparentId(param);
-                for (Map<String, Object> map1 : list1) {
-                    param.put("parentId", map1.get("parentId"));
-                    param.put("noticeLevel", "2");
-                    List<Map<String, Object>> list2 = dicQuaMapper.queryQuaparentId(param);
-                    for (Map<String, Object> map2 : list2) {
-                        param.put("parentId", map2.get("parentId"));
-                        List<Map<String, Object>> list3 = dicQuaMapper.queryQuaOne(param);
-                        for (Map<String, Object> map3 : list3) {
-                            Map<String, Object> oneMap = new HashMap<>();
-                            oneMap.put("quaName", map3.get("quaName"));
-                            oneMap.put("id", map.get("id"));
-                            oneMap.put("quaCode", map.get("quaCode"));
-                            oneMap.put("benchName", map.get("benchName"));
-                            dicQuaListMap.add(oneMap);
-                        }
-                    }
-                }
-            }
-        }
-
-        param.put("noticeLevel", "3");
-        List<Map<String, Object>> listtwo = dicQuaMapper.queryQuaTwo(param);
-        for (Map<String, Object> map : listtwo) {
-            String quaCode = (String) map.get("quaCode");
-            Integer integer = relQuaGradeMapper.queryRelQuaGrade(quaCode);
-            param.put("zid", map.get("id"));
-            Integer integer1 = dicQuaMapper.queryQuaparentIdIsNull(param);
-            if ((integer != 0 && integer > 0) || integer1 == 0) {
-                param.put("parentId", map.get("parentId"));
-                param.put("noticeLevel", "2");
-                List<Map<String, Object>> list1 = dicQuaMapper.queryQuaparentId(param);
-                for (Map<String, Object> map1 : list1) {
-                    param.put("parentId", map1.get("parentId"));
-                    List<Map<String, Object>> list3 = dicQuaMapper.queryQuaOne(param);
-                    for (Map<String, Object> map2 : list3) {
-                        Map<String, Object> oneMap = new HashMap<>();
-                        oneMap.put("quaName", map2.get("quaName"));
-                        oneMap.put("id", map.get("id"));
-                        oneMap.put("quaCode", map.get("quaCode"));
-                        oneMap.put("benchName", map.get("benchName"));
-                        dicQuaListMap.add(oneMap);
-                    }
-                }
-            }
-        }
-
-        param.put("noticeLevel", "2");
-        List<Map<String, Object>> listthree = dicQuaMapper.queryQuaTwo(param);
-        for (Map<String, Object> map : listthree) {
-            String quaCode = (String) map.get("quaCode");
-            Integer integer = relQuaGradeMapper.queryRelQuaGrade(quaCode);
-            param.put("zid", map.get("id"));
-            Integer integer1 = dicQuaMapper.queryQuaparentIdIsNull(param);
-            if ((integer != 0 && integer > 0) || integer1 == 0) {
-                param.put("parentId", map.get("parentId"));
-                List<Map<String, Object>> list3 = dicQuaMapper.queryQuaOne(param);
-                for (Map<String, Object> map1 : list3) {
-                    Map<String, Object> oneMap = new HashMap<>();
-                    oneMap.put("quaName", map1.get("quaName"));
-                    oneMap.put("id", map.get("id"));
-                    oneMap.put("quaCode", map.get("quaCode"));
-                    oneMap.put("benchName", map.get("benchName"));
-                    dicQuaListMap.add(oneMap);
-                }
-            }
-        }
-
-
-        return dicQuaListMap;
-    }
-
-
-
     @Override
     public Map<String,Object> getDicQuaListMaps(Map<String, Object> param) {
         List<Map<String, Object>> dicQuaListMap = new ArrayList<>();
@@ -208,17 +108,17 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             String parentId = (String) map.get("parentId");
             if (StringUtil.isNotEmpty(parentId)) {
                 param.put("parentId", parentId);
-                List<Map<String, Object>> list1 = dicQuaMapper.queryDicQuaBenchNameListMap(param);
+                List<Map<String, Object>> list1 = dicQuaMapper.queryDicQuaListMap(param);
                 for (Map<String, Object> map1 : list1) {
                     String parentId1 = (String) map1.get("parentId");
                     if (StringUtil.isNotEmpty(parentId1)) {
                         param.put("parentId", parentId1);
-                        List<Map<String, Object>> list2 = dicQuaMapper.queryDicQuaBenchNameListMap(param);
+                        List<Map<String, Object>> list2 = dicQuaMapper.queryDicQuaListMap(param);
                         for (Map<String, Object> map2 : list2) {
                             String parentId2 = (String) map2.get("parentId");
                             if (StringUtil.isNotEmpty(parentId2)) {
                                 param.put("parentId", parentId2);
-                                List<Map<String, Object>> list3 = dicQuaMapper.queryDicQuaBenchNameListMap(param);
+                                List<Map<String, Object>> list3 = dicQuaMapper.queryDicQuaListMap(param);
                                 for (Map<String, Object> map3 : list3) {
                                     String benchName = (String) map.get("benchName");
                                     if (StringUtil.isNotEmpty(benchName)) {

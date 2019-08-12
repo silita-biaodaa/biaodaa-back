@@ -4,6 +4,7 @@ import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.model.DicAlias;
 import com.silita.model.DicCommon;
+import com.silita.model.RelQuaGrade;
 import com.silita.service.IGradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,11 +31,11 @@ public class GradeController extends BaseController {
      *
      * @return
      */
-    @ResponseBody
+   /* @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> list() {
         return this.successMap(gradeService.getGradeList(null));
-    }
+    }*/
 
 
     /**
@@ -43,9 +44,9 @@ public class GradeController extends BaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> listMap(@RequestBody Map<String,Object> param) {
-        return this.successMap(gradeService.getDicCommonGradeList(param));
+    @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> listMap(@RequestBody RelQuaGrade relQuaGrade) {
+        return this.successMap(gradeService.getDicCommonGradeList(relQuaGrade));
     }
 
 
@@ -108,11 +109,11 @@ public class GradeController extends BaseController {
      * @param param
      * @return
      */
-    @ResponseBody
+   /* @ResponseBody
     @RequestMapping(value = "/cate/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> cateList(@RequestBody Map<String, Object> param) {
         return this.successMap(gradeService.getQualGradeList(param));
-    }
+    }*/
 
     /**
      * 资质等级下拉选项
@@ -120,7 +121,7 @@ public class GradeController extends BaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/cate/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/cate/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> cateListMap(@RequestBody Map<String, Object> param) {
         return this.successMap(gradeService.gitGradePullDownListMap(param));
     }
@@ -131,21 +132,21 @@ public class GradeController extends BaseController {
      * @param param
      * @return
      */
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping(value = "/sec/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> secList(@RequestBody Map<String, Object> param) {
         return this.successMap(gradeService.getSecQualGradeList(param));
-    }
+    }*/
 
     /**
      * 获取符合该资质的等级
-     * @param param
+     * @param relQuaGrade
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/sec/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> secListMap(@RequestBody Map<String, Object> param) {
-        return this.successMap(gradeService.getGradeListMap(param));
+    @RequestMapping(value = "/sec/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> secListMap(@RequestBody RelQuaGrade relQuaGrade) {
+        return this.successMap(gradeService.getGradeListMap(relQuaGrade));
     }
 
 

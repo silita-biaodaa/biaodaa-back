@@ -33,10 +33,17 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
 
     /***
      * 根据stdCode获取词典别名列表
-     * @param param
+     * @param
      * @return
      */
-    List<Map<String,Object>> queryAliasListCode(Map<String,Object> param);
+    List<Map<String,Object>> queryAliasListCode(DicAlias dicAlias);
+
+    /**
+     * 别名统计
+     * @param dicAlias
+     * @return
+     */
+    Integer queryAliasListCodeCount(DicAlias dicAlias);
 
     /**
      * 根据stdCode获取词典别名个数

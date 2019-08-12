@@ -55,23 +55,8 @@ public class QualController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> list(@RequestBody Map param) {
-        return successMap(qualService.getDicQuaList(param));
+        return qualService.getDicQuaListMaps(param);
     }
-
-    @ResponseBody
-    @RequestMapping(value = "/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> listMap(@RequestBody Map param) {
-
-        return successMap(qualService.getDicQuaListMap(param));
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/listMaps", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> listMaps(@RequestBody Map param) {
-
-        return successMap(qualService.getDicQuaListMaps(param));
-    }
-
 
 
 

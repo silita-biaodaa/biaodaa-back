@@ -108,6 +108,18 @@
         </if>
         ORDER BY t.parent_id,
           t.order_no
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="queryDicCommonGradeListCount" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+          ifnull(count(1),0)
+        FROM
+        biaodaa_admin.dic_common t
+        WHERE t.type = 'qua_grade'
+        <if test="name != null and name != ''">
+            and t.name = #{name}
+        </if>
     </select>
 
     <select id="queryDicCommCountByName" resultType="java.lang.Integer" parameterType="java.util.Map">
@@ -168,9 +180,31 @@
         FROM `dic_common` c
         JOIN `rel_qua_grade` r
         ON c.code=r.grade_code
-        WHERE r.qua_code=#{code}
+        WHERE r.qua_code=#{quaCode}
+        order by order_no
+         LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="queryGradeListMapCount" resultType="java.lang.Integer">
+        SELECT
+           ifnull(count(1),0)
+        FROM `dic_common` c
+        JOIN `rel_qua_grade` r
+        ON c.code=r.grade_code
+        WHERE r.qua_code=#{quaCode}
+    </select>
+
+    <select id="queryGradeListMapPullDown" resultType="java.util.Map" parameterType="map">
+        SELECT
+        c.code as code,
+        c.parent_id AS parentId
+        FROM `dic_common` c
+        JOIN `rel_qua_grade` r
+        ON c.code=r.grade_code
+        WHERE r.qua_code=#{quaCode}
         order by order_no
     </select>
+
     <!--资质等级下拉选项-->
     <select id="queryGradePullDownListMap" resultType="java.util.Map" parameterType="map">
         SELECT
@@ -184,16 +218,17 @@
         </if>
         <if test="listMapCode != null and listMapCode.size >0">
             AND (
-            <foreach collection="listMapCode" item="list" separator="or">
+            <foreach collection="listMapCode" item="list" separator="and">
                 c.code &lt;&gt; #{list.code}
             </foreach>
             )
         </if>
-
-
+        order by order_no
     </select>
     <select id="queryPbMode" resultType="java.util.Map" parameterType="map">
         SELECT t.name,t.name FROM `dic_common` t WHERE t.type &lt;&gt; 'qua_grade'
     </select>
+
+
 
 </mapper>

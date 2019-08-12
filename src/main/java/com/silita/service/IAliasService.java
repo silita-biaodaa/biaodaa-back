@@ -18,14 +18,14 @@ public interface IAliasService {
      * @param param
      * @return
      */
-    List<DicAlias> getAliasList(Map<String,Object> param);
+    //List<DicAlias> getAliasList(Map<String,Object> param);
 
     /**
      * 查询别名
      * @param param
      * @return
      */
-    List<Map<String,Object>> gitAliasListStdCode(Map<String,Object> param);
+    Map<String,Object> gitAliasListStdCode(Map<String,Object> param);
 
     /**
      * 删除别名

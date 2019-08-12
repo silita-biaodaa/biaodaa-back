@@ -5,7 +5,9 @@ import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
 import com.silita.model.DicAlias;
 import com.silita.service.IAliasService;
+import com.silita.service.abs.AbstractService;
 import org.apache.commons.collections.MapUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,19 +16,20 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-public class AliasServiceImpl implements IAliasService {
+public class AliasServiceImpl extends AbstractService implements IAliasService {
 
     @Autowired
     DicAliasMapper dicAliasMapper;
 
-    @Override
+
+/*    @Override
     public List<DicAlias> getAliasList(Map<String, Object> param) {
         DicAlias dicAlias = new DicAlias();
         dicAlias.setName(MapUtils.getString(param, "name"));
         dicAlias.setStdCode(MapUtils.getString(param, "stdCode"));
         dicAlias.setStdType(MapUtils.getString(param, "stdType"));
         return dicAliasMapper.listDicAliasByStdCode(dicAlias);
-    }
+    }*/
 
     /**
      * 根据quaCode获取资质别名
@@ -35,17 +38,17 @@ public class AliasServiceImpl implements IAliasService {
      * @return
      */
     @Override
-    public List<Map<String,Object>> gitAliasListStdCode(Map<String, Object> param) {
-
-        List<Map<String, Object>> list = dicAliasMapper.queryAliasListCode(param);
-
-        BasePageModel basePageModel = new BasePageModel();
-        Integer pageNo = MapUtils.getInteger(param, "pageNo");
-        Integer pageSize = MapUtils.getInteger(param, "pageSize");
-        basePageModel.setPage(pageNo);//起始页是第一页
-        basePageModel.setRows(pageSize);//一页5行
-       // List<Map<String, Object>> pageListMap = PageBean.getPageListMap(list, basePageModel);
-        return null;
+    public Map<String,Object> gitAliasListStdCode(Map<String, Object> param) {
+        DicAlias dicAlias = new DicAlias();
+        dicAlias.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
+        dicAlias.setPageSize(MapUtils.getInteger(param, "pageSize"));
+        dicAlias.setStdCode(MapUtils.getString(param,"code"));
+        dicAlias.setName(MapUtils.getString(param,"name"));
+        dicAlias.setStdType(MapUtils.getString(param,"type"));
+        Map<String,Object> params = new HashMap<>();
+        params.put("list",dicAliasMapper.queryAliasListCode(dicAlias));
+        params.put("total",dicAliasMapper.queryAliasListCodeCount(dicAlias));
+        return super.handlePageCount(params,dicAlias);
     }
 
     @Override
@@ -219,4 +222,7 @@ public class AliasServiceImpl implements IAliasService {
         resultMap.put("msg", Constant.MSG_SUCCESS);*/
         return null;
     }
+
+
+
 }

@@ -6,7 +6,9 @@ import com.silita.dao.DicCommonMapper;
 import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.DicAlias;
 import com.silita.model.DicCommon;
+import com.silita.model.RelQuaGrade;
 import com.silita.service.IGradeService;
+import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
 import org.apache.commons.collections.MapUtils;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class GradeServiceImpl implements IGradeService {
+public class GradeServiceImpl extends AbstractService implements IGradeService {
 
     @Autowired
     DicCommonMapper dicCommonMapper;
@@ -51,13 +53,17 @@ public class GradeServiceImpl implements IGradeService {
 
     /**
      * 等级列表
-     * @param param
+     * @param relQuaGrade
      * @return
      */
     @Override
-    public List<Map<String, Object>> getDicCommonGradeList(Map<String, Object> param) {
+    public Map<String, Object> getDicCommonGradeList(RelQuaGrade relQuaGrade) {
 
-        return dicCommonMapper.queryDicCommonGradeList(param);
+        Map<String,Object> params = new HashMap<>();
+        params.put("list",dicCommonMapper.queryDicCommonGradeList(relQuaGrade));
+        params.put("total",dicCommonMapper.queryDicCommonGradeListCount(relQuaGrade));
+
+        return super.handlePageCount(params,relQuaGrade);
     }
 
     @Override
@@ -165,13 +171,15 @@ public class GradeServiceImpl implements IGradeService {
 
     /**
      * 获取符合该资质的等级
-     * @param param
+     * @param relQuaGrade
      * @return
      */
     @Override
-    public List<Map<String, Object>> getGradeListMap(Map<String, Object> param) {
-        List<Map<String, Object>> list = dicCommonMapper.queryGradeListMap(param);
-        return list;
+    public Map<String, Object> getGradeListMap(RelQuaGrade relQuaGrade) {
+        Map<String,Object> params = new HashMap<>();
+        params.put("list",dicCommonMapper.queryGradeListMap(relQuaGrade));
+        params.put("total",dicCommonMapper.queryGradeListMapCount(relQuaGrade));
+        return super.handlePageCount(params,relQuaGrade);
     }
 
     /**
@@ -181,7 +189,10 @@ public class GradeServiceImpl implements IGradeService {
      */
     @Override
     public List<Map<String, Object>> gitGradePullDownListMap(Map<String, Object> param) {
-        List<Map<String, Object>> gradeListMap = getGradeListMap(param);
+        RelQuaGrade relQuaGrade = new RelQuaGrade();
+        relQuaGrade.setQuaCode(MapUtils.getString(param,"quaCode"));
+
+        List<Map<String, Object>> gradeListMap = dicCommonMapper.queryGradeListMapPullDown(relQuaGrade);
         List<Map<String,Object>> listMap = new ArrayList<>();
         for (Map<String, Object> map : gradeListMap) {
             Map<String,Object> map1 = new HashMap<>();

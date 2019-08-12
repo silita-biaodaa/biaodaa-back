@@ -27,20 +27,10 @@ public class AliasController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String,Object> list(@RequestBody Map<String,Object> param){
-        return successMap(aliasService.getAliasList(param));
+        return successMap(aliasService.gitAliasListStdCode(param));
     }
 
-    /**
-     *别名搜素
-     * @param param
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/listMap", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String,Object> listMap(@RequestBody Map<String,Object> param){
-        List<Map<String, Object>> list = aliasService.gitAliasListStdCode(param);
-        return successMap(list);
-    }
+
 
     @ResponseBody
     @RequestMapping(value = "/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")

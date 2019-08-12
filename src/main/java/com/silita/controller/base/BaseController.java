@@ -27,6 +27,19 @@ public class BaseController {
         return resultMap;
     }
 
+    public Map<String, Object> successMaps(Object obj) {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.MSG_SUCCESS);
+        if (null != obj) {
+            resultMap.put("data", obj);
+        } else {
+            Object[] nullObj = new Object[0];
+            resultMap.put("data", nullObj);
+        }
+        return resultMap;
+    }
+
     public void seccussMap(Map resultMap, PageInfo pageInfo) {
         resultMap.put("code",Constant.CODE_SUCCESS);
         resultMap.put("msg",Constant.MSG_SUCCESS);

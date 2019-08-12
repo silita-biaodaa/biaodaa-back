@@ -334,8 +334,27 @@
         d.parent_id AS parentId
         FROM
         biaodaa_admin.dic_qua d
+        WHERE 1=1
+        <if test="benchName != null and benchName != ''">
+            and d.bench_name like CONCAT('%',#{benchName},'%')
+        </if>
+        order by order_no
+    </select>
+    <select id="queryDicQuaListMap" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.qua_name as quaName,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode,
+        d.parent_id AS parentId
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE 1=1
         <if test="parentId != null and parentId != ''">
-            WHERE d.id=#{parentId}
+            and d.id=#{parentId}
+        </if>
+        <if test="id != null and id != ''">
+            and d.id=#{id}
         </if>
         order by order_no
     </select>
