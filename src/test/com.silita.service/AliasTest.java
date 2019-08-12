@@ -55,32 +55,58 @@ public class AliasTest extends ConfigTest {
             alias.setCreateBy("system");
             dicAliasMapper.insertDicAlias(alias);
         }
-
-        Reader in = new FileReader("");
-        in.read();
     }
 
     @Test
     public void gradeAlias() throws IOException {
-        File file = new File("E:\\朱帅\\耀邦\\资质\\新建 XLSX 工作表.xlsx");
+        File file = new File("E:\\朱帅\\耀邦\\资质\\新别名导入.xlsx");
         FileInputStream fileInputStream = new FileInputStream(file);
         XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
-        Sheet sheet = workbook.getSheet("Sheet1");
+        Sheet sheet = workbook.getSheet("需增加等级别名");
         int rows = sheet.getLastRowNum();
-        for (int i = 1; i <= rows; i++) {
+        for (int i = 0; i < rows; i++) {
             Row row = sheet.getRow(i);
             Cell cell = row.getCell(0);
             String value = cell.getStringCellValue();
             Cell ce = row.getCell(1);
             String val = ce.getStringCellValue();
             if (null != value && !"".equals(value)) {
-                DicCommon dicCommon = dicCommonMapper.queryQuaGrade(value);
+                DicCommon dicCommon = dicCommonMapper.queryQuaGrade(val);
                 if (null != dicCommon) {
                     DicAlias alias = new DicAlias();
                     alias.setId(DataHandlingUtil.getUUID());
-                    alias.setName(val);
-                    alias.setCode("alias_grade_" + PinYinUtil.cn2py(val) + "_" + System.currentTimeMillis());
+                    alias.setName(value);
+                    alias.setCode("alias_grade_" + PinYinUtil.cn2py(value) + "_" + System.currentTimeMillis());
                     alias.setStdCode(dicCommon.getCode());
+                    alias.setStdType("1");
+                    alias.setCreateBy("system");
+                    dicAliasMapper.insertDicAlias(alias);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void qualAlias() throws IOException {
+        File file = new File("E:\\朱帅\\耀邦\\资质\\新别名导入.xlsx");
+        FileInputStream fileInputStream = new FileInputStream(file);
+        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+        Sheet sheet = workbook.getSheet("需增加资质别名");
+        int rows = sheet.getLastRowNum();
+        for (int i = 0; i < rows; i++) {
+            Row row = sheet.getRow(i);
+            Cell cell = row.getCell(0);
+            String value = cell.getStringCellValue();
+            Cell ce = row.getCell(1);
+            String val = ce.getStringCellValue();
+            if (null != value && !"".equals(value)) {
+                String code = dicQuaMapper.queryQualCodeByBenchName(val);
+                if (null != code) {
+                    DicAlias alias = new DicAlias();
+                    alias.setId(DataHandlingUtil.getUUID());
+                    alias.setName(value);
+                    alias.setCode("alias_grade_" + PinYinUtil.cn2py(value) + "_" + System.currentTimeMillis());
+                    alias.setStdCode(code);
                     alias.setStdType("3");
                     alias.setCreateBy("system");
                     dicAliasMapper.insertDicAlias(alias);
