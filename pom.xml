@@ -26,7 +26,7 @@
     <name>biaodaa-back</name>
     <groupId>com.biaodaa</groupId>
     <artifactId>biaodaa-back</artifactId>
-    <version>1.4.23</version>
+    <version>1.4.26</version>
 
     <properties>
         <spring.version>4.1.6.RELEASE</spring.version>
@@ -39,6 +39,9 @@
         <bonecp.version>0.7.1.RELEASE</bonecp.version>
         <ant.version>1.8.2</ant.version>
         <aspectjweaver.version>1.6.8</aspectjweaver.version>
+
+        <mongodb.version>3.6.3</mongodb.version>
+        <morphia.version>1.3.2</morphia.version>
 
         <cglib.version>2.2</cglib.version>
         <mybatis.version>3.3.0</mybatis.version>
@@ -160,6 +163,19 @@
             <artifactId>mockito-all</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- mongodb-driver -->
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+            <version>${mongodb.version}</version>
+        </dependency>
+        <!-- morphia -->
+        <dependency>
+            <groupId>org.mongodb.morphia</groupId>
+            <artifactId>morphia</artifactId>
+            <version>${morphia.version}</version>
         </dependency>
 
         <!-- mysql -->

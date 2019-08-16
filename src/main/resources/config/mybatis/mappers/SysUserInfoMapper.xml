@@ -33,6 +33,10 @@
     <update id="lockUser" parameterType="java.util.Map">
         update mishu_write.sys_user_info set enable = #{isEnable},updated = now() where pkid = #{pkid}
     </update>
+    <update id="updateRemark" parameterType="map">
+        UPDATE mishu_write.`sys_user_info` t SET t.remark=#{remark} where t.pkid=#{pkid}
+    </update>
+
 
     <select id="queryUserCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1)
@@ -148,4 +152,146 @@
         Order by t.created desc
         limit #{start},#{pageSize}
     </select>
+    <select id="queryActiveUserCount" resultType="java.util.Map" parameterType="map">
+        SELECT
+          (SELECT
+            COUNT(1)
+          FROM
+            mishu.tb_login_info
+          WHERE login_time LIKE CONCAT('%', #{yesterday}, '%')) AS yesterdayActive,
+          (SELECT
+            COUNT(1)
+          FROM
+            mishu.tb_login_info
+          WHERE login_time LIKE CONCAT('%', #{today}, '%')) AS todayActive
+        FROM
+          mishu.`tb_login_info`
+          GROUP BY yesterdayActive,todayActive
+    </select>
+    <select id="queryActiveUserList" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t.pkid,
+          t.phone_no AS phoneNo,
+          t.login_name AS loginName,
+          COUNT(t4.login_tel) AS loginCount,
+          t.`created`,
+          t3.expired_date AS expiredDate
+        FROM
+          mishu_write.`tb_vip_info` t3
+          JOIN mishu_write.`sys_user_info` t
+            ON t3.user_id = t.pkid
+            JOIN mishu.tb_login_info t4
+            ON t.phone_no=t4.`login_tel`
+            WHERE 1=1
+            <if test="(startDate == null and endDate == null) or (startDate == '' and endDate == '')">
+                AND t4.login_time &gt;= #{loginTime}
+            </if>
+            <if test="phoneNo != null and phoneNo != ''">
+                and t.phone_no=#{phoneNo}
+            </if>
+            <if test="startDate != null and startDate !=''">
+                and t3.expired_date &gt;= #{startDate}
+            </if>
+            <if test="endDate != null and endDate !=''">
+                and t3.expired_date &lt;= #{endDate}
+            </if>
+            GROUP BY t4.`login_tel`
+            ORDER BY loginCount DESC
+    </select>
+
+    <select id="queryUserInfoList" resultType="java.util.Map" parameterType="map">
+        SELECT
+        t.pkid,
+        t.phone_no AS phoneNo,
+        t.login_name AS loginName,
+        t.in_company as inCompany,
+        t.`created`,
+        t.inviter_code as inviterCode,
+        t.own_invite_code AS ownInviteCode,
+        t3.expired_date AS expiredDate
+        FROM
+        mishu_write.`tb_vip_info` t3
+        JOIN mishu_write.`sys_user_info` t
+        ON t3.user_id = t.pkid
+        WHERE 1=1
+        <if test="createStartDate != null and createStartDate !=''">
+            and t.`created` &gt;= #{createStartDate}
+        </if>
+        <if test="createdEndData != null and createdEndData !=''">
+            and t.`created` &gt;= #{createdEndData}
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            and t.phone_no=#{phoneNo}
+        </if>
+        <if test="startDate != null and startDate !=''">
+            and t3.expired_date &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            and t3.expired_date &lt;= #{endDate}
+        </if>
+        GROUP BY t.`phone_no`
+        ORDER BY t3.expired_date DESC
+    </select>
+    <!--获取用户统计-->
+    <select id="queryUserInfoCount" resultType="java.util.Map" parameterType="map">
+        SELECT
+        (SELECT
+        COUNT(0)
+        FROM
+        mishu_write.`sys_user_info`
+        WHERE created LIKE CONCAT('%', #{yesterday}, '%')) AS yesterdayCount,
+        (SELECT
+        COUNT(0)
+        FROM
+        mishu_write.`sys_user_info`
+        WHERE created LIKE CONCAT('%', #{today}, '%')) AS todayCount,
+        COUNT(0) AS total
+        FROM
+        mishu_write.`sys_user_info`
+    </select>
+    <select id="querySingleUserInfo" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t.pkid,
+          t.phone_no AS phoneNo,
+          t.nike_name AS nikeName,
+          t.image_url AS imageUrl,
+          t.user_name AS userName,
+          t.sex,
+          t.birth_year AS birthYear,
+          t.in_city AS inCity,
+          t.in_company AS inCompany,
+          t.POSITION,
+          t.email,
+          t.inviter_code AS inviterCode,
+          t.created,
+          t.remark
+        FROM
+          mishu_write.`sys_user_info` t
+          WHERE pkid=#{pkid}
+    </select>
+    <select id="queryPast" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t.pkid,
+          t2.`expired_date` AS expiredDate
+        FROM
+         mishu_write.`sys_user_info` t
+         JOIN mishu_write.`tb_vip_info` t2
+         ON t.`pkid` = t2.`user_id`
+    </select>
+    <select id="queryInviterInfo" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t.pkid,
+          t.phone_no AS phoneNo,
+          t.login_name AS loginName,
+          t.in_company AS inCompany,
+          t.created,
+          t1.expired_date AS expiredDate
+        FROM
+          mishu_write.`sys_user_info` t
+          JOIN mishu_write.`tb_vip_info` t1
+          ON t.pkid=t1.`user_id`
+        WHERE t.inviter_code = #{ownInviteCode}
+    </select>
+
+
 </mapper>

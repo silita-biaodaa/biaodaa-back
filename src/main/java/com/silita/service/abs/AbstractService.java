@@ -86,9 +86,9 @@ public abstract class AbstractService {
         if (list.isEmpty()) {
             retMap.put("data", Collections.emptyList());
             retMap.put("pageNo", 0);
-            retMap.put("pageRowNum", 0);
-            retMap.put("totalRowNum", 0);
-            retMap.put("totalPageNum", 0);
+            retMap.put("pageSize", 0);
+            retMap.put("total", 0);
+            retMap.put("pages", 0);
 
             return retMap;
         }
@@ -116,6 +116,9 @@ public abstract class AbstractService {
 
         return retMap;
     }
+
+
+
 
 
 

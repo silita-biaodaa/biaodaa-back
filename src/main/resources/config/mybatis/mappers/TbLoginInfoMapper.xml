@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbLoginInfoMapper" >
+
+  <select id="queryLoginCount" resultType="java.lang.Integer" parameterType="map">
+    SELECT IFNULL(COUNT(1),1) FROM mishu.`tb_login_info` tb WHERE tb.login_tel=#{phoneNo}
+  </select>
+
+</mapper>
