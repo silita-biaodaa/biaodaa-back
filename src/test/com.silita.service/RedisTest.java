@@ -179,7 +179,7 @@ public class RedisTest extends ConfigTest {
     }
 
     @Test
-    public void test5(){
+    public void test5() {
   /*      DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
         List<Map<String,Object>> listMap = new ArrayList<>();
@@ -233,7 +233,7 @@ public class RedisTest extends ConfigTest {
 
 
     @Test
-    public void test6(){
+    public void test6() {
        /* DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
         List<Map<String,Object>> listMap = new ArrayList<>();
@@ -280,7 +280,7 @@ public class RedisTest extends ConfigTest {
 
 
     @Test
-    public void  test7(){
+    public void test7() {
        /* DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
         List<Map<String,Object>> listMap = new ArrayList<>();
@@ -336,9 +336,8 @@ public class RedisTest extends ConfigTest {
     }
 
 
-
     @Test
-    public void  test9(){
+    public void test9() {
        /* DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
         List<String> listMap = new ArrayList<>();
@@ -368,19 +367,19 @@ public class RedisTest extends ConfigTest {
 
 
     @Test
-    public void test10(){
+    public void test10() {
         DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
-        List<Map<String,Object>> listMap = new ArrayList<>();
+        List<Map<String, Object>> listMap = new ArrayList<>();
         for (DBObject dbObject : dbObjects) {
-            Map<String,Object> mongodbMap = new HashMap<>();
+            Map<String, Object> mongodbMap = new HashMap<>();
             Map map = dbObject.toMap();
             String stdCode = MapUtils.getString(map, "stdCode");
             Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
-                    && (orderStatus == 9)){
-            }else if((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
-                    && (orderStatus == 2)){
+            if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
+                    && (orderStatus == 9)) {
+            } else if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
+                    && (orderStatus == 2)) {
 
             }
         }
@@ -388,9 +387,9 @@ public class RedisTest extends ConfigTest {
 
     @Test
     public void test11() throws ParseException {
-        Map<String,Integer> maps = new HashMap<>();
+        Map<String, Integer> maps = new HashMap<>();
         //今日
-        SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         String todayDate = sdf.format(date);
         //昨日
@@ -401,51 +400,50 @@ public class RedisTest extends ConfigTest {
         DBCursor dbObjects = dbCollection.find();
         int yesterdatCount = 0;
         int todayCount = 0;
-        int totalCount=0;
+        int totalCount = 0;
         for (DBObject dbObject : dbObjects) {
             Map map = dbObject.toMap();
             String stdCode = MapUtils.getString(map, "stdCode");
             Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
-                    && (orderStatus == 9)){
+            if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
+                    && (orderStatus == 9)) {
                 totalCount++;
-                Date createTime =(Date) map.get("createTime");
-              //  Date startDate = sdf.parse(createTime);
+                Date createTime = (Date) map.get("createTime");
+                //  Date startDate = sdf.parse(createTime);
                 String timeCycle = sdf.format(createTime);
-                if (timeCycle.equals(yesterdayDate)){
+                if (timeCycle.equals(yesterdayDate)) {
                     yesterdatCount++;
-                }else if(timeCycle.equals(todayDate)){
+                } else if (timeCycle.equals(todayDate)) {
                     todayCount++;
                 }
 
             }
         }
-        maps.put("yesterdayPay",yesterdatCount);
-        maps.put("todayPay",todayCount);
-        maps.put("totalPayUser",totalCount);
+        maps.put("yesterdayPay", yesterdatCount);
+        maps.put("todayPay", todayCount);
+        maps.put("totalPayUser", totalCount);
 
 
-        System.out.println("maps:"+maps);
-
+        System.out.println("maps:" + maps);
 
 
     }
 
     @Test
-    public void test12(){
+    public void test12() {
 
 
         DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
-        Map<String,Object> mongodbMap = new HashMap<>();
+        Map<String, Object> mongodbMap = new HashMap<>();
         for (DBObject dbObject : dbObjects) {
 
             Map map = dbObject.toMap();
             String stdCode = MapUtils.getString(map, "stdCode");
             Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
-                    && (orderStatus == 9)){
-                mongodbMap.put(MapUtils.getString(map,"userId"),MapUtils.getString(map,"userId"));
+            if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
+                    && (orderStatus == 9)) {
+                mongodbMap.put(MapUtils.getString(map, "userId"), MapUtils.getString(map, "userId"));
             }
 
         }
@@ -453,10 +451,10 @@ public class RedisTest extends ConfigTest {
 
 
     @Test
-    public void test13(){
+    public void test13() {
 
         //今日
-        SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         String todayDate = sdf.format(date);
         //昨日
@@ -466,7 +464,7 @@ public class RedisTest extends ConfigTest {
 
         DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
-        Map<String,Object> maps = new HashMap<>();
+        Map<String, Object> maps = new HashMap<>();
         //昨日订单
         int yesterdayOrderCount = 0;
         //今日订单
@@ -492,51 +490,51 @@ public class RedisTest extends ConfigTest {
             String stdCode = MapUtils.getString(map, "stdCode");
             String tradeType = MapUtils.getString(map, "tradeType");
             Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
-                    && (orderStatus == 9)){
-                Date createTime =(Date) map.get("createTime");
+            if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
+                    && (orderStatus == 9)) {
+                Date createTime = (Date) map.get("createTime");
                 String timeCycle = sdf.format(createTime);
                 Integer fee = MapUtils.getInteger(map, "fee");
-                if (timeCycle.equals(yesterdayDate)){
+                if (timeCycle.equals(yesterdayDate)) {
                     //昨日订单
                     yesterdayOrderCount++;
                     //昨日已付
-                    if(fee != null && fee > 0){
-                        if(StringUtil.isNotEmpty(tradeType)){
-                            if(tradeType.equals("ios app")){
-                                yesterdayPaidCountIos=yesterdayPaidCountIos+fee;
-                            }else{
-                                yesterdayPaidCount=yesterdayOrderCount+fee;
+                    if (fee != null && fee > 0) {
+                        if (StringUtil.isNotEmpty(tradeType)) {
+                            if (tradeType.equals("ios app")) {
+                                yesterdayPaidCountIos = yesterdayPaidCountIos + fee;
+                            } else {
+                                yesterdayPaidCount = yesterdayOrderCount + fee;
                             }
                         }
 
                     }
-                }else if(timeCycle.equals(todayDate)){
+                } else if (timeCycle.equals(todayDate)) {
                     //今日订单
                     todayOrderCount++;
                     //今日已付
-                    if(fee != null && fee > 0){
-                        if(StringUtil.isNotEmpty(tradeType)){
-                            if(tradeType.equals("ios app")){
-                                todayPaidCountIos=todayPaidCountIos+fee;
-                                todayReceivableCountIos=todayReceivableCountIos+fee;
-                                todayTrueMoneyCountIos=todayTrueMoneyCountIos+fee;
-                            }else{
-                                todayPaidCount=todayPaidCount+fee;
-                                todayReceivableCount=todayReceivableCount+fee;
-                                todayTrueMoneyCount=todayTrueMoneyCount+fee;
+                    if (fee != null && fee > 0) {
+                        if (StringUtil.isNotEmpty(tradeType)) {
+                            if (tradeType.equals("ios app")) {
+                                todayPaidCountIos = todayPaidCountIos + fee;
+                                todayReceivableCountIos = todayReceivableCountIos + fee;
+                                todayTrueMoneyCountIos = todayTrueMoneyCountIos + fee;
+                            } else {
+                                todayPaidCount = todayPaidCount + fee;
+                                todayReceivableCount = todayReceivableCount + fee;
+                                todayTrueMoneyCount = todayTrueMoneyCount + fee;
                             }
                         }
 
                     }
 
                 }
-                if(fee != null && fee > 0){
-                    if(StringUtil.isNotEmpty(tradeType)){
-                        if(tradeType.equals("ios app")){
-                            totalMoneyIos=totalMoneyIos+fee;
-                        }else{
-                            totalMoney=totalMoney+fee;
+                if (fee != null && fee > 0) {
+                    if (StringUtil.isNotEmpty(tradeType)) {
+                        if (tradeType.equals("ios app")) {
+                            totalMoneyIos = totalMoneyIos + fee;
+                        } else {
+                            totalMoney = totalMoney + fee;
                         }
                     }
 
@@ -553,11 +551,11 @@ public class RedisTest extends ConfigTest {
         todayTrueMoneyCountIos = todayTrueMoneyCountIos * 0.68;
         totalMoneyIos = totalMoneyIos * 0.68;
 
-        String one = yesterdayPaidCountIos+"";
-        String two = todayPaidCountIos+"";
-        String three = yesterdayPaidCountIos+"";
-        String four = todayTrueMoneyCountIos+"";
-        String five = totalMoneyIos+"";
+        String one = yesterdayPaidCountIos + "";
+        String two = todayPaidCountIos + "";
+        String three = yesterdayPaidCountIos + "";
+        String four = todayTrueMoneyCountIos + "";
+        String five = totalMoneyIos + "";
 
         String yesterdayIos = MongodbCommon.fenToYuan(one);
         String todaypaidIos = MongodbCommon.fenToYuan(two);
@@ -566,23 +564,20 @@ public class RedisTest extends ConfigTest {
         String zongIos = MongodbCommon.fenToYuan(five);
 
 
-
-
-
         //昨日已付  分转元
-        String yesterdayPaid = yesterdayPaidCount+"";
+        String yesterdayPaid = yesterdayPaidCount + "";
         String yesterday = MongodbCommon.fenToYuan(yesterdayPaid);
         //今日已付  分转元
-        String todayPaid = todayPaidCount+"";
+        String todayPaid = todayPaidCount + "";
         String today = MongodbCommon.fenToYuan(todayPaid);
         //今日应收 分转元
-        String receivable = todayReceivableCount+"";
+        String receivable = todayReceivableCount + "";
         String yin = MongodbCommon.fenToYuan(receivable);
         //今日实收 分转元
-        String trueMoney = todayTrueMoneyCount+"";
+        String trueMoney = todayTrueMoneyCount + "";
         String shi = MongodbCommon.fenToYuan(trueMoney);
         //总金额  分转元
-        String total = totalMoney+"";
+        String total = totalMoney + "";
         String zong = MongodbCommon.fenToYuan(total);
         //ios
         double yesterdayIosOne = Double.parseDouble(yesterdayIos);
@@ -597,44 +592,129 @@ public class RedisTest extends ConfigTest {
         double shiOne = Double.parseDouble(shi);
         double zongOne = Double.parseDouble(zong);
 
-        yesterdayOne=yesterdayOne+yesterdayIosOne;
-        todayOne=todayOne+todaypaidIosOne;
-        yinOne=yinOne+receivableIosOne;
-        shiOne=shiOne+trueMoneyIosOne;
-        zongOne=zongOne+zongIosOne;
+        yesterdayOne = yesterdayOne + yesterdayIosOne;
+        todayOne = todayOne + todaypaidIosOne;
+        yinOne = yinOne + receivableIosOne;
+        shiOne = shiOne + trueMoneyIosOne;
+        zongOne = zongOne + zongIosOne;
 
 
+        maps.put("yesterdayOrder", yesterdayOrderCount);
+        maps.put("todayOrder", todayOrderCount);
+        maps.put("yesterdayPaid", yesterdayOne);
+        maps.put("todayPaid", todayOne);
+        maps.put("todayReceivable", yinOne);
+        maps.put("todayTrueMoney", shiOne);
+        maps.put("totalMoney", zongOne);
 
-
-        maps.put("yesterdayOrder",yesterdayOrderCount);
-        maps.put("todayOrder",todayOrderCount);
-        maps.put("yesterdayPaid",yesterdayOne);
-        maps.put("todayPaid",todayOne);
-        maps.put("todayReceivable",yinOne);
-        maps.put("todayTrueMoney",shiOne);
-        maps.put("totalMoney",zongOne);
-
-        System.out.println("maps:"+maps);
+        System.out.println("maps:" + maps);
 
     }
 
     @Test
-    public void test14(){
-        double yesterdayPaidCountIos=100;
-        yesterdayPaidCountIos=yesterdayPaidCountIos * 0.68;
+    public void test14() {
+        double yesterdayPaidCountIos = 100;
+        yesterdayPaidCountIos = yesterdayPaidCountIos * 0.68;
         System.out.println(yesterdayPaidCountIos);
 
 
     }
 
     @Test
-    public void test15(){
+    public void test15() {
         double a = 500.12;
         double b = 600.00;
 
-        System.out.println( a=a+b);
+        System.out.println(a = a + b);
 
 
+    }
+
+    @Test
+    public void test16() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date dates = sdf.parse("2019-09-18 11:08:17");
+            Calendar c = Calendar.getInstance();
+            c.setTime(dates);
+            c.add(Calendar.DATE, 30);
+
+            String date = sdf.format(c.getTime());
+            System.out.println(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void test17(){
+        List<Map<String,Object>> listMap = new ArrayList<>();
+
+
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("userId","2018-01-01");
+        map1.put("b",2);
+        listMap.add(map1);
+        Map<String,Object> map2 = new HashMap<>();
+        map2.put("userId","2018-01-03");
+        map2.put("b",2);
+        listMap.add(map2);
+        Map<String,Object> map3 = new HashMap<>();
+        map3.put("userId","2018-01-02");
+        map3.put("b",2);
+        listMap.add(map3);
+        for (Map<String, Object> map : listMap) {
+            System.out.println("排序前："+map);
+        }
+
+        Collections.sort(listMap, new Comparator<Map<String, Object>>() {
+
+            public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                String name1 = (String) o1.get("userId");//name1是从你list里面拿出来的一个
+                String name2 = (String) o2.get("userId"); //name1是从你list里面拿出来的第二个name
+                return name1.compareTo(name2);
+            }
+        });
+
+        for (Map<String, Object> map : listMap) {
+            System.out.println("排序后:"+map);
+        }
+
+    }
+    @Test
+    public void test18(){
+
+        BasicDBObject cond = null;
+        cond = new BasicDBObject();
+        cond.append("userId","161a12ff4fc140799786187b10f8f1c5");
+        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
+        DBCursor dbObjects = dbCollection.find(cond);
+        List<Map<String,Object>> listMap = new ArrayList<>();
+
+        for (DBObject dbObject : dbObjects) {
+            Map map = dbObject.toMap();
+            Map<String,Object> maps = new HashMap<>();
+            String stdCode = MapUtils.getString(map, "stdCode");
+            Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
+            if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
+                    && (orderStatus == 9)) {
+                maps.put("userId",MapUtils.getString(map,"userId"));
+                maps.put("stdCode",MapUtils.getString(map,"stdCode"));
+                maps.put("vipDays",MapUtils.getString(map,"vipDays"));
+                maps.put("createTime",MapUtils.getString(map,"createTime"));
+                listMap.add(maps);
+            }
+        }
+    }
+    @Test
+    public void test19(){
+        Map<String,Object> param = new HashMap<>();
+        param.put("userId","161a12ff4fc140799786187b10f8f1c5");
+        List<Map<String, Object>> topUpListMap = MongodbCommon.getTopUp(param);
+        for (Map<String, Object> map : topUpListMap) {
+            System.out.println(map);
+        }
     }
 
 

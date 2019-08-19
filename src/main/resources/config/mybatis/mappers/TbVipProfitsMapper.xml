@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbVipProfitsMapper" >
+
+    <insert id="insertVipProfits" parameterType="map">
+        INSERT INTO mishu_write.`tb_vip_profits` (
+            v_profits_id,
+            settings_code,
+            increase_days,
+            v_id,
+            his_expired_date,
+            created
+          )
+          VALUES
+            (#{vProfitsId},'a-operate',#{vipDay},#{vId},#{expiredDate},NOW())
+    </insert>
+    <select id="queryVipProfitsSingle" resultType="java.util.Map" parameterType="map">
+        SELECT
+          created,
+          settings_code AS settingsCode,
+          increase_days AS vipDay,
+          his_expired_date AS expiredDate
+        FROM
+          mishu_write.`tb_vip_profits`
+        WHERE v_id = #{vId} and settings_code &lt;&gt; 'a-inviter'
+    </select>
+    <select id="queryVipProfitsInviter" resultType="java.util.Map" parameterType="map">
+       SELECT
+          t3.created,
+          t3.increase_days AS vipDay,
+          t3.his_expired_date AS expiredDate,
+          t.`phone_no` AS behavior
+        FROM
+          mishu_write.`sys_user_info` t
+          JOIN mishu_write.`tb_vip_info` t2
+            ON t.`pkid` = t2.`user_id`
+          JOIN mishu_write.`tb_vip_profits` t3
+            ON t2.`v_id` = t3.`v_id`
+        WHERE t3.inviter_code = #{inviterCode}
+    </select>
+</mapper>

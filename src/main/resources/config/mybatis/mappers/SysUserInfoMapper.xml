@@ -292,6 +292,9 @@
           ON t.pkid=t1.`user_id`
         WHERE t.inviter_code = #{ownInviteCode}
     </select>
+    <select id="queryinviterCode" resultType="java.lang.String" parameterType="map">
+        select own_invite_code from mishu_write.`sys_user_info` where pkid=#{userId}
+    </select>
 
 
 </mapper>

@@ -93,4 +93,6 @@ public interface SysUserInfoMapper extends MyMapper<SysUserInfo> {
      * @param param
      */
     List<Map<String,Object>> queryInviterInfo(Map<String,Object> param);
+
+    String queryinviterCode(Map<String,Object> param);
 }
