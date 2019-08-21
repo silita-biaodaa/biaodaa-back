@@ -68,7 +68,7 @@ public interface IUserInfoService {
      * 修改备注
      * @param param
      */
-    void getupdateRemark(Map<String,Object> param);
+    void updateRemark(Map<String,Object> param);
 
     /**
      * 邀请人信息

@@ -175,7 +175,9 @@
           t.login_name AS loginName,
           COUNT(t4.login_tel) AS loginCount,
           t.`created`,
-          t3.expired_date AS expiredDate
+          t3.expired_date AS expiredDate,
+          t.inviter_code as inviterCode,
+          t.own_invite_code AS ownInviteCode
         FROM
           mishu_write.`tb_vip_info` t3
           JOIN mishu_write.`sys_user_info` t
@@ -184,16 +186,16 @@
             ON t.phone_no=t4.`login_tel`
             WHERE 1=1
             <if test="(startDate == null and endDate == null) or (startDate == '' and endDate == '')">
-                AND t4.login_time &gt;= #{loginTime}
+                AND DATE(t4.login_time) &gt;= #{loginTime}
             </if>
             <if test="phoneNo != null and phoneNo != ''">
                 and t.phone_no=#{phoneNo}
             </if>
             <if test="startDate != null and startDate !=''">
-                and t3.expired_date &gt;= #{startDate}
+                and DATE(t4.login_time) &gt;= #{startDate}
             </if>
             <if test="endDate != null and endDate !=''">
-                and t3.expired_date &lt;= #{endDate}
+                and DATE(t4.login_time) &lt;= #{endDate}
             </if>
             GROUP BY t4.`login_tel`
             ORDER BY loginCount DESC
@@ -215,19 +217,19 @@
         ON t3.user_id = t.pkid
         WHERE 1=1
         <if test="createStartDate != null and createStartDate !=''">
-            and t.`created` &gt;= #{createStartDate}
+            and DATE(t.`created`) &gt;= #{createStartDate}
         </if>
         <if test="createdEndData != null and createdEndData !=''">
-            and t.`created` &gt;= #{createdEndData}
+            and DATE(t.`created`) &lt;= #{createdEndData}
         </if>
         <if test="phoneNo != null and phoneNo != ''">
             and t.phone_no=#{phoneNo}
         </if>
         <if test="startDate != null and startDate !=''">
-            and t3.expired_date &gt;= #{startDate}
+            and DATE(t3.expired_date) &gt;= #{startDate}
         </if>
         <if test="endDate != null and endDate !=''">
-            and t3.expired_date &lt;= #{endDate}
+            and DATE(t3.expired_date) &lt;= #{endDate}
         </if>
         GROUP BY t.`phone_no`
         ORDER BY t3.expired_date DESC
@@ -294,6 +296,23 @@
     </select>
     <select id="queryinviterCode" resultType="java.lang.String" parameterType="map">
         select own_invite_code from mishu_write.`sys_user_info` where pkid=#{userId}
+    </select>
+    <select id="queryPhone" resultType="java.util.Map" parameterType="map">
+        SELECT pkid,phone_no AS phoneNo FROM mishu_write.`sys_user_info` where 1=1
+        <if test="orderList != null and orderList.size >0">
+           and  pkid in
+            (
+            <foreach collection="orderList" item="list" separator=",">
+                #{list.userId}
+            </foreach>
+            )
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            and phone_no like CONCAT('%',#{phoneNo},'%')
+        </if>
+    </select>
+    <select id="queryInviterPhone" resultType="java.lang.String" parameterType="map">
+        SELECT phone_no AS phoneNo FROM mishu_write.`sys_user_info` where own_invite_code=#{inviterCode}
     </select>
 
 

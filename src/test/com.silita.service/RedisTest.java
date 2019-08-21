@@ -1,21 +1,19 @@
 package com.silita.service;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.client.model.Filters;
+import com.mongodb.*;
 import com.silita.common.MongodbCommon;
 import com.silita.common.MyRedisTemplate;
 import com.silita.utils.PropertiesUtils;
+import com.silita.utils.dateUtils.MyDateUtils;
 import com.silita.utils.mongdbUtlis.MongoUtils;
 import org.apache.commons.collections.MapUtils;
-import org.bson.conversions.Bson;
+import org.bson.BasicBSONObject;
 import org.junit.Test;
-import org.mongodb.morphia.query.Query;
+import org.mongodb.morphia.query.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -648,24 +646,24 @@ public class RedisTest extends ConfigTest {
 
 
     @Test
-    public void test17(){
-        List<Map<String,Object>> listMap = new ArrayList<>();
+    public void test17() {
+        List<Map<String, Object>> listMap = new ArrayList<>();
 
 
-        Map<String,Object> map1 = new HashMap<>();
-        map1.put("userId","2018-01-01");
-        map1.put("b",2);
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put("userId", "2018-01-01");
+        map1.put("b", 2);
         listMap.add(map1);
-        Map<String,Object> map2 = new HashMap<>();
-        map2.put("userId","2018-01-03");
-        map2.put("b",2);
+        Map<String, Object> map2 = new HashMap<>();
+        map2.put("userId", "2018-01-03");
+        map2.put("b", 2);
         listMap.add(map2);
-        Map<String,Object> map3 = new HashMap<>();
-        map3.put("userId","2018-01-02");
-        map3.put("b",2);
+        Map<String, Object> map3 = new HashMap<>();
+        map3.put("userId", "2018-01-02");
+        map3.put("b", 2);
         listMap.add(map3);
         for (Map<String, Object> map : listMap) {
-            System.out.println("排序前："+map);
+            System.out.println("排序前：" + map);
         }
 
         Collections.sort(listMap, new Comparator<Map<String, Object>>() {
@@ -678,43 +676,181 @@ public class RedisTest extends ConfigTest {
         });
 
         for (Map<String, Object> map : listMap) {
-            System.out.println("排序后:"+map);
+            System.out.println("排序后:" + map);
         }
 
     }
+
     @Test
-    public void test18(){
+    public void test18() {
 
-        BasicDBObject cond = null;
-        cond = new BasicDBObject();
-        cond.append("userId","161a12ff4fc140799786187b10f8f1c5");
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
-        DBCursor dbObjects = dbCollection.find(cond);
-        List<Map<String,Object>> listMap = new ArrayList<>();
-
-        for (DBObject dbObject : dbObjects) {
-            Map map = dbObject.toMap();
-            Map<String,Object> maps = new HashMap<>();
-            String stdCode = MapUtils.getString(map, "stdCode");
-            Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
-                    && (orderStatus == 9)) {
-                maps.put("userId",MapUtils.getString(map,"userId"));
-                maps.put("stdCode",MapUtils.getString(map,"stdCode"));
-                maps.put("vipDays",MapUtils.getString(map,"vipDays"));
-                maps.put("createTime",MapUtils.getString(map,"createTime"));
-                listMap.add(maps);
+        try {
+            DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
+            DBCursor dbObjects = dbCollection.find();
+            List<Map<String, Object>> listMap = new ArrayList<>();
+            SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM DD HH:mm:ss z yyyy", Locale.ENGLISH);
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            for (DBObject dbObject : dbObjects) {
+                Map map = dbObject.toMap();
+                Map<String, Object> maps = new HashMap<>();
+                String stdCode = MapUtils.getString(map, "stdCode");
+                Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
+                if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
+                        && (orderStatus == 9)) {
+                    String createTime = MapUtils.getString(map, "createTime");
+                    String format = sdf2.format(sdf1.parse(createTime));
+                    maps.put("userId", MapUtils.getString(map, "userId"));
+                    maps.put("stdCode", MapUtils.getString(map, "stdCode"));
+                    maps.put("vipDays", MapUtils.getString(map, "vipDays"));
+                    maps.put("createTime", MapUtils.getString(map, "createTime"));
+                    listMap.add(maps);
+                }
             }
+
+            for (Map<String, Object> map : listMap) {
+                System.out.println(map);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
     @Test
-    public void test19(){
-        Map<String,Object> param = new HashMap<>();
-        param.put("userId","161a12ff4fc140799786187b10f8f1c5");
+    public void test19() {
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", "161a12ff4fc140799786187b10f8f1c5");
         List<Map<String, Object>> topUpListMap = MongodbCommon.getTopUp(param);
         for (Map<String, Object> map : topUpListMap) {
             System.out.println(map);
         }
+    }
+
+    @Test
+    public void test20() {
+
+        BasicDBList endList = new BasicDBList();
+        BasicDBObject forceEnd = new BasicDBObject();
+        forceEnd.put("orderStatus", 9);
+        forceEnd.put("stdCode", "month");
+
+        BasicDBList condList = new BasicDBList();
+        BasicDBObject autoEnd = new BasicDBObject();
+        condList.add(new BasicDBObject("orderStatus", 9));
+        condList.add(new BasicDBObject("endTime", new BasicDBObject("$lt", new Date())));
+        autoEnd.put("$and", condList);
+
+        endList.add(forceEnd);
+        endList.add(autoEnd);
+        BasicDBObject objects = new BasicDBObject();
+        objects.put("$or", endList);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            String dateStr = "2019-06-28";
+            Date parse = null;
+            // 解析字符串时间
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+            SimpleDateFormat formats = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            parse = formats.parse(formats.format(date));
+
+
+            SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM DD HH:mm:ss z yyyy", Locale.ENGLISH);
+            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            DecimalFormat dFormat = new DecimalFormat("0.00");
+            DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
+            BasicDBObject object = new BasicDBObject();
+
+            object.put("createTime", new BasicDBObject("$gt", parse));
+            //object.put("orderStatus", 9);
+
+            BasicDBObject timeStart = new BasicDBObject(new BasicBSONObject("createTime", new BasicBSONObject("$gt", new Date(2019 - 1900, 6 - 1, 1))));
+            BasicDBObject timeEnd = new BasicDBObject(new BasicBSONObject("createTime", new BasicDBObject("$lt", MyDateUtils.strToDate("2019-05-28", "yyyy-MM-dd"))));
+            DBCursor dbObjects = dbCollection.find(object);
+            List<Map<String, Object>> listMap = new ArrayList<>();
+            for (DBObject dbObject : dbObjects) {
+                Map map = dbObject.toMap();
+                Map<String, Object> maps = new HashMap<>();
+                String stdCode = MapUtils.getString(map, "stdCode");
+                String tradeType = MapUtils.getString(map, "tradeType");
+                String createTime = MapUtils.getString(map, "createTime");
+                Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
+                Integer vipDays = MapUtils.getInteger(map, "vipDays");
+                Integer fee = MapUtils.getInteger(map, "fee");
+
+                maps.put("userId", MapUtils.getString(map, "userId"));
+                maps.put("orderStatus", MapUtils.getString(map, "orderStatus"));
+                maps.put("orderNo", MapUtils.getString(map, "orderNo"));
+                maps.put("stdCode", MapUtils.getString(map, "stdCode"));
+                final String format2 = sdf2.format(sdf1.parse(createTime));
+                maps.put("createTime", sdf2.format(sdf1.parse(createTime)));
+                if (vipDays != null && vipDays == 30 && stdCode.equals("month")) {
+                    maps.put("orderType", "充值一个月");
+                } else if (vipDays != null && vipDays == 90 && stdCode.equals("quarter")) {
+                    maps.put("orderType", "充值一个季度");
+                } else if (vipDays != null && vipDays == 180 && stdCode.equals("hlafYear")) {
+                    maps.put("orderType", "充值半年");
+                } else if (vipDays != null && vipDays == 365 && stdCode.equals("year")) {
+                    maps.put("orderType", "充值一年");
+                } else if (stdCode.equals("report_com")) {
+                    maps.put("orderType", "普通用户");
+                } else if (stdCode.equals("report_vip")) {
+                    maps.put("orderType", "会员用户");
+                }
+                if (orderStatus != null && orderStatus == 9) {
+                    maps.put("payStatus", "已付款");
+                } else if (orderStatus != null && orderStatus == 2) {
+                    maps.put("payStatus", "未付款");
+                } else {
+                    maps.put("payStatus", "已退款");
+                }
+
+                double iosMoney = fee;
+                String iosMoneytow = iosMoney + "";
+                String iosMoneyThree = MongodbCommon.fenToYuan(iosMoneytow);
+                double iosMoneyFour = Double.parseDouble(iosMoneyThree);
+                String format = dFormat.format(iosMoneyFour);
+
+
+                maps.put("money", format);
+
+                if (tradeType != null && tradeType.equals("APP")) {
+                    maps.put("tradeType", "安卓");
+                    maps.put("truePay", format);
+                } else if (tradeType != null && tradeType.equals("ios app")) {
+                    maps.put("tradeType", "苹果");
+
+                    double iosMoneyFive = iosMoneyFour * 0.68;
+                    String format1 = dFormat.format(iosMoneyFive);
+                    maps.put("truePay", format1);
+                } else if (tradeType != null && tradeType.equals("NATIVE")) {
+                    maps.put("tradeType", "网页");
+                    maps.put("truePay", format);
+                }
+                listMap.add(maps);
+            }
+
+            for (Map<String, Object> map : listMap) {
+                System.out.println("map:" + map);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test21() {
+        String bt = "2019-06-05";
+        String et = "2019-08-05";
+        String time = "2019-08-04";
+        boolean b = false;
+        if ((time.compareTo(bt) > 0 || time.equals(bt)) && (et.compareTo(time) > 0 || et.equals(time))) {
+            b = true;
+            System.out.println(b);
+        }
+
     }
 
 

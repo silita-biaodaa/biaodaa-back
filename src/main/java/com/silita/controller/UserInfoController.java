@@ -115,7 +115,7 @@ public class UserInfoController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/updateRemark", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String,Object> updateRemark(@RequestBody Map<String,Object> param){
-        userInfoService.getupdateRemark(param);
+        userInfoService.updateRemark(param);
         return successMap();
     }
 

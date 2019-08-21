@@ -95,4 +95,16 @@ public interface SysUserInfoMapper extends MyMapper<SysUserInfo> {
     List<Map<String,Object>> queryInviterInfo(Map<String,Object> param);
 
     String queryinviterCode(Map<String,Object> param);
+
+    /**
+     * 获取手机号码
+     * @return
+     */
+    List<Map<String,Object>> queryPhone(Map<String,Object> param);
+
+    /**
+     * 邀请人手机号
+     * @return
+     */
+    String queryInviterPhone(Map<String,Object> param);
 }

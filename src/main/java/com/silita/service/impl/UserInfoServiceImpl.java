@@ -276,13 +276,29 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         return map;
     }
 
+    /**
+     * 个人信息
+     * @param param
+     * @return
+     */
     @Override
     public Map<String, Object> getSingleUserInfo(Map<String, Object> param) {
+        Map<String, Object> map = sysUserInfoMapper.querySingleUserInfo(param);
+        String inviterCode = MapUtils.getString(map, "inviterCode");
+        param.put("inviterCode",inviterCode);
+        String phone = sysUserInfoMapper.queryInviterPhone(param);
+        if(StringUtil.isNotEmpty(phone)){
+            map.put("inviterPhone",phone);
+        }
         return sysUserInfoMapper.querySingleUserInfo(param);
     }
 
+    /**
+     * 编辑备注
+     * @param param
+     */
     @Override
-    public void getupdateRemark(Map<String, Object> param) {
+    public void updateRemark(Map<String, Object> param) {
         sysUserInfoMapper.updateRemark(param);
     }
 
@@ -350,19 +366,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         return MongodbCommon.getUserType();
     }
 
-    public static void main(String[] args) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            String beginTime = "2019-03-06 18:38:13";
-            String endTime = "2019-04-05";
-            Date date1 = format.parse(beginTime);
-            Date date2 = format.parse(endTime);
-            int days = (int) ((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
-            System.out.println(days);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     public String getLoginTime() {

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +71,17 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
             }
             topUpListMap.addAll(list);
         }
+
+       if(topUpListMap != null && topUpListMap.size() >1){
+           Collections.sort(topUpListMap, new Comparator<Map<String, Object>>() {
+
+               public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                   String name1 = (String) o1.get("created");//name1是从你list里面拿出来的一个
+                   String name2 = (String) o2.get("created"); //name1是从你list里面拿出来的第二个name
+                   return name2.compareTo(name1);
+               }
+           });
+       }
 
         return topUpListMap;
     }
