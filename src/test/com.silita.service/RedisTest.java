@@ -630,12 +630,12 @@ public class RedisTest extends ConfigTest {
 
     @Test
     public void test16() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date dates = sdf.parse("2019-09-18 11:08:17");
+            Date dates = sdf.parse("2019-09-18");
             Calendar c = Calendar.getInstance();
             c.setTime(dates);
-            c.add(Calendar.DATE, 30);
+            c.add(Calendar.DATE, 1);
 
             String date = sdf.format(c.getTime());
             System.out.println(date);
@@ -851,6 +851,21 @@ public class RedisTest extends ConfigTest {
             System.out.println(b);
         }
 
+    }
+
+    @Test
+    public void test22(){
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dates = sdf.parse("2019-09-18 11:08:17");
+            Calendar c = Calendar.getInstance();
+            c.setTime(dates);
+            c.add(Calendar.DATE, 1);
+            String tomorrow = sdf.format(c.getTime());
+            System.out.println(tomorrow);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 

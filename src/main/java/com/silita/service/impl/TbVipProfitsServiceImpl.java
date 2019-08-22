@@ -5,15 +5,13 @@ import com.silita.dao.SysUserInfoMapper;
 import com.silita.dao.TbVipInfoMapper;
 import com.silita.dao.TbVipProfitsMapper;
 import com.silita.service.ITbVipProfitsService;
+import com.silita.utils.dateUtils.MyDateUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
@@ -34,20 +32,24 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
     public List<Map<String, Object>> getVipProfitsSingle(Map<String, Object> param) {
         //订单
         List<Map<String, Object>> topUpListMap = MongodbCommon.getTopUp(param);
-        if (topUpListMap != null && topUpListMap.size() >0) {
+        if (topUpListMap != null && topUpListMap.size() > 0) {
             for (Map<String, Object> map : topUpListMap) {
                 String date = tbVipInfoMapper.queryDate(param);
                 map.put("expiredDate", date);
             }
         }
         //邀请人
-        String inviterCode = sysUserInfoMapper.queryinviterCode(param);
-        if (StringUtil.isNotEmpty(inviterCode)) {
-            param.put("inviterCode", inviterCode);
+        String ownInviteCode = sysUserInfoMapper.queryinviterCode(param);
+        if (StringUtil.isNotEmpty(ownInviteCode)) {
+
+            param.put("ownInviteCode", ownInviteCode);
             List<Map<String, Object>> listInviterCode = tbVipProfitsMapper.queryVipProfitsInviter(param);
+            Map<String, Object> inviterMap = new HashMap<>();
+
             if (listInviterCode != null && listInviterCode.size() > 0) {
                 for (Map<String, Object> map : listInviterCode) {
-                    map.put("created", MapUtils.getString(map, "created"));
+                    String created = MyDateUtils.strToDates(MapUtils.getString(map, "created"), "yyyy-MM-dd HH:mm:ss");
+                    map.put("created", created);
                     map.put("behavior", "邀请新用户" + MapUtils.getString(map, "behavior"));
                     map.put("vipDay", "邀请赠送" + MapUtils.getInteger(map, "vipDay") + "天会员");
                 }
@@ -59,7 +61,8 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
         List<Map<String, Object>> list = tbVipProfitsMapper.queryVipProfitsSingle(param);
         if (list != null && list.size() > 0) {
             for (Map<String, Object> map : list) {
-                map.put("created", MapUtils.getString(map, "created"));
+                String created = MyDateUtils.strToDates(MapUtils.getString(map, "created"), "yyyy-MM-dd HH:mm:ss");
+                map.put("created", created);
                 String settingsCode = MapUtils.getString(map, "settingsCode");
                 if (settingsCode.equals("a-first")) {
                     map.put("behavior", "注册");
@@ -72,16 +75,16 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
             topUpListMap.addAll(list);
         }
 
-       if(topUpListMap != null && topUpListMap.size() >1){
-           Collections.sort(topUpListMap, new Comparator<Map<String, Object>>() {
+        if (topUpListMap != null && topUpListMap.size() > 1) {
+            Collections.sort(topUpListMap, new Comparator<Map<String, Object>>() {
 
-               public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-                   String name1 = (String) o1.get("created");//name1是从你list里面拿出来的一个
-                   String name2 = (String) o2.get("created"); //name1是从你list里面拿出来的第二个name
-                   return name2.compareTo(name1);
-               }
-           });
-       }
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                    String name1 = (String) o1.get("created");//name1是从你list里面拿出来的一个
+                    String name2 = (String) o2.get("created"); //name1是从你list里面拿出来的第二个name
+                    return name2.compareTo(name1);
+                }
+            });
+        }
 
         return topUpListMap;
     }

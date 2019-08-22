@@ -47,6 +47,27 @@ public class MyDateUtils {
     }
 
     /**
+     * 获取明天日期
+     *
+     * @return
+     */
+    public static String getTomorrowTime(String end) {
+        String tomorrow = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dates = sdf.parse(end);
+            Calendar c = Calendar.getInstance();
+            c.setTime(dates);
+            c.add(Calendar.DATE, 1);
+            tomorrow = sdf.format(c.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tomorrow;
+
+    }
+
+    /**
      * 获得当天日期
      *
      * @param parrten
@@ -139,6 +160,29 @@ public class MyDateUtils {
         ParsePosition pos = new ParsePosition(0);
         Date dt1 = formatter.parse(time, pos);
         return dt1;
+    }
+
+    /**
+     * 将字串转换为指定格式的日期
+     *
+     * @param time    时间
+     * @param parrten 为空时，将使用yyyy-MM-dd格式
+     * @return
+     */
+    public static String strToDates(String time, String parrten) {
+        String format = "";
+        if (parrten == null || parrten.equals("")) {
+            parrten = "yyyy-MM-dd";
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat(parrten);
+        try {
+            Date parse = formatter.parse(time);
+            format = formatter.format(parse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return format;
+
     }
 
     /**

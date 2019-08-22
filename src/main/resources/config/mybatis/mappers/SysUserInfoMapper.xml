@@ -158,12 +158,12 @@
             COUNT(1)
           FROM
             mishu.tb_login_info
-          WHERE login_time LIKE CONCAT('%', #{yesterday}, '%')) AS yesterdayActive,
+          WHERE created_date LIKE CONCAT('%', #{yesterday}, '%')) AS yesterdayActive,
           (SELECT
             COUNT(1)
           FROM
             mishu.tb_login_info
-          WHERE login_time LIKE CONCAT('%', #{today}, '%')) AS todayActive
+          WHERE created_date LIKE CONCAT('%', #{today}, '%')) AS todayActive
         FROM
           mishu.`tb_login_info`
           GROUP BY yesterdayActive,todayActive
@@ -186,16 +186,16 @@
             ON t.phone_no=t4.`login_tel`
             WHERE 1=1
             <if test="(startDate == null and endDate == null) or (startDate == '' and endDate == '')">
-                AND DATE(t4.login_time) &gt;= #{loginTime}
+                AND DATE(t4.created_date) &gt;= #{loginTime}
             </if>
             <if test="phoneNo != null and phoneNo != ''">
-                and t.phone_no=#{phoneNo}
+                and t.phone_no like CONCAT('%',#{phoneNo},'%')
             </if>
             <if test="startDate != null and startDate !=''">
-                and DATE(t4.login_time) &gt;= #{startDate}
+                and DATE(t4.created_date) &gt;= #{startDate}
             </if>
             <if test="endDate != null and endDate !=''">
-                and DATE(t4.login_time) &lt;= #{endDate}
+                and DATE(t4.created_date) &lt;= #{endDate}
             </if>
             GROUP BY t4.`login_tel`
             ORDER BY loginCount DESC
@@ -206,15 +206,15 @@
         t.pkid,
         t.phone_no AS phoneNo,
         t.login_name AS loginName,
-        t.in_company as inCompany,
+        t.in_company AS inCompany,
         t.`created`,
-        t.inviter_code as inviterCode,
+        t.inviter_code AS inviterCode,
         t.own_invite_code AS ownInviteCode,
         t3.expired_date AS expiredDate
         FROM
-        mishu_write.`tb_vip_info` t3
-        JOIN mishu_write.`sys_user_info` t
-        ON t3.user_id = t.pkid
+        mishu_write.`sys_user_info` t
+        LEFT JOIN   mishu_write.`tb_vip_info` t3
+        ON t.pkid = t3.user_id
         WHERE 1=1
         <if test="createStartDate != null and createStartDate !=''">
             and DATE(t.`created`) &gt;= #{createStartDate}
@@ -223,7 +223,7 @@
             and DATE(t.`created`) &lt;= #{createdEndData}
         </if>
         <if test="phoneNo != null and phoneNo != ''">
-            and t.phone_no=#{phoneNo}
+            and t.phone_no like CONCAT('%',#{phoneNo},'%')
         </if>
         <if test="startDate != null and startDate !=''">
             and DATE(t3.expired_date) &gt;= #{startDate}

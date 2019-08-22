@@ -21,5 +21,14 @@ public interface TbVipProfitsMapper extends MyMapper<TbVipProfits> {
      */
     List<Map<String,Object>> queryVipProfitsSingle(Map<String,Object> param);
 
+    /**
+     * 邀请人
+     * @param param
+     * @return
+     */
     List<Map<String,Object>> queryVipProfitsInviter(Map<String,Object> param);
+
+
+
+
 }

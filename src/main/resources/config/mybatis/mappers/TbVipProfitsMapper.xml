@@ -16,26 +16,32 @@
     </insert>
     <select id="queryVipProfitsSingle" resultType="java.util.Map" parameterType="map">
         SELECT
-          created,
-          settings_code AS settingsCode,
-          increase_days AS vipDay,
-          his_expired_date AS expiredDate
+          t.created,
+          t.settings_code AS settingsCode,
+          t.increase_days AS vipDay,
+          t1.expired_date AS expiredDate
         FROM
-          mishu_write.`tb_vip_profits`
-        WHERE v_id = #{vId} and settings_code &lt;&gt; 'a-inviter'
+          mishu_write.`tb_vip_profits` t
+          JOIN mishu_write.`tb_vip_info` t1
+          ON t.v_id=t1.v_id
+        WHERE t.v_id = #{vId} and t.settings_code &lt;&gt; 'a-inviter'
     </select>
     <select id="queryVipProfitsInviter" resultType="java.util.Map" parameterType="map">
-       SELECT
+      SELECT
+        t4.`phone_no` as behavior,
+          t2.expired_date AS expiredDate,
           t3.created,
-          t3.increase_days AS vipDay,
-          t3.his_expired_date AS expiredDate,
-          t.`phone_no` AS behavior
+          t3.increase_days AS vipDay
         FROM
           mishu_write.`sys_user_info` t
           JOIN mishu_write.`tb_vip_info` t2
-            ON t.`pkid` = t2.`user_id`
+            ON t.pkid = t2.`user_id`
           JOIN mishu_write.`tb_vip_profits` t3
             ON t2.`v_id` = t3.`v_id`
-        WHERE t3.inviter_code = #{inviterCode}
+            JOIN mishu_write.`sys_user_info` t4
+            ON t3.`inviter_code`=t4.`inviter_code`
+        WHERE t.`own_invite_code` = #{ownInviteCode}
+          AND t3.settings_code = 'a-inviter'
+          GROUP BY t4.`phone_no`
     </select>
 </mapper>

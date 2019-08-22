@@ -132,7 +132,7 @@ public class UserInfoController extends BaseController {
     }
 
     /**
-     * 邀请人信息
+     * 订单统计
      * @return
      */
     @ResponseBody
