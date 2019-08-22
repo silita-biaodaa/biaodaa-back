@@ -16,11 +16,6 @@ import java.util.Map;
 
 public class MongoUtils {
 
-
-
-
-
-
     private static Logger logger = LoggerFactory.getLogger(MongoUtils.class);
 
     public static Datastore init(String ip, String host, String dbName) {
@@ -40,7 +35,7 @@ public class MongoUtils {
         builder.socketTimeout(1000 * 60);
         builder.maxWaitTime(1000 * 60);
         builder.threadsAllowedToBlockForConnectionMultiplier(5);
-        builder.maxConnectionIdleTime(6000);
+        builder.maxConnectionIdleTime(6000).build();
         builder.maxConnectionLifeTime(1000 * 60 * 60 * 2);
         MongoClient mongoClient = new MongoClient(serverList, builder.build());
         Morphia morphia = new Morphia();
