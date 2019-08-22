@@ -19,7 +19,7 @@
           t.created,
           t.settings_code AS settingsCode,
           t.increase_days AS vipDay,
-          t1.expired_date AS expiredDate
+          t.his_expired_date AS expiredDate
         FROM
           mishu_write.`tb_vip_profits` t
           JOIN mishu_write.`tb_vip_info` t1
@@ -29,7 +29,7 @@
     <select id="queryVipProfitsInviter" resultType="java.util.Map" parameterType="map">
       SELECT
         t4.`phone_no` as behavior,
-          t2.expired_date AS expiredDate,
+          t3.his_expired_date AS expiredDate,
           t3.created,
           t3.increase_days AS vipDay
         FROM

@@ -301,7 +301,7 @@ public class MongodbCommon {
                     && (orderStatus == 9)) {
                 maps.put("userId", MapUtils.getString(map, "userId"));
                 maps.put("created", MapUtils.getString(map, "createTime"));
-                maps.put("vipDay", "充值" + MapUtils.getString(map, "vipDay") + "天会员");
+                maps.put("vipDay", "充值" + MapUtils.getString(map, "vipDays") + "天会员");
                 if (vipDays != null && vipDays == 30) {
                     maps.put("behavior", "充值一个月");
                 } else if (vipDays != null && vipDays == 90) {
@@ -490,7 +490,7 @@ public class MongodbCommon {
                         maps.put("truePay", iosMoneyThree);
                     }else{
                         maps.put("truePay", iosMoneyThree);
-                        maps.put("tradeType","移动端");
+                        maps.put("tradeType","Wap");
                     }
                     listMap.add(maps);
                     // }
