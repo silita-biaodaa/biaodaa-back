@@ -35,8 +35,9 @@ public class MongoUtils {
         builder.socketTimeout(1000 * 60);
         builder.maxWaitTime(1000 * 60);
         builder.threadsAllowedToBlockForConnectionMultiplier(5);
-        builder.maxConnectionIdleTime(6000).build();
-        builder.maxConnectionLifeTime(1000 * 60 * 60 * 2);
+        builder.maxConnectionIdleTime(6000);
+//        builder.maxConnectionLifeTime(1000 * 60 * 60 * 2);
+        builder.maxConnectionLifeTime(0);
         MongoClient mongoClient = new MongoClient(serverList, builder.build());
         Morphia morphia = new Morphia();
         morphia.mapPackage("com.silita.biaodaa");
