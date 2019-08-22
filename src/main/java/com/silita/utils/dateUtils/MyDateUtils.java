@@ -115,11 +115,11 @@ public class MyDateUtils {
     public static Date getTransitionDate(String orderStart) {
         Date parse = null;
         try {
-            Date bt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(orderStart);
+            Date bt = new SimpleDateFormat("yyyy-MM-dd").parse(orderStart);
             SimpleDateFormat formats = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             parse = formats.parse(formats.format(bt));
         } catch (Exception e) {
-            logger.info("String转Date" + e);
+            logger.info("String转Date",e);
         }
         return parse;
     }
@@ -155,7 +155,7 @@ public class MyDateUtils {
             Date d = sdff.parse(createTime);
             formatDate = new SimpleDateFormat("yyyy-MM-dd").format(d);
         }catch (Exception e){
-            logger.info("mongdb时间转换" + e);
+            logger.info("mongdb时间转换" ,e);
         }
         return formatDate;
     }
@@ -175,7 +175,7 @@ public class MyDateUtils {
             c.add(Calendar.DATE, 1);
             tomorrow = sdf.format(c.getTime());
         } catch (Exception e) {
-            logger.info("获取明天日期" + e);
+            logger.info("获取明天日期" , e);
         }
         return tomorrow;
 
@@ -196,7 +196,7 @@ public class MyDateUtils {
             c.add(Calendar.DATE, day);
             tomorrow = sdf.format(c.getTime());
         } catch (Exception e) {
-            logger.info("获取明天日期" + e);
+            logger.info("获取明天日期" , e);
         }
         return tomorrow;
 

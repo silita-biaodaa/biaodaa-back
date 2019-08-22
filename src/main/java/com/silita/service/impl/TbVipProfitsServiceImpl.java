@@ -83,7 +83,7 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
                 public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     String name1 = (String) o1.get("created");//name1是从你list里面拿出来的一个
                     String name2 = (String) o2.get("created"); //name1是从你list里面拿出来的第二个name
-                    return name1.compareTo(name2);
+                    return name2.compareTo(name1);
                 }
             });
         }
