@@ -25,6 +25,7 @@
           JOIN mishu_write.`tb_vip_info` t1
           ON t.v_id=t1.v_id
         WHERE t.v_id = #{vId} and t.settings_code &lt;&gt; 'a-inviter'
+        order by t.created desc
     </select>
     <select id="queryVipProfitsInviter" resultType="java.util.Map" parameterType="map">
       SELECT
@@ -43,5 +44,6 @@
         WHERE t.`own_invite_code` = #{ownInviteCode}
           AND t3.settings_code = 'a-inviter'
           GROUP BY t4.`phone_no`
+          order by t3.created desc
     </select>
 </mapper>
