@@ -1,11 +1,11 @@
 package com.silita.service.impl;
 
-import com.silita.common.MongodbCommon;
 import com.silita.dao.SysRoleInfoMapper;
 import com.silita.dao.SysUserInfoMapper;
 import com.silita.model.SysUserInfo;
 import com.silita.service.IUserInfoService;
 import com.silita.service.abs.AbstractService;
+import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,15 @@ import java.util.*;
  * sys_user_info ServiceImpl
  */
 @Service
-public class UserInfoServiceImpl extends AbstractService implements IUserInfoService {
+public class UserInfoServiceImpl  extends AbstractService implements IUserInfoService {
 
     @Autowired
     SysUserInfoMapper sysUserInfoMapper;
 
     @Autowired
     SysRoleInfoMapper sysRoleInfoMapper;
+    @Autowired
+    MongodbService mongodbUtils;
 
     @Override
     public Map<String, Object> userCount(Map<String, Object> param) {
@@ -47,11 +49,20 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         return resultMap;
     }
 
+    /**
+     * 锁定用户
+     * @param param
+     */
     @Override
     public void userLock(Map<String, Object> param) {
         sysUserInfoMapper.lockUser(param);
     }
 
+    /**
+     * 查询列表
+     * @param userInfo
+     * @return
+     */
     @Override
     public Map<String, Object> listUserInfo(SysUserInfo userInfo) {
         Integer total = sysUserInfoMapper.queryUserTotal(userInfo);
@@ -94,10 +105,10 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
     @Override
     public Map<String, Object> getActiveUserList(Map<String, Object> param) {
 
-        String loginTime = getLoginTime();
+        String loginTime = MyDateUtils.getLoginTime();
         param.put("loginTime", loginTime);
 
-        Map<String, Integer> userTypeMap = MongodbCommon.getUserType();
+        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
 
         Map<String, Object> params = new HashMap<>();
         List<Map<String, Object>> list = sysUserInfoMapper.queryActiveUserList(param);
@@ -161,9 +172,9 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public Map<String, Object> getUserInfo(Map<String, Object> param) {
-        String loginTime = getLoginTime();
-        param.put("loginTime", loginTime);
-        Map<String, Integer> userTypeMap = MongodbCommon.getUserType();
+        //String loginTime = getLoginTime();
+        //param.put("loginTime", loginTime);
+        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
         List<Map<String, Object>> list = sysUserInfoMapper.queryUserInfoList(param);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -228,24 +239,20 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
     @Override
     public Map<String, Object> getUserCount() {
         Map<String, Object> param = new HashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar yester = Calendar.getInstance();
-        yester.add(Calendar.DATE, -1);
-        Calendar to = Calendar.getInstance();
-        to.add(Calendar.DATE, 0);//-1.昨天时间 0.当前时间 1.明天时间 *以此类推
-        String yesterday = sdf.format(yester.getTime());
-        String today = sdf.format(to.getTime());
-        param.put("yesterday", yesterday);
-        param.put("today", today);
+        String todays = MyDateUtils.getTodays();
+        String yesterdays = MyDateUtils.getYesterdays();
+        param.put("yesterday", yesterdays);
+        param.put("today", todays);
         Map<String, Object> map = sysUserInfoMapper.queryUserInfoCount(param);
         try {
-            Map<String, Integer> userPayCount = MongodbCommon.getUserPayCount();
+            Map<String, Integer> userPayCount = mongodbUtils.getUserPayCount();
             map.put("yesterdayPay", MapUtils.getInteger(userPayCount, "yesterdayPay"));
             map.put("todayPay", MapUtils.getInteger(userPayCount, "todayPay"));
             map.put("totalPayUser", MapUtils.getInteger(userPayCount, "totalPayUser"));
-            Map<String, Object> pastDue = MongodbCommon.getPastDue();
+            Map<String, Object> pastDue = mongodbUtils.getPastDue();
             List<Map<String, Object>> list = sysUserInfoMapper.queryPast();
             int pastCount = 0;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             for (Map<String, Object> stringObjectMap : list) {
                 String pkid = MapUtils.getString(pastDue, MapUtils.getString(stringObjectMap, "pkid"));
                 if (StringUtil.isNotEmpty(pkid)) {
@@ -300,7 +307,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public Map<String, Object> getInviterInfo(Map<String, Object> param) {
-        Map<String, Integer> userTypeMap = MongodbCommon.getUserType();
+        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
         List<Map<String, Object>> list = sysUserInfoMapper.queryInviterInfo(param);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -349,26 +356,21 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public Map<String, Object> getOrderCount() {
-        return MongodbCommon.getOrderCount();
+        return mongodbUtils.getOrderCount();
     }
 
+    /**
+     * 获取用户状态 ：1:付费、2及以上：续费 else 注册
+     *
+     * @return
+     */
     @Override
     public Map<String, Integer> getUserInfoType() {
-        return MongodbCommon.getUserType();
+        return mongodbUtils.getUserType();
     }
 
 
 
-    public String getLoginTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar c = Calendar.getInstance();
-        //过去一月
-        c.setTime(new Date());
-        c.add(Calendar.MONTH, -1);
-        Date m = c.getTime();
-        String mon = format.format(m);
-        return mon;
-    }
 
 
 }

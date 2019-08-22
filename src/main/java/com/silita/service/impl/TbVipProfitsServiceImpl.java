@@ -1,10 +1,10 @@
 package com.silita.service.impl;
 
-import com.silita.common.MongodbCommon;
 import com.silita.dao.SysUserInfoMapper;
 import com.silita.dao.TbVipInfoMapper;
 import com.silita.dao.TbVipProfitsMapper;
 import com.silita.service.ITbVipProfitsService;
+import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,8 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
     private TbVipProfitsMapper tbVipProfitsMapper;
     @Autowired
     private SysUserInfoMapper sysUserInfoMapper;
+    @Autowired
+    private MongodbService mongodbUtils;
 
     /**
      * 会员明细
@@ -31,21 +33,21 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
     @Override
     public List<Map<String, Object>> getVipProfitsSingle(Map<String, Object> param) {
         //订单
-        List<Map<String, Object>> topUpListMap = MongodbCommon.getTopUp(param);
+        List<Map<String, Object>> topUpListMap = mongodbUtils.getTopUp(param);
         if (topUpListMap != null && topUpListMap.size() > 0) {
             for (Map<String, Object> map : topUpListMap) {
-                String date = tbVipInfoMapper.queryDate(param);
-                map.put("expiredDate", date);
+                Integer vipDays = MapUtils.getInteger(map, "vipDays");
+                String created = MapUtils.getString(map, "created");
+                String tomorrowTime = MyDateUtils.getTomorrowTime(created, vipDays);
+                //String date = tbVipInfoMapper.queryDate(param);
+                map.put("expiredDate", tomorrowTime);
             }
         }
         //邀请人
         String ownInviteCode = sysUserInfoMapper.queryinviterCode(param);
         if (StringUtil.isNotEmpty(ownInviteCode)) {
-
             param.put("ownInviteCode", ownInviteCode);
             List<Map<String, Object>> listInviterCode = tbVipProfitsMapper.queryVipProfitsInviter(param);
-            Map<String, Object> inviterMap = new HashMap<>();
-
             if (listInviterCode != null && listInviterCode.size() > 0) {
                 for (Map<String, Object> map : listInviterCode) {
                     String created = MyDateUtils.strToDates(MapUtils.getString(map, "created"), "yyyy-MM-dd HH:mm:ss");
@@ -81,7 +83,7 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
                 public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     String name1 = (String) o1.get("created");//name1是从你list里面拿出来的一个
                     String name2 = (String) o2.get("created"); //name1是从你list里面拿出来的第二个name
-                    return name2.compareTo(name1);
+                    return name1.compareTo(name2);
                 }
             });
         }

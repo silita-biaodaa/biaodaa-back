@@ -1,10 +1,10 @@
 package com.silita.service.impl;
 
 
-import com.silita.common.MongodbCommon;
 import com.silita.dao.SysUserInfoMapper;
 import com.silita.service.IOrderService;
 import com.silita.service.abs.AbstractService;
+import com.silita.service.mongodb.MongodbService;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,18 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
 
     @Autowired
     private SysUserInfoMapper sysUserInfoMapper;
+    @Autowired
+    private MongodbService mongodbUtils;
 
-
+    /**
+     * 订单列表
+     * @param param
+     * @return
+     */
     @Override
     public Map<String, Object> getOrderListMap(Map<String, Object> param) {
         String orderType = MapUtils.getString(param, "orderType");
-
-
-        List<Map<String, Object>> orderList = MongodbCommon.getOrderList(param);
+        List<Map<String, Object>> orderList = mongodbUtils.getOrderList(param);
         param.put("orderList", orderList);
         List<Map<String, Object>> list = sysUserInfoMapper.queryPhone(param);
         Map<String, Object> maps = new HashMap<>();

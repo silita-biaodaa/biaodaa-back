@@ -1,7 +1,6 @@
 package com.silita.service;
 
 import com.mongodb.*;
-import com.silita.common.MongodbCommon;
 import com.silita.common.MyRedisTemplate;
 import com.silita.utils.PropertiesUtils;
 import com.silita.utils.dateUtils.MyDateUtils;
@@ -9,7 +8,6 @@ import com.silita.utils.mongdbUtlis.MongoUtils;
 import org.apache.commons.collections.MapUtils;
 import org.bson.BasicBSONObject;
 import org.junit.Test;
-import org.mongodb.morphia.query.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -448,7 +446,7 @@ public class RedisTest extends ConfigTest {
     }
 
 
-    @Test
+/*    @Test
     public void test13() {
 
         //今日
@@ -607,7 +605,7 @@ public class RedisTest extends ConfigTest {
 
         System.out.println("maps:" + maps);
 
-    }
+    }*/
 
     @Test
     public void test14() {
@@ -683,32 +681,31 @@ public class RedisTest extends ConfigTest {
 
     @Test
     public void test18() {
+      /*  BasicDBObject forceEnd = new BasicDBObject();
+        forceEnd.put("orderNo", "201908220504211823T26VA");*/
 
         try {
             DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
             DBCursor dbObjects = dbCollection.find();
             List<Map<String, Object>> listMap = new ArrayList<>();
-            SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM DD HH:mm:ss z yyyy", Locale.ENGLISH);
-            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (DBObject dbObject : dbObjects) {
                 Map map = dbObject.toMap();
                 Map<String, Object> maps = new HashMap<>();
-                String stdCode = MapUtils.getString(map, "stdCode");
-                Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-                if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
-                        && (orderStatus == 9)) {
-                    String createTime = MapUtils.getString(map, "createTime");
-                    String format = sdf2.format(sdf1.parse(createTime));
-                    maps.put("userId", MapUtils.getString(map, "userId"));
-                    maps.put("stdCode", MapUtils.getString(map, "stdCode"));
-                    maps.put("vipDays", MapUtils.getString(map, "vipDays"));
-                    maps.put("createTime", MapUtils.getString(map, "createTime"));
-                    listMap.add(maps);
-                }
+                maps.put("orderNo", MapUtils.getString(map, "orderNo"));
+                maps.put("createTime", MapUtils.getString(map, "createTime"));
+                listMap.add(maps);
             }
+
 
             for (Map<String, Object> map : listMap) {
                 System.out.println(map);
+                String createTime = MapUtils.getString(map, "createTime");
+                System.out.println(createTime);
+                SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+                Date d = sdff.parse(createTime);
+                String formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
+                System.out.println("formatDate:"+formatDate);
+
             }
 
         } catch (Exception e) {
@@ -718,14 +715,29 @@ public class RedisTest extends ConfigTest {
 
     @Test
     public void test19() {
+        try {
+            String date = "Thu Aug 27 18:05:49 CST 2015";
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date d = sdf.parse(date);
+            String formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
+            System.out.println(formatDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+/*
+    @Test
+    public void test19() {
         Map<String, Object> param = new HashMap<>();
         param.put("userId", "161a12ff4fc140799786187b10f8f1c5");
         List<Map<String, Object>> topUpListMap = MongodbCommon.getTopUp(param);
         for (Map<String, Object> map : topUpListMap) {
             System.out.println(map);
         }
-    }
-
+    }*/
+/*
     @Test
     public void test20() {
 
@@ -838,7 +850,7 @@ public class RedisTest extends ConfigTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Test
     public void test21() {
@@ -854,7 +866,7 @@ public class RedisTest extends ConfigTest {
     }
 
     @Test
-    public void test22(){
+    public void test22() {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date dates = sdf.parse("2019-09-18 11:08:17");
@@ -863,9 +875,46 @@ public class RedisTest extends ConfigTest {
             c.add(Calendar.DATE, 1);
             String tomorrow = sdf.format(c.getTime());
             System.out.println(tomorrow);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Test
+    public void test23() {
+        String todays = MyDateUtils.getTodays();
+        String yesterdays = MyDateUtils.getYesterdays();
+        System.out.println("今日：" + todays + ";" + "昨日：" + yesterdays);
+    }
+
+    @Test
+    public void test24() {
+        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
+
+        BasicDBObject obj = new BasicDBObject();
+
+        obj.put("userId", "c0ece7f4a6b944158646ef4626544472");
+        obj.put("orderNo", "20190409031821333VEEEEE");
+        obj.put("channelNo", 1001);
+        obj.put("orderType", 1);
+        obj.put("stdCode", "month");
+        obj.put("vipDays", 30);
+        obj.put("fee", 31800);
+        obj.put("deviceInfo", "WEB");
+        obj.put("tradeType", "APP");
+        obj.put("prepayId", "wx09151821581598f9fcb3152d0850275346");
+        obj.put("tradeType", 9);
+
+        String todays = MyDateUtils.getTodayss();
+        Date transitionDate = MyDateUtils.getTransitionDate(todays);
+        obj.put("createTime", transitionDate);
+        obj.put("wxpayParam", 0);
+        obj.put("_class", "com.silita.pay.vo.OrderInfo");
+        obj.put("updateTime", transitionDate);
+
+
+        dbCollection.insert(obj);
     }
 
 

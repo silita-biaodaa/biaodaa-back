@@ -5,6 +5,8 @@ package com.silita.utils.dateUtils;
  */
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -17,6 +19,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class MyDateUtils {
+
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(MyDateUtils.class);
 
     public MyDateUtils() {
     }
@@ -47,6 +51,116 @@ public class MyDateUtils {
     }
 
     /**
+     * 获取今日日期
+     *
+     * @return
+     */
+    public static String getTodays() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar to = Calendar.getInstance();
+        to.add(Calendar.DATE, 0);//-1.昨天时间 0.当前时间 1.明天时间 *以此类推
+        String today = sdf.format(to.getTime());
+        return today;
+    }
+
+    /**
+     * 获取今日日期
+     *
+     * @return
+     */
+    public static String getTodayss() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar to = Calendar.getInstance();
+        to.add(Calendar.DATE, 0);//-1.昨天时间 0.当前时间 1.明天时间 *以此类推
+        String today = sdf.format(to.getTime());
+        return today;
+    }
+
+    /**
+     * 获取昨日日期
+     *
+     * @return
+     */
+    public static String getYesterdays() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar yester = Calendar.getInstance();
+        yester.add(Calendar.DATE, -1);
+        String yesterday = sdf.format(yester.getTime());
+        return yesterday;
+    }
+
+    /**
+     * 获取过去一个月时间
+     *
+     * @return
+     */
+    public static String getLoginTime() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        //过去一月
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, -1);
+        Date m = c.getTime();
+        String mon = format.format(m);
+        return mon;
+    }
+
+    /**
+     * mongodb时间
+     * String 转 Date
+     *
+     * @param orderStart
+     * @return
+     */
+    public static Date getTransitionDate(String orderStart) {
+        Date parse = null;
+        try {
+            Date bt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(orderStart);
+            SimpleDateFormat formats = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            parse = formats.parse(formats.format(bt));
+        } catch (Exception e) {
+            logger.info("String转Date" + e);
+        }
+        return parse;
+    }
+
+    /**
+     * mongdb时间转换
+     *
+     * @param createTime
+     * @return
+     */
+    public static String getDates(String createTime) {
+        String formatDate = "";
+        try {
+            SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date d = sdff.parse(createTime);
+            formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
+        }catch (Exception e){
+            logger.info("mongdb时间转换" + e);
+        }
+        return formatDate;
+    }
+
+    /**
+     * mongdb时间转换
+     *
+     * @param createTime
+     * @return
+     */
+    public static String getDatezh(String createTime) {
+        String formatDate = "";
+        try {
+            SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date d = sdff.parse(createTime);
+            formatDate = new SimpleDateFormat("yyyy-MM-dd").format(d);
+        }catch (Exception e){
+            logger.info("mongdb时间转换" + e);
+        }
+        return formatDate;
+    }
+
+    /**
      * 获取明天日期
      *
      * @return
@@ -61,7 +175,28 @@ public class MyDateUtils {
             c.add(Calendar.DATE, 1);
             tomorrow = sdf.format(c.getTime());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("获取明天日期" + e);
+        }
+        return tomorrow;
+
+    }
+
+    /**
+     * 获取多少天之后
+     *
+     * @return
+     */
+    public static String getTomorrowTime(String end,Integer day) {
+        String tomorrow = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dates = sdf.parse(end);
+            Calendar c = Calendar.getInstance();
+            c.setTime(dates);
+            c.add(Calendar.DATE, day);
+            tomorrow = sdf.format(c.getTime());
+        } catch (Exception e) {
+            logger.info("获取明天日期" + e);
         }
         return tomorrow;
 
