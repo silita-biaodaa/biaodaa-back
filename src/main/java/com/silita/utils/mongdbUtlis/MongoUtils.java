@@ -35,7 +35,7 @@ public class MongoUtils {
         builder.socketTimeout(1000 * 60);
         builder.maxWaitTime(1000 * 60);
         builder.threadsAllowedToBlockForConnectionMultiplier(5);
-        builder.maxConnectionIdleTime(6000);
+        builder.maxConnectionIdleTime(60000);
 //        builder.maxConnectionLifeTime(1000 * 60 * 60 * 2);
         builder.maxConnectionLifeTime(0);
         MongoClient mongoClient = new MongoClient(serverList, builder.build());
