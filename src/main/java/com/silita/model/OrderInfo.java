@@ -3,25 +3,26 @@ package com.silita.model;
 import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 @Getter
 @Setter
-public class OrderInfo extends Pagination {
-    private String userID;
+@Document(collection = "order_info")
+public class OrderInfo extends Pagination implements java.io.Serializable{
+    private String userId;
     private String orderNo;
     private String channelNo;
-    private int orderType;
+    private Integer orderType;
     private String stdCode;
-    private int vipDays;
-    private int fee;
+    private Integer vipDays;
+    private Integer fee;
     private String deviceInfo;
     private String tradeType;
     private String prepayId;
-    private int orderStatus;
-    private int isDelete;
+    private Integer orderStatus;
+    private Integer isDelete;
     private Date createTime;
-    private Object wxpayParam;
     private String _class;
     private Date updateTime;
 

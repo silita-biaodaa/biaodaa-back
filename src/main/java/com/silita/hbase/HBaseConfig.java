@@ -42,7 +42,7 @@ public class HBaseConfig {
 
     private String hbaseRootdir="hdfs://DESKTOP-3R7HQ4C:8020/hbase";*/
 
-   @Value("${hbase.config.hbase.zookeeper.quorum}")
+/*   @Value("${hbase.config.hbase.zookeeper.quorum}")
     private String hbaseZookeeperQuorum;
     @Value("${hbase.config.hbase.zookeeper.property.clientPort}")
     private String hbaseZookeeperclientPort;
@@ -73,5 +73,5 @@ public class HBaseConfig {
         configuration.set("hbase.master", hbaseMaster);
         configuration.set("hbase.rootdir", hbaseRootdir);
         return configuration;
-    }
+    }*/
 }

@@ -142,6 +142,70 @@ public class MyDateUtils {
         return formatDate;
     }
 
+
+    /**
+     * mongdb时间转换   时区问题
+     *
+     * @param createTime
+     * @return
+     */
+    public static String getTimeZone(String createTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String format = "";
+        try {
+            SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date d = sdff.parse(createTime);
+            String formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
+
+            Date parse = sdf.parse(formatDate);
+            Calendar ca = Calendar.getInstance();
+            ca.setTime(parse);
+            ca.add(Calendar.HOUR_OF_DAY, -8);//减去时区问题的8小时
+            format = sdf.format(ca.getTime());
+        }catch (Exception e){
+            logger.info("mongdb时间转换" + e);
+        }
+        return format;
+    }
+
+    /**
+     * mongdb时间转换   时区问题
+     *
+     * @param createTime
+     * @return
+     */
+    public static String getTimeZones(String createTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+        String format = "";
+        try {
+            SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date d = sdff.parse(createTime);
+            String formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
+
+            Date parse = sdf.parse(formatDate);
+            Calendar ca = Calendar.getInstance();
+            ca.setTime(parse);
+            ca.add(Calendar.HOUR_OF_DAY, -8);//减去时区问题的8小时
+            format = sdfs.format(ca.getTime());
+        }catch (Exception e){
+            logger.info("mongdb时间转换" + e);
+        }
+        return format;
+    }
+
+    public static String getActiveDates(String createTime) {
+        String formatDate = "";
+        try {
+            SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date d = sdff.parse(createTime);
+            formatDate = new SimpleDateFormat("yyyy-MM-dd").format(d);
+        }catch (Exception e){
+            logger.info("mongdb时间转换" + e);
+        }
+        return formatDate;
+    }
+
     /**
      * mongdb时间转换
      *

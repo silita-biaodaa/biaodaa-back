@@ -83,10 +83,4 @@ public interface IUserInfoService {
      */
     Map<String,Object> getOrderCount();
 
-
-    /**
-     * 用户类型
-     * @return
-     */
-    Map<String,Integer> getUserInfoType();
 }

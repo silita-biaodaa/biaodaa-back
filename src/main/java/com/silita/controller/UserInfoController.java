@@ -97,15 +97,7 @@ public class UserInfoController extends BaseController {
         return successMap(userInfoService.getSingleUserInfo(param));
     }
 
-    /**
-     * 用户类型
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/userType", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String,Object> userType(){
-        return successMap(userInfoService.getUserInfoType());
-    }
+
 
     /**
      * 修改备注

@@ -157,13 +157,13 @@
           (SELECT
             COUNT(1)
           FROM
-            mishu.tb_login_info
-          WHERE created_date LIKE CONCAT('%', #{yesterday}, '%')) AS yesterdayActive,
+            mishu.`tb_login_info`
+          WHERE DATE(created_date) = #{yesterday}) AS yesterdayActive,
           (SELECT
             COUNT(1)
           FROM
             mishu.tb_login_info
-          WHERE created_date LIKE CONCAT('%', #{today}, '%')) AS todayActive
+          WHERE DATE(created_date) = #{today}) AS todayActive
         FROM
           mishu.`tb_login_info`
           GROUP BY yesterdayActive,todayActive
@@ -179,11 +179,11 @@
           t.inviter_code as inviterCode,
           t.own_invite_code AS ownInviteCode
         FROM
-          mishu_write.`tb_vip_info` t3
-          JOIN mishu_write.`sys_user_info` t
-            ON t3.user_id = t.pkid
-            JOIN mishu.tb_login_info t4
-            ON t.phone_no=t4.`login_tel`
+        mishu.`tb_login_info` t4
+        LEFT JOIN mishu_write.`sys_user_info` t
+        ON t.phone_no = t4.`login_tel`
+        JOIN mishu_write.`tb_vip_info` t3
+        ON t3.user_id = t.pkid
             WHERE 1=1
             <if test="(startDate == null and endDate == null) or (startDate == '' and endDate == '')">
                 AND DATE(t4.created_date) &gt;= #{loginTime}
@@ -199,6 +199,65 @@
             </if>
             GROUP BY t4.`login_tel`
             ORDER BY loginCount DESC
+    </select>
+
+    <select id="queryActiveUserListAll" resultType="java.util.Map" parameterType="map">
+        SELECT
+        t.pkid,
+        t.phone_no AS phoneNo,
+        t.login_name AS loginName,
+        COUNT(t4.login_tel) AS loginCount,
+        t.`created`,
+        t3.expired_date AS expiredDate,
+        t.inviter_code as inviterCode,
+        t.own_invite_code AS ownInviteCode
+        FROM
+        mishu_write.`tb_vip_info` t3
+        JOIN mishu_write.`sys_user_info` t
+        ON t3.user_id = t.pkid
+        JOIN mishu.tb_login_info t4
+        ON t.phone_no=t4.`login_tel`
+        WHERE 1=1
+        <if test="(startDate == null and endDate == null) or (startDate == '' and endDate == '')">
+            AND DATE(t4.created_date) &gt;= #{loginTime}
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            and t.phone_no like CONCAT('%',#{phoneNo},'%')
+        </if>
+        <if test="startDate != null and startDate !=''">
+            and DATE(t4.created_date) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            and DATE(t4.created_date) &lt;= #{endDate}
+        </if>
+        GROUP BY t4.`login_tel`
+        ORDER BY loginCount DESC
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="queryActiveUserListAllCount" resultType="java.util.Map" parameterType="map">
+        select
+        COUNT(t4.login_tel) AS loginCount
+        FROM
+        mishu_write.`tb_vip_info` t3
+        JOIN mishu_write.`sys_user_info` t
+        ON t3.user_id = t.pkid
+        JOIN mishu.tb_login_info t4
+        ON t.phone_no=t4.`login_tel`
+        WHERE 1=1
+        <if test="(startDate == null and endDate == null) or (startDate == '' and endDate == '')">
+            AND DATE(t4.created_date) &gt;= #{loginTime}
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            and t.phone_no like CONCAT('%',#{phoneNo},'%')
+        </if>
+        <if test="startDate != null and startDate !=''">
+            and DATE(t4.created_date) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            and DATE(t4.created_date) &lt;= #{endDate}
+        </if>
+        GROUP BY t4.`login_tel`
     </select>
 
     <select id="queryUserInfoList" resultType="java.util.Map" parameterType="map">
@@ -234,6 +293,67 @@
         GROUP BY t.`phone_no`
         ORDER BY t3.expired_date DESC
     </select>
+
+    <select id="queryUserInfoListAll" resultType="java.util.Map" parameterType="map">
+        SELECT
+        t.pkid,
+        t.phone_no AS phoneNo,
+        t.login_name AS loginName,
+        t.in_company AS inCompany,
+        t.`created`,
+        t.inviter_code AS inviterCode,
+        t.own_invite_code AS ownInviteCode,
+        t3.expired_date AS expiredDate
+        FROM
+        mishu_write.`sys_user_info` t
+        LEFT JOIN   mishu_write.`tb_vip_info` t3
+        ON t.pkid = t3.user_id
+        WHERE 1=1
+        <if test="createStartDate != null and createStartDate !=''">
+            and DATE(t.`created`) &gt;= #{createStartDate}
+        </if>
+        <if test="createdEndData != null and createdEndData !=''">
+            and DATE(t.`created`) &lt;= #{createdEndData}
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            and t.phone_no like CONCAT('%',#{phoneNo},'%')
+        </if>
+        <if test="startDate != null and startDate !=''">
+            and DATE(t3.expired_date) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            and DATE(t3.expired_date) &lt;= #{endDate}
+        </if>
+        GROUP BY t.`phone_no`
+        ORDER BY t3.expired_date DESC
+        LIMIT #{start}, #{pageSize}
+    </select>
+
+    <select id="queryUserInfoListAllCount" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+        ifnull(count(0),0)
+        FROM
+        mishu_write.`sys_user_info` t
+        LEFT JOIN   mishu_write.`tb_vip_info` t3
+        ON t.pkid = t3.user_id
+        WHERE 1=1
+        <if test="createStartDate != null and createStartDate !=''">
+            and DATE(t.`created`) &gt;= #{createStartDate}
+        </if>
+        <if test="createdEndData != null and createdEndData !=''">
+            and DATE(t.`created`) &lt;= #{createdEndData}
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            and t.phone_no like CONCAT('%',#{phoneNo},'%')
+        </if>
+        <if test="startDate != null and startDate !=''">
+            and DATE(t3.expired_date) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate !=''">
+            and DATE(t3.expired_date) &lt;= #{endDate}
+        </if>
+    </select>
+
     <!--获取用户统计-->
     <select id="queryUserInfoCount" resultType="java.util.Map" parameterType="map">
         SELECT
@@ -315,6 +435,7 @@
     <select id="queryInviterPhone" resultType="java.lang.String" parameterType="map">
         SELECT phone_no AS phoneNo FROM mishu_write.`sys_user_info` where own_invite_code=#{inviterCode}
     </select>
+
 
 
 </mapper>

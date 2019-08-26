@@ -8,7 +8,7 @@
        http://www.springframework.org/schema/aop
        http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd ">
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
     <!-- 后台旧表数据源 -->
     <bean id="datasource2" class="com.alibaba.druid.pool.DruidDataSource"

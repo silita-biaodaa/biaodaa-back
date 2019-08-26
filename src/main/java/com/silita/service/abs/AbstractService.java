@@ -2,6 +2,7 @@ package com.silita.service.abs;
 
 import com.silita.common.Constant;
 import com.silita.utils.split.Pagination;
+import org.apache.commons.collections.MapUtils;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Collections;
@@ -38,7 +39,7 @@ public abstract class AbstractService {
      */
     public Map<String, Object> handlePageCount(Map<String, Object> params, Pagination<? extends Pagination> page) {
         int pageCount = 0;
-        int total = (Integer) params.get("total");
+        int total = MapUtils.getInteger(params,"total");
         if (total % page.getPageSize() == 0) {
             pageCount = total / page.getPageSize();
         } else {

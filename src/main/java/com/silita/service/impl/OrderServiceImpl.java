@@ -19,7 +19,6 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
     private SysUserInfoMapper sysUserInfoMapper;
     @Autowired
     private MongodbService mongodbUtils;
-
     /**
      * 订单列表
      * @param param
@@ -42,7 +41,6 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
             }
         }
         List<Map<String, Object>> newList = new ArrayList<>();
-
         if ((StringUtil.isNotEmpty(orderType) && orderType.equals("续费会员"))) {
             Map<String, Object> totalMaps = new HashMap<>();
             for (Map<String, Object> map : orderList) {
@@ -66,7 +64,6 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
                             totalMaps.put(MapUtils.getString(map, "userId"), MapUtils.getString(map, "userId"));
                             newList.add(map);
                         }
-
                     } else {
                         totalMaps.put(MapUtils.getString(map, "userId"), MapUtils.getString(map, "userId"));
                         newList.add(map);

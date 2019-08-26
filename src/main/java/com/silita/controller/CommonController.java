@@ -22,8 +22,8 @@ public class CommonController extends BaseController {
 
     @Autowired
     ICommonService commonService;
-    @Autowired
-    INtContentService ntContentService;
+   /* @Autowired
+    INtContentService ntContentService;*/
     @Autowired
     INoticeZhaoBiaoService noticeZhaoBiaoService;
 

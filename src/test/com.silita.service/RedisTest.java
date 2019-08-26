@@ -1,17 +1,15 @@
 package com.silita.service;
 
-import com.mongodb.*;
+//import com.mongodb.*;
 import com.silita.common.MyRedisTemplate;
-import com.silita.utils.PropertiesUtils;
+import com.silita.model.OrderInfo;
 import com.silita.utils.dateUtils.MyDateUtils;
-import com.silita.utils.mongdbUtlis.MongoUtils;
-import org.apache.commons.collections.MapUtils;
-import org.bson.BasicBSONObject;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import tk.mybatis.mapper.util.StringUtil;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -23,10 +21,12 @@ public class RedisTest extends ConfigTest {
 
     @Autowired
     IUserInfoService iUserInfoService;
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
 
     @Test
     public void test() {
-        // myRedisTemplate.setObject("ceshikey","filter_map");
 
         Object sys_area_region = myRedisTemplate.getObject("sys_area_region");
 
@@ -288,6 +288,11 @@ public class RedisTest extends ConfigTest {
             if((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter"))
             & (orderStatus == 9)){
                 mongodbMap.put("userId", MapUtils.getString(map, "userId"));
+                String createTime = MapUtils.getString(map, "createTime");
+                Integer vipDays = MapUtils.getInteger(map, "vipDays");
+                String activeDates = MyDateUtils.getActiveDates(createTime);
+                mongodbMap.put("createTime",activeDates);
+                mongodbMap.put("vipDays",vipDays);
                 mongodbMap.put("count", 1);
                 listMap.add(mongodbMap);
             }
@@ -309,19 +314,13 @@ public class RedisTest extends ConfigTest {
                             map2.put("count",count);
                         }
                     }
-
                 }else{
                     maps.put(MapUtils.getString(map,"userId"),MapUtils.getString(map,"userId"));
-                    newMap.put("userId",MapUtils.getString(map,"userId"));
-                    newMap.put("count",MapUtils.getInteger(map,"count"));
-                    newListMap.add(newMap);
+                    newListMap.add(map);
                 }
-
             }else{
                 maps.put(MapUtils.getString(map,"userId"),MapUtils.getString(map,"userId"));
-                newMap.put("userId",MapUtils.getString(map,"userId"));
-                newMap.put("count",MapUtils.getInteger(map,"count"));
-                newListMap.add(newMap);
+                newListMap.add(map);
             }
         }
 
@@ -364,7 +363,7 @@ public class RedisTest extends ConfigTest {
 
     @Test
     public void test10() {
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
+       /* DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (DBObject dbObject : dbObjects) {
@@ -378,12 +377,12 @@ public class RedisTest extends ConfigTest {
                     && (orderStatus == 2)) {
 
             }
-        }
+        }*/
     }
 
     @Test
     public void test11() throws ParseException {
-        Map<String, Integer> maps = new HashMap<>();
+      /*  Map<String, Integer> maps = new HashMap<>();
         //今日
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
@@ -421,14 +420,14 @@ public class RedisTest extends ConfigTest {
 
 
         System.out.println("maps:" + maps);
-
+*/
 
     }
 
     @Test
     public void test12() {
 
-
+/*
         DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
         DBCursor dbObjects = dbCollection.find();
         Map<String, Object> mongodbMap = new HashMap<>();
@@ -442,7 +441,7 @@ public class RedisTest extends ConfigTest {
                 mongodbMap.put(MapUtils.getString(map, "userId"), MapUtils.getString(map, "userId"));
             }
 
-        }
+        }*/
     }
 
 
@@ -684,7 +683,7 @@ public class RedisTest extends ConfigTest {
       /*  BasicDBObject forceEnd = new BasicDBObject();
         forceEnd.put("orderNo", "201908220504211823T26VA");*/
 
-        try {
+       /* try {
             DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
             DBCursor dbObjects = dbCollection.find();
             List<Map<String, Object>> listMap = new ArrayList<>();
@@ -710,7 +709,7 @@ public class RedisTest extends ConfigTest {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Test
@@ -890,7 +889,7 @@ public class RedisTest extends ConfigTest {
 
     @Test
     public void test24() {
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
+       /* DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
 
         BasicDBObject obj = new BasicDBObject();
 
@@ -914,8 +913,86 @@ public class RedisTest extends ConfigTest {
         obj.put("updateTime", transitionDate);
 
 
-        dbCollection.insert(obj);
+        dbCollection.insert(obj);*/
     }
+    @Test
+    public void test30(){
+
+        List<OrderInfo> all = mongoTemplate.findAll(OrderInfo.class);
+        for (OrderInfo orderInfo : all) {
+            System.out.println(orderInfo.getChannelNo());
+        }
+
+    }
+
+    @Test
+    public void test31(){
+      /*  Criteria criteria = null;
+        criteria = Criteria.where("orderStatus").is(9).and("stdCode").is("month");*/
+        //criteria.
+
+        //System.out.println("userId:"+orderInfo.getUserId()+";  订单状态:"+orderInfo.getOrderStatus()+";  支付时长："+orderInfo.getStdCode());
+
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("orderStatus").is(9),
+                        new Criteria().orOperator(
+                                Criteria.where("stdCode").is("month"),
+                                Criteria.where("stdCode").is("quarter"),
+                                Criteria.where("stdCode").is("hlafYear"),
+                                Criteria.where("stdCode").is("year")
+                        )));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        Map<String,Integer> maps = new HashMap<>();
+        //今日时间
+        String todayDate = MyDateUtils.getTodays();
+        //昨日时间
+        String yesterdayDate = MyDateUtils.getYesterdays();
+        int yesterdatCount = 0;
+        int todayCount = 0;
+        int totalCount = 0;
+        Map<String,Integer> map = new HashMap<>();
+        for (OrderInfo orderInfo : orderInfos) {
+            String timeCycle = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+            //System.out.println("orderNo:"+orderInfo.getOrderNo()+"; userId:"+orderInfo.getUserId()+"; createTime:"+timeCycle+"; Time:"+orderInfo.getCreateTime());
+            totalCount++;
+            if(timeCycle.equals(todayDate)){
+                todayCount++;
+            }else if(timeCycle.equals(yesterdayDate)){
+                yesterdatCount++;
+            }
+
+            if (null != map.get(orderInfo.getUserId())) {
+                int count = map.get(orderInfo.getUserId());
+                count++;
+                map.put(orderInfo.getUserId(), count);
+            } else {
+                map.put(orderInfo.getUserId(), 1);
+            }
+        }
+        maps.put("payUser",map.size());
+        maps.put("yesterdayPay", yesterdatCount);
+        maps.put("todayPay", todayCount);
+        maps.put("totalPayUser", totalCount);
+
+        System.out.println(maps);
+    }
+
+    @Test
+    public void test40(){
+        Query query = new Query();
+        query.addCriteria(Criteria.where("orderStatus").gte(2));
+
+
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        for (OrderInfo orderInfo : orderInfos) {
+            System.out.println("a:"+orderInfo.getOrderStatus()+"; b:"+orderInfo.getStdCode());
+        }
+    }
+
+
+
 
 
 }

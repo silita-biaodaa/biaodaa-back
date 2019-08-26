@@ -155,4 +155,10 @@ public class SysUserInfo extends Pagination {
      * 非表字段查询类型
      */
     private String type;
+
+    private String loginTime;
+
+    private String createStartDate;
+
+    private String createdEndData;
 }

@@ -1,13 +1,17 @@
 package com.silita.service.mongodb;
 
-import com.mongodb.*;
-import com.silita.utils.PropertiesUtils;
+
+import com.silita.model.OrderInfo;
 import com.silita.utils.dateUtils.MyDateUtils;
-import com.silita.utils.mongdbUtlis.MongoUtils;
 import org.apache.commons.collections.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.beans.IntrospectionException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,104 +19,88 @@ import java.util.*;
 
 @Service
 public class MongodbService {
+    @Autowired
+    MongoTemplate mongoTemplate;
+
     /**
-     * 获取用户状态 ：1:付费、2及以上：续费 else 注册
+     * 获取用户状态 ：统计次数为 1:付费、统计次数 2及以上：续费 没有 则是 注册
      *
      * @return
      */
     public Map<String, Integer> getUserType() {
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
-        DBCursor dbObjects = dbCollection.find();
-        List<String> listMap = new ArrayList<>();
-        for (DBObject dbObject : dbObjects) {
-            Map map = dbObject.toMap();
-            String stdCode = MapUtils.getString(map, "stdCode");
-            Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if (StringUtil.isNotEmpty(stdCode) && null != orderStatus) {
-                if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter") || stdCode.equals("hlafYear"))
-                        && (orderStatus == 9)) {
-                    listMap.add(MapUtils.getString(map, "userId"));
-                }
-            }
-        }
-
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("orderStatus").is(9),
+                        new Criteria().orOperator(
+                                Criteria.where("stdCode").is("month"),
+                                Criteria.where("stdCode").is("quarter"),
+                                Criteria.where("stdCode").is("hlafYear"),
+                                Criteria.where("stdCode").is("year")
+                        )));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         Map<String, Integer> maps = new HashMap<>();
-        for (
-                String user : listMap)
-
-        {
-            if (null != maps.get(user)) {
-                int count = maps.get(user);
+        for (OrderInfo orderInfo : orderInfos) {
+            if (null != maps.get(orderInfo.getUserId())) {
+                int count = maps.get(orderInfo.getUserId());
                 count++;
-                maps.put(user, count);
+                maps.put(orderInfo.getUserId(), count);
             } else {
-                maps.put(user, 1);
+                maps.put(orderInfo.getUserId(), 1);
             }
         }
-
         return maps;
     }
 
     /**
-     * 用户统计  今日/昨日  count付费
+     * 用户统计  统计今日/昨日  付费用户  及   总付费用户 和 付费用户
      *
      * @return
      */
     public Map<String, Integer> getUserPayCount() {
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("orderStatus").is(9),
+                        new Criteria().orOperator(
+                                Criteria.where("stdCode").is("month"),
+                                Criteria.where("stdCode").is("quarter"),
+                                Criteria.where("stdCode").is("hlafYear"),
+                                Criteria.where("stdCode").is("year")
+                        )));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         Map<String, Integer> maps = new HashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //今日时间
         String todayDate = MyDateUtils.getTodays();
+        //昨日时间
         String yesterdayDate = MyDateUtils.getYesterdays();
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
-        DBCursor dbObjects = dbCollection.find();
         int yesterdatCount = 0;
         int todayCount = 0;
         int totalCount = 0;
-        for (DBObject dbObject : dbObjects) {
-            Map map = dbObject.toMap();
-            String stdCode = MapUtils.getString(map, "stdCode");
-            Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if (StringUtil.isNotEmpty(stdCode) && null != orderStatus) {
-                if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter") || stdCode.equals("hlafYear"))
-                        && (orderStatus == 9)) {
-                    totalCount++;
-                /*Date createTime = (Date) map.get("createTime");
-                String timeCycle = sdf.format(createTime);*/
-                    String createTime = MapUtils.getString(map, "createTime");
-                    String timeCycle = MyDateUtils.getDatezh(createTime);
-                    if (timeCycle.equals(yesterdayDate)) {
-                        yesterdatCount++;
-                    } else if (timeCycle.equals(todayDate)) {
-                        todayCount++;
-                    }
-                }
+        Map<String, Integer> map = new HashMap<>();
+        for (OrderInfo orderInfo : orderInfos) {
+            String timeCycle = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+            totalCount++;
+            if (timeCycle.equals(todayDate)) {
+                todayCount++;
+            } else if (timeCycle.equals(yesterdayDate)) {
+                yesterdatCount++;
+            }
+            if (null != map.get(orderInfo.getUserId())) {
+                int count = map.get(orderInfo.getUserId());
+                count++;
+                map.put(orderInfo.getUserId(), count);
+            } else {
+                map.put(orderInfo.getUserId(), 1);
             }
         }
+        maps.put("payUser", map.size());
         maps.put("yesterdayPay", yesterdatCount);
         maps.put("todayPay", todayCount);
         maps.put("totalPayUser", totalCount);
         return maps;
     }
 
-    //用户统计
-    public Map<String, Object> getPastDue() {
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
-        DBCursor dbObjects = dbCollection.find();
-        Map<String, Object> maps = new HashMap<>();
-        for (DBObject dbObject : dbObjects) {
-            Map map = dbObject.toMap();
-            String stdCode = MapUtils.getString(map, "stdCode");
-            Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if (StringUtil.isNotEmpty(stdCode) && null != orderStatus) {
-                if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter") || stdCode.equals("hlafYear"))
-                        && (orderStatus == 9)) {
-                    maps.put(MapUtils.getString(map, "userId"), MapUtils.getString(map, "userId"));
-                }
-            }
-
-        }
-        return maps;
-    }
 
     /**
      * 分转元
@@ -145,9 +133,17 @@ public class MongodbService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String todayDate = MyDateUtils.getTodays();
         String yesterdayDate = MyDateUtils.getYesterdays();
-
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
-        DBCursor dbObjects = dbCollection.find();
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("orderStatus").is(9),
+                        new Criteria().orOperator(
+                                Criteria.where("stdCode").is("month"),
+                                Criteria.where("stdCode").is("quarter"),
+                                Criteria.where("stdCode").is("hlafYear"),
+                                Criteria.where("stdCode").is("year")
+                        )));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         Map<String, Object> maps = new HashMap<>();
         //昨日订单
         int yesterdayOrderCount = 0;
@@ -168,65 +164,52 @@ public class MongodbService {
         //总金额
         double totalMoney = 0;
         double totalMoneyIos = 0;
-
-        for (DBObject dbObject : dbObjects) {
-            Map map = dbObject.toMap();
-            String stdCode = MapUtils.getString(map, "stdCode");
-            String tradeType = MapUtils.getString(map, "tradeType");
-            Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            if(StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
-                if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter") || stdCode.equals("hlafYear"))
-                        && (orderStatus == 9)) {
-                    //Date createTime = (Date) map.get("createTime");
-                    //String timeCycle = sdf.format(createTime);
-                    String createTime = MapUtils.getString(map, "createTime");
-                    String timeCycle = MyDateUtils.getDatezh(createTime);
-                    Integer fee = MapUtils.getInteger(map, "fee");
-                    if (timeCycle.equals(yesterdayDate)) {
-                        //昨日订单
-                        yesterdayOrderCount++;
-                        //昨日已付
-                        if (fee != null && fee > 0) {
-                            if (StringUtil.isNotEmpty(tradeType)) {
-                                if (tradeType.equals("ios app")) {
-                                    yesterdayPaidCountIos = yesterdayPaidCountIos + fee;
-                                } else {
-                                    yesterdayPaidCount = yesterdayOrderCount + fee;
-                                }
-                            }
-
-                        }
-                    } else if (timeCycle.equals(todayDate)) {
-                        //今日订单
-                        todayOrderCount++;
-                        //今日已付
-                        if (fee != null && fee > 0) {
-                            if (StringUtil.isNotEmpty(tradeType)) {
-                                if (tradeType.equals("ios app")) {
-                                    todayPaidCountIos = todayPaidCountIos + fee;
-                                    todayReceivableCountIos = todayReceivableCountIos + fee;
-                                    todayTrueMoneyCountIos = todayTrueMoneyCountIos + fee;
-                                } else {
-                                    todayPaidCount = todayPaidCount + fee;
-                                    todayReceivableCount = todayReceivableCount + fee;
-                                    todayTrueMoneyCount = todayTrueMoneyCount + fee;
-                                }
-                            }
-
-                        }
-
-                    }
+        for (OrderInfo orderInfo : orderInfos) {
+            String stdCode = orderInfo.getStdCode();
+            String tradeType = orderInfo.getTradeType();
+            Integer orderStatus = orderInfo.getOrderStatus();
+            if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
+                String timeCycle = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+                Integer fee = orderInfo.getFee();
+                if (timeCycle.equals(yesterdayDate)) {
+                    //昨日订单
+                    yesterdayOrderCount++;
+                    //昨日已付
                     if (fee != null && fee > 0) {
                         if (StringUtil.isNotEmpty(tradeType)) {
                             if (tradeType.equals("ios app")) {
-                                totalMoneyIos = totalMoneyIos + fee;
+                                yesterdayPaidCountIos = yesterdayPaidCountIos + fee;
                             } else {
-                                totalMoney = totalMoney + fee;
+                                yesterdayPaidCount = yesterdayOrderCount + fee;
                             }
                         }
-
                     }
-
+                } else if (timeCycle.equals(todayDate)) {
+                    //今日订单
+                    todayOrderCount++;
+                    //今日已付
+                    if (fee != null && fee > 0) {
+                        if (StringUtil.isNotEmpty(tradeType)) {
+                            if (tradeType.equals("ios app")) {
+                                todayPaidCountIos = todayPaidCountIos + fee;
+                                todayReceivableCountIos = todayReceivableCountIos + fee;
+                                todayTrueMoneyCountIos = todayTrueMoneyCountIos + fee;
+                            } else {
+                                todayPaidCount = todayPaidCount + fee;
+                                todayReceivableCount = todayReceivableCount + fee;
+                                todayTrueMoneyCount = todayTrueMoneyCount + fee;
+                            }
+                        }
+                    }
+                }
+                if (fee != null && fee > 0) {
+                    if (StringUtil.isNotEmpty(tradeType)) {
+                        if (tradeType.equals("ios app")) {
+                            totalMoneyIos = totalMoneyIos + fee;
+                        } else {
+                            totalMoney = totalMoney + fee;
+                        }
+                    }
                 }
             }
         }
@@ -304,43 +287,45 @@ public class MongodbService {
      * @return
      */
     public List<Map<String, Object>> getTopUp(Map<String, Object> param) {
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
-        String userId = MapUtils.getString(param, "userId");
-        BasicDBObject cond = null;
-        cond = new BasicDBObject();
-        cond.append("userId", userId);
-        DBCursor dbObjects = dbCollection.find(cond);
-        List<Map<String, Object>> listMap = new ArrayList<>();
-        for (DBObject dbObject : dbObjects) {
-            Map map = dbObject.toMap();
-            Map<String, Object> maps = new HashMap<>();
-            String stdCode = MapUtils.getString(map, "stdCode");
-            Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            Integer vipDays = MapUtils.getInteger(map, "vipDays");
-            if(StringUtil.isNotEmpty(stdCode) && null != orderStatus && null != vipDays) {
-                if ((stdCode.equals("year") || stdCode.equals("month") || stdCode.equals("quarter") || stdCode.equals("hlafYear"))
-                        && (orderStatus == 9)) {
-                    maps.put("userId", MapUtils.getString(map, "userId"));
-                    String createTime = MapUtils.getString(map, "createTime");
-                    String dates = MyDateUtils.getDates(createTime);
-                    maps.put("vipDays", MapUtils.getInteger(map, "vipDays"));
-                    maps.put("created", dates);
-                    maps.put("vipDay", "充值" + MapUtils.getString(map, "vipDays") + "天会员");
-                    if (vipDays != null && vipDays == 30) {
-                        maps.put("behavior", "充值一个月");
-                    } else if (vipDays != null && vipDays == 90) {
-                        maps.put("behavior", "充值一个季度");
-                    } else if (vipDays != null && vipDays == 365) {
-                        maps.put("behavior", "充值一年");
-                    } else if (vipDays != null && vipDays == 180) {
-                        maps.put("behavior", "充值半年");
-                    }
-                    listMap.add(maps);
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("orderStatus").is(9),new Criteria().and("userId").is(MapUtils.getString(param,"userId")),
+                        new Criteria().orOperator(
+                                Criteria.where("stdCode").is("month"),
+                                Criteria.where("stdCode").is("quarter"),
+                                Criteria.where("stdCode").is("hlafYear"),
+                                Criteria.where("stdCode").is("year")
+                        )));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        List<Map<String,Object>> listMap = new ArrayList<>();
+        for (OrderInfo orderInfo : orderInfos) {
+            Map<String,Object> maps = new HashMap<>();
+            String stdCode = orderInfo.getStdCode();
+            String tradeType = orderInfo.getTradeType();
+            Integer orderStatus = orderInfo.getOrderStatus();
+            if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
+                String dates = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+                Integer vipDays = orderInfo.getVipDays();
+                maps.put("userId",orderInfo.getUserId());
+                maps.put("userId",orderInfo.getUserId());
+                maps.put("created", dates);
+                maps.put("vipDay", "充值" + orderInfo.getVipDays() + "天会员");
+                if (vipDays != null && vipDays == 30) {
+                    maps.put("behavior", "充值一个月");
+                } else if (vipDays != null && vipDays == 90) {
+                    maps.put("behavior", "充值一个季度");
+                } else if (vipDays != null && vipDays == 365) {
+                    maps.put("behavior", "充值一年");
+                } else if (vipDays != null && vipDays == 180) {
+                    maps.put("behavior", "充值半年");
                 }
+                listMap.add(maps);
             }
         }
         return listMap;
     }
+
 
     /**
      * 订单列表
@@ -348,11 +333,7 @@ public class MongodbService {
      * @return
      */
     public List<Map<String, Object>> getOrderList(Map<String, Object> param) {
-        //DecimalFormat dFormat = new DecimalFormat("0.00");
-        DBCollection dbCollection = MongoUtils.init(PropertiesUtils.getProperty("mongodb.order.ip"), PropertiesUtils.getProperty("mongodb.order.host"), "biaodaa-pay").getDB().getCollection("order_info");
-        BasicDBList endList = new BasicDBList();
-        //用于  或（or）
-        BasicDBList condList = new BasicDBList();
+        Query query = new Query();
         //订单列表
         String orderType = MapUtils.getString(param, "orderType");
         //付款状态
@@ -365,95 +346,68 @@ public class MongodbService {
         String orderEnd = MapUtils.getString(param, "orderEnd");
         if (StringUtil.isNotEmpty(orderStart)) {
             Date parse = MyDateUtils.getTransitionDate(orderStart);
-            BasicDBObject forceEnd = new BasicDBObject();
-            forceEnd.append("createTime", new BasicDBObject("$gte", parse));
-            endList.add(forceEnd);
-        }
-
-
-        if (StringUtil.isNotEmpty(orderEnd)) {
             String tomorrowTime = MyDateUtils.getTomorrowTime(orderEnd);
             Date parsetow = MyDateUtils.getTransitionDate(tomorrowTime);
-            BasicDBObject forceEnd = new BasicDBObject();
-            forceEnd.put("createTime", new BasicDBObject("$lte", parsetow));
-            endList.add(forceEnd);
+            /*query.addCriteria(new Criteria().orOperator(
+                    Criteria.where("createTime").lt(parsetow),
+                    Criteria.where("createTime").gte(parse)));*/
+            query.addCriteria(
+                    Criteria.where("createTime").gte(parse));
         }
-
         if (StringUtil.isNotEmpty(orderType)) {
-            BasicDBObject autoEnd = new BasicDBObject();
             if (orderType.equals("充值会员") || orderType.equals("续费会员")) {
-                condList.add(new BasicDBObject("stdCode", "month"));
-                condList.add(new BasicDBObject("stdCode", "year"));
-                condList.add(new BasicDBObject("stdCode", "quarter"));
-                condList.add(new BasicDBObject("stdCode", "hlafYear"));
-                autoEnd.put("$or", condList);
-                endList.add(autoEnd);
+                query.addCriteria(new Criteria().orOperator(
+                        Criteria.where("stdCode").is("month"),
+                        Criteria.where("stdCode").is("year"),
+                        Criteria.where("stdCode").is("quarter"),
+                        Criteria.where("stdCode").is("hlafYear")
+                ));
             } else if (orderType.equals("综合查询")) {
-                condList.add(new BasicDBObject("stdCode", "report_com"));
-                condList.add(new BasicDBObject("stdCode", "report_vip"));
-                autoEnd.put("$or", condList);
-                endList.add(autoEnd);
+                query.addCriteria(new Criteria().orOperator(
+                        Criteria.where("stdCode").is("report_com"),
+                        Criteria.where("stdCode").is("report_vip")
+                ));
             }
         }
         if (StringUtil.isNotEmpty(payStatus)) {
-            BasicDBObject forceEnd = new BasicDBObject();
             if (payStatus.equals("已付款")) {
-                forceEnd.put("orderStatus", 9);
-                endList.add(forceEnd);
+                query.addCriteria(Criteria.where("orderStatus").is(9));
             } else if (payStatus.equals("未付款")) {
-                forceEnd.put("orderStatus", 1);
-                endList.add(forceEnd);
+                query.addCriteria(Criteria.where("orderStatus").is(1));
             } else if (payStatus.equals("已退款")) {
-                forceEnd.put("orderStatus", 10);
-                endList.add(forceEnd);
+                query.addCriteria(Criteria.where("orderStatus").is(10));
             }
         }
         if (StringUtil.isNotEmpty(tradeTypes)) {
-            BasicDBObject tradeTypeObject = new BasicDBObject();
             if (tradeTypes.equals("安卓")) {
-                tradeTypeObject.put("tradeType", "APP");
-                endList.add(tradeTypeObject);
+                query.addCriteria(Criteria.where("tradeType").is("APP"));
             } else if (tradeTypes.equals("苹果")) {
-                tradeTypeObject.put("tradeType", "ios app");
-                endList.add(tradeTypeObject);
+                query.addCriteria(Criteria.where("tradeType").is("ios app"));
             } else if (tradeTypes.equals("扫码")) {
-                tradeTypeObject.put("tradeType", "NATIVE");
-                endList.add(tradeTypeObject);
+                query.addCriteria(Criteria.where("tradeType").is("NATIVE"));
             } else {
-                tradeTypeObject.put("tradeType", "MWEB");
-                endList.add(tradeTypeObject);
+                query.addCriteria(Criteria.where("tradeType").is("MWEB"));
             }
         }
-
-        BasicDBObject objects = new BasicDBObject();
-        if ((StringUtil.isNotEmpty(orderType) && (orderType.equals("充值会员") || orderType.equals("综合查询"))) ||
-                StringUtil.isNotEmpty(payStatus) || StringUtil.isNotEmpty(tradeTypes) || StringUtil.isNotEmpty(orderStart) || StringUtil.isNotEmpty(orderEnd)) {
-            objects.put("$and", endList);
-        }
-        BasicDBObject basicDBObject = new BasicDBObject();
-        basicDBObject.put("createTime", -1);
-        DBCursor dbObjects = dbCollection.find(objects).sort(basicDBObject);
+//        query.with(new Sort(new Sort.Order(Sort.Direction.DESC,"createTime")));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         List<Map<String, Object>> listMap = new ArrayList<>();
-        for (DBObject dbObject : dbObjects) {
-            Map map = dbObject.toMap();
-            Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-            String tradeType1 = MapUtils.getString(map, "tradeType");
-            String stdCode1 = MapUtils.getString(map, "stdCode");
-            if(null != orderStatus && StringUtil.isNotEmpty(tradeType1) && StringUtil.isNotEmpty(stdCode1)) {
+        for (OrderInfo orderInfo : orderInfos) {
+            Integer orderStatus = orderInfo.getOrderStatus();
+            String tradeType = orderInfo.getTradeType();
+            String stdCode = orderInfo.getStdCode();
+            if (null != orderStatus && StringUtil.isNotEmpty(tradeType) && StringUtil.isNotEmpty(stdCode)) {
                 if (orderStatus != null && (orderStatus == 9 || orderStatus == 1 || orderStatus == 10)
-                        && (tradeType1.equals("APP") || tradeType1.equals("ios app") || tradeType1.equals("NATIVE")
-                        || tradeType1.equals("MWEB")) && (stdCode1.equals("month") || stdCode1.equals("year") || stdCode1.equals("quarter")
-                        || stdCode1.equals("hlafYear") || stdCode1.equals("report_com") || stdCode1.equals("report_vip"))) {
+                        && (tradeType.equals("APP") || tradeType.equals("ios app") || tradeType.equals("NATIVE")
+                        || tradeType.equals("MWEB")) && (stdCode.equals("month") || stdCode.equals("year") || stdCode.equals("quarter")
+                        || stdCode.equals("hlafYear") || stdCode.equals("report_com") || stdCode.equals("report_vip"))) {
                     Map<String, Object> maps = new HashMap<>();
-                    String stdCode = MapUtils.getString(map, "stdCode");
-                    String tradeType = MapUtils.getString(map, "tradeType");
-                    Integer vipDays = MapUtils.getInteger(map, "vipDays");
-                    Integer fee = MapUtils.getInteger(map, "fee");
-                    maps.put("userId", MapUtils.getString(map, "userId"));
-                    maps.put("orderNo", MapUtils.getString(map, "orderNo"));
+                    Integer vipDays = orderInfo.getVipDays();
+                    Integer fee = orderInfo.getFee();
+                    maps.put("userId", orderInfo.getUserId());
+                    maps.put("orderNo", orderInfo.getOrderNo());
                     maps.put("orderStatus", orderStatus);
-                    String createTime = MapUtils.getString(map, "createTime");
-                    String dates = MyDateUtils.getDates(createTime);
+                    String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString());
                     maps.put("createTime", dates);
                     maps.put("stdCode", stdCode);
                     maps.put("count", 1);
@@ -481,7 +435,6 @@ public class MongodbService {
                     String iosMoneytow = iosMoney + "";
                     String iosMoneyThree = fenToYuan(iosMoneytow);
                     double iosMoneyFour = Double.parseDouble(iosMoneyThree);
-                    //String format = dFormat.format(iosMoneyFour);
                     maps.put("money", iosMoneyThree);
                     if (tradeType != null && tradeType.equals("APP")) {
                         maps.put("tradeType", "安卓");
@@ -489,7 +442,6 @@ public class MongodbService {
                     } else if (tradeType != null && tradeType.equals("ios app")) {
                         maps.put("tradeType", "苹果");
                         iosMoneyFour = iosMoneyFour * 0.68;
-                        //String format1 = dFormat.format(iosMoneyFive);
                         maps.put("truePay", iosMoneyFour);
                     } else if (tradeType != null && tradeType.equals("NATIVE")) {
                         maps.put("tradeType", "扫码");
@@ -505,3 +457,5 @@ public class MongodbService {
         return listMap;
     }
 }
+
+
