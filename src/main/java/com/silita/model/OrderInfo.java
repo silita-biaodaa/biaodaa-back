@@ -3,6 +3,7 @@ package com.silita.model;
 import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ public class OrderInfo extends Pagination implements java.io.Serializable{
     private String deviceInfo;
     private String tradeType;
     private String prepayId;
+    @Indexed
     private Integer orderStatus;
     private Integer isDelete;
     private Date createTime;

@@ -981,18 +981,10 @@ public class RedisTest extends ConfigTest {
 
     @Test
     public void test40(){
-        Query query = new Query();
-        query.addCriteria(Criteria.where("orderStatus").gte(2));
-
-
+        Criteria criteria = new Criteria("orderStatus");
+        criteria.lt(9);
+        Query query = Query.query(criteria);
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
-        for (OrderInfo orderInfo : orderInfos) {
-            System.out.println("a:"+orderInfo.getOrderStatus()+"; b:"+orderInfo.getStdCode());
-        }
+        System.out.println(orderInfos.size());
     }
-
-
-
-
-
 }
