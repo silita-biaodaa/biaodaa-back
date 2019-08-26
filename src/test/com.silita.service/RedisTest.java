@@ -915,8 +915,9 @@ public class RedisTest extends ConfigTest {
 
         dbCollection.insert(obj);*/
     }
+
     @Test
-    public void test30(){
+    public void test30() {
 
         List<OrderInfo> all = mongoTemplate.findAll(OrderInfo.class);
         for (OrderInfo orderInfo : all) {
@@ -926,7 +927,7 @@ public class RedisTest extends ConfigTest {
     }
 
     @Test
-    public void test31(){
+    public void test31() {
       /*  Criteria criteria = null;
         criteria = Criteria.where("orderStatus").is(9).and("stdCode").is("month");*/
         //criteria.
@@ -944,7 +945,7 @@ public class RedisTest extends ConfigTest {
                                 Criteria.where("stdCode").is("year")
                         )));
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
-        Map<String,Integer> maps = new HashMap<>();
+        Map<String, Integer> maps = new HashMap<>();
         //今日时间
         String todayDate = MyDateUtils.getTodays();
         //昨日时间
@@ -952,14 +953,14 @@ public class RedisTest extends ConfigTest {
         int yesterdatCount = 0;
         int todayCount = 0;
         int totalCount = 0;
-        Map<String,Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
             String timeCycle = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
             //System.out.println("orderNo:"+orderInfo.getOrderNo()+"; userId:"+orderInfo.getUserId()+"; createTime:"+timeCycle+"; Time:"+orderInfo.getCreateTime());
             totalCount++;
-            if(timeCycle.equals(todayDate)){
+            if (timeCycle.equals(todayDate)) {
                 todayCount++;
-            }else if(timeCycle.equals(yesterdayDate)){
+            } else if (timeCycle.equals(yesterdayDate)) {
                 yesterdatCount++;
             }
 
@@ -971,7 +972,7 @@ public class RedisTest extends ConfigTest {
                 map.put(orderInfo.getUserId(), 1);
             }
         }
-        maps.put("payUser",map.size());
+        maps.put("payUser", map.size());
         maps.put("yesterdayPay", yesterdatCount);
         maps.put("todayPay", todayCount);
         maps.put("totalPayUser", totalCount);
@@ -980,11 +981,50 @@ public class RedisTest extends ConfigTest {
     }
 
     @Test
-    public void test40(){
+    public void test40() {
         Criteria criteria = new Criteria("orderStatus");
         criteria.lt(9);
         Query query = Query.query(criteria);
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         System.out.println(orderInfos.size());
     }
+
+    @Test
+    public void test41() {
+        Query query = new Query();
+
+       // Date parsetow = MyDateUtils.getTransitionDate(tomorrowTime);
+
+        query.addCriteria(Criteria.where("orderStatus").gte(2));
+
+        String start = "2019-07-27";
+
+        String end = "2019-08-01";
+
+        Date startDate = MyDateUtils.getStringTrueDate(start);
+        Date endDate = MyDateUtils.getStringTrueDate(end);
+
+
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        for (OrderInfo orderInfo : orderInfos) {
+
+            System.out.println("a:"+orderInfo.getOrderStatus()+"; b:"+orderInfo.getStdCode());
+            /*String timeZones = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+            String timeZone = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString());
+            Date dates = MyDateUtils.getStringTrueDate(timeZones);
+            Boolean compareStartDate = MyDateUtils.getCompareStartDate(dates, startDate);
+            Boolean compareEndDate = MyDateUtils.getCompareEndDate(dates, endDate);
+            if(compareStartDate == true && compareEndDate == true){
+                System.out.println("userId:"+orderInfo.getUserId()+"; 创建时间："+timeZone);
+            }*/
+
+            //System.out.println("userId:"+orderInfo.getUserId()+"; 创建时间："+timeZone);
+
+
+        }
+    }
 }
+
+
+
+

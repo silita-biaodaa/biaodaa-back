@@ -5,6 +5,7 @@ import com.silita.model.OrderInfo;
 import com.silita.utils.dateUtils.MyDateUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -76,11 +77,9 @@ public class MongodbService {
         String yesterdayDate = MyDateUtils.getYesterdays();
         int yesterdatCount = 0;
         int todayCount = 0;
-        int totalCount = 0;
         Map<String, Integer> map = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
             String timeCycle = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
-            totalCount++;
             if (timeCycle.equals(todayDate)) {
                 todayCount++;
             } else if (timeCycle.equals(yesterdayDate)) {
@@ -94,10 +93,9 @@ public class MongodbService {
                 map.put(orderInfo.getUserId(), 1);
             }
         }
-        maps.put("payUser", map.size());
         maps.put("yesterdayPay", yesterdatCount);
         maps.put("todayPay", todayCount);
-        maps.put("totalPayUser", totalCount);
+        maps.put("totalPayUser", map.size());
         return maps;
     }
 
@@ -290,7 +288,7 @@ public class MongodbService {
         Query query = new Query();
         query.addCriteria(
                 new Criteria().andOperator(
-                        Criteria.where("orderStatus").is(9),new Criteria().and("userId").is(MapUtils.getString(param,"userId")),
+                        Criteria.where("orderStatus").is(9), new Criteria().and("userId").is(MapUtils.getString(param, "userId")),
                         new Criteria().orOperator(
                                 Criteria.where("stdCode").is("month"),
                                 Criteria.where("stdCode").is("quarter"),
@@ -298,17 +296,17 @@ public class MongodbService {
                                 Criteria.where("stdCode").is("year")
                         )));
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
-        List<Map<String,Object>> listMap = new ArrayList<>();
+        List<Map<String, Object>> listMap = new ArrayList<>();
         for (OrderInfo orderInfo : orderInfos) {
-            Map<String,Object> maps = new HashMap<>();
+            Map<String, Object> maps = new HashMap<>();
             String stdCode = orderInfo.getStdCode();
             String tradeType = orderInfo.getTradeType();
             Integer orderStatus = orderInfo.getOrderStatus();
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
                 String dates = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
                 Integer vipDays = orderInfo.getVipDays();
-                maps.put("userId",orderInfo.getUserId());
-                maps.put("userId",orderInfo.getUserId());
+                maps.put("userId", orderInfo.getUserId());
+                maps.put("userId", orderInfo.getUserId());
                 maps.put("created", dates);
                 maps.put("vipDay", "充值" + orderInfo.getVipDays() + "天会员");
                 if (vipDays != null && vipDays == 30) {
@@ -344,15 +342,14 @@ public class MongodbService {
         String orderStart = MapUtils.getString(param, "orderStart");
         //结束时间
         String orderEnd = MapUtils.getString(param, "orderEnd");
-        if (StringUtil.isNotEmpty(orderStart)) {
+        if (StringUtil.isNotEmpty(orderStart) && StringUtil.isNotEmpty(orderEnd)) {
             Date parse = MyDateUtils.getTransitionDate(orderStart);
             String tomorrowTime = MyDateUtils.getTomorrowTime(orderEnd);
             Date parsetow = MyDateUtils.getTransitionDate(tomorrowTime);
-            /*query.addCriteria(new Criteria().orOperator(
-                    Criteria.where("createTime").lt(parsetow),
-                    Criteria.where("createTime").gte(parse)));*/
-            query.addCriteria(
-                    Criteria.where("createTime").gte(parse));
+            query.addCriteria(new Criteria().andOperator(
+                    Criteria.where("createTime").gte(parse), Criteria.where("createTime").lte(parsetow)));
+           /* query.addCriteria(
+                    Criteria.where("createTime").gte(parse));*/
         }
         if (StringUtil.isNotEmpty(orderType)) {
             if (orderType.equals("充值会员") || orderType.equals("续费会员")) {
@@ -389,70 +386,70 @@ public class MongodbService {
                 query.addCriteria(Criteria.where("tradeType").is("MWEB"));
             }
         }
-//        query.with(new Sort(new Sort.Order(Sort.Direction.DESC,"createTime")));
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         List<Map<String, Object>> listMap = new ArrayList<>();
         for (OrderInfo orderInfo : orderInfos) {
             Integer orderStatus = orderInfo.getOrderStatus();
             String tradeType = orderInfo.getTradeType();
             String stdCode = orderInfo.getStdCode();
-            if (null != orderStatus && StringUtil.isNotEmpty(tradeType) && StringUtil.isNotEmpty(stdCode)) {
-                if (orderStatus != null && (orderStatus == 9 || orderStatus == 1 || orderStatus == 10)
+            //if (null != orderStatus && StringUtil.isNotEmpty(tradeType) && StringUtil.isNotEmpty(stdCode)) {
+                /*if (orderStatus != null && (orderStatus == 9 || orderStatus == 1 || orderStatus == 10)
                         && (tradeType.equals("APP") || tradeType.equals("ios app") || tradeType.equals("NATIVE")
                         || tradeType.equals("MWEB")) && (stdCode.equals("month") || stdCode.equals("year") || stdCode.equals("quarter")
-                        || stdCode.equals("hlafYear") || stdCode.equals("report_com") || stdCode.equals("report_vip"))) {
-                    Map<String, Object> maps = new HashMap<>();
-                    Integer vipDays = orderInfo.getVipDays();
-                    Integer fee = orderInfo.getFee();
-                    maps.put("userId", orderInfo.getUserId());
-                    maps.put("orderNo", orderInfo.getOrderNo());
-                    maps.put("orderStatus", orderStatus);
-                    String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString());
-                    maps.put("createTime", dates);
-                    maps.put("stdCode", stdCode);
-                    maps.put("count", 1);
-                    if (vipDays != null && vipDays == 30 && stdCode.equals("month")) {
-                        maps.put("orderType", "充值一个月");
-                    } else if (vipDays != null && vipDays == 90 && stdCode.equals("quarter")) {
-                        maps.put("orderType", "充值一个季度");
-                    } else if (vipDays != null && vipDays == 180 && stdCode.equals("hlafYear")) {
-                        maps.put("orderType", "充值半年");
-                    } else if (vipDays != null && vipDays == 365 && stdCode.equals("year")) {
-                        maps.put("orderType", "充值一年");
-                    } else if (stdCode.equals("report_com")) {
-                        maps.put("orderType", "普通用户");
-                    } else if (stdCode.equals("report_vip")) {
-                        maps.put("orderType", "会员用户");
-                    }
-                    if (orderStatus != null && orderStatus == 9) {
-                        maps.put("payStatus", "已付款");
-                    } else if (orderStatus != null && orderStatus == 1) {
-                        maps.put("payStatus", "未付款");
-                    } else if (orderStatus != null && orderStatus == 10) {
-                        maps.put("payStatus", "已退款");
-                    }
-                    double iosMoney = fee;
-                    String iosMoneytow = iosMoney + "";
-                    String iosMoneyThree = fenToYuan(iosMoneytow);
-                    double iosMoneyFour = Double.parseDouble(iosMoneyThree);
-                    maps.put("money", iosMoneyThree);
-                    if (tradeType != null && tradeType.equals("APP")) {
-                        maps.put("tradeType", "安卓");
-                        maps.put("truePay", iosMoneyThree);
-                    } else if (tradeType != null && tradeType.equals("ios app")) {
-                        maps.put("tradeType", "苹果");
-                        iosMoneyFour = iosMoneyFour * 0.68;
-                        maps.put("truePay", iosMoneyFour);
-                    } else if (tradeType != null && tradeType.equals("NATIVE")) {
-                        maps.put("tradeType", "扫码");
-                        maps.put("truePay", iosMoneyThree);
-                    } else {
-                        maps.put("truePay", iosMoneyThree);
-                        maps.put("tradeType", "Wap");
-                    }
-                    listMap.add(maps);
-                }
+                        || stdCode.equals("hlafYear") || stdCode.equals("report_com") || stdCode.equals("report_vip"))) {*/
+            Map<String, Object> maps = new HashMap<>();
+            Integer vipDays = orderInfo.getVipDays();
+            Integer fee = orderInfo.getFee();
+            maps.put("userId", orderInfo.getUserId());
+            maps.put("orderNo", orderInfo.getOrderNo());
+            maps.put("orderStatus", orderStatus);
+            String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString());
+            maps.put("createTime", dates);
+            maps.put("stdCode", stdCode);
+            maps.put("count", 1);
+            if (vipDays != null && vipDays == 30 && stdCode.equals("month")) {
+                maps.put("orderType", "充值一个月");
+            } else if (vipDays != null && vipDays == 90 && stdCode.equals("quarter")) {
+                maps.put("orderType", "充值一个季度");
+            } else if (vipDays != null && vipDays == 180 && stdCode.equals("hlafYear")) {
+                maps.put("orderType", "充值半年");
+            } else if (vipDays != null && vipDays == 365 && stdCode.equals("year")) {
+                maps.put("orderType", "充值一年");
+            } else if (stdCode.equals("report_com")) {
+                maps.put("orderType", "普通用户");
+            } else if (stdCode.equals("report_vip")) {
+                maps.put("orderType", "会员用户");
             }
+            if (orderStatus != null && orderStatus == 9) {
+                maps.put("payStatus", "已付款");
+            } else if (orderStatus != null && orderStatus == 1) {
+                maps.put("payStatus", "未付款");
+            } else if (orderStatus != null && orderStatus == 10) {
+                maps.put("payStatus", "已退款");
+            }
+            double iosMoney = fee;
+            String iosMoneytow = iosMoney + "";
+            String iosMoneyThree = fenToYuan(iosMoneytow);
+            double iosMoneyFour = Double.parseDouble(iosMoneyThree);
+            maps.put("money", iosMoneyThree);
+            if (tradeType != null && tradeType.equals("APP")) {
+                maps.put("tradeType", "安卓");
+                maps.put("truePay", iosMoneyThree);
+            } else if (tradeType != null && tradeType.equals("ios app")) {
+                maps.put("tradeType", "苹果");
+                iosMoneyFour = iosMoneyFour * 0.68;
+                maps.put("truePay", iosMoneyFour);
+            } else if (tradeType != null && tradeType.equals("NATIVE")) {
+                maps.put("tradeType", "扫码");
+                maps.put("truePay", iosMoneyThree);
+            } else {
+                maps.put("truePay", iosMoneyThree);
+                maps.put("tradeType", "Wap");
+            }
+            listMap.add(maps);
+            // }
+            //}
         }
         return listMap;
     }

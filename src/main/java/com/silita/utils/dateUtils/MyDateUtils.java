@@ -194,6 +194,36 @@ public class MyDateUtils {
         return format;
     }
 
+    /**
+     * 比较时间
+     * @param time
+     * @param start
+     * @return
+     */
+    public static Boolean getCompareStartDate(Date time,Date start){
+         boolean b = false;
+        int compareTo = time.compareTo(start);
+        if(compareTo == -1 || compareTo == 0){
+            b = true;
+        }
+        return b;
+    }
+
+    /**
+     * 比较时间
+     * @param time
+     * @param end
+     * @return
+     */
+    public static Boolean getCompareEndDate(Date time,Date end){
+        boolean b = false;
+        int compareTo = time.compareTo(end);
+        if(compareTo == 1 || compareTo == 0){
+            b = true;
+        }
+        return b;
+    }
+
     public static String getActiveDates(String createTime) {
         String formatDate = "";
         try {
@@ -398,6 +428,22 @@ public class MyDateUtils {
         SimpleDateFormat formatter = new SimpleDateFormat(parrten);
         Date date = new Date(time);
         return formatter.format(date).toString();
+    }
+
+    /**
+     * String 转 Date
+     * @param createTime
+     * @return
+     */
+    public static Date getStringTrueDate(String createTime){
+        Date parse = null;
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+             parse = simpleDateFormat.parse(createTime);
+        }catch (Exception e){
+            logger.info("String 转 Date",e);
+        }
+        return parse;
     }
 
     /**

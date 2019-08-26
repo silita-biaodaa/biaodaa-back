@@ -154,16 +154,18 @@
     </select>
     <select id="queryActiveUserCount" resultType="java.util.Map" parameterType="map">
         SELECT
-          (SELECT
-            COUNT(1)
+          (SELECT COUNT(1) FROM (
+          SELECT
+            DISTINCT(`login_tel`)
           FROM
             mishu.`tb_login_info`
-          WHERE DATE(created_date) = #{yesterday}) AS yesterdayActive,
-          (SELECT
-            COUNT(1)
+          WHERE DATE(created_date) = #{yesterday}) AS a) AS yesterdayActive,
+          (SELECT COUNT(1) FROM (
+          SELECT
+            DISTINCT(`login_tel`)
           FROM
-            mishu.tb_login_info
-          WHERE DATE(created_date) = #{today}) AS todayActive
+            mishu.`tb_login_info`
+          WHERE DATE(created_date) = #{today}) AS b) AS todayActive
         FROM
           mishu.`tb_login_info`
           GROUP BY yesterdayActive,todayActive
@@ -361,15 +363,24 @@
         COUNT(0)
         FROM
         mishu_write.`sys_user_info`
-        WHERE created LIKE CONCAT('%', #{yesterday}, '%')) AS yesterdayCount,
+        WHERE DATE(created) = #{yesterday}) AS yesterdayCount,
         (SELECT
         COUNT(0)
         FROM
         mishu_write.`sys_user_info`
-        WHERE created LIKE CONCAT('%', #{today}, '%')) AS todayCount,
-        COUNT(0) AS total
+        WHERE DATE(created) = #{today}) AS todayCount,
+        (SELECT
+            COUNT(1)
+          FROM
+            (SELECT DISTINCT
+              (t.`phone_no`)
+            FROM
+              mishu_write.`sys_user_info` t
+              LEFT JOIN mishu_write.`tb_vip_info` t3
+                ON t.pkid = t3.user_id) AS a) total
         FROM
         mishu_write.`sys_user_info`
+        GROUP BY total
     </select>
     <select id="querySingleUserInfo" resultType="java.util.Map" parameterType="map">
         SELECT

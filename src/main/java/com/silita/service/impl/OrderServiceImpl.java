@@ -75,12 +75,10 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
                 for (Map<String, Object> map : newList) {
                     if (MapUtils.getInteger(map, "count") > 1) {
                         String phoneNo1 = MapUtils.getString(map, "phoneNo");
-
                         if (StringUtil.isNotEmpty(phoneNo1)) {
                             if(!"会员用户".equals(map.get("orderType")) && !"普通用户".equals(map.get("orderType"))){
                                 newOrderList.add(map);
                             }
-
                         }
                     }
                 }

@@ -418,7 +418,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
             map.put("yesterdayPay", MapUtils.getInteger(userPayCount, "yesterdayPay"));
             map.put("todayPay", MapUtils.getInteger(userPayCount, "todayPay"));
             map.put("totalPayUser", MapUtils.getInteger(userPayCount, "totalPayUser"));
-            map.put("payUser", MapUtils.getInteger(userPayCount, "payUser"));
             Map<String, Integer> pastDue = mongodbUtils.getUserType();
             List<Map<String, Object>> list = sysUserInfoMapper.queryPast();
             int pastCount = 0;
