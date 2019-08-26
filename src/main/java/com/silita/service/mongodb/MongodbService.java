@@ -4,6 +4,7 @@ package com.silita.service.mongodb;
 import com.silita.model.OrderInfo;
 import com.silita.utils.dateUtils.MyDateUtils;
 import org.apache.commons.collections.MapUtils;
+import org.elasticsearch.common.recycler.Recycler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -302,7 +303,7 @@ public class MongodbService {
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
                 String dates = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
                 Integer vipDays = orderInfo.getVipDays();
-                maps.put("userId", orderInfo.getUserId());
+                maps.put("orderNo", orderInfo.getOrderNo());
                 maps.put("userId", orderInfo.getUserId());
                 maps.put("created", dates);
                 maps.put("vipDay", "充值" + orderInfo.getVipDays() + "天会员");
@@ -338,47 +339,106 @@ public class MongodbService {
         String orderStart = MapUtils.getString(param, "orderStart");
         //结束时间
         String orderEnd = MapUtils.getString(param, "orderEnd");
+        //
+        Criteria criteria = new Criteria();
+
         if (StringUtil.isNotEmpty(orderStart) && StringUtil.isNotEmpty(orderEnd)) {
             Date parse = MyDateUtils.getTransitionDate(orderStart);
             String tomorrowTime = MyDateUtils.getTomorrowTime(orderEnd);
             Date parsetow = MyDateUtils.getTransitionDate(tomorrowTime);
-            query.addCriteria(new Criteria().andOperator(
-                    Criteria.where("createTime").gte(parse), Criteria.where("createTime").lte(parsetow)));
+
+            criteria.andOperator(Criteria.where("createTime").gte(parse),criteria.where("createTime").lte(parsetow));
         }
         if (StringUtil.isNotEmpty(orderType)) {
             if (orderType.equals("充值会员") || orderType.equals("续费会员")) {
-                query.addCriteria(new Criteria().orOperator(
+                criteria.orOperator(
                         Criteria.where("stdCode").is("month"),
                         Criteria.where("stdCode").is("year"),
                         Criteria.where("stdCode").is("quarter"),
                         Criteria.where("stdCode").is("hlafYear")
-                ));
+                );
             } else if (orderType.equals("综合查询")) {
-                query.addCriteria(new Criteria().orOperator(
+                criteria.orOperator(
                         Criteria.where("stdCode").is("report_com"),
                         Criteria.where("stdCode").is("report_vip")
-                ));
+                );
             }
         }
         if (StringUtil.isNotEmpty(payStatus)) {
             if (payStatus.equals("已付款")) {
-                query.addCriteria(Criteria.where("orderStatus").is(9));
+
+                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))){
+                    criteria.and("orderStatus").is(9);
+
+                }else{
+                    criteria.orOperator(Criteria.where("orderStatus").is(9));
+                }
             } else if (payStatus.equals("未付款")) {
-                query.addCriteria(Criteria.where("orderStatus").is(1));
+                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))){
+                    criteria.and("orderStatus").is(1);
+                }else{
+                    criteria.orOperator(Criteria.where("orderStatus").is(1));
+                }
+
             } else if (payStatus.equals("已退款")) {
-                query.addCriteria(Criteria.where("orderStatus").is(10));
+                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))){
+                    criteria.and("orderStatus").is(10);
+                }else{
+                    criteria.orOperator(Criteria.where("orderStatus").is(10));
+                }
             }
         }
         if (StringUtil.isNotEmpty(tradeTypes)) {
             if (tradeTypes.equals("安卓")) {
-                query.addCriteria(Criteria.where("tradeType").is("APP"));
+                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))){
+                    criteria.and("tradeType").is("APP");
+                }else{
+                    criteria.andOperator(Criteria.where("tradeType").is("APP"),
+                            Criteria.where("tradeType").ne("ios app"),
+                            Criteria.where("tradeType").ne("NATIVE"),
+                            Criteria.where("tradeType").ne("MWEB"));
+                }
             } else if (tradeTypes.equals("苹果")) {
-                query.addCriteria(Criteria.where("tradeType").is("ios app"));
+                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))){
+                    criteria.and("tradeType").is("ios app");
+                }else{
+                    criteria.andOperator(Criteria.where("tradeType").is("ios app"),
+                            Criteria.where("tradeType").ne("APP"),
+                            Criteria.where("tradeType").ne("NATIVE"),
+                            Criteria.where("tradeType").ne("MWEB"));
+                }
             } else if (tradeTypes.equals("扫码")) {
-                query.addCriteria(Criteria.where("tradeType").is("NATIVE"));
+                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))){
+                    criteria.and("tradeType").is("NATIVE");
+                }else{
+                    criteria.andOperator(Criteria.where("tradeType").is("NATIVE"),
+                            Criteria.where("tradeType").ne("APP"),
+                            Criteria.where("tradeType").ne("ios app"),
+                            Criteria.where("tradeType").ne("MWEB"));
+                }
             } else {
-                query.addCriteria(Criteria.where("tradeType").is("MWEB"));
+                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                StringUtil.isNotEmpty(orderEnd))){
+                    criteria.and("tradeType").is("MWEB");
+                }else{
+                    criteria.andOperator(
+                            Criteria.where("tradeType").is("MWEB"),
+                            Criteria.where("tradeType").ne("APP"),
+                            Criteria.where("tradeType").ne("ios app"),
+                            Criteria.where("tradeType").ne("NATIVE"));
+                }
+
             }
+        }
+        if ((StringUtil.isNotEmpty(orderType) && (orderType.equals("充值会员") || orderType.equals("综合查询"))) ||
+                StringUtil.isNotEmpty(payStatus) || StringUtil.isNotEmpty(tradeTypes) || StringUtil.isNotEmpty(orderStart) || StringUtil.isNotEmpty(orderEnd)) {
+            query.addCriteria(criteria);
         }
         query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
