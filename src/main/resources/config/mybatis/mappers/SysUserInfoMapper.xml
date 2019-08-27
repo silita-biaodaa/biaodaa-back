@@ -162,13 +162,13 @@
             DISTINCT(`login_tel`)
           FROM
             mishu.`tb_login_info`
-          WHERE DATE(created_date) = #{yesterday}) AS a) AS yesterdayActive,
+          WHERE DATE(created_date) = #{yesterday} and login_tel IS NOT NULL) AS a) AS yesterdayActive,
           (SELECT COUNT(1) FROM (
           SELECT
             DISTINCT(`login_tel`)
           FROM
             mishu.`tb_login_info`
-          WHERE DATE(created_date) = #{today}) AS b) AS todayActive
+          WHERE DATE(created_date) = #{today} and login_tel IS NOT NULL) AS b) AS todayActive
         FROM
           mishu.`tb_login_info`
           GROUP BY yesterdayActive,todayActive
