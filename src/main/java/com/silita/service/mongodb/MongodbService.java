@@ -55,6 +55,41 @@ public class MongodbService {
     }
 
     /**
+     * 总付费用户
+     *
+     * @return
+     */
+    public List<Map<String, Object>> getUserPayCounts() {
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("orderStatus").is(9),
+                        new Criteria().orOperator(
+                                Criteria.where("stdCode").is("month"),
+                                Criteria.where("stdCode").is("quarter"),
+                                Criteria.where("stdCode").is("hlafYear"),
+                                Criteria.where("stdCode").is("year")
+                        )));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        Map<String, Integer> maps = new HashMap<>();
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (OrderInfo orderInfo : orderInfos) {
+            Map<String, Object> map = new HashMap<>();
+            if (null != maps.get(orderInfo.getUserId())) {
+                int count = maps.get(orderInfo.getUserId());
+                count++;
+                maps.put(orderInfo.getUserId(), count);
+            } else {
+                maps.put(orderInfo.getUserId(), 1);
+                map.put("userId", orderInfo.getUserId());
+                list.add(map);
+            }
+        }
+        return list;
+    }
+
+    /**
      * 用户统计  统计今日/昨日  付费用户  及   总付费用户 和 付费用户
      *
      * @return
@@ -80,7 +115,7 @@ public class MongodbService {
         int todayCount = 0;
         Map<String, Integer> map = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
-            String timeCycle = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyyy-MM-dd");
             if (timeCycle.equals(todayDate)) {
                 todayCount++;
             } else if (timeCycle.equals(yesterdayDate)) {
@@ -168,7 +203,7 @@ public class MongodbService {
             String tradeType = orderInfo.getTradeType();
             Integer orderStatus = orderInfo.getOrderStatus();
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
-                String timeCycle = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+                String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyyy-MM-dd");
                 Integer fee = orderInfo.getFee();
                 if (timeCycle.equals(yesterdayDate)) {
                     //昨日订单
@@ -301,7 +336,7 @@ public class MongodbService {
             String tradeType = orderInfo.getTradeType();
             Integer orderStatus = orderInfo.getOrderStatus();
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
-                String dates = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+                String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyyy-MM-dd");
                 Integer vipDays = orderInfo.getVipDays();
                 maps.put("orderNo", orderInfo.getOrderNo());
                 maps.put("userId", orderInfo.getUserId());
@@ -327,7 +362,7 @@ public class MongodbService {
      *
      * @return
      */
-    public List<Map<String, Object>> getOrderList(Map<String, Object> param) {
+    public List<Map<String, Object>> getOrderList(Map<String,Object> param) {
         Query query = new Query();
         //订单列表
         String orderType = MapUtils.getString(param, "orderType");
@@ -339,15 +374,16 @@ public class MongodbService {
         String orderStart = MapUtils.getString(param, "orderStart");
         //结束时间
         String orderEnd = MapUtils.getString(param, "orderEnd");
+
         //
         Criteria criteria = new Criteria();
+
 
         if (StringUtil.isNotEmpty(orderStart) && StringUtil.isNotEmpty(orderEnd)) {
             Date parse = MyDateUtils.getTransitionDate(orderStart);
             String tomorrowTime = MyDateUtils.getTomorrowTime(orderEnd);
             Date parsetow = MyDateUtils.getTransitionDate(tomorrowTime);
-
-            criteria.andOperator(Criteria.where("createTime").gte(parse),criteria.where("createTime").lte(parsetow));
+            criteria.andOperator(Criteria.where("createTime").gte(parse), criteria.where("createTime").lte(parsetow));
         }
         if (StringUtil.isNotEmpty(orderType)) {
             if (orderType.equals("充值会员") || orderType.equals("续费会员")) {
@@ -366,67 +402,66 @@ public class MongodbService {
         }
         if (StringUtil.isNotEmpty(payStatus)) {
             if (payStatus.equals("已付款")) {
-
-                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))){
+                if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))) {
                     criteria.and("orderStatus").is(9);
-
-                }else{
+                } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(9));
                 }
             } else if (payStatus.equals("未付款")) {
-                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))){
+                if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))) {
                     criteria.and("orderStatus").is(1);
-                }else{
+                } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(1));
                 }
 
             } else if (payStatus.equals("已退款")) {
-                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))){
+                if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))) {
                     criteria.and("orderStatus").is(10);
-                }else{
+                } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(10));
                 }
             }
         }
         if (StringUtil.isNotEmpty(tradeTypes)) {
             if (tradeTypes.equals("安卓")) {
-                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))){
+                if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))) {
                     criteria.and("tradeType").is("APP");
-                }else{
+                } else {
                     criteria.andOperator(Criteria.where("tradeType").is("APP"),
                             Criteria.where("tradeType").ne("ios app"),
                             Criteria.where("tradeType").ne("NATIVE"),
                             Criteria.where("tradeType").ne("MWEB"));
                 }
             } else if (tradeTypes.equals("苹果")) {
-                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))){
+                if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))) {
                     criteria.and("tradeType").is("ios app");
-                }else{
+                } else {
                     criteria.andOperator(Criteria.where("tradeType").is("ios app"),
                             Criteria.where("tradeType").ne("APP"),
                             Criteria.where("tradeType").ne("NATIVE"),
                             Criteria.where("tradeType").ne("MWEB"));
                 }
+
             } else if (tradeTypes.equals("扫码")) {
-                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))){
+                if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))) {
                     criteria.and("tradeType").is("NATIVE");
-                }else{
+                } else {
                     criteria.andOperator(Criteria.where("tradeType").is("NATIVE"),
                             Criteria.where("tradeType").ne("APP"),
                             Criteria.where("tradeType").ne("ios app"),
                             Criteria.where("tradeType").ne("MWEB"));
                 }
             } else {
-                if((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                StringUtil.isNotEmpty(orderEnd))){
+                if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))) {
                     criteria.and("tradeType").is("MWEB");
-                }else{
+                } else {
                     criteria.andOperator(
                             Criteria.where("tradeType").is("MWEB"),
                             Criteria.where("tradeType").ne("APP"),
@@ -458,7 +493,7 @@ public class MongodbService {
                     maps.put("userId", orderInfo.getUserId());
                     maps.put("orderNo", orderInfo.getOrderNo());
                     maps.put("orderStatus", orderStatus);
-                    String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString());
+                    String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyyy-MM-dd HH:mm:ss");
                     maps.put("createTime", dates);
                     maps.put("stdCode", stdCode);
                     maps.put("count", 1);
@@ -507,4 +542,57 @@ public class MongodbService {
         }
         return listMap;
     }
+
+    /**
+     * 判空
+     */
+    public void isNull(Map<String,Object> param){
+        String orderType = MapUtils.getString(param, "orderType");
+        //付款状态
+        String payStatus = MapUtils.getString(param, "payStatus");
+        //渠道
+        String tradeTypes = MapUtils.getString(param, "tradeType");
+        //开始时间
+        String orderStart = MapUtils.getString(param, "orderStart");
+        //结束时间
+        String orderEnd = MapUtils.getString(param, "orderEnd");
+        String createStartDate = MapUtils.getString(param, "createStartDate");
+        String createdEndData = MapUtils.getString(param, "createdEndData");
+        String startDate = MapUtils.getString(param, "startDate");
+        String endDate = MapUtils.getString(param, "endDate");
+        String phoneNo = MapUtils.getString(param, "phoneNo");
+
+
+        if(StringUtil.isEmpty(createStartDate)){
+            param.put("createStartDate","");
+        }
+        if(StringUtil.isEmpty(createdEndData)){
+            param.put("createdEndData","");
+        }
+        if(StringUtil.isEmpty(startDate)){
+            param.put("startDate","");
+        }
+        if(StringUtil.isEmpty(endDate)){
+            param.put("endDate","");
+        }
+        if(StringUtil.isEmpty(phoneNo)){
+            param.put("phoneNo","");
+        }
+        if(StringUtil.isEmpty(orderType)){
+            param.put("orderType","");
+        }
+        if(StringUtil.isEmpty(payStatus)){
+            param.put("payStatus","");
+        }
+        if(StringUtil.isEmpty(tradeTypes)){
+            param.put("tradeTypes","");
+        }
+        if(StringUtil.isEmpty(orderStart)){
+            param.put("orderStart","");
+        }
+        if(StringUtil.isEmpty(orderEnd)){
+            param.put("orderEnd","");
+        }
+    }
+
 }

@@ -23,6 +23,8 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
     private TbVipInfoMapper tbVipInfoMapper;
     @Autowired
     private TbVipProfitsMapper tbVipProfitsMapper;
+    @Autowired
+    private SysUserInfoMapper sysUserInfoMapper;
 
 
     /**
@@ -59,6 +61,8 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
             }
             param.put("vProfitsId",DataHandlingUtil.getUUID());
             tbVipProfitsMapper.insertVipProfits(param);
+            //编辑用户状态  普通用户 -- 》 会员用户
+            sysUserInfoMapper.updateUserState(param);
         } catch (Exception e) {
             e.printStackTrace();
         }

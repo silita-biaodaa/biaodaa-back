@@ -26,6 +26,7 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
      */
     @Override
     public Map<String, Object> getOrderListMap(Map<String, Object> param) {
+        mongodbUtils.isNull(param);
         String orderType = MapUtils.getString(param, "orderType");
         List<Map<String, Object>> orderList = mongodbUtils.getOrderList(param);
         param.put("orderList", orderList);
@@ -59,7 +60,6 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
                                     map2.put("count", count);
                                 }
                             }
-
                         } else {
                             totalMaps.put(MapUtils.getString(map, "userId"), MapUtils.getString(map, "userId"));
                             newList.add(map);
@@ -83,7 +83,6 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
                     }
                 }
             }
-
             Integer pageNo = MapUtils.getInteger(param, "pageNo");
             Integer pageSize = MapUtils.getInteger(param, "pageSize");
             return getPagingResultMap(newOrderList, pageNo, pageSize);

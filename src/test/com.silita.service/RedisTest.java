@@ -3,6 +3,7 @@ package com.silita.service;
 //import com.mongodb.*;
 import com.silita.common.MyRedisTemplate;
 import com.silita.model.OrderInfo;
+import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class RedisTest extends ConfigTest {
     IUserInfoService iUserInfoService;
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private MongodbService mongodbService;
 
 
     @Test
@@ -955,7 +958,7 @@ public class RedisTest extends ConfigTest {
         int totalCount = 0;
         Map<String, Integer> map = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
-            String timeCycle = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
+            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyy-MM-dd");
             //System.out.println("orderNo:"+orderInfo.getOrderNo()+"; userId:"+orderInfo.getUserId()+"; createTime:"+timeCycle+"; Time:"+orderInfo.getCreateTime());
             totalCount++;
             if (timeCycle.equals(todayDate)) {
@@ -1023,6 +1026,23 @@ public class RedisTest extends ConfigTest {
 
         }
     }
+
+    @Test
+    public void test50(){
+
+        Map<String, Integer> userType = mongodbService.getUserType();
+        System.out.println(userType);
+
+        Query query = new Query();
+
+        /*Query query = new Query();
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        for (OrderInfo orderInfo : orderInfos) {
+
+        }*/
+    }
+
+
 }
 
 

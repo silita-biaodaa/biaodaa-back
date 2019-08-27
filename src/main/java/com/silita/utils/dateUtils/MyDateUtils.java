@@ -7,6 +7,7 @@ package com.silita.utils.dateUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.Logger;
 import org.slf4j.LoggerFactory;
+import tk.mybatis.mapper.util.StringUtil;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -149,34 +150,12 @@ public class MyDateUtils {
      * @param createTime
      * @return
      */
-    public static String getTimeZone(String createTime) {
+    public static String getTimeZone(String createTime,String setFormat) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String format = "";
-        try {
-            SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-            Date d = sdff.parse(createTime);
-            String formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
-
-            Date parse = sdf.parse(formatDate);
-            Calendar ca = Calendar.getInstance();
-            ca.setTime(parse);
-            ca.add(Calendar.HOUR_OF_DAY, -8);//减去时区问题的8小时
-            format = sdf.format(ca.getTime());
-        }catch (Exception e){
-            logger.info("mongdb时间转换" + e);
+        if(StringUtil.isEmpty(setFormat)){
+                setFormat="yyyy-MM-dd";
         }
-        return format;
-    }
-
-    /**
-     * mongdb时间转换   时区问题
-     *
-     * @param createTime
-     * @return
-     */
-    public static String getTimeZones(String createTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdfs = new SimpleDateFormat(setFormat);
         String format = "";
         try {
             SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
@@ -193,6 +172,7 @@ public class MyDateUtils {
         }
         return format;
     }
+
 
     /**
      * 比较时间

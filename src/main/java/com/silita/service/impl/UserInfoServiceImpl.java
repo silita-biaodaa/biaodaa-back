@@ -108,8 +108,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
 
     @Override
     public Map<String, Object> getActiveUserList(Map<String, Object> param) {
-        String loginTime = MyDateUtils.getLoginTime();
-        param.put("loginTime", loginTime);
+        mongodbUtils.isNull(param);
         Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
         List<Map<String, Object>> list = sysUserInfoMapper.queryActiveUserList(param);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -253,6 +252,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public Map<String, Object> getUserInfo(Map<String, Object> param) {
+        mongodbUtils.isNull(param);
         SysUserInfo sysUserInfo = new SysUserInfo();
         Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
         List<Map<String, Object>> list = sysUserInfoMapper.queryUserInfoList(param);
@@ -400,6 +400,8 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
     }
 */
 
+
+
     /**
      * 获取用户统计
      *
@@ -415,9 +417,24 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         Map<String, Object> map = sysUserInfoMapper.queryUserInfoCount(param);
         try {
             Map<String, Integer> userPayCount = mongodbUtils.getUserPayCount();
+            List<Map<String, Object>> userPayCounts = mongodbUtils.getUserPayCounts();
+            param.put("listUserId", userPayCounts);
+            Map<String, Object> maps = new HashMap<>();
+            List<Map<String, Object>> lists = sysUserInfoMapper.queryPhones(param);
+            for (Map<String, Object> userId : lists) {
+                maps.put(MapUtils.getString(userId, "pkid"), MapUtils.getString(userId, "phoneNo"));
+            }
+            int count = 0;
+            for (Map<String, Object> payCount : userPayCounts) {
+                System.out.println(payCount);
+                String phone = MapUtils.getString(maps, MapUtils.getString(payCount,"userId"));
+                if(StringUtil.isNotEmpty(phone)){
+                    count++;
+                }
+            }
             map.put("yesterdayPay", MapUtils.getInteger(userPayCount, "yesterdayPay"));
             map.put("todayPay", MapUtils.getInteger(userPayCount, "todayPay"));
-            map.put("totalPayUser", MapUtils.getInteger(userPayCount, "totalPayUser"));
+            map.put("totalPayUser", count);
             Map<String, Integer> pastDue = mongodbUtils.getUserType();
             List<Map<String, Object>> list = sysUserInfoMapper.queryPast();
             int pastCount = 0;

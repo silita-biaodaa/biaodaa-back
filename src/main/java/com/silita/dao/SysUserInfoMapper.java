@@ -119,6 +119,11 @@ public interface SysUserInfoMapper extends MyMapper<SysUserInfo> {
     void updateRemark(Map<String,Object> param);
 
     /**
+     *编辑用户状态  普通用户 --》 会员用户
+     */
+    void updateUserState(Map<String,Object> param);
+
+    /**
      * 邀请人信息
      * @param param
      */
@@ -131,6 +136,8 @@ public interface SysUserInfoMapper extends MyMapper<SysUserInfo> {
      * @return
      */
     List<Map<String,Object>> queryPhone(Map<String,Object> param);
+
+    List<Map<String,Object>> queryPhones(Map<String,Object> param);
 
     /**
      * 邀请人手机号

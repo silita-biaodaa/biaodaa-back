@@ -36,6 +36,9 @@
     <update id="updateRemark" parameterType="map">
         UPDATE mishu_write.`sys_user_info` t SET t.remark=#{remark} where t.pkid=#{pkid}
     </update>
+    <update id="updateUserState" parameterType="map">
+        UPDATE mishu_write.`sys_user_role` SET role_id='1551429176' WHERE user_id=#{userId}
+    </update>
 
 
     <select id="queryUserCount" parameterType="java.util.Map" resultType="java.lang.Integer">
@@ -187,9 +190,6 @@
         JOIN mishu_write.`tb_vip_info` t3
         ON t3.user_id = t.pkid
             WHERE 1=1
-            <if test="(startDate == null and endDate == null) or (startDate == '' and endDate == '')">
-                AND DATE(t4.created_date) &gt;= #{loginTime}
-            </if>
             <if test="phoneNo != null and phoneNo != ''">
                 and t.phone_no like CONCAT('%',#{phoneNo},'%')
             </if>
@@ -442,6 +442,15 @@
         <if test="phoneNo != null and phoneNo != ''">
             and phone_no like CONCAT('%',#{phoneNo},'%')
         </if>
+    </select>
+    <select id="queryPhones" resultType="java.util.Map" parameterType="map">
+        SELECT pkid,phone_no AS phoneNo FROM mishu_write.`sys_user_info` where 1=1
+            and  pkid in
+            (
+            <foreach collection="listUserId" item="list" separator=",">
+                #{list.userId}
+            </foreach>
+            )
     </select>
     <select id="queryInviterPhone" resultType="java.lang.String" parameterType="map">
         SELECT phone_no AS phoneNo FROM mishu_write.`sys_user_info` where own_invite_code=#{inviterCode}
