@@ -16,6 +16,34 @@
         SELECT t.uid,t.user_name AS userName,t.password,t.phone FROM biaodaa_admin.`tb_user` t WHERE phone = #{phone} and t.password = #{password}
     </select>
     <select id="queryAccountList" resultType="com.silita.model.TbUser" parameterType="com.silita.model.TbUser">
+        SELECT
+          t.uid,
+          t.user_name,
+          t.password,
+          t.real_name,
+          t.phone,
+          t.sflag,
+          t.lock,
+          t.created,
+          t.updated,
+          t.department,
+          t.post
+        FROM
+          biaodaa_admin.`tb_user` t
+          WHERE 1=1
+          <if test="phone != null and phone != ''">
+              AND phone LIKE CONCAT('%',#{phone},'%')
+          </if>
 
+    </select>
+    <select id="queryAccountListCount" resultType="java.lang.Integer" parameterType="map">
+          SELECT
+              ifnull(count(1),0)
+            FROM
+              biaodaa_admin.`tb_user` t
+              WHERE 1=1
+            <if test="phone != null and phone != ''">
+                AND phone LIKE CONCAT('%',#{phone},'%')
+            </if>
     </select>
 </mapper>

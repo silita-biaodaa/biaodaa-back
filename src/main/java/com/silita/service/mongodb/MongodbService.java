@@ -214,7 +214,7 @@ public class MongodbService {
                             if (tradeType.equals("ios app")) {
                                 yesterdayPaidCountIos = yesterdayPaidCountIos + fee;
                             } else {
-                                yesterdayPaidCount = yesterdayOrderCount + fee;
+                                yesterdayPaidCount = yesterdayPaidCount + fee;
                             }
                         }
                     }

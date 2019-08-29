@@ -2,6 +2,7 @@ package com.silita.service;
 
 import com.silita.model.TbUser;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,5 +38,11 @@ public interface IUserService {
      * @param param
      */
     Map<String,Object> updatePassword(Map<String,Object> param);
+    /**
+     * 账号管理查询及筛选
+     * @param tbUser
+     * @return
+     */
+    Map<String,Object> getAccountList(TbUser tbUser);
 
 }

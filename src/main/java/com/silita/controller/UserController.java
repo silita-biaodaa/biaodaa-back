@@ -2,6 +2,7 @@ package com.silita.controller;
 
 import com.silita.common.Constant;
 import com.silita.controller.base.BaseController;
+import com.silita.model.TbUser;
 import com.silita.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,6 +47,16 @@ public class UserController extends BaseController {
         maps.put("code", 0);
         maps.put("msg","手机号码或原密码错误");
         return this.successMap();
+    }
+    /**
+     * 账号管理查询及筛选
+     * @param tbUser
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/accountList", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String,Object> accountList(@RequestBody TbUser tbUser){
+        return this.successMap(userService.getAccountList(tbUser));
     }
 
 }

@@ -33,9 +33,16 @@ public interface TbUserMapper extends MyMapper<TbUser> {
     Map<String,Object> querySingleUser(Map<String,Object> param);
 
     /**
-     * 找好管理
+     * 账号管理查询及筛选
      * @param tbUser
      * @return
      */
     List<TbUser> queryAccountList(TbUser tbUser);
+
+    /**
+     * 账号管理查询及筛选 统计
+     * @param tbUser
+     * @return
+     */
+    Integer queryAccountListCount(TbUser tbUser);
 }

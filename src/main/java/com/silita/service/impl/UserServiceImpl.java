@@ -10,10 +10,7 @@ import com.silita.service.abs.AbstractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Create by IntelliJ Idea 2018.1
@@ -75,5 +72,18 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             tbUserMapper.updatePassword(param);
         }
         return map;
+    }
+
+    /**
+     * 账号管理查询及筛选
+     * @param tbUser
+     * @return
+     */
+    @Override
+    public Map<String,Object> getAccountList(TbUser tbUser) {
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("list",tbUserMapper.queryAccountList(tbUser));
+        resultMap.put("total",tbUserMapper.queryAccountListCount(tbUser));
+        return super.handlePageCount(resultMap,tbUser);
     }
 }
