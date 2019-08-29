@@ -5,6 +5,7 @@ import com.silita.common.MyRedisTemplate;
 import com.silita.model.OrderInfo;
 import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
+import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -1043,9 +1044,23 @@ public class RedisTest extends ConfigTest {
     }
     @Test
     public void test51(){
-        String date = "2019-08-20";
-        //Integer compareTo = MyDateUtils.getCompareTo(date);
-        //System.out.println(compareTo);
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("orderStatus").is(9),
+                        new Criteria().orOperator(
+                                Criteria.where("stdCode").is("month"),
+                                Criteria.where("stdCode").is("quarter"),
+                                Criteria.where("stdCode").is("hlafYear"),
+                                Criteria.where("stdCode").is("year")
+                        )));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        for (OrderInfo orderInfo : orderInfos) {
+//            System.out.println("{orderNo:"+orderInfo.getOrderNo()+", createTime:"+orderInfo.getCreateTime()+"}");
+            String timeZone = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(), "yyyy-MM-dd HH:mm:ss");
+            System.out.println("{orderNo:"+orderInfo.getOrderNo()+", createTime:"+orderInfo.getCreateTime()+", createdTime:"+timeZone+"}");
+
+        }
     }
 
 
