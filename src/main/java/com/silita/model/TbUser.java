@@ -56,7 +56,19 @@ public class TbUser extends Pagination{
 	private Date updated;
 
 	/**
+	 * 部门
+	 */
+	private String department;
+
+	/**
+	 * 岗位
+	 */
+	private String post;
+
+	/**
 	 *
 	 */
 	private List<TbRole> roles;
+
+
 }

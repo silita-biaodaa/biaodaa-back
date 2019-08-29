@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.FeedbackMapper" >
+    <update id="updateRemark" parameterType="map">
+        UPDATE mishu_write.`feedback` SET remark = #{remark} where id = #{id}
+    </update>
+    <update id="updateState" parameterType="map">
+        UPDATE mishu_write.`feedback` SET state = #{state} where id = #{id}
+    </update>
 
+    <select id="queryFeedbackList" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t1.`pkid`,
+          t1.`phone_no` AS phoneNo,
+          t.id,
+          t.type,
+          t.problem,
+          t.starttime,
+          t.state,
+          t.remark,
+          t2.expired_date as expiredDate
+        FROM
+          mishu_write.`feedback` t
+          JOIN mishu_write.`sys_user_info` t1
+            ON t.`pid` = t1.`pkid`
+          JOIN mishu_write.`tb_vip_info` t2
+            ON t1.`pkid` = t2.`user_id`
+        WHERE 1 = 1
+        <if test="type != null and type != ''">
+            and t.type = #{type}
+        </if>
+        <if test="phoneNo != null and phoneNo != ''">
+            and t1.phone_no like CONCAT('%',#{phoneNo},'%')
+        </if>
+        <if test="state != null and state !=''">
+            and t.state = #{state}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            and DATE(t.starttime) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and DATE(t.starttime) &lt;= #{endDate}
+        </if>
+          and t.state is not null
+          AND t.`type` IS NOT NULL
+        order by t.starttime desc
+    </select>
+    <select id="queryFeedbackCount" resultType="java.util.Map" parameterType="map">
+        SELECT
+          (SELECT
+            COUNT(1)
+          FROM
+            mishu_write.`feedback` f
+          WHERE DATE(f.starttime) = #{yesterday}
+            AND f.type IS NOT NULL
+            AND f.state IS NOT NULL) AS yesterdayCount,
+          (SELECT
+            COUNT(1)
+          FROM
+            mishu_write.`feedback` f1
+          WHERE f1.type IS NOT NULL
+            AND f1.state IS NOT NULL) AS totalCount,
+          (SELECT
+            COUNT(1)
+          FROM
+            mishu_write.`feedback` f2
+          WHERE f2.state = 1
+            AND f2.state IS NOT NULL
+            AND f2.type IS NOT NULL) AS untreatedCount
+        FROM
+          mishu_write.`feedback`
+        GROUP BY yesterdayCount,
+          totalCount,
+          untreatedCount
+    </select>
 </mapper>

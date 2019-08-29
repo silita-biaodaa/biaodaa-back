@@ -144,4 +144,6 @@ public interface SysUserInfoMapper extends MyMapper<SysUserInfo> {
      * @return
      */
     String queryInviterPhone(Map<String,Object> param);
+
+    //updateLock(Map<String,Object> param);
 }

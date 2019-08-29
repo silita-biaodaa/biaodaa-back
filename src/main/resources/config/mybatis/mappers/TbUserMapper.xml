@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbUserMapper" >
+
+
+    <update id="updateLock" parameterType="map">
+        UPDATE biaodaa_admin.`tb_user` t SET t.lock = #{lock} WHERE t.uid = #{uid}
+    </update>
+    <update id="updatePassword" parameterType="map">
+        UPDATE biaodaa_admin.`tb_user` t SET t.password = #{password},t.updated = NOW() where t.uid = #{uid}
+    </update>
+    <update id="updateResetPassword" parameterType="map">
+        UPDATE biaodaa_admin.`tb_user` t SET t.password = #{password} where t.uid = #{uid}
+    </update>
+    <select id="querySingleUser" resultType="java.util.Map" parameterType="map">
+        SELECT t.uid,t.user_name AS userName,t.password,t.phone FROM biaodaa_admin.`tb_user` t WHERE phone = #{phone} and t.password = #{password}
+    </select>
+    <select id="queryAccountList" resultType="com.silita.model.TbUser" parameterType="com.silita.model.TbUser">
+
+    </select>
+</mapper>

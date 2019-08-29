@@ -26,4 +26,16 @@ public interface IUserService {
      */
     Map<String, Object> getRolesAndPermissionsByUserName(String userName);
 
+    /**
+     * 用户锁定或解锁
+     * @param param
+     */
+    void updateLock(Map<String,Object> param);
+
+    /**
+     * 修改密码
+     * @param param
+     */
+    Map<String,Object> updatePassword(Map<String,Object> param);
+
 }

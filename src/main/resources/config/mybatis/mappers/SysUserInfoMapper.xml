@@ -41,6 +41,7 @@
     </update>
 
 
+
     <select id="queryUserCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1)
         FROM mishu_write.sys_user_info t
@@ -220,9 +221,6 @@
         JOIN mishu.tb_login_info t4
         ON t.phone_no=t4.`login_tel`
         WHERE 1=1
-        <if test="(startDate == null and endDate == null) or (startDate == '' and endDate == '')">
-            AND DATE(t4.created_date) &gt;= #{loginTime}
-        </if>
         <if test="phoneNo != null and phoneNo != ''">
             and t.phone_no like CONCAT('%',#{phoneNo},'%')
         </if>

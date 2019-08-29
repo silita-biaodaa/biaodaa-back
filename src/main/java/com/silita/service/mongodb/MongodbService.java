@@ -256,7 +256,7 @@ public class MongodbService {
 
         String one = yesterdayPaidCountIos + "";
         String two = todayPaidCountIos + "";
-        String three = yesterdayPaidCountIos + "";
+        String three = todayReceivableCountIos + "";
         String four = todayTrueMoneyCountIos + "";
         String five = totalMoneyIos + "";
 

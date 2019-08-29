@@ -90,6 +90,9 @@ public class MyDateUtils {
         return yesterday;
     }
 
+
+
+
     /**
      * 获取过去一个月时间
      *
@@ -171,6 +174,27 @@ public class MyDateUtils {
             logger.info("mongdb时间转换" + e);
         }
         return format;
+    }
+
+    /**
+     * 会员日期 是否大于等于 当前日期
+     * @param beginTime
+     * @return
+     */
+    public static Integer getCompareTo(String beginTime){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        int compareTo = 0;
+        try {
+            Date day = new Date();
+            String endTime = format.format(day);
+            Date date1 = format.parse(beginTime);
+            Date date2 = format.parse(endTime);
+            compareTo = date1.compareTo(date2);
+        }catch (Exception e){
+            logger.info("时间比较",e);
+        }
+        return compareTo;
+
     }
 
 

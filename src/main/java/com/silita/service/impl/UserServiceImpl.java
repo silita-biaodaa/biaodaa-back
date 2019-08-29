@@ -1,6 +1,7 @@
 package com.silita.service.impl;
 
 import com.silita.dao.IUserMapper;
+import com.silita.dao.TbUserMapper;
 import com.silita.model.TbPermission;
 import com.silita.model.TbRole;
 import com.silita.model.TbUser;
@@ -25,6 +26,8 @@ public class UserServiceImpl extends AbstractService implements IUserService {
 
     @Autowired
     private IUserMapper userMapper;
+    @Autowired
+    private TbUserMapper tbUserMapper;
 
     @Override
     public TbUser getUserByUserName(String userName) {
@@ -52,4 +55,25 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         return map;
     }
 
+    /**
+     * 用户锁定或解锁
+     * @param param
+     */
+    @Override
+    public void updateLock(Map<String, Object> param) {
+        tbUserMapper.updateLock(param);
+    }
+
+    /**
+     * 修改密码
+     * @param param
+     */
+    @Override
+    public Map<String,Object> updatePassword(Map<String, Object> param) {
+        Map<String, Object> map = tbUserMapper.querySingleUser(param);
+        if(null != map){
+            tbUserMapper.updatePassword(param);
+        }
+        return map;
+    }
 }

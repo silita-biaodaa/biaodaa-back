@@ -29,4 +29,47 @@ public class FeedbackController extends BaseController {
         return this.successMap(feedbackService.listFeedback(param));
     }
 
+    /**
+     * 反馈列表
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/new/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> newList(@RequestBody Map<String, Object> param) {
+        return feedbackService.getlistFeedback(param);
+    }
+
+    /**
+     * 反馈统计
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/count", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> count() {
+        return this.successMap(feedbackService.getFeedbackCount());
+    }
+    /**
+     * 修改备注
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateRemark", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> updateRemark(@RequestBody Map<String, Object> param) {
+        feedbackService.updateRemark(param);
+        return this.successMap();
+    }
+    /**
+     * 修改反馈状态
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateState", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> updateState(@RequestBody Map<String, Object> param) {
+        feedbackService.updateState(param);
+        return this.successMap();
+    }
+
+
+
 }
