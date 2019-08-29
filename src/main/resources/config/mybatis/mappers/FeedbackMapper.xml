@@ -51,6 +51,8 @@
             COUNT(1)
           FROM
             mishu_write.`feedback` f
+            JOIN mishu_write.`sys_user_info` t1
+            ON f.`pid` = t1.`pkid`
           WHERE DATE(f.starttime) = #{yesterday}
             AND f.type IS NOT NULL
             AND f.state IS NOT NULL) AS yesterdayCount,
@@ -58,12 +60,16 @@
             COUNT(1)
           FROM
             mishu_write.`feedback` f1
+            JOIN mishu_write.`sys_user_info` t1
+            ON f1.`pid` = t1.`pkid`
           WHERE f1.type IS NOT NULL
             AND f1.state IS NOT NULL) AS totalCount,
           (SELECT
             COUNT(1)
           FROM
             mishu_write.`feedback` f2
+            JOIN mishu_write.`sys_user_info` t1
+            ON f2.`pid` = t1.`pkid`
           WHERE f2.state = 1
             AND f2.state IS NOT NULL
             AND f2.type IS NOT NULL) AS untreatedCount

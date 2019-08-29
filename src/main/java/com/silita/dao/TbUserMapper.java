@@ -26,11 +26,18 @@ public interface TbUserMapper extends MyMapper<TbUser> {
     void updateResetPassword(Map<String,Object> param);
 
     /**
-     * 查询单个管理员
+     * 查询手机号码是否存在
      * @param param
      * @return
      */
-    Map<String,Object> querySingleUser(Map<String,Object> param);
+    Integer querySingleUserPhone(Map<String,Object> param);
+
+    /**
+     * 查询原密码是否正确
+     * @param param
+     * @return
+     */
+    Integer querySingleUserPassword(Map<String,Object> param);
 
     /**
      * 账号管理查询及筛选

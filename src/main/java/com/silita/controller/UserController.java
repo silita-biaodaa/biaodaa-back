@@ -37,18 +37,11 @@ public class UserController extends BaseController {
      * @param param
      * @return
      */
-   /* @ResponseBody
+    @ResponseBody
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String,Object> updatePassword(@RequestBody Map<String,Object> param){
-        Map<String, Object> map = userService.updatePassword(param);
-        if(null != map){
-            return this.successMap();
-        }
-        Map<String,Object> maps = new HashMap<>();
-        maps.put("code", 0);
-        maps.put("msg","手机号码或原密码错误");
-        return this.successMap();
-    }*/
+        return userService.updatePassword(param);
+    }
 
     /**
      * 账号管理查询及筛选

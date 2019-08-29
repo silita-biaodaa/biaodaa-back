@@ -1,5 +1,6 @@
 package com.silita.service.impl;
 
+import com.silita.common.Constant;
 import com.silita.dao.IUserMapper;
 import com.silita.dao.TbUserMapper;
 import com.silita.model.TbPermission;
@@ -42,7 +43,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         TbRole role = null;
         TbPermission permission = null;
         Set<String> roles = new HashSet<String>();
-        Set<String > permissions = new HashSet<String>();
+        Set<String> permissions = new HashSet<String>();
         Map<String, Object> map = new HashMap<String, Object>();
         TbUser vo = this.userMapper.getRolesAndPermissionsByUserName(userName);
         for (int i = 0; i < vo.getRoles().size(); i++) {
@@ -60,6 +61,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
 
     /**
      * 用户锁定或解锁
+     *
      * @param param
      */
     @Override
@@ -69,19 +71,37 @@ public class UserServiceImpl extends AbstractService implements IUserService {
 
     /**
      * 修改密码
+     *
      * @param param
      */
     @Override
-    public Map<String,Object> updatePassword(Map<String, Object> param) {
-        Map<String, Object> map = tbUserMapper.querySingleUser(param);
-        if(null != map){
-            tbUserMapper.updatePassword(param);
+    public Map<String, Object> updatePassword(Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Integer integer = tbUserMapper.querySingleUserPhone(param);
+        if (null == integer || integer == 0) {
+            resultMap.put("msg", Constant.MSG_PHONE);
+            resultMap.put("code", Constant.CODE_PHONE);
+            return resultMap;
         }
-        return map;
+        String password = MapUtils.getString(param, "password");
+        param.put("password", MD5Utils.sign(password));
+        Integer integer1 = tbUserMapper.querySingleUserPassword(param);
+        if (null == integer1 || integer1 == 0) {
+            resultMap.put("msg", Constant.MSG_PASSWORD);
+            resultMap.put("code", Constant.CODE_PASSWORD);
+            return resultMap;
+        }
+        String newpassword = MapUtils.getString(param, "newpassword");
+        param.put("newpassword", MD5Utils.sign(newpassword));
+        tbUserMapper.updatePassword(param);
+        resultMap.put("msg", Constant.CODE_SUCCESS);
+        resultMap.put("code", Constant.MSG_SUCCESS);
+        return resultMap;
     }
 
     /**
      * 重置密码
+     *
      * @param param
      */
     @Override
@@ -93,18 +113,19 @@ public class UserServiceImpl extends AbstractService implements IUserService {
 
     /**
      * 账号管理查询及筛选
+     *
      * @param tbUser
      * @return
      */
     @Override
-    public Map<String,Object> getAccountList(TbUser tbUser) {
+    public Map<String, Object> getAccountList(TbUser tbUser) {
         String phone = tbUser.getPhone();
-        if(StringUtil.isEmpty(phone)){
+        if (StringUtil.isEmpty(phone)) {
             tbUser.setPhone("");
         }
-        Map<String,Object> resultMap = new HashMap<>();
-        resultMap.put("list",tbUserMapper.queryAccountList(tbUser));
-        resultMap.put("total",tbUserMapper.queryAccountListCount(tbUser));
-        return super.handlePageCount(resultMap,tbUser);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("list", tbUserMapper.queryAccountList(tbUser));
+        resultMap.put("total", tbUserMapper.queryAccountListCount(tbUser));
+        return super.handlePageCount(resultMap, tbUser);
     }
 }
