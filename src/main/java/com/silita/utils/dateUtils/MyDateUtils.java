@@ -90,9 +90,6 @@ public class MyDateUtils {
         return yesterday;
     }
 
-
-
-
     /**
      * 获取过去一个月时间
      *
@@ -153,43 +150,19 @@ public class MyDateUtils {
      * @param createTime
      * @return
      */
-    public static String getTimeZone(String createTime,String setFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if(StringUtil.isEmpty(setFormat)){
-                setFormat="yyyy-MM-dd";
+    public static String getTimeZone(Date createTime, String setFormat) {
+        if (StringUtil.isEmpty(setFormat)) {
+            setFormat = "yyyy-MM-dd";
         }
-        SimpleDateFormat sdfs = new SimpleDateFormat(setFormat);
-        String format = "";
         try {
-            SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-            Date d = sdff.parse(createTime);
-            String formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
-            Date parse = sdf.parse(formatDate);
-            format = sdfs.format(parse);
-        }catch (Exception e){
-            logger.info("mongdb时间转换" + e);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(createTime);
+            long time = createTime.getTime();
+            return longDateToStr(time, setFormat);
+        } catch (Exception e) {
+            logger.error("时间转换错误" + e);
         }
         return format;
-    }
-
-    /**
-     * 会员日期 是否大于等于 当前日期
-     * @param beginTime
-     * @return
-     */
-    public static Integer getCompareTo(String beginTime){
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        int compareTo = 0;
-        try {
-            Date day = new Date();
-            String endTime = format.format(day);
-            Date date1 = format.parse(beginTime);
-            Date date2 = format.parse(endTime);
-            compareTo = date1.compareTo(date2);
-        }catch (Exception e){
-            logger.info("时间比较",e);
-        }
-        return compareTo;
     }
 
 

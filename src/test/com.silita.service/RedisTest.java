@@ -5,6 +5,7 @@ import com.silita.common.MyRedisTemplate;
 import com.silita.model.OrderInfo;
 import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
+import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -958,7 +959,7 @@ public class RedisTest extends ConfigTest {
         int totalCount = 0;
         Map<String, Integer> map = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
-            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyy-MM-dd");
+            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyy-MM-dd");
             //System.out.println("orderNo:"+orderInfo.getOrderNo()+"; userId:"+orderInfo.getUserId()+"; createTime:"+timeCycle+"; Time:"+orderInfo.getCreateTime());
             totalCount++;
             if (timeCycle.equals(todayDate)) {
@@ -1040,6 +1041,26 @@ public class RedisTest extends ConfigTest {
         for (OrderInfo orderInfo : orderInfos) {
 
         }*/
+    }
+    @Test
+    public void test51(){
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("orderStatus").is(9),
+                        new Criteria().orOperator(
+                                Criteria.where("stdCode").is("month"),
+                                Criteria.where("stdCode").is("quarter"),
+                                Criteria.where("stdCode").is("hlafYear"),
+                                Criteria.where("stdCode").is("year")
+                        )));
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        for (OrderInfo orderInfo : orderInfos) {
+//            System.out.println("{orderNo:"+orderInfo.getOrderNo()+", createTime:"+orderInfo.getCreateTime()+"}");
+            String timeZone = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(), "yyyy-MM-dd HH:mm:ss");
+            System.out.println("{orderNo:"+orderInfo.getOrderNo()+", createTime:"+orderInfo.getCreateTime()+", createdTime:"+timeZone+"}");
+
+        }
     }
 
 
