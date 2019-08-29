@@ -160,12 +160,13 @@ public class MyDateUtils {
         try {
             SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
             Date d = sdff.parse(createTime);
+            TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
             String formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
 
             Date parse = sdf.parse(formatDate);
             Calendar ca = Calendar.getInstance();
             ca.setTime(parse);
-            ca.add(Calendar.HOUR_OF_DAY, -8);//减去时区问题的8小时
+            ca.add(Calendar.HOUR_OF_DAY, 0);//减去时区问题的8小时
             format = sdfs.format(ca.getTime());
         }catch (Exception e){
             logger.info("mongdb时间转换" + e);

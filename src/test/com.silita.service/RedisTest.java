@@ -1041,6 +1041,12 @@ public class RedisTest extends ConfigTest {
 
         }*/
     }
+    @Test
+    public void test51(){
+        String date = "2019-08-20";
+        //Integer compareTo = MyDateUtils.getCompareTo(date);
+        //System.out.println(compareTo);
+    }
 
 
 }

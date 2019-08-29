@@ -163,8 +163,6 @@ public class MongodbService {
      * @return
      */
     public Map<String, Object> getOrderCount() {
-        //今日
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String todayDate = MyDateUtils.getTodays();
         String yesterdayDate = MyDateUtils.getYesterdays();
         Query query = new Query();
@@ -214,7 +212,7 @@ public class MongodbService {
                             if (tradeType.equals("ios app")) {
                                 yesterdayPaidCountIos = yesterdayPaidCountIos + fee;
                             } else {
-                                yesterdayPaidCount = yesterdayOrderCount + fee;
+                                yesterdayPaidCount = yesterdayPaidCount + fee;
                             }
                         }
                     }
@@ -256,7 +254,7 @@ public class MongodbService {
 
         String one = yesterdayPaidCountIos + "";
         String two = todayPaidCountIos + "";
-        String three = yesterdayPaidCountIos + "";
+        String three = todayReceivableCountIos + "";
         String four = todayTrueMoneyCountIos + "";
         String five = totalMoneyIos + "";
 
