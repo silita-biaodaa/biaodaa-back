@@ -556,6 +556,9 @@ public class MongodbService {
         String startDate = MapUtils.getString(param, "startDate");
         String endDate = MapUtils.getString(param, "endDate");
         String phoneNo = MapUtils.getString(param, "phoneNo");
+        String phone = MapUtils.getString(param, "phone");
+        String state = MapUtils.getString(param, "state");
+        String type = MapUtils.getString(param, "type");
 
         if(StringUtil.isEmpty(createStartDate)){
             param.put("createStartDate","");
@@ -587,6 +590,16 @@ public class MongodbService {
         if(StringUtil.isEmpty(orderEnd)){
             param.put("orderEnd","");
         }
+        if(StringUtil.isEmpty(type)){
+            param.put("type","");
+        }
+        if(StringUtil.isEmpty(state)){
+            param.put("state","");
+        }
+        if(StringUtil.isEmpty(phone)){
+            param.put("phone","");
+        }
+
     }
 
 

@@ -1057,8 +1057,8 @@ public class RedisTest extends ConfigTest {
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         for (OrderInfo orderInfo : orderInfos) {
 //            System.out.println("{orderNo:"+orderInfo.getOrderNo()+", createTime:"+orderInfo.getCreateTime()+"}");
-            String timeZone = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(), "yyyy-MM-dd HH:mm:ss");
-            System.out.println("{orderNo:"+orderInfo.getOrderNo()+", createTime:"+orderInfo.getCreateTime()+", createdTime:"+timeZone+"}");
+//            String timeZone = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(), "yyyy-MM-dd HH:mm:ss");
+//            System.out.println("{orderNo:"+orderInfo.getOrderNo()+", createTime:"+orderInfo.getCreateTime()+", createdTime:"+timeZone+"}");
 
         }
     }

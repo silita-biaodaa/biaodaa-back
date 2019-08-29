@@ -15,17 +15,13 @@
     <select id="querySingleUser" resultType="java.util.Map" parameterType="map">
         SELECT t.uid,t.user_name AS userName,t.password,t.phone FROM biaodaa_admin.`tb_user` t WHERE phone = #{phone} and t.password = #{password}
     </select>
-    <select id="queryAccountList" resultType="com.silita.model.TbUser" parameterType="com.silita.model.TbUser">
+    <select id="queryAccountList" resultType="java.util.Map" parameterType="com.silita.model.TbUser">
         SELECT
           t.uid,
-          t.user_name,
-          t.password,
-          t.real_name,
+          t.real_name as realName,
           t.phone,
-          t.sflag,
-          t.lock,
+        <include refid="lock"/>,
           t.created,
-          t.updated,
           t.department,
           t.post
         FROM
@@ -34,8 +30,17 @@
           <if test="phone != null and phone != ''">
               AND phone LIKE CONCAT('%',#{phone},'%')
           </if>
-
+        order by t.created desc
+        LIMIT #{start}, #{pageSize}
     </select>
+
+    <sql id="lock">
+       ( case t.lock
+        when '0' then '未锁定'
+        else '锁定' end) as locks
+    </sql>
+
+
     <select id="queryAccountListCount" resultType="java.lang.Integer" parameterType="map">
           SELECT
               ifnull(count(1),0)

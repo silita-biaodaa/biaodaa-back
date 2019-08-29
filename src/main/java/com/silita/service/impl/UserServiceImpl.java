@@ -7,8 +7,12 @@ import com.silita.model.TbRole;
 import com.silita.model.TbUser;
 import com.silita.service.IUserService;
 import com.silita.service.abs.AbstractService;
+import com.silita.service.mongodb.MongodbService;
+import com.silita.utils.md5.MD5Utils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.*;
 
@@ -25,6 +29,8 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     private IUserMapper userMapper;
     @Autowired
     private TbUserMapper tbUserMapper;
+    @Autowired
+    MongodbService mongodbService;
 
     @Override
     public TbUser getUserByUserName(String userName) {
@@ -75,12 +81,27 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     }
 
     /**
+     * 重置密码
+     * @param param
+     */
+    @Override
+    public void updateResetPassword(Map<String, Object> param) {
+        String password = MapUtils.getString(param, "password");
+        param.put("password", MD5Utils.sign(password));//md5加密
+        tbUserMapper.updateResetPassword(param);
+    }
+
+    /**
      * 账号管理查询及筛选
      * @param tbUser
      * @return
      */
     @Override
     public Map<String,Object> getAccountList(TbUser tbUser) {
+        String phone = tbUser.getPhone();
+        if(StringUtil.isEmpty(phone)){
+            tbUser.setPhone("");
+        }
         Map<String,Object> resultMap = new HashMap<>();
         resultMap.put("list",tbUserMapper.queryAccountList(tbUser));
         resultMap.put("total",tbUserMapper.queryAccountListCount(tbUser));

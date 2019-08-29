@@ -38,6 +38,12 @@ public interface IUserService {
      * @param param
      */
     Map<String,Object> updatePassword(Map<String,Object> param);
+
+    /**
+     * 重置密码
+     * @param param
+     */
+    void updateResetPassword(Map<String,Object> param);
     /**
      * 账号管理查询及筛选
      * @param tbUser

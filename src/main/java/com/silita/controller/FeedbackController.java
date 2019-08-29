@@ -2,6 +2,7 @@ package com.silita.controller;
 
 import com.silita.controller.base.BaseController;
 import com.silita.service.IFeedbackService;
+import com.silita.service.mongodb.MongodbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,8 @@ public class FeedbackController extends BaseController {
 
     @Autowired
     IFeedbackService feedbackService;
+    @Autowired
+    MongodbService mongodbService;
 
     /**
      * 等级列表
@@ -37,6 +40,7 @@ public class FeedbackController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/new/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> newList(@RequestBody Map<String, Object> param) {
+        mongodbService.isNull(param);
         return feedbackService.getlistFeedback(param);
     }
 

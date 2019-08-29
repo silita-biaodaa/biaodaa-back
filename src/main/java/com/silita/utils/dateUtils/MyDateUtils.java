@@ -4,6 +4,7 @@ package com.silita.utils.dateUtils;
  * Description:Class说明：日期格式化类
  */
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.LoggerFactory;
 import tk.mybatis.mapper.util.StringUtil;
@@ -137,7 +138,7 @@ public class MyDateUtils {
             Date d = sdff.parse(createTime);
             formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
         } catch (Exception e) {
-            logger.info("mongdb时间转换" + e);
+            logger.error("mongdb时间转换",e);
         }
         return formatDate;
     }
@@ -159,7 +160,7 @@ public class MyDateUtils {
             long time = createTime.getTime();
             return longDateToStr(time, setFormat);
         } catch (Exception e) {
-            logger.error("时间转换错误" + e);
+            logger.error("mongdb时间转换   时区问题",e);
         }
         return null;
     }
@@ -204,7 +205,7 @@ public class MyDateUtils {
             Date d = sdff.parse(createTime);
             formatDate = new SimpleDateFormat("yyyy-MM-dd").format(d);
         } catch (Exception e) {
-            logger.info("mongdb时间转换" + e);
+            logger.error("mongdb时间转换",e);
         }
         return formatDate;
     }
@@ -222,7 +223,8 @@ public class MyDateUtils {
             Date d = sdff.parse(createTime);
             formatDate = new SimpleDateFormat("yyyy-MM-dd").format(d);
         } catch (Exception e) {
-            logger.info("mongdb时间转换", e);
+            logger.error("mongdb时间转换",e);
+
         }
         return formatDate;
     }
@@ -310,6 +312,25 @@ public class MyDateUtils {
             parrten = "yyyy/MM/dd";
         }
         return MyDateUtils.getTime(date, parrten);
+    }
+
+    /**
+     * 时间比较
+     * @return
+     */
+    public static Integer getCompareTo(String beginTime){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Integer integer = 0;
+        try {
+            Date day = new Date();
+            String endTime = format.format(day);
+            Date date1 = format.parse(beginTime);
+            Date date2 = format.parse(endTime);
+            integer = date1.compareTo(date2);
+        }catch (Exception e){
+            logger.info("时间比较",e);
+        }
+        return integer;
     }
 
     /**

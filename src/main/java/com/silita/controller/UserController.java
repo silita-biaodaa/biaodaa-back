@@ -22,13 +22,14 @@ public class UserController extends BaseController {
 
     /**
      * 用户锁定或解锁
+     *
      * @param param
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/updateLock", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String,Object> updateLock(@RequestBody Map<String,Object> param){
-       userService.updateLock(param);
+    public Map<String, Object> updateLock(@RequestBody Map<String, Object> param) {
+        userService.updateLock(param);
         return this.successMap();
     }
     /**
@@ -36,8 +37,8 @@ public class UserController extends BaseController {
      * @param param
      * @return
      */
-    @ResponseBody
-    @RequestMapping(value = "/updateLock", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+   /* @ResponseBody
+    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String,Object> updatePassword(@RequestBody Map<String,Object> param){
         Map<String, Object> map = userService.updatePassword(param);
         if(null != map){
@@ -47,15 +48,28 @@ public class UserController extends BaseController {
         maps.put("code", 0);
         maps.put("msg","手机号码或原密码错误");
         return this.successMap();
+    }*/
+
+    /**
+     * 账号管理查询及筛选
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateResetPassword", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> updateResetPassword(@RequestBody Map<String,Object> param) {
+        userService.updateResetPassword(param);
+        return this.successMap();
     }
     /**
      * 账号管理查询及筛选
+     *
      * @param tbUser
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/accountList", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String,Object> accountList(@RequestBody TbUser tbUser){
+    public Map<String, Object> accountList(@RequestBody TbUser tbUser) {
         return this.successMap(userService.getAccountList(tbUser));
     }
 
