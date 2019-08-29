@@ -5,7 +5,6 @@ package com.silita.utils.dateUtils;
  */
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.logging.log4j.Logger;
 import org.slf4j.LoggerFactory;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -120,7 +119,7 @@ public class MyDateUtils {
             SimpleDateFormat formats = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
             parse = formats.parse(formats.format(bt));
         } catch (Exception e) {
-            logger.info("String转Date",e);
+            logger.info("String转Date", e);
         }
         return parse;
     }
@@ -137,7 +136,7 @@ public class MyDateUtils {
             SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
             Date d = sdff.parse(createTime);
             formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.info("mongdb时间转换" + e);
         }
         return formatDate;
@@ -150,21 +149,18 @@ public class MyDateUtils {
      * @param createTime
      * @return
      */
-    public static String getTimeZone(String createTime,String setFormat) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if(StringUtil.isEmpty(setFormat)){
-                setFormat="yyyy-MM-dd";
+    public static String getTimeZone(Date createTime, String setFormat) {
+        if (StringUtil.isEmpty(setFormat)) {
+            setFormat = "yyyy-MM-dd";
         }
-        SimpleDateFormat sdfs = new SimpleDateFormat(setFormat);
         String format = "";
         try {
-            SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-            Date d = sdff.parse(createTime);
-            String formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(d);
-            Date parse = sdf.parse(formatDate);
-            format = sdfs.format(parse);
-        }catch (Exception e){
-            logger.info("mongdb时间转换" + e);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(createTime);
+            long time = createTime.getTime();
+            return longDateToStr(time, setFormat);
+        } catch (Exception e) {
+            logger.error("时间转换错误" + e);
         }
         return format;
     }
@@ -172,14 +168,15 @@ public class MyDateUtils {
 
     /**
      * 比较时间
+     *
      * @param time
      * @param start
      * @return
      */
-    public static Boolean getCompareStartDate(Date time,Date start){
-         boolean b = false;
+    public static Boolean getCompareStartDate(Date time, Date start) {
+        boolean b = false;
         int compareTo = time.compareTo(start);
-        if(compareTo == -1 || compareTo == 0){
+        if (compareTo == -1 || compareTo == 0) {
             b = true;
         }
         return b;
@@ -187,14 +184,15 @@ public class MyDateUtils {
 
     /**
      * 比较时间
+     *
      * @param time
      * @param end
      * @return
      */
-    public static Boolean getCompareEndDate(Date time,Date end){
+    public static Boolean getCompareEndDate(Date time, Date end) {
         boolean b = false;
         int compareTo = time.compareTo(end);
-        if(compareTo == 1 || compareTo == 0){
+        if (compareTo == 1 || compareTo == 0) {
             b = true;
         }
         return b;
@@ -206,7 +204,7 @@ public class MyDateUtils {
             SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
             Date d = sdff.parse(createTime);
             formatDate = new SimpleDateFormat("yyyy-MM-dd").format(d);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.info("mongdb时间转换" + e);
         }
         return formatDate;
@@ -224,8 +222,8 @@ public class MyDateUtils {
             SimpleDateFormat sdff = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
             Date d = sdff.parse(createTime);
             formatDate = new SimpleDateFormat("yyyy-MM-dd").format(d);
-        }catch (Exception e){
-            logger.info("mongdb时间转换" ,e);
+        } catch (Exception e) {
+            logger.info("mongdb时间转换", e);
         }
         return formatDate;
     }
@@ -245,7 +243,7 @@ public class MyDateUtils {
             c.add(Calendar.DATE, 1);
             tomorrow = sdf.format(c.getTime());
         } catch (Exception e) {
-            logger.info("获取明天日期" , e);
+            logger.info("获取明天日期", e);
         }
         return tomorrow;
 
@@ -256,7 +254,7 @@ public class MyDateUtils {
      *
      * @return
      */
-    public static String getTomorrowTime(String end,Integer day) {
+    public static String getTomorrowTime(String end, Integer day) {
         String tomorrow = "";
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -266,7 +264,7 @@ public class MyDateUtils {
             c.add(Calendar.DATE, day);
             tomorrow = sdf.format(c.getTime());
         } catch (Exception e) {
-            logger.info("获取明天日期" , e);
+            logger.info("获取明天日期", e);
         }
         return tomorrow;
 
@@ -408,16 +406,17 @@ public class MyDateUtils {
 
     /**
      * String 转 Date
+     *
      * @param createTime
      * @return
      */
-    public static Date getStringTrueDate(String createTime){
+    public static Date getStringTrueDate(String createTime) {
         Date parse = null;
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-             parse = simpleDateFormat.parse(createTime);
-        }catch (Exception e){
-            logger.info("String 转 Date",e);
+            parse = simpleDateFormat.parse(createTime);
+        } catch (Exception e) {
+            logger.info("String 转 Date", e);
         }
         return parse;
     }
@@ -963,8 +962,8 @@ public class MyDateUtils {
     }
 
     public static void main(String[] args) {
-		/*// 获取当月第一天和最后一天
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        /*// 获取当月第一天和最后一天
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String firstday, lastday;
 		// 获取前月的第一天
 		Calendar cale = null;

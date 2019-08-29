@@ -4,7 +4,6 @@ package com.silita.service.mongodb;
 import com.silita.model.OrderInfo;
 import com.silita.utils.dateUtils.MyDateUtils;
 import org.apache.commons.collections.MapUtils;
-import org.elasticsearch.common.recycler.Recycler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,10 +12,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
 
-import java.beans.IntrospectionException;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -115,7 +112,7 @@ public class MongodbService {
         int todayCount = 0;
         Map<String, Integer> map = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
-            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyyy-MM-dd");
+            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd");
             if (timeCycle.equals(todayDate)) {
                 todayCount++;
             } else if (timeCycle.equals(yesterdayDate)) {
@@ -201,7 +198,7 @@ public class MongodbService {
             String tradeType = orderInfo.getTradeType();
             Integer orderStatus = orderInfo.getOrderStatus();
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
-                String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyyy-MM-dd");
+                String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd");
                 Integer fee = orderInfo.getFee();
                 if (timeCycle.equals(yesterdayDate)) {
                     //昨日订单
@@ -334,7 +331,7 @@ public class MongodbService {
             String tradeType = orderInfo.getTradeType();
             Integer orderStatus = orderInfo.getOrderStatus();
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
-                String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyyy-MM-dd");
+                String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd");
                 Integer vipDays = orderInfo.getVipDays();
                 maps.put("orderNo", orderInfo.getOrderNo());
                 maps.put("userId", orderInfo.getUserId());
@@ -491,7 +488,7 @@ public class MongodbService {
                     maps.put("userId", orderInfo.getUserId());
                     maps.put("orderNo", orderInfo.getOrderNo());
                     maps.put("orderStatus", orderStatus);
-                    String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString(),"yyyy-MM-dd HH:mm:ss");
+                    String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd HH:mm:ss");
                     maps.put("createTime", dates);
                     maps.put("stdCode", stdCode);
                     maps.put("count", 1);
