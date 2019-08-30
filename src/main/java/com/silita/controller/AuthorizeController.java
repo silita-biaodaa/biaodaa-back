@@ -29,9 +29,9 @@ public class AuthorizeController {
     @ResponseBody
     public Map<String, Object> login(@RequestBody TbUser user) {
         Map result = new HashMap();
-
+        //// TODO: 2019/8/30 需要改动，根据手机号和password登录
         Subject subject = SecurityUtils.getSubject();
-        String tokenStr = JWTUtil.sign(user.getUserName(), user.getPassword());
+        String tokenStr = JWTUtil.sign(user.getUserName(), user.getPassword(),2);
         JWTToken jwtToken = new JWTToken(tokenStr);
         try {
             subject.login(jwtToken);

@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.util.StringUtils;
@@ -69,9 +70,31 @@ public class JWTUtil {
         try {
             HttpServletRequest httpServletRequest = (HttpServletRequest) request;
             String authorization = httpServletRequest.getHeader("Authorization");
-            if(!StringUtils.isEmpty(authorization)) {
+            if (!StringUtils.isEmpty(authorization)) {
                 DecodedJWT jwt = JWT.decode(authorization);
                 return jwt.getClaim("userName").asString();
+            } else {
+                return null;
+            }
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获得token中的信息无需secret解密也能获得
+     *
+     * @return token中包含的uid
+     */
+    public static String getUid(ServletRequest request) {
+        try {
+            HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+            String authorization = httpServletRequest.getHeader("Authorization");
+            if (!StringUtils.isEmpty(authorization)) {
+                DecodedJWT jwt = JWT.decode(authorization);
+                Claim user = jwt.getClaim("user");
+                String[] users = user.as(new String[]{}.getClass());
+                return users[1];
             } else {
                 return null;
             }
@@ -91,7 +114,7 @@ public class JWTUtil {
         try {
             //token过期时间
             Date date;
-            if(tokenLifeCycle == null) {
+            if (tokenLifeCycle == null) {
                 date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
             } else {
                 date = new Date(System.currentTimeMillis() + Long.parseLong(tokenLifeCycle));
@@ -109,4 +132,34 @@ public class JWTUtil {
         }
     }
 
+    /**
+     * 生成签名,30min后过期
+     *
+     * @param username 用户名
+     * @param secret   用户的密码
+     * @param uid      用户id
+     * @return 加密的token
+     */
+    public static String sign(String username, String secret, Integer uid) {
+        try {
+            //token过期时间
+            Date date;
+            if (tokenLifeCycle == null) {
+                date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+            } else {
+                date = new Date(System.currentTimeMillis() + Long.parseLong(tokenLifeCycle));
+            }
+            //密码MD5加密
+            Object md5Password = new SimpleHash("MD5", secret, username, 2);
+            Algorithm algorithm = Algorithm.HMAC256(String.valueOf(md5Password));
+            String[] users = new String[]{username, uid.toString()};
+            // 附带username信息
+            return JWT.create()
+                    .withArrayClaim("users", users)
+                    .withExpiresAt(date)
+                    .sign(algorithm);
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+    }
 }
