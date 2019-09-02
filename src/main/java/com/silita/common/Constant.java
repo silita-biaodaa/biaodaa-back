@@ -183,6 +183,6 @@ public class Constant {
      */
     public static String MSG_PASSWORD ="原密码错误";
 
-
+    public static String MSG_MISTAKE = "手机号或密码错误";
 
 }

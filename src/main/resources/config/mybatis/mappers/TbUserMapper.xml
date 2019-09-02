@@ -12,6 +12,23 @@
     <update id="updateResetPassword" parameterType="map">
         UPDATE biaodaa_admin.`tb_user` t SET t.password = #{password} where t.uid = #{uid}
     </update>
+    <update id="updateUser" parameterType="map">
+        update biaodaa_admin.`tb_user` t set
+        <if test="realName != null and realName !=''">
+            t.real_name = #{realName}
+        </if>
+        <if test="phone != null and phone !=''">
+            t.phone = #{phone}
+        </if>
+        <if test="department != null and department !=''">
+            t.department = #{department}
+        </if>
+        <if test="post != null and post !=''">
+            t.post = #{post}
+        </if>
+            t.updated = NOW()
+        where uid=#{uid}
+    </update>
     <select id="querySingleUserPhone" resultType="java.lang.Integer" parameterType="map">
         SELECT ifnull(count(1),0) FROM biaodaa_admin.`tb_user` t WHERE t.phone = #{phone}
     </select>
@@ -53,6 +70,18 @@
             <if test="phone != null and phone != ''">
                 AND phone LIKE CONCAT('%',#{phone},'%')
             </if>
+    </select>
+    <select id="login" resultType="com.silita.model.TbUser" parameterType="com.silita.model.TbUser">
+        SELECT
+          t.uid,
+          t.user_name as userName,
+          t.password,
+          t.phone,
+          t.sflag,
+          t.lock
+        FROM
+          biaodaa_admin.tb_user t
+        WHERE phone = #{phone} and password = #{password}
     </select>
 
 </mapper>

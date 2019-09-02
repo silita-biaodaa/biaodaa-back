@@ -34,11 +34,12 @@ public class JWTUtil {
      * @param secret 用户的密码
      * @return 是否正确
      */
-    public static boolean verify(String token, String username, String secret) {
+    public static boolean verify(String token, String username, String secret,String phone,Integer uid) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
+            String[] users = new String[]{username, uid.toString(),phone};
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withClaim("userName", username)
+                    .withArrayClaim("users", users)
                     .build();
             DecodedJWT jwt = verifier.verify(token);
             return true;
@@ -52,10 +53,21 @@ public class JWTUtil {
      *
      * @return token中包含的用户名
      */
+//    public static String getUsername(String token) {
+//        try {
+//            DecodedJWT jwt = JWT.decode(token);
+//            return jwt.getClaim("userName").asString();
+//        } catch (JWTDecodeException e) {
+//            return null;
+//        }
+//    }
+
     public static String getUsername(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("userName").asString();
+            Claim user = jwt.getClaim("users");
+            String[] users = user.as(new String[]{}.getClass());
+            return users[0];
         } catch (JWTDecodeException e) {
             return null;
         }
@@ -72,10 +84,28 @@ public class JWTUtil {
             String authorization = httpServletRequest.getHeader("Authorization");
             if (!StringUtils.isEmpty(authorization)) {
                 DecodedJWT jwt = JWT.decode(authorization);
-                return jwt.getClaim("userName").asString();
+                Claim user = jwt.getClaim("users");
+                String[] users = user.as(new String[]{}.getClass());
+                return users[0];
             } else {
                 return null;
             }
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取手机号
+     * @param token
+     * @return
+     */
+    public static String getPhone(String token) {
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            Claim user = jwt.getClaim("users");
+            String[] users = user.as(new String[]{}.getClass());
+            return users[2];
         } catch (JWTDecodeException e) {
             return null;
         }
@@ -92,7 +122,7 @@ public class JWTUtil {
             String authorization = httpServletRequest.getHeader("Authorization");
             if (!StringUtils.isEmpty(authorization)) {
                 DecodedJWT jwt = JWT.decode(authorization);
-                Claim user = jwt.getClaim("user");
+                Claim user = jwt.getClaim("users");
                 String[] users = user.as(new String[]{}.getClass());
                 return users[1];
             } else {
@@ -140,7 +170,7 @@ public class JWTUtil {
      * @param uid      用户id
      * @return 加密的token
      */
-    public static String sign(String username, String secret, Integer uid) {
+    public static String sign(String username, String secret, Integer uid,String phone) {
         try {
             //token过期时间
             Date date;
@@ -150,9 +180,9 @@ public class JWTUtil {
                 date = new Date(System.currentTimeMillis() + Long.parseLong(tokenLifeCycle));
             }
             //密码MD5加密
-            Object md5Password = new SimpleHash("MD5", secret, username, 2);
-            Algorithm algorithm = Algorithm.HMAC256(String.valueOf(md5Password));
-            String[] users = new String[]{username, uid.toString()};
+            //Object md5Password = new SimpleHash("MD5", secret, phone, 2);
+            Algorithm algorithm = Algorithm.HMAC256(String.valueOf(secret));
+            String[] users = new String[]{username, uid.toString(),phone};
             // 附带username信息
             return JWT.create()
                     .withArrayClaim("users", users)

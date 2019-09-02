@@ -44,7 +44,7 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 账号管理查询及筛选
+     * 重置密码
      * @param param
      * @return
      */

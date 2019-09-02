@@ -31,7 +31,7 @@
     </resultMap>
 
     <update id="lockUser" parameterType="java.util.Map">
-        update mishu_write.sys_user_info set enable = #{isEnable},updated = now() where pkid = #{pkid}
+        update mishu_write.sys_user_info set enable = #{lock},updated = now() where pkid = #{pkid}
     </update>
     <update id="updateRemark" parameterType="map">
         UPDATE mishu_write.`sys_user_info` t SET t.remark=#{remark} where t.pkid=#{pkid}
@@ -269,6 +269,7 @@
         t.`created`,
         t.inviter_code AS inviterCode,
         t.own_invite_code AS ownInviteCode,
+        <include refid="ENABLE"/>,
         t3.expired_date AS expiredDate
         FROM
         mishu_write.`sys_user_info` t
@@ -293,6 +294,12 @@
         GROUP BY t.`phone_no`
         ORDER BY t3.expired_date DESC
     </select>
+
+    <sql id="ENABLE">
+       ( case t.ENABLE
+        when '0' then '锁定'
+        else '未锁定' end) as locks
+    </sql>
 
     <select id="queryUserInfoListAll" resultType="java.util.Map" parameterType="map">
         SELECT
@@ -453,7 +460,9 @@
     <select id="queryInviterPhone" resultType="java.lang.String" parameterType="map">
         SELECT phone_no AS phoneNo FROM mishu_write.`sys_user_info` where own_invite_code=#{inviterCode}
     </select>
-
+    <select id="queryPhoneSingle" resultType="java.lang.String">
+        select phone_no AS phoneNo from mishu_write.`sys_user_info` where pkid = #{pkid}
+    </select>
 
 
 </mapper>

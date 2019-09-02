@@ -1,5 +1,6 @@
 package com.silita.controller;
 
+import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.model.SysUserInfo;
 import com.silita.service.IUserInfoService;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +44,9 @@ public class UserInfoController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/lock", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> userLock(@RequestBody Map<String, Object> param) {
+    public Map<String, Object> userLock(@RequestBody Map<String, Object> param, ServletRequest request) {
+        String uid = JWTUtil.getUid(request);
+        param.put("optBy",uid);
         userInfoService.userLock(param);
         return successMap();
     }
@@ -106,7 +111,8 @@ public class UserInfoController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/updateRemark", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String,Object> updateRemark(@RequestBody Map<String,Object> param){
+    public Map<String,Object> updateRemark(@RequestBody Map<String,Object> param,ServletRequest request){
+        param.put("optBy",JWTUtil.getUid(request));
         userInfoService.updateRemark(param);
         return successMap();
     }

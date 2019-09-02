@@ -40,7 +40,7 @@
     <select id="getUserByUserName" parameterType="String" resultMap="UserResult">
         SELECT *
         FROM tb_user
-        WHERE user_name = #{userName};
+        WHERE phone = #{userName};
     </select>
 
     <select id="getRolesAndPermissionsByUserName" parameterType="String" resultMap="RolesAndPermissions">

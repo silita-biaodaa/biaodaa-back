@@ -36,6 +36,13 @@ public interface SysUserInfoMapper extends MyMapper<SysUserInfo> {
     int lockUser(Map<String, Object> param);
 
     /**
+     * 查询单个手机号码
+     * @param param
+     * @return
+     */
+    String queryPhoneSingle(Map<String,Object> param);
+
+    /**
      * 查询列表
      * @param userInfo
      * @return
@@ -146,4 +153,6 @@ public interface SysUserInfoMapper extends MyMapper<SysUserInfo> {
     String queryInviterPhone(Map<String,Object> param);
 
     //updateLock(Map<String,Object> param);
+
+
 }

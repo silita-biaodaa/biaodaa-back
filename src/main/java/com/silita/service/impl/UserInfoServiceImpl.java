@@ -1,12 +1,15 @@
 package com.silita.service.impl;
 
+import com.silita.dao.SysLogsMapper;
 import com.silita.dao.SysRoleInfoMapper;
 import com.silita.dao.SysUserInfoMapper;
+import com.silita.model.SysLogs;
 import com.silita.model.SysUserInfo;
 import com.silita.service.IUserInfoService;
 import com.silita.service.abs.AbstractService;
 import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
+import com.silita.utils.oldProjectUtils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
 import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
     SysRoleInfoMapper sysRoleInfoMapper;
     @Autowired
     MongodbService mongodbUtils;
+    @Autowired
+    SysLogsMapper logsMapper;
 
     @Override
     public Map<String, Object> userCount(Map<String, Object> param) {
@@ -57,6 +62,16 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public void userLock(Map<String, Object> param) {
+        param.put("pid", CommonUtil.getUUID());
+        param.put("optType", "用户账号");
+        if (MapUtils.getInteger(param, "lock") == 1) {
+            param.put("optDesc", "解锁账户");
+        } else {
+            param.put("optDesc", "锁定账户");
+        }
+        String phone = sysUserInfoMapper.queryPhoneSingle(param);
+        param.put("operand", phone);
+        logsMapper.insertLogs(param);//添加操作日志
         sysUserInfoMapper.lockUser(param);
     }
 
@@ -401,7 +416,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
 */
 
 
-
     /**
      * 获取用户统计
      *
@@ -427,8 +441,8 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
             int count = 0;
             for (Map<String, Object> payCount : userPayCounts) {
                 System.out.println(payCount);
-                String phone = MapUtils.getString(maps, MapUtils.getString(payCount,"userId"));
-                if(StringUtil.isNotEmpty(phone)){
+                String phone = MapUtils.getString(maps, MapUtils.getString(payCount, "userId"));
+                if (StringUtil.isNotEmpty(phone)) {
                     count++;
                 }
             }
@@ -534,6 +548,12 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public void updateRemark(Map<String, Object> param) {
+        param.put("pid", CommonUtil.getUUID());
+        param.put("optType", "用户账号");
+        param.put("optDesc", "添加用户备注");
+        String phone = sysUserInfoMapper.queryPhoneSingle(param);
+        param.put("operand", phone);
+        logsMapper.insertLogs(param);//添加操作日志
         sysUserInfoMapper.updateRemark(param);
     }
 

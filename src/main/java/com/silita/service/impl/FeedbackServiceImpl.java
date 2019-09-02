@@ -1,12 +1,15 @@
 package com.silita.service.impl;
 
 import com.silita.dao.FeedbackMapper;
+import com.silita.dao.SysLogsMapper;
+import com.silita.dao.SysUserInfoMapper;
 import com.silita.dao.TbFeedbackMapper;
 import com.silita.model.TbFeedback;
 import com.silita.service.IFeedbackService;
 import com.silita.service.abs.AbstractService;
 import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
+import com.silita.utils.oldProjectUtils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,10 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
     FeedbackMapper feedbackMapper;
     @Autowired
     MongodbService mongodbService;
+    @Autowired
+    SysLogsMapper logsMapper;
+    @Autowired
+    SysUserInfoMapper sysUserInfoMapper;
 
 
     @Override
@@ -123,6 +130,13 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
      */
     @Override
     public void updateRemark(Map<String, Object> param) {
+        param.put("pid", CommonUtil.getUUID());
+        param.put("optType", "意见反馈");
+        param.put("optDesc", "添加反馈备注");
+        param.put("pkid",feedbackMapper.queryPid(param));
+        String phone = sysUserInfoMapper.queryPhoneSingle(param);
+        param.put("operand", phone);
+        logsMapper.insertLogs(param);//添加操作日志
         feedbackMapper.updateRemark(param);
     }
 
@@ -132,6 +146,13 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
      */
     @Override
     public void updateState(Map<String, Object> param) {
+        param.put("pid", CommonUtil.getUUID());
+        param.put("optType", "意见反馈");
+        param.put("optDesc", "编辑反馈状态");
+        param.put("pkid",feedbackMapper.queryPid(param));
+        String phone = sysUserInfoMapper.queryPhoneSingle(param);
+        param.put("operand", phone);
+        logsMapper.insertLogs(param);//添加操作日志
         feedbackMapper.updateState(param);
     }
 

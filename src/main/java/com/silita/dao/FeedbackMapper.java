@@ -36,4 +36,11 @@ public interface FeedbackMapper extends MyMapper<Feedback> {
      */
     void updateState(Map<String,Object> param);
 
+    /**
+     * 获取用户id
+     * @param param
+     * @return
+     */
+    String queryPid(Map<String,Object> param);
+
 }

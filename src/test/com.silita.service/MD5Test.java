@@ -14,12 +14,14 @@ public class MD5Test {
         //加密方式
         String hashAlgorithmName = "MD5";
         //密码
-        String credentials = "123456";
+        String credentials = "12345678";
         //加密次数
         int hashIterations = 2;
-        //盐（用用户账号）
-        ByteSource credentialsSalt = ByteSource.Util.bytes("gemingyi");
+        //盐（用用户手机号）
+        ByteSource credentialsSalt = ByteSource.Util.bytes("18774885504");
         Object obj = new SimpleHash(hashAlgorithmName, credentials, credentialsSalt, hashIterations);
         System.out.println(obj);
+
+        //d9a7cf53dbc8204afc639a8dc356e1bc
     }
 }

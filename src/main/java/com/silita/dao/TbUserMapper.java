@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface TbUserMapper extends MyMapper<TbUser> {
+
+    TbUser login(TbUser tbUser);
+
+
+
     /**
      * 用户解锁或锁定
      * @param param
@@ -24,6 +29,12 @@ public interface TbUserMapper extends MyMapper<TbUser> {
      * @param param
      */
     void updateResetPassword(Map<String,Object> param);
+
+    /**
+     * 编辑管理员
+     * @param param
+     */
+    void updateUser(Map<String,Object> param);
 
     /**
      * 查询手机号码是否存在
@@ -52,4 +63,5 @@ public interface TbUserMapper extends MyMapper<TbUser> {
      * @return
      */
     Integer queryAccountListCount(TbUser tbUser);
+
 }

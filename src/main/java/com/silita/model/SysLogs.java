@@ -53,5 +53,7 @@ public class SysLogs extends Pagination {
     @Column(name = "opt_time")
     private Date optTime;
 
+    private String realName;
+
 
 }

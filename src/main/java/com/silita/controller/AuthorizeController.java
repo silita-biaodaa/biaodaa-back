@@ -3,9 +3,11 @@ package com.silita.controller;
 import com.silita.commons.shiro.token.JWTToken;
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.model.TbUser;
+import com.silita.service.IUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,13 +27,29 @@ import java.util.Map;
 @RequestMapping("/authorize")
 public class AuthorizeController {
 
+    @Autowired
+    private IUserService userService;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String, Object> login(@RequestBody TbUser user) {
         Map result = new HashMap();
+        Integer integer = userService.existssqlPhone(user);
+        if(null == integer || integer == 0){
+            result.put("code", 0);
+            result.put("msg", "手机号不存在");
+            return result;
+        }
+        TbUser login = userService.login(user);
+        if(login == null){
+            result.put("code", 0);
+            result.put("msg", "手机号或密码错误");
+            return result;
+        }
+
         //// TODO: 2019/8/30 需要改动，根据手机号和password登录
         Subject subject = SecurityUtils.getSubject();
-        String tokenStr = JWTUtil.sign(user.getUserName(), user.getPassword(),2);
+        String tokenStr = JWTUtil.sign(login.getUserName(), login.getPassword(),login.getUid(),login.getPhone());
         JWTToken jwtToken = new JWTToken(tokenStr);
         try {
             subject.login(jwtToken);
@@ -39,6 +57,7 @@ public class AuthorizeController {
             result.put("data", tokenStr);
             result.put("msg", "登录成功！");
         } catch (Exception e) {
+            e.printStackTrace();
             result.put("code",0);
             result.put("msg",e.getMessage());
         }

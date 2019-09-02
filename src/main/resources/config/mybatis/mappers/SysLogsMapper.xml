@@ -2,4 +2,59 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.SysLogsMapper" >
 
+    <select id="queryLogsList" resultType="java.util.Map" parameterType="com.silita.model.SysLogs">
+        SELECT
+        t.opt_time AS optTime,
+        t1.real_name AS realName,
+        t1.department,
+        t1.post,
+        t.opt_type AS optType,
+        t.opt_desc AS optDesc,
+        t.operand,
+        t2.`pkid`
+        FROM
+        biaodaa_admin.`sys_logs` t
+        JOIN biaodaa_admin.`tb_user` t1
+        ON t.opt_by = t1.uid
+        JOIN mishu_write.`sys_user_info` t2
+        ON t.`operand` = t2.`phone_no`
+        where 1=1
+        <if test="realName != null and realName != ''">
+            and t1.real_name = #{realName}
+        </if>
+        <if test="optType != null and optType != ''">
+            and t.opt_type = #{optType}
+        </if>
+        ORDER BY opt_time DESC
+        limit #{start},#{pageSize}
+    </select>
+    <select id="queryLogsListCount" resultType="java.lang.Integer" parameterType="com.silita.model.SysLogs">
+        SELECT
+        ifnull(count(1),0)
+        FROM
+        biaodaa_admin.`sys_logs` t
+        JOIN biaodaa_admin.`tb_user` t1
+        ON t.opt_by = t1.uid
+        JOIN mishu_write.`sys_user_info` t2
+        ON t.`operand` = t2.`phone_no`
+        where 1=1
+        <if test="realName != null and realName != ''">
+            and t1.real_name = #{realName}
+        </if>
+        <if test="optType != null and optType != ''">
+            and t.opt_type = #{optType}
+        </if>
+    </select>
+    <insert id="insertLogs" parameterType="map">
+        INSERT INTO biaodaa_admin.sys_logs (
+          pkid,
+          opt_type,
+          opt_desc,
+          opt_by,
+          opt_time,
+          operand
+        )
+        VALUES
+          (#{pid},#{optType},#{optDesc},#{optBy},NOW(),#{operand})
+    </insert>
 </mapper>

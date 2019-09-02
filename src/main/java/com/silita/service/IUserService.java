@@ -13,6 +13,10 @@ import java.util.Map;
  */
 public interface IUserService {
 
+    Integer existssqlPhone(TbUser tbUser);
+
+    TbUser login(TbUser tbUser);
+
     /**
      * 根据用户名获取用户基本信息
      * @param userName
@@ -50,5 +54,11 @@ public interface IUserService {
      * @return
      */
     Map<String,Object> getAccountList(TbUser tbUser);
+
+    /**
+     * 修改管理员信息
+     * @param param
+     */
+    void updateUser(Map<String,Object> param);
 
 }

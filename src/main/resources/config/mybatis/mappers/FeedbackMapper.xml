@@ -23,7 +23,7 @@
           mishu_write.`feedback` t
           JOIN mishu_write.`sys_user_info` t1
             ON t.`pid` = t1.`pkid`
-          JOIN mishu_write.`tb_vip_info` t2
+          left JOIN mishu_write.`tb_vip_info` t2
             ON t1.`pkid` = t2.`user_id`
         WHERE 1 = 1
         <if test="type != null and type != ''">
@@ -78,5 +78,8 @@
         GROUP BY yesterdayCount,
           totalCount,
           untreatedCount
+    </select>
+    <select id="queryPid" resultType="java.lang.String" parameterType="map">
+        SELECT pid FROM mishu_write.`feedback` WHERE id = #{id}
     </select>
 </mapper>

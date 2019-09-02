@@ -67,14 +67,14 @@ public class MyRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
         String token = (String) auth.getCredentials();
         // 解密获得userName，用于和数据库进行对比
-        String userName = JWTUtil.getUsername(token);
-        TbUser vo = this.userService.getUserByUserName(userName);
+        String phone = JWTUtil.getPhone(token);
+        TbUser vo = this.userService.getUserByUserName(phone);
         if (vo == null) {
-            throw new UnknownAccountException("该用户名称不存在！");
+            throw new UnknownAccountException("该用户手机号不存在！");
         } else if (vo.getLock() == null || vo.getLock().equals(1)) {
             throw new UnknownAccountException("该用户已经被锁定了！");
-        } else if(!JWTUtil.verify(token, userName, vo.getPassword())) {
-            throw new IncorrectCredentialsException("用户名或密码错误！");
+        } else if(!JWTUtil.verify(token, phone, vo.getPassword(),vo.getPhone(),vo.getUid())) {
+            throw new IncorrectCredentialsException("手机号或密码错误！");
         } else {
             AuthenticationInfo authcInfo = new SimpleAuthenticationInfo(token, token, vo.getUserName());
             return authcInfo;

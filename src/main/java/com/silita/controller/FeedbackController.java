@@ -1,5 +1,6 @@
 package com.silita.controller;
 
+import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.service.IFeedbackService;
 import com.silita.service.mongodb.MongodbService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletRequest;
 import java.util.Map;
 
 @Controller
@@ -59,7 +61,8 @@ public class FeedbackController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/updateRemark", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> updateRemark(@RequestBody Map<String, Object> param) {
+    public Map<String, Object> updateRemark(@RequestBody Map<String, Object> param, ServletRequest request) {
+        param.put("optBy",JWTUtil.getUid(request));
         feedbackService.updateRemark(param);
         return this.successMap();
     }
@@ -69,7 +72,8 @@ public class FeedbackController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/updateState", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> updateState(@RequestBody Map<String, Object> param) {
+    public Map<String, Object> updateState(@RequestBody Map<String, Object> param,ServletRequest request) {
+        param.put("optBy",JWTUtil.getUid(request));
         feedbackService.updateState(param);
         return this.successMap();
     }
