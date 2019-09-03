@@ -21,7 +21,7 @@
         ON t.`operand` = t2.`phone_no`
         where 1=1
         <if test="realName != null and realName != ''">
-            and t1.real_name = #{realName}
+            and t1.real_name like CONCAT('%',#{realName},'%')
         </if>
         <if test="optType != null and optType != ''">
             and t.opt_type = #{optType}

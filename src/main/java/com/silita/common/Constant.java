@@ -175,6 +175,15 @@ public class Constant {
     public static String MSG_PHONE ="手机号不存在";
 
     /**
+     * 手机号不存在
+     */
+    public static String CODE_PHONES = "0";
+    /**
+     * 手机号不存在
+     */
+    public static String MSG_PHONES ="手机号已存在";
+
+    /**
      * 原密码错误
      */
     public static String CODE_PASSWORD = "0";

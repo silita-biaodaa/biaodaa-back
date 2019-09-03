@@ -10,8 +10,6 @@ public interface TbUserMapper extends MyMapper<TbUser> {
 
     TbUser login(TbUser tbUser);
 
-
-
     /**
      * 用户解锁或锁定
      * @param param
@@ -75,5 +73,12 @@ public interface TbUserMapper extends MyMapper<TbUser> {
      * @return
      */
     Integer queryMaxUId();
+
+    /**
+     * 获取管理员手机号
+     * @param param
+     * @return
+     */
+    String queryAdministratorPhone(Map<String,Object> param);
 
 }

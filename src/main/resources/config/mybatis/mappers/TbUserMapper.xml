@@ -2,15 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.TbUserMapper" >
     <insert id="insertAdministrator" parameterType="map">
-        INSERT INTO biaodaa_admin.`tb_user` (
-          real_name,
-          phone,
-          PASSWORD,
-          department,
-          post
+        INSERT INTO biaodaa_admin.`tb_user`(
+          `real_name`,
+          `phone`,
+          `password`,
+          `created`,
+          `department`,
+          `post`
         )
         VALUES
-          (#{realName},#{phone},#{password},#{department},#{post})
+          (#{realName},#{phone},#{password},NOW(),#{department},#{post})
     </insert>
 
 
@@ -25,17 +26,20 @@
     </update>
     <update id="updateUser" parameterType="map">
         update biaodaa_admin.`tb_user` t set
+        <if test="password != null and password !=''">
+            t.password = #{password},
+        </if>
         <if test="realName != null and realName !=''">
-            t.real_name = #{realName}
+            t.real_name = #{realName},
         </if>
         <if test="phone != null and phone !=''">
-            t.phone = #{phone}
+            t.phone = #{phone},
         </if>
         <if test="department != null and department !=''">
-            t.department = #{department}
+            t.department = #{department},
         </if>
         <if test="post != null and post !=''">
-            t.post = #{post}
+            t.post = #{post},
         </if>
             t.updated = NOW()
         where uid=#{uid}
@@ -96,6 +100,9 @@
     </select>
     <select id="queryMaxUId" resultType="java.lang.Integer">
         SELECT MAX(uid) FROM tb_user
+    </select>
+    <select id="queryAdministratorPhone" resultType="java.lang.String" parameterType="map">
+        select phone from biaodaa_admin.tb_user where uid=#{uid}
     </select>
 
 </mapper>
