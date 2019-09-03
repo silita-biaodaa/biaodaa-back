@@ -64,4 +64,16 @@ public interface TbUserMapper extends MyMapper<TbUser> {
      */
     Integer queryAccountListCount(TbUser tbUser);
 
+    /**
+     * 添加管理员
+     * @param param
+     */
+    void insertAdministrator(Map<String,Object> param);
+
+    /**
+     * 获取最大uid
+     * @return
+     */
+    Integer queryMaxUId();
+
 }

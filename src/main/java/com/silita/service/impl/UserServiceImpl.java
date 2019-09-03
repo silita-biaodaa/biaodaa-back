@@ -165,4 +165,10 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     public void updateUser(Map<String, Object> param) {
        tbUserMapper.updateUser(param);
     }
+
+    @Override
+    public void addAdministrator(Map<String, Object> param) {
+        tbUserMapper.insertAdministrator(param);
+        Integer integer = tbUserMapper.queryMaxUId();
+    }
 }

@@ -61,4 +61,10 @@ public interface IUserService {
      */
     void updateUser(Map<String,Object> param);
 
+    /**
+     * 添加管理员
+     * @param param
+     */
+    void addAdministrator(Map<String,Object> param);
+
 }

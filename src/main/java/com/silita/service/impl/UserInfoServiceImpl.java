@@ -3,7 +3,6 @@ package com.silita.service.impl;
 import com.silita.dao.SysLogsMapper;
 import com.silita.dao.SysRoleInfoMapper;
 import com.silita.dao.SysUserInfoMapper;
-import com.silita.model.SysLogs;
 import com.silita.model.SysUserInfo;
 import com.silita.service.IUserInfoService;
 import com.silita.service.abs.AbstractService;
@@ -11,7 +10,6 @@ import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
 import com.silita.utils.oldProjectUtils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
-import org.apache.hadoop.yarn.webapp.hamlet.Hamlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
@@ -549,7 +547,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
     @Override
     public void updateRemark(Map<String, Object> param) {
         param.put("pid", CommonUtil.getUUID());
-        param.put("optType", "用户账号");
+        param.put("optType", "用户信息");
         param.put("optDesc", "添加用户备注");
         String phone = sysUserInfoMapper.queryPhoneSingle(param);
         param.put("operand", phone);

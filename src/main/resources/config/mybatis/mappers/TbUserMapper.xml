@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.TbUserMapper" >
+    <insert id="insertAdministrator" parameterType="map">
+        INSERT INTO biaodaa_admin.`tb_user` (
+          real_name,
+          phone,
+          PASSWORD,
+          department,
+          post
+        )
+        VALUES
+          (#{realName},#{phone},#{password},#{department},#{post})
+    </insert>
 
 
     <update id="updateLock" parameterType="map">
@@ -82,6 +93,9 @@
         FROM
           biaodaa_admin.tb_user t
         WHERE phone = #{phone} and password = #{password}
+    </select>
+    <select id="queryMaxUId" resultType="java.lang.Integer">
+        SELECT MAX(uid) FROM tb_user
     </select>
 
 </mapper>

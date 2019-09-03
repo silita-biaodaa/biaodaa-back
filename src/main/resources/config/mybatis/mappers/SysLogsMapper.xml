@@ -11,6 +11,7 @@
         t.opt_type AS optType,
         t.opt_desc AS optDesc,
         t.operand,
+        t1.uid,
         t2.`pkid`
         FROM
         biaodaa_admin.`sys_logs` t
