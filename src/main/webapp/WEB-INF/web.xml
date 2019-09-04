@@ -52,6 +52,16 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--权限过滤-->
+<!--    <filter>
+        <filter-name>FilterEncoding</filter-name>
+        <filter-class>com.silita.commons.shiro.filter.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>FilterEncoding</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
+
     <!-- shiro过滤器 -->
     <filter>
         <filter-name>shiroFilter</filter-name>

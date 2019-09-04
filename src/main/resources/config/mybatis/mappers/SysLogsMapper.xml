@@ -15,9 +15,9 @@
         t2.`pkid`
         FROM
         biaodaa_admin.`sys_logs` t
-        JOIN biaodaa_admin.`tb_user` t1
+        left JOIN biaodaa_admin.`tb_user` t1
         ON t.opt_by = t1.uid
-        JOIN mishu_write.`sys_user_info` t2
+        left JOIN mishu_write.`sys_user_info` t2
         ON t.`operand` = t2.`phone_no`
         where 1=1
         <if test="realName != null and realName != ''">
@@ -34,9 +34,9 @@
         ifnull(count(1),0)
         FROM
         biaodaa_admin.`sys_logs` t
-        JOIN biaodaa_admin.`tb_user` t1
+        left JOIN biaodaa_admin.`tb_user` t1
         ON t.opt_by = t1.uid
-        JOIN mishu_write.`sys_user_info` t2
+        left JOIN mishu_write.`sys_user_info` t2
         ON t.`operand` = t2.`phone_no`
         where 1=1
         <if test="realName != null and realName != ''">

@@ -136,8 +136,8 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             Object md5Password = new SimpleHash("MD5", newPassword, phone, hashIterations);
             param.put("newpassword", md5Password.toString());
             tbUserMapper.updatePassword(param);
-            resultMap.put("msg", Constant.CODE_SUCCESS);
-            resultMap.put("code", Constant.MSG_SUCCESS);
+            resultMap.put("msg", Constant.MSG_SUCCESS);
+            resultMap.put("code", Constant.CODE_SUCCESS);
             param.put("pid", CommonUtil.getUUID());
             param.put("optType", "用户账号");
             param.put("optDesc", "修改管理员密码:"+phone);

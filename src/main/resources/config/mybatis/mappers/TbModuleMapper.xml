@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbModuleMapper" >
+
+  <select id="queryUpdateUserModule" resultType="java.util.Map" parameterType="map">
+      SELECT t.`id`,t.`pid`,t.`title`,t.`url`,t.`icon`,t.`sort`,t5.`uid` FROM biaodaa_admin.`tb_module` t
+        LEFT JOIN biaodaa_admin.`tb_role_module` t2
+        ON t.`id` = t2.`id`
+        LEFT JOIN biaodaa_admin.`tb_role` t3
+        ON t2.`rid` = t3.`rid`
+        LEFT JOIN biaodaa_admin.`tb_user_role` t4
+        ON t3.`rid` = t4.`rid`
+        LEFT JOIN biaodaa_admin.`tb_user` t5
+        ON t4.`uid` = t5.`uid` AND t5.`uid` = ${id}
+        where t.pid = #{pid}
+        GROUP BY t.`id`
+  </select>
+
+    <select id="queryModule" resultType="java.util.Map" parameterType="map">
+      SELECT t.`id`,t.`pid`,t.`title`,t.`url`,t.`icon`,t.`sort`,t5.`uid` FROM biaodaa_admin.`tb_module` t
+        LEFT JOIN biaodaa_admin.`tb_role_module` t2
+        ON t.`id` = t2.`id`
+        LEFT JOIN biaodaa_admin.`tb_role` t3
+        ON t2.`rid` = t3.`rid`
+        LEFT JOIN biaodaa_admin.`tb_user_role` t4
+        ON t3.`rid` = t4.`rid`
+        JOIN biaodaa_admin.`tb_user` t5
+        ON t4.`uid` = t5.`uid` AND t5.`uid` = ${uid}
+        where t.pid = #{pid}
+        GROUP BY t.`id`
+  </select>
+    <select id="queryAddUserModule" resultType="java.util.Map" parameterType="map">
+      SELECT
+        t.`id`,t.`pid`,t.`title`,t.`url`,t.`icon`,t.`sort`
+      FROM biaodaa_admin.`tb_module` t
+      where pid = #{pid}
+      GROUP BY t.`id`
+    </select>
+
+</mapper>

@@ -71,6 +71,9 @@ public class JWTAuthenticationFilter extends AuthenticatingFilter {
         } else {
             try {
                 Subject subject = this.getSubject(servletRequest, servletResponse);
+
+
+
                 subject.login(token);
                 return true;
             } catch (AuthenticationException e) {
