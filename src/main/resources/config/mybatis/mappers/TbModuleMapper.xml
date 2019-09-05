@@ -5,13 +5,13 @@
   <select id="queryUpdateUserModule" resultType="java.util.Map" parameterType="map">
       SELECT t.`id`,t.`pid`,t.`title`,t.`url`,t.`icon`,t.`sort`,t5.`uid` FROM biaodaa_admin.`tb_module` t
         LEFT JOIN biaodaa_admin.`tb_role_module` t2
-        ON t.`id` = t2.`id`
+        ON t.`id` = t2.`id` AND t2.`uid` = ${uid}
         LEFT JOIN biaodaa_admin.`tb_role` t3
         ON t2.`rid` = t3.`rid`
         LEFT JOIN biaodaa_admin.`tb_user_role` t4
         ON t3.`rid` = t4.`rid`
         LEFT JOIN biaodaa_admin.`tb_user` t5
-        ON t4.`uid` = t5.`uid` AND t5.`uid` = ${id}
+        ON t4.`uid` = t5.`uid` AND t5.`uid` = ${uid}
         where t.pid = #{pid}
         GROUP BY t.`id`
   </select>
@@ -19,7 +19,7 @@
     <select id="queryModule" resultType="java.util.Map" parameterType="map">
       SELECT t.`id`,t.`pid`,t.`title`,t.`url`,t.`icon`,t.`sort`,t5.`uid` FROM biaodaa_admin.`tb_module` t
         LEFT JOIN biaodaa_admin.`tb_role_module` t2
-        ON t.`id` = t2.`id`
+        ON t.`id` = t2.`id` AND t2.`uid` = ${uid}
         LEFT JOIN biaodaa_admin.`tb_role` t3
         ON t2.`rid` = t3.`rid`
         LEFT JOIN biaodaa_admin.`tb_user_role` t4

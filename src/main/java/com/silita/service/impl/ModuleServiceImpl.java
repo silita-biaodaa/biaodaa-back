@@ -40,12 +40,12 @@ public class ModuleServiceImpl implements ModuleService {
                     listMap3.add(map3);
                 }
                 if (MapUtils.getInteger(map, "pid") != 9903) {
-                    map2.put("date", listMap3);
+                    map2.put("data", listMap3);
                     listMap2.add(map2);
                 }
             }
             if (MapUtils.getInteger(map, "id") != 9903) {
-                map.put("date", listMap2);
+                map.put("data", listMap2);
                 listMap.add(map);
             }
         }
@@ -76,12 +76,12 @@ public class ModuleServiceImpl implements ModuleService {
                         listMap3.add(map3);
                     }
                     if (MapUtils.getInteger(map, "pid") != 9903) {
-                        map2.put("date", listMap3);
+                        map2.put("data", listMap3);
                         listMap2.add(map2);
                     }
                 }
                 if (MapUtils.getInteger(map, "id") != 9903) {
-                    map.put("date", listMap2);
+                    map.put("data", listMap2);
                     listMap.add(map);
                 }
             }
@@ -115,10 +115,10 @@ public class ModuleServiceImpl implements ModuleService {
                     for (Map<String, Object> map3 : listThree) {
                         listMap3.add(map3);
                     }
-                    map2.put("date", listMap3);
+                    map2.put("data", listMap3);
                     listMap2.add(map2);
                 }
-                map.put("date", listMap2);
+                map.put("data", listMap2);
                 listMap.add(map);
             }
         } catch (Exception e) {

@@ -33,7 +33,7 @@ public class ModuleController extends BaseController {
         return this.successMap(module);
     }
     /**
-     * 展示可编辑的权限
+     * 展示可添加的权限
      * @return
      */
     @ResponseBody

@@ -9,10 +9,15 @@ import java.util.Map;
 public interface TbRoleModuleMapper extends MyMapper<TbRoleModule> {
 
     /**
-     * 添加用户权限
+     * 添加管理员权限
      * @param param
      */
     void insertRoleModule(Map<String,Object> param);
 
-    //List<Map<String,Object>>
+    /**
+     * 删除管理员权限
+     * @param param
+     */
+    void deleteRoleModule(Map<String,Object> param);
+
 }
