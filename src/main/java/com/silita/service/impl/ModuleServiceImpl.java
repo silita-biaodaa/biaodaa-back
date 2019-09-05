@@ -1,6 +1,7 @@
 package com.silita.service.impl;
 
 import com.silita.dao.TbModuleMapper;
+import com.silita.dao.TbUserRoleMapper;
 import com.silita.service.ModuleService;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import java.util.Map;
 public class ModuleServiceImpl implements ModuleService {
     @Autowired
     private TbModuleMapper tbModuleMapper;
+    @Autowired
+    private TbUserRoleMapper tbUserRoleMapper;
 
     /**
      * 获取可编辑的权限
@@ -99,6 +102,9 @@ public class ModuleServiceImpl implements ModuleService {
      */
     @Override
     public List<Map<String, Object>> getModule(Map<String, Object> param) {
+
+        Integer integer = tbUserRoleMapper.queryRid(param);
+        param.put("rid",integer);
         param.put("pid", 99);
         List<Map<String, Object>> listMap = new ArrayList<>();
         try {

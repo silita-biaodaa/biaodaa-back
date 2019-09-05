@@ -9,6 +9,14 @@
         <result property="roleName" column="role_name"/>
         <result property="desc" column="desc"/>
     </resultMap>
+    <insert id="addRole" parameterType="map">
+        INSERT INTO biaodaa_admin.`tb_role` (`desc`,`created`)
+        VALUES (#{desc},NOW())
+    </insert>
+    <update id="updateRole" parameterType="map">
+        update biaodaa_admin.`tb_role` set `desc` = #{desc},`updated` = NOW() where rid = #{rid}
+    </update>
+
 
     <select id="listRoleByUserName" parameterType="String" resultType="java.lang.String">
         SELECT r.role_name
@@ -17,4 +25,44 @@
         LEFT JOIN tb_role r ON ur.rid = r.rid
         WHERE u.user_name = #{userName}
     </select>
+    <select id="queryRoleList" resultType="java.util.Map" parameterType="com.silita.model.TbRole">
+        SELECT
+          t.rid,
+          t.role_name AS roleName,
+          t.desc,
+          t.created,
+          t.updated
+        FROM
+          biaodaa_admin.`tb_role` t
+          where 1=1
+          <if test="desc != null and desc != ''">
+              and t.desc like CONCAT('%',#{desc},'%')
+          </if>
+        ORDER BY t.created DESC
+        LIMIT #{start}, #{pageSize}
+    </select>
+    <select id="queryRoleListCount" resultType="java.lang.Integer" parameterType="com.silita.model.TbRole">
+        SELECT
+        ifnull(count(1),0)
+        FROM
+        biaodaa_admin.`tb_role` t
+        where 1=1
+        <if test="desc != null and desc != ''">
+            and t.desc like CONCAT('%',#{desc},'%')
+        </if>
+    </select>
+    <select id="queryRoleMaxRid" resultType="java.lang.Integer">
+        SELECT MAX(rid) FROM biaodaa_admin.`tb_role`
+    </select>
+    <select id="queryRoleAll" resultType="java.util.Map">
+        SELECT t.`rid`,t.`desc` FROM biaodaa_admin.`tb_role` t
+    </select>
+    <select id="queryDesc" resultType="java.lang.String" parameterType="map">
+        select t.desc from biaodaa_admin.`tb_role` t where t.desc = #{desc}
+    </select>
+    <select id="queryDescRid" resultType="java.lang.String" parameterType="map">
+        select t.desc from biaodaa_admin.`tb_role` t where t.rid = #{rid}
+    </select>
+
+
 </mapper>

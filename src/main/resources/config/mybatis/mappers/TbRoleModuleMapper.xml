@@ -4,15 +4,15 @@
 
 
   <insert id="insertRoleModule" parameterType="map">
-    insert into biaodaa_admin.`tb_role_module`(rid,id,uid)
+    insert into biaodaa_admin.`tb_role_module`(rid,id)
     values
     <foreach collection="list" item="list" separator=",">
-      (#{list.rid},#{list.id},#{list.uid})
+      (#{list.rid},#{list.id})
     </foreach>
   </insert>
 
   <delete id="deleteRoleModule" parameterType="map">
-    DELETE FROM biaodaa_admin.tb_role_module where uid = #{uid}
+    DELETE FROM biaodaa_admin.tb_role_module where rid = #{rid}
   </delete>
 
 </mapper>

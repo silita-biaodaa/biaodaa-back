@@ -85,7 +85,7 @@ public class UserController extends BaseController {
         return userService.updateAdministrator(param);
     }
     /**
-     * 添加管理员及分配权限
+     * 添加管理员及分配角色
      *
      * @param param
      * @return

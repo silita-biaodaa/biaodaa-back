@@ -3,6 +3,7 @@
 <mapper namespace="com.silita.dao.TbUserMapper" >
     <insert id="insertAdministrator" parameterType="map">
         INSERT INTO biaodaa_admin.`tb_user`(
+          `user_name`,
           `real_name`,
           `phone`,
           `password`,
@@ -11,7 +12,7 @@
           `post`
         )
         VALUES
-          (#{realName},#{phone},#{password},NOW(),#{department},#{post})
+          (#{phone},#{realName},#{phone},#{password},NOW(),#{department},#{post})
     </insert>
 
 
@@ -33,6 +34,7 @@
             t.real_name = #{realName},
         </if>
         <if test="phone != null and phone !=''">
+            t.user_name = #{phone},
             t.phone = #{phone},
         </if>
         <if test="department != null and department !=''">

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbUserRoleMapper" >
+  <insert id="insertUserRole" parameterType="map">
+      insert into biaodaa_admin.`tb_user_role` (uid,rid)
+      values (#{uid},#{rid})
+  </insert>
+
+  <delete id="deleteUserRole" parameterType="map">
+    delete from biaodaa_admin.`tb_user_role` where uid = #{uid}
+  </delete>
+  <select id="queryRid" resultType="java.lang.Integer">
+     select rid from biaodaa_admin.`tb_user_role` where uid = #{uid}
+  </select>
+</mapper>

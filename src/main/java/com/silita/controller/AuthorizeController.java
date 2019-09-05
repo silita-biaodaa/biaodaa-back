@@ -4,6 +4,7 @@ import com.silita.commons.shiro.token.JWTToken;
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.model.TbUser;
 import com.silita.service.IUserService;
+import com.silita.service.ModuleService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +31,9 @@ public class AuthorizeController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private ModuleService moduleService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
@@ -46,6 +51,8 @@ public class AuthorizeController {
             result.put("msg", "手机号或密码错误");
             return result;
         }
+        Map<String,Object> param = new HashMap<>();
+        List<Map<String, Object>> module = moduleService.getModule(param);
 
         //// TODO: 2019/8/30 需要改动，根据手机号和password登录
         Subject subject = SecurityUtils.getSubject();

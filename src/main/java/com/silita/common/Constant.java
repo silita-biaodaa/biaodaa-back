@@ -187,6 +187,10 @@ public class Constant {
      * 原密码错误
      */
     public static String CODE_PASSWORD = "0";
+
+    public static String MSG_DESC = "角色已存在";
+
+    public static  String CODE_DESC = "0";
     /**
      * 原密码错误
      */
