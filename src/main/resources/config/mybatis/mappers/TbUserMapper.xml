@@ -117,5 +117,8 @@
     <select id="queryAdministratorPhone" resultType="java.lang.String" parameterType="map">
         select phone from biaodaa_admin.tb_user where uid=#{uid}
     </select>
+    <select id="queryRealName" resultType="java.lang.String">
+        select real_name from biaodaa_admin.tb_user where uid = #{uid}
+    </select>
 
 </mapper>

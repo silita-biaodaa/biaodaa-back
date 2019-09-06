@@ -12,4 +12,5 @@
   <select id="queryRid" resultType="java.lang.Integer">
      select rid from biaodaa_admin.`tb_user_role` where uid = #{uid}
   </select>
+
 </mapper>

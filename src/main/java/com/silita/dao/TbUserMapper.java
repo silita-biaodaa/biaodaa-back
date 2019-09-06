@@ -81,4 +81,11 @@ public interface TbUserMapper extends MyMapper<TbUser> {
      */
     String queryAdministratorPhone(Map<String,Object> param);
 
+    /**
+     * 获取管理员真实姓名
+     * @param param
+     * @return
+     */
+    String queryRealName(Map<String,Object> param);
+
 }

@@ -54,7 +54,7 @@ public class ModuleController extends BaseController {
     public Map<String, Object> list(ServletRequest request) {
         Map<String,Object> param = new HashMap<>();
         param.put("uid",JWTUtil.getUid(request));
-        List<Map<String, Object>> module = moduleService.getModule(param);
+        Map<String, Object> module = moduleService.getModule(param);
         return this.successMap(module);
     }
 

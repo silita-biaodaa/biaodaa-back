@@ -1,6 +1,8 @@
 package com.silita.service.impl;
 
+import com.silita.dao.IRoleMapper;
 import com.silita.dao.TbModuleMapper;
+import com.silita.dao.TbUserMapper;
 import com.silita.dao.TbUserRoleMapper;
 import com.silita.service.ModuleService;
 import org.apache.commons.collections.MapUtils;
@@ -18,6 +20,10 @@ public class ModuleServiceImpl implements ModuleService {
     private TbModuleMapper tbModuleMapper;
     @Autowired
     private TbUserRoleMapper tbUserRoleMapper;
+    @Autowired
+    private IRoleMapper roleMapper;
+    @Autowired
+    private TbUserMapper tbUserMapper;
     /**
      * 获取可编辑的权限
      *
@@ -84,7 +90,7 @@ public class ModuleServiceImpl implements ModuleService {
      * @return
      */
     @Override
-    public List<Map<String, Object>> getModule(Map<String, Object> param) {
+    public Map<String, Object> getModule(Map<String, Object> param) {
         Integer integer = tbUserRoleMapper.queryRid(param);
         param.put("rid",integer);
         List<Map<String, Object>> listMap = new ArrayList<>();
@@ -107,6 +113,16 @@ public class ModuleServiceImpl implements ModuleService {
                 lists.add(map);
             }
         }
-        return lists;
+        Map<String,Object> params = new HashMap<>();
+        if(integer == 1){
+            String desc = roleMapper.queryDescRid(param);
+            params.put("adminName",desc);
+            params.put("menu",lists);
+            return params;
+        }
+        String realName = tbUserMapper.queryRealName(param);
+        params.put("adminName",realName);
+        params.put("menu",lists);
+        return params;
     }
 }

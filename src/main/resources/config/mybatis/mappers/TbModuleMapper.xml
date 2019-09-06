@@ -34,7 +34,8 @@
         t.`url`,
         t.`icon`,
         t.`sort`,
-        t4.`rid`
+        t4.`rid`,
+        t2.optiond
       FROM
         biaodaa_admin.`tb_module` t
         JOIN biaodaa_admin.`tb_role_module` t2

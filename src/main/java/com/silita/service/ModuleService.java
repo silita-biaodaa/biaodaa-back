@@ -22,6 +22,6 @@ public interface ModuleService {
      * @param param
      * @return
      */
-    List<Map<String,Object>> getModule(Map<String,Object> param);
+    Map<String,Object> getModule(Map<String,Object> param);
 
 }

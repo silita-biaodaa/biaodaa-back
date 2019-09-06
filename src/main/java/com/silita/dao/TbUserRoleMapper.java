@@ -24,4 +24,5 @@ public interface TbUserRoleMapper extends MyMapper<TbUserRole> {
      * @return
      */
     Integer queryRid(Map<String,Object> param);
+
 }
