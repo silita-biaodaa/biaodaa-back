@@ -23,17 +23,14 @@ import java.util.*;
  */
 @Service
 public class UserInfoServiceImpl extends AbstractService implements IUserInfoService {
-
     @Autowired
     SysUserInfoMapper sysUserInfoMapper;
-
     @Autowired
     SysRoleInfoMapper sysRoleInfoMapper;
     @Autowired
     MongodbService mongodbUtils;
     @Autowired
     SysLogsMapper logsMapper;
-
     @Override
     public Map<String, Object> userCount(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -174,87 +171,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         Integer pageSize = MapUtils.getInteger(param, "pageSize");
         return super.getPagingResultMap(list, currentPage, pageSize);
     }
-/*
-    public Map<String, Object> getActiveUserList(Map<String, Object> param) {
-        SysUserInfo sysUserInfo = new SysUserInfo();
-        String loginTime = MyDateUtils.getLoginTime();
-        param.put("loginTime", loginTime);
-        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
-        List<Map<String, Object>> list = new ArrayList<>();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String userType = MapUtils.getString(param, "userType");
-        if (StringUtil.isNotEmpty(userType)) {
-            list = sysUserInfoMapper.queryActiveUserList(param);
-        } else {
-            sysUserInfo.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
-            sysUserInfo.setPageSize(MapUtils.getInteger(param, "pageSize"));
-            sysUserInfo.setLoginTime(loginTime);
-            String phoneNo = MapUtils.getString(param, "phoneNo");
-            if (StringUtil.isNotEmpty(phoneNo)) {
-                sysUserInfo.setPhoneNo(phoneNo);
-            }
-            String startDate = MapUtils.getString(param, "startDate");
-            String endDate = MapUtils.getString(param, "endDate");
-            if (StringUtil.isNotEmpty(startDate)) {
-                sysUserInfo.setStartDate(startDate);
-            }
-            if (StringUtil.isNotEmpty(endDate)) {
-                sysUserInfo.setEndDate(endDate);
-            }
-            list = sysUserInfoMapper.queryActiveUserListAll(sysUserInfo);
-        }
-        try {
-            if (list != null && list.size() > 0) {
-                for (Map<String, Object> map : list) {
-                    String created = MyDateUtils.strToDates(MapUtils.getString(map, "created"), "yyyy-MM-dd");
-                    map.put("created", created);
-                    Integer integer = userTypeMap.get(MapUtils.getString(map, "pkid"));
-                    if (integer != null && integer != 0) {
-                        Date day = new Date();
-                        String beginTime = MapUtils.getString(map, "expiredDate");
-                        String endTime = format.format(day);
-                        Date expiredDate = format.parse(beginTime);
-                        Date current = format.parse(endTime);
-                        int compareTo = expiredDate.compareTo(current);
-
-                        if (compareTo < 0) {
-                            map.put("userType", "过期");
-                        } else {
-                            if (integer > 1) {
-                                map.put("userType", "续费");
-                            } else {
-                                map.put("userType", "付费");
-                            }
-                        }
-                    } else {
-                        map.put("userType", "注册");
-                    }
-                }
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (StringUtil.isNotEmpty(userType)) {
-            List<Map<String, Object>> listMap = list;
-            List<Map<String, Object>> activeListMap = new ArrayList<>();
-            for (Map<String, Object> map : listMap) {
-                String userType1 = MapUtils.getString(map, "userType");
-                if (userType.equals(userType1)) {
-                    activeListMap.add(map);
-                }
-            }
-            Integer currentPage = MapUtils.getInteger(param, "currentPage");
-            Integer pageSize = MapUtils.getInteger(param, "pageSize");
-            return super.getPagingResultMap(activeListMap, currentPage, pageSize);
-        }
-        Map<String, Object> params = new HashMap<>();
-        List<Map<String, Object>> list1 = sysUserInfoMapper.queryActiveUserListAllCount(sysUserInfo);
-        int count = list1.size();
-        params.put("list", list);
-        param.put("total",count);
-        return super.handlePageCount(params, sysUserInfo);
-    }
-*/
 
 
     /**
@@ -322,98 +238,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         Integer pageSize = MapUtils.getInteger(param, "pageSize");
         return super.getPagingResultMap(list, currentPage, pageSize);
     }
-/*
-    @Override
-    public Map<String, Object> getUserInfo(Map<String, Object> param) {
-        SysUserInfo sysUserInfo = new SysUserInfo();
-        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
-        List<Map<String, Object>> list = new ArrayList<>();
-
-        String userType = MapUtils.getString(param, "userType");
-        if (StringUtil.isNotEmpty(userType)) {
-            list = sysUserInfoMapper.queryUserInfoList(param);
-        } else {
-            sysUserInfo.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
-            sysUserInfo.setPageSize(MapUtils.getInteger(param, "pageSize"));
-            String phoneNo = MapUtils.getString(param, "phoneNo");
-            if (StringUtil.isNotEmpty(phoneNo)) {
-                sysUserInfo.setPhoneNo(phoneNo);
-            }
-            String startDate = MapUtils.getString(param, "startDate");
-            String endDate = MapUtils.getString(param, "endDate");
-            if (StringUtil.isNotEmpty(startDate)) {
-                sysUserInfo.setStartDate(startDate);
-            }
-            if (StringUtil.isNotEmpty(endDate)) {
-                sysUserInfo.setEndDate(endDate);
-            }
-            String createStartDate = MapUtils.getString(param, "createStartDate");
-            String createdEndData = MapUtils.getString(param, "createdEndData");
-            if (StringUtil.isNotEmpty(createStartDate)) {
-                sysUserInfo.setStartDate(createStartDate);
-            }
-            if (StringUtil.isNotEmpty(createdEndData)) {
-                sysUserInfo.setEndDate(createdEndData);
-            }
-            list = sysUserInfoMapper.queryUserInfoListAll(sysUserInfo);
-        }
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            if (list != null && list.size() > 0) {
-                for (Map<String, Object> map : list) {
-                    String created = MyDateUtils.strToDates(MapUtils.getString(map, "created"), "yyyy-MM-dd");
-                    map.put("created", created);
-                    Integer integer = userTypeMap.get(MapUtils.getString(map, "pkid"));
-                    if (integer != null && integer != 0) {
-                        Date day = new Date();
-                        String beginTime = MapUtils.getString(map, "expiredDate");
-                        if (StringUtil.isNotEmpty(beginTime)) {
-                            String endTime = format.format(day);
-                            Date date1 = format.parse(beginTime);
-                            Date date2 = format.parse(endTime);
-                            int compareTo = date1.compareTo(date2);
-                            if (compareTo < 0) {
-                                map.put("userType", "过期");
-                            } else {
-                                if (integer > 1) {
-                                    map.put("userType", "续费");
-                                } else {
-                                    map.put("userType", "付费");
-                                }
-                            }
-                        } else {
-                            map.put("userType", "注册");
-                        }
-                    } else {
-                        map.put("userType", "注册");
-                    }
-                }
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (StringUtil.isNotEmpty(userType)) {
-            List<Map<String, Object>> listMap = list;
-            List<Map<String, Object>> activeListMap = new ArrayList<>();
-            for (Map<String, Object> map : listMap) {
-                String userType1 = MapUtils.getString(map, "userType");
-                if (userType.equals(userType1)) {
-                    activeListMap.add(map);
-                }
-            }
-            Integer currentPage = MapUtils.getInteger(param, "currentPage");
-            Integer pageSize = MapUtils.getInteger(param, "pageSize");
-            return super.getPagingResultMap(activeListMap, currentPage, pageSize);
-        }
-        Map<String, Object> params = new HashMap<>();
-        params.put("list", list);
-        param.put("total", sysUserInfoMapper.queryUserInfoListAllCount(sysUserInfo));
-        return super.handlePageCount(params, sysUserInfo);
-    }
-*/
-
-
     /**
      * 获取用户统计
      *
@@ -471,55 +295,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         }
         return map;
     }
-    /*
-     */
-/**
- * 获取用户统计
- *
- * @return
- *//*
-
-    @Override
-    public Map<String, Object> getUserCount() {
-        Map<String, Object> param = new HashMap<>();
-        String todays = MyDateUtils.getTodays();
-        String yesterdays = MyDateUtils.getYesterdays();
-        param.put("yesterday", yesterdays);
-        param.put("today", todays);
-        Map<String, Object> map = sysUserInfoMapper.queryUserInfoCount(param);
-        try {
-//            Map<String, Integer> userPayCount = mongodbUtils.getUserPayCount();
-            Map<String, Integer> userPayCount = new HashMap<>();
-            map.put("yesterdayPay", MapUtils.getInteger(userPayCount, "yesterdayPay"));
-            map.put("todayPay", MapUtils.getInteger(userPayCount, "todayPay"));
-            map.put("totalPayUser", MapUtils.getInteger(userPayCount, "totalPayUser"));
-//            Map<String, Object> pastDue = mongodbUtils.getPastDue();
-            Map<String, Object> pastDue;
-            List<Map<String, Object>> list = sysUserInfoMapper.queryPast();
-            int pastCount = 0;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            for (Map<String, Object> stringObjectMap : list) {
-                String pkid = MapUtils.getString(pastDue, MapUtils.getString(stringObjectMap, "pkid"));
-                String pkid = "";
-                if (StringUtil.isNotEmpty(pkid)) {
-                    Date day = new Date();
-                    String beginTime = MapUtils.getString(stringObjectMap, "expiredDate");
-                    String endTime = sdf.format(day);
-                    Date date1 = sdf.parse(beginTime);
-                    Date date2 = sdf.parse(endTime);
-                    int compareTo = date1.compareTo(date2);
-                    if (compareTo < 0) {
-                        pastCount++;
-                    }
-                }
-            }
-            map.put("pastUser", pastCount);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return map;
-    }
-*/
 
     /**
      * 个人信息
@@ -604,7 +379,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         resultMap.put("total", count);
         return resultMap;
     }
-
     /**
      * 订单统计
      *

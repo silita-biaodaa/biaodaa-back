@@ -4,7 +4,6 @@ import com.silita.dao.SysLogsMapper;
 import com.silita.dao.SysUserInfoMapper;
 import com.silita.dao.TbVipInfoMapper;
 import com.silita.dao.TbVipProfitsMapper;
-import com.silita.model.SysUserInfo;
 import com.silita.service.ITbVipInfoService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.oldProjectUtils.CommonUtil;
@@ -30,7 +29,6 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
     @Autowired
     SysLogsMapper logsMapper;
 
-
     /**
      * 新增 || 编辑  会员信息
      *
@@ -40,9 +38,6 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
     public void addVipInfo(Map<String, Object> param) {
         Integer vipDay = MapUtils.getInteger(param, "vipDay");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-
-
         try {
             Map<String, Object> map = tbVipInfoMapper.queryVipInfoUserCount(param);
             if (map != null && map.size() > 0) {

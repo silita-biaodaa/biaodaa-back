@@ -18,7 +18,6 @@ public class ModuleServiceImpl implements ModuleService {
     private TbModuleMapper tbModuleMapper;
     @Autowired
     private TbUserRoleMapper tbUserRoleMapper;
-
     /**
      * 获取可编辑的权限
      *
@@ -31,7 +30,6 @@ public class ModuleServiceImpl implements ModuleService {
 
         List<Map<String, Object>> list = tbModuleMapper.queryUpdateUserModule(param);
         for (Map<String, Object> map : list) {
-
             param.put("pid", MapUtils.getInteger(map, "id"));
             List<Map<String, Object>> listTwo = tbModuleMapper.queryUpdateUserModule(param);
             List<Map<String, Object>> listMap2 = new ArrayList<>();
@@ -47,7 +45,6 @@ public class ModuleServiceImpl implements ModuleService {
         }
         return listMap;
     }
-
     /**
      * 获取可添加权限
      *
@@ -88,14 +85,10 @@ public class ModuleServiceImpl implements ModuleService {
      */
     @Override
     public List<Map<String, Object>> getModule(Map<String, Object> param) {
-
         Integer integer = tbUserRoleMapper.queryRid(param);
         param.put("rid",integer);
-        //param.put("pid", 99);
         List<Map<String, Object>> listMap = new ArrayList<>();
-
         List<Map<String, Object>> list = tbModuleMapper.queryModuleOne();
-
         for (Map<String, Object> map : list) {
             List<Map<String, Object>> list1 = tbModuleMapper.queryModule(param);
             List<Map<String, Object>> listMap2 = new ArrayList<>();
@@ -114,25 +107,6 @@ public class ModuleServiceImpl implements ModuleService {
                 lists.add(map);
             }
         }
-
-
-       /* try {
-            List<Map<String, Object>> list = tbModuleMapper.queryModule(param);
-            for (Map<String, Object> map : list) {
-                param.put("pid", MapUtils.getInteger(map, "id"));
-                List<Map<String, Object>> listTwo = tbModuleMapper.queryModule(param);
-                List<Map<String, Object>> listMap2 = new ArrayList<>();
-                for (Map<String, Object> map2 : listTwo) {
-                    param.put("pid", MapUtils.getInteger(map2, "id"));
-                    listMap2.add(map2);
-                }
-                map.put("data", listMap2);
-                listMap.add(map);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
         return lists;
     }
 }

@@ -105,7 +105,6 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
         }
         return resultMap;
     }
-
     /**
      * 编辑权限
      * @param param
@@ -131,8 +130,6 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
             tbRoleModuleMapper.insertRoleModule(param);
         }
     }
-
-
 
     /**
      * 查询角色列表
