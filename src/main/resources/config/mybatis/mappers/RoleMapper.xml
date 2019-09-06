@@ -41,7 +41,7 @@
         <if test="rid != null and rid != ''">
             and t.rid = #{rid}
         </if>
-        and t3.desc &lt;&gt; '超级管理员'
+        and t.desc &lt;&gt; '超级管理员'
         ORDER BY t.created DESC
         LIMIT #{start}, #{pageSize}
     </select>
@@ -57,7 +57,7 @@
         <if test="rid != null and rid != ''">
             and t.rid = #{rid}
         </if>
-        and t3.desc &lt;&gt; '超级管理员'
+        and t.desc &lt;&gt; '超级管理员'
     </select>
     <select id="queryRoleMaxRid" resultType="java.lang.Integer">
         SELECT MAX(rid) FROM biaodaa_admin.`tb_role`

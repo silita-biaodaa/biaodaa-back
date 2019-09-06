@@ -1,5 +1,6 @@
 package com.silita.service.impl;
 
+import com.silita.common.IsNullCommon;
 import com.silita.dao.FeedbackMapper;
 import com.silita.dao.SysLogsMapper;
 import com.silita.dao.SysUserInfoMapper;
@@ -37,9 +38,14 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
     @Autowired
     SysUserInfoMapper sysUserInfoMapper;
 
-
+    /**
+     * 列表展示
+     * @param param
+     * @return
+     */
     @Override
     public Map<String, Object> listFeedback(Map<String, Object> param) {
+        IsNullCommon.isNull(param);
         TbFeedback feedback = new TbFeedback();
         feedback.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
         feedback.setPageSize(MapUtils.getInteger(param, "pageSize"));
@@ -61,6 +67,7 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
      */
     @Override
     public Map<String,Object> getlistFeedback(Map<String, Object> param) {
+        IsNullCommon.isNull(param);
         Map<String, Integer> userTypeMap = mongodbService.getUserType();
         List<Map<String, Object>> list = feedbackMapper.queryFeedbackList(param);
         String userType = MapUtils.getString(param, "userType");

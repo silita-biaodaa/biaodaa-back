@@ -23,26 +23,7 @@ import java.io.IOException;
 public class HBaseConfig {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-/*
-    private String hbaseZookeeperQuorum="192.168.2.101";
-
-    private String hbaseZookeeperclientPort="2181";
-
-    private String hbaseMaster="192.168.2.101 60000";
-
-    private String hbaseRootdir="hdfs://192.168.2.101:9000/hbase";*/
-
-
-
-   /* private String hbaseZookeeperQuorum="192.168.88.222";
-
-    private String hbaseZookeeperclientPort="2181";
-
-    private String hbaseMaster="DESKTOP-3R7HQ4C:60000";
-
-    private String hbaseRootdir="hdfs://DESKTOP-3R7HQ4C:8020/hbase";*/
-
-/*   @Value("${hbase.config.hbase.zookeeper.quorum}")
+   @Value("${hbase.config.hbase.zookeeper.quorum}")
     private String hbaseZookeeperQuorum;
     @Value("${hbase.config.hbase.zookeeper.property.clientPort}")
     private String hbaseZookeeperclientPort;
@@ -73,5 +54,5 @@ public class HBaseConfig {
         configuration.set("hbase.master", hbaseMaster);
         configuration.set("hbase.rootdir", hbaseRootdir);
         return configuration;
-    }*/
+    }
 }

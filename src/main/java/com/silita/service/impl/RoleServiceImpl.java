@@ -1,6 +1,7 @@
 package com.silita.service.impl;
 
 import com.silita.common.Constant;
+import com.silita.common.IsNullCommon;
 import com.silita.dao.IRoleMapper;
 import com.silita.dao.SysLogsMapper;
 import com.silita.dao.TbRoleModuleMapper;
@@ -9,6 +10,7 @@ import com.silita.service.IRoleService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.oldProjectUtils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 @Service
 public class RoleServiceImpl extends AbstractService implements IRoleService {
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
     @Autowired
     private IRoleMapper roleMapper;
     @Autowired
@@ -34,6 +37,7 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
      */
     @Override
     public Map<String,Object> addRole(Map<String, Object> param) {
+        IsNullCommon.isNull(param);
         Map<String,Object> resultMap = new HashMap<>();
         try {
             String desc1 = roleMapper.queryDesc(param);
@@ -69,7 +73,7 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("添加角色及赋权：",e);
         }
         return resultMap;
     }
@@ -81,6 +85,7 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
      */
     @Override
     public Map<String, Object> updateRole(Map<String, Object> param) {
+        IsNullCommon.isNull(param);
         Map<String,Object> resultMap = new HashMap<>();
         String desc = roleMapper.queryDescRid(param);
         String desc1 = MapUtils.getString(param, "desc");
@@ -138,12 +143,16 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
      */
     @Override
     public Map<String, Object> getRoleList(TbRole role) {
+        String desc = role.getDesc();
+        if(StringUtil.isEmpty(desc)){
+            role.setDesc("");
+        }
         Map resultMap = new HashMap();
         try {
             resultMap.put("list", roleMapper.queryRoleList(role));
             resultMap.put("total", roleMapper.queryRoleListCount(role));
         }catch (Exception e){
-            e.printStackTrace();
+            logger.error("查询角色列表:",e);
         }
         return super.handlePageCount(resultMap,role);
     }

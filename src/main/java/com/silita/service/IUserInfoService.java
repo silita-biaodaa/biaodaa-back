@@ -2,7 +2,6 @@ package com.silita.service;
 
 import com.silita.model.SysUserInfo;
 
-import java.util.List;
 import java.util.Map;
 
 /**

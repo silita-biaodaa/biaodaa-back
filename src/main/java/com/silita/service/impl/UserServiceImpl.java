@@ -1,6 +1,7 @@
 package com.silita.service.impl;
 
 import com.silita.common.Constant;
+import com.silita.common.IsNullCommon;
 import com.silita.dao.*;
 import com.silita.model.TbPermission;
 import com.silita.model.TbRole;
@@ -8,9 +9,11 @@ import com.silita.model.TbUser;
 import com.silita.service.IUserService;
 import com.silita.service.abs.AbstractService;
 import com.silita.service.mongodb.MongodbService;
+import com.silita.utils.dateUtils.MyDateUtils;
 import com.silita.utils.oldProjectUtils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
@@ -26,14 +29,14 @@ import java.util.*;
 @Service("userService")
 public class UserServiceImpl extends AbstractService implements IUserService {
 
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Autowired
     private IUserMapper userMapper;
     @Autowired
     private TbUserMapper tbUserMapper;
     @Autowired
     MongodbService mongodbService;
-    @Autowired
-    private TbRoleModuleMapper tbRoleModuleMapper;
     @Autowired
     private SysLogsMapper sysLogsMapper;
     @Autowired
@@ -143,7 +146,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             param.put("operand", "");
             sysLogsMapper.insertLogs(param);//添加操作日志
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("修改密码:",e);
         }
         return resultMap;
     }
@@ -192,6 +195,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
      */
     @Override
     public Map<String, Object> updateAdministrator(Map<String, Object> param) {
+        IsNullCommon.isNull(param);
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String phone1 = MapUtils.getString(param, "phone");
@@ -237,7 +241,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("编辑管理员：",e);
         }
         return resultMap;
     }
@@ -249,6 +253,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
      */
     @Override
     public Map<String, Object> addAdministrator(Map<String, Object> param) {
+        IsNullCommon.isNull(param);
         Map<String, Object> resultMap = new HashMap<>();
         try {
             Integer integer1 = tbUserMapper.querySingleUserPhone(param);
@@ -273,7 +278,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.error("添加管理员：",e);
         }
         return resultMap;
     }

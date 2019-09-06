@@ -21,5 +21,5 @@ public interface INtContentService {
  * @param param
  * @return
  */
-   // Map queryCentent(Map<String,Object> param) throws IOException;
+    Map queryCentent(Map<String,Object> param) throws IOException;
 }

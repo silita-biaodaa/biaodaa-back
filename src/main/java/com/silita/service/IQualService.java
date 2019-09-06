@@ -1,6 +1,5 @@
 package com.silita.service;
 
-import com.github.pagehelper.PageInfo;
 import com.silita.model.DicAlias;
 import com.silita.model.DicQua;
 
