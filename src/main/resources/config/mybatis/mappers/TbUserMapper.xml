@@ -60,13 +60,19 @@
         <include refid="lock"/>,
           t.created,
           t.department,
-          t.post
+          t.post,
+          t3.desc
         FROM
           biaodaa_admin.`tb_user` t
+        JOIN biaodaa_admin.`tb_user_role` t2
+        on t.uid = t2.uid
+        JOIN biaodaa_admin.`tb_role` t3
+        ON t2.`rid` = t3.`rid`
           WHERE 1=1
           <if test="phone != null and phone != ''">
               AND phone LIKE CONCAT('%',#{phone},'%')
           </if>
+        and t3.desc &lt;&gt; '超级管理员'
         order by t.created desc
         LIMIT #{start}, #{pageSize}
     </select>

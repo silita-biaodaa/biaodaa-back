@@ -51,9 +51,11 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
                 String[] split = ids.split(",");
                 List<Map<String, Object>> mapList = new ArrayList<>();
                 for (String s : split) {
+                    String[] split1 = s.split("\\/");
                     Map<String, Object> maps = new HashMap<>();
                     maps.put("rid", integer);
-                    maps.put("id", s);
+                    maps.put("id", split1[0]);
+                    maps.put("optiond",split1[1]);
                     mapList.add(maps);
                 }
                 param.put("list", mapList);
@@ -117,8 +119,10 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
             String[] split = ids.split(",");
             List<Map<String, Object>> mapList = new ArrayList<>();
             for (String s2 : split) {
+                String[] split1 = s2.split("\\/");
                 Map<String, Object> maps = new HashMap<>();
-                maps.put("id", s2);
+                maps.put("id", split1[0]);
+                maps.put("optiond",split1[1]);
                 maps.put("rid", rid);
                 mapList.add(maps);
             }
@@ -127,6 +131,8 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
             tbRoleModuleMapper.insertRoleModule(param);
         }
     }
+
+
 
     /**
      * 查询角色列表

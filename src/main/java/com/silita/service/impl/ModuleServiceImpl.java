@@ -36,14 +36,7 @@ public class ModuleServiceImpl implements ModuleService {
             List<Map<String, Object>> listTwo = tbModuleMapper.queryUpdateUserModule(param);
             List<Map<String, Object>> listMap2 = new ArrayList<>();
             for (Map<String, Object> map2 : listTwo) {
-                param.put("pid", MapUtils.getInteger(map2, "id"));
-                List<Map<String, Object>> listThree = tbModuleMapper.queryUpdateUserModule(param);
-                List<Map<String, Object>> listMap3 = new ArrayList<>();
-                for (Map<String, Object> map3 : listThree) {
-                    listMap3.add(map3);
-                }
                 if (MapUtils.getInteger(map, "pid") != 9903) {
-                    map2.put("data", listMap3);
                     listMap2.add(map2);
                 }
             }
@@ -72,14 +65,7 @@ public class ModuleServiceImpl implements ModuleService {
                 List<Map<String, Object>> listTwo = tbModuleMapper.queryAddUserModule(param);
                 List<Map<String, Object>> listMap2 = new ArrayList<>();
                 for (Map<String, Object> map2 : listTwo) {
-                    param.put("pid", MapUtils.getInteger(map2, "id"));
-                    List<Map<String, Object>> listThree = tbModuleMapper.queryAddUserModule(param);
-                    List<Map<String, Object>> listMap3 = new ArrayList<>();
-                    for (Map<String, Object> map3 : listThree) {
-                        listMap3.add(map3);
-                    }
                     if (MapUtils.getInteger(map, "pid") != 9903) {
-                        map2.put("data", listMap3);
                         listMap2.add(map2);
                     }
                 }
@@ -105,23 +91,39 @@ public class ModuleServiceImpl implements ModuleService {
 
         Integer integer = tbUserRoleMapper.queryRid(param);
         param.put("rid",integer);
-        param.put("pid", 99);
+        //param.put("pid", 99);
         List<Map<String, Object>> listMap = new ArrayList<>();
-        try {
+
+        List<Map<String, Object>> list = tbModuleMapper.queryModuleOne();
+
+        for (Map<String, Object> map : list) {
+            List<Map<String, Object>> list1 = tbModuleMapper.queryModule(param);
+            List<Map<String, Object>> listMap2 = new ArrayList<>();
+            for (Map<String, Object> stringObjectMap : list1) {
+                if(map.get("id").equals(stringObjectMap.get("pid"))){
+                    listMap2.add(stringObjectMap);
+                }
+            }
+            map.put("data",listMap2);
+            listMap.add(map);
+        }
+        List<Map<String,Object>> lists = new ArrayList<>();
+        for (Map<String, Object> map : list) {
+            List<Map<String, Object>> listMaps = (List<Map<String, Object>>)map.get("data");
+            if(listMaps != null && listMaps.size() >0){
+                lists.add(map);
+            }
+        }
+
+
+       /* try {
             List<Map<String, Object>> list = tbModuleMapper.queryModule(param);
             for (Map<String, Object> map : list) {
-
                 param.put("pid", MapUtils.getInteger(map, "id"));
                 List<Map<String, Object>> listTwo = tbModuleMapper.queryModule(param);
                 List<Map<String, Object>> listMap2 = new ArrayList<>();
                 for (Map<String, Object> map2 : listTwo) {
                     param.put("pid", MapUtils.getInteger(map2, "id"));
-                    List<Map<String, Object>> listThree = tbModuleMapper.queryModule(param);
-                    List<Map<String, Object>> listMap3 = new ArrayList<>();
-                    for (Map<String, Object> map3 : listThree) {
-                        listMap3.add(map3);
-                    }
-                    map2.put("data", listMap3);
                     listMap2.add(map2);
                 }
                 map.put("data", listMap2);
@@ -129,8 +131,8 @@ public class ModuleServiceImpl implements ModuleService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
-        return listMap;
+        return lists;
     }
 }

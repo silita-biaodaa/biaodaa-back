@@ -28,4 +28,11 @@ public interface TbModuleMapper extends MyMapper<TbModule> {
     List<Map<String,Object>> queryModule(Map<String,Object> param);
 
 
+    List<Map<String,Object>> queryModuleOne();
+
+
+
+
+
+
 }

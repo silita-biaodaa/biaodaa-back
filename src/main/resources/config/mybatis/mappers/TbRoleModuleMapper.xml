@@ -4,10 +4,10 @@
 
 
   <insert id="insertRoleModule" parameterType="map">
-    insert into biaodaa_admin.`tb_role_module`(rid,id)
+    insert into biaodaa_admin.`tb_role_module`(rid,id,optiond)
     values
     <foreach collection="list" item="list" separator=",">
-      (#{list.rid},#{list.id})
+      (#{list.rid},#{list.id},#{list.optiond})
     </foreach>
   </insert>
 

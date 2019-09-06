@@ -55,7 +55,7 @@
         SELECT MAX(rid) FROM biaodaa_admin.`tb_role`
     </select>
     <select id="queryRoleAll" resultType="java.util.Map">
-        SELECT t.`rid`,t.`desc` FROM biaodaa_admin.`tb_role` t
+        SELECT t.`rid`,t.`desc` FROM biaodaa_admin.`tb_role` t where t.rid &lt;&gt; 1
     </select>
     <select id="queryDesc" resultType="java.lang.String" parameterType="map">
         select t.desc from biaodaa_admin.`tb_role` t where t.desc = #{desc}

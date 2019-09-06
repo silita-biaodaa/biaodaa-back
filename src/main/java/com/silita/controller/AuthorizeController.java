@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -51,8 +52,24 @@ public class AuthorizeController {
             result.put("msg", "手机号或密码错误");
             return result;
         }
-        Map<String,Object> param = new HashMap<>();
+       /* Map<String,Object> param = new HashMap<>();
+        param.put("uid",login.getUid());
         List<Map<String, Object>> module = moduleService.getModule(param);
+        String url = "";
+        for (Map<String, Object> map : module) {
+            List<Map<String,Object>> data =(List<Map<String,Object>>) map.get("data");
+            for (Map<String, Object> datum : data) {
+                List<Map<String,Object>> data1 =(List<Map<String,Object>>) datum.get("data");
+                for (Map<String, Object> map3 : data1) {
+                    if(StringUtil.isNotEmpty(url)){
+                        url = (String) map3.get("url")+","+url;
+                    }else{
+                        url = (String) map3.get("url");
+                    }
+                }
+            }
+        }
+        System.out.println(url);*/
 
         //// TODO: 2019/8/30 需要改动，根据手机号和password登录
         Subject subject = SecurityUtils.getSubject();
