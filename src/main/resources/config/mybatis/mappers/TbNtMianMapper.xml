@@ -498,6 +498,8 @@
         </if>
     </select>
 
+
+
     <sql id="ntStatus">
        ( CASE
         mian.nt_status

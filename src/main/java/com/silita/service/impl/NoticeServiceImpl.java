@@ -182,6 +182,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
 
 
 
+
     public static void main(String[] args) {
         Map<String, String> regionSource = RegionCommon.regionSource;
         for (String s : regionSource.keySet()) {
