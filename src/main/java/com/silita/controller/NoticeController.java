@@ -98,4 +98,16 @@ public class NoticeController extends BaseController {
         return successMap(null);
     }
 
+    /**
+     * 公告统计
+     * @return
+     */
+    @RequestMapping(value = "/noticeCount", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> noticeCount() {
+        return successMap(noticeService.getNoticeCount());
+    }
+
+
+
 }

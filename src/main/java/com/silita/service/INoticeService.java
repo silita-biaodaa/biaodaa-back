@@ -73,4 +73,6 @@ public interface INoticeService {
      */
     void saveTbNtChange(TbNtChange tbNtChange);
 
+
+
 }

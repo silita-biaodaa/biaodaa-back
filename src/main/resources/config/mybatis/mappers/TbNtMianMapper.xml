@@ -497,6 +497,7 @@
             AND mian.nt_status = #{ntStatus}
         </if>
     </select>
+
     <sql id="ntStatus">
        ( CASE
         mian.nt_status

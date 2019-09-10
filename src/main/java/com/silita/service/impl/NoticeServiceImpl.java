@@ -1,15 +1,20 @@
 package com.silita.service.impl;
 
 import com.silita.common.Constant;
+import com.silita.common.RegionCommon;
 import com.silita.dao.*;
 import com.silita.model.*;
 import com.silita.service.INoticeService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
+import com.silita.utils.dateUtils.MyDateUtils;
 import com.silita.utils.stringUtils.WordProcessingUtil;
+import org.apache.commons.collections.MapUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +23,7 @@ import java.util.Map;
 @Service("noticeService")
 public class NoticeServiceImpl extends AbstractService implements INoticeService {
 
+    private static org.slf4j.Logger logger = LoggerFactory.getLogger(NoticeServiceImpl.class);
     @Autowired
     DicCommonMapper dicCommonMapper;
     @Autowired
@@ -172,6 +178,15 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         map.put("pkid", tbNtChange.getNtEditId());
         //添加变更信息时，同时标段表对应字段一起改变
         tbNtTendersMapper.updateChangeFieldValue(map);*/
+    }
+
+
+
+    public static void main(String[] args) {
+        Map<String, String> regionSource = RegionCommon.regionSource;
+        for (String s : regionSource.keySet()) {
+            System.out.println(s);
+        }
     }
 
 }
