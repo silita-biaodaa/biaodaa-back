@@ -16,8 +16,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-import static com.silita.biaodaa.elastic.Enum.FieldType.integer;
-
 @Service
 public class TbVipInfoServiceImpl implements ITbVipInfoService {
     @Autowired

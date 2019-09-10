@@ -31,10 +31,10 @@ public class NtContentServiceImpl implements INtContentService {
     @Autowired
     TbNtTextHunanMapper tbNtTextHunanMapper;
 
-    private String hBaseTableName="notice";
+   // private String hBaseTableName="notice";
 
-    @Autowired
-    private Connection connection;
+   /* @Autowired
+    private Connection connection;*/
     @Override
     public TbNtText getNtContent(TbNtText ntText) {
         TbNtText nt = tbNtTextHunanMapper.queryNtTextDetail(ntText);
@@ -53,7 +53,7 @@ public class NtContentServiceImpl implements INtContentService {
      * @throws IOException
      */
 
-    public Map queryCentent(Map<String, Object> param) throws IOException {
+/*    public Map queryCentent(Map<String, Object> param) throws IOException {
         String snatchId = tbNtTextHunanMapper.getSnatchid(param);
         String content = "";
         Map<String, Object> map = new HashMap<String, Object>();
@@ -76,6 +76,6 @@ public class NtContentServiceImpl implements INtContentService {
         map.put("ntId",ntId);
         map.put("pkid",snatchId);
         return map;
-    }
+    }*/
 
 }

@@ -23,7 +23,7 @@ import java.io.IOException;
 public class HBaseConfig {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-   @Value("${hbase.config.hbase.zookeeper.quorum}")
+/*   @Value("${hbase.config.hbase.zookeeper.quorum}")
     private String hbaseZookeeperQuorum;
     @Value("${hbase.config.hbase.zookeeper.property.clientPort}")
     private String hbaseZookeeperclientPort;
@@ -39,8 +39,8 @@ public class HBaseConfig {
             connection = ConnectionFactory.createConnection(configuration());
             logger.info("#####连接hbase成功#####");
         } catch (IOException e) {
-            e.printStackTrace();
-//            logger.error("连接hbase失败!!!");
+            //e.printStackTrace();
+            logger.error("连接hbase失败!!!");
         }
         return connection;
     }
@@ -54,5 +54,5 @@ public class HBaseConfig {
         configuration.set("hbase.master", hbaseMaster);
         configuration.set("hbase.rootdir", hbaseRootdir);
         return configuration;
-    }
+    }*/
 }

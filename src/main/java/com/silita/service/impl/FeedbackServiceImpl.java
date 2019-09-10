@@ -1,6 +1,7 @@
 package com.silita.service.impl;
 
 import com.silita.common.IsNullCommon;
+import com.silita.common.UserTypeCommon;
 import com.silita.dao.FeedbackMapper;
 import com.silita.dao.SysLogsMapper;
 import com.silita.dao.SysUserInfoMapper;
@@ -45,7 +46,6 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
      */
     @Override
     public Map<String, Object> listFeedback(Map<String, Object> param) {
-        IsNullCommon.isNull(param);
         TbFeedback feedback = new TbFeedback();
         feedback.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
         feedback.setPageSize(MapUtils.getInteger(param, "pageSize"));
@@ -73,10 +73,10 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
         String userType = MapUtils.getString(param, "userType");
         if (list != null && list.size() > 0) {
             for (Map<String, Object> map : list) {
-                String starttime = MyDateUtils.strToDates(MapUtils.getString(map, "starttime"), "yyyy-MM-dd");
-                map.put("starttime",starttime);
+                String startTime = MyDateUtils.strToDates(MapUtils.getString(map, "startTime"), "yyyy-MM-dd");
+                map.put("startTime",startTime);
                 Integer integer = userTypeMap.get(MapUtils.getString(map, "pkid"));
-                judge(integer, map);
+                UserTypeCommon.judge(integer, map);
             }
         }
         if (StringUtil.isNotEmpty(userType)) {
@@ -97,27 +97,6 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
         return super.getPagingResultMap(list, currentPage, pageSize);
     }
 
-    public void judge(Integer integer, Map<String, Object> map) {
-        if (integer != null && integer != 0) {
-            String beginTime = MapUtils.getString(map, "expiredDate");
-            if (StringUtil.isNotEmpty(beginTime)) {
-                Integer compareTo = MyDateUtils.getCompareTo(beginTime);
-                if (compareTo < 0) {
-                    map.put("userType", "过期");
-                } else {
-                    if (integer > 1) {
-                        map.put("userType", "续费");
-                    } else {
-                        map.put("userType", "付费");
-                    }
-                }
-            } else {
-                map.put("userType", "注册");
-            }
-        } else {
-            map.put("userType", "注册");
-        }
-    }
 
     /**
      * 反馈统计
