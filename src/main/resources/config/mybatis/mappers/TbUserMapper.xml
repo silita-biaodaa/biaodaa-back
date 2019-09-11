@@ -73,6 +73,7 @@
               AND phone LIKE CONCAT('%',#{phone},'%')
           </if>
         and t3.desc &lt;&gt; '超级管理员'
+        group by t.uid
         order by t.created desc
         LIMIT #{start}, #{pageSize}
     </select>

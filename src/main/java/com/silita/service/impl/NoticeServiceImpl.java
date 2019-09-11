@@ -214,7 +214,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
                 yesterdayCounts = yesterdayCounts + yesterdayCount;
                 Integer todayCount = MapUtils.getInteger(map, "todayCount");
                 todayCounts = todayCounts + todayCount;
-                Integer totalCount = MapUtils.getInteger(map, "todayCount");
+                Integer totalCount = MapUtils.getInteger(map, "totalCount");
                 totalCounts = totalCounts + totalCount;
             }
             resultMap.put("yesterdayCounts", yesterdayCounts);
