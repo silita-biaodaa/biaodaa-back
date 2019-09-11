@@ -29,9 +29,7 @@ public class RoleController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/addRole", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> addRole(@RequestBody Map<String,Object> param, ServletRequest request) {
-        param.put("optBy",JWTUtil.getUid(request));
-
+    public Map<String, Object> addRole(@RequestBody Map<String,Object> param) {
         return roleService.addRole(param);
     }
     /**

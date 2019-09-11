@@ -3,12 +3,10 @@ package com.silita.service.impl;
 import com.silita.common.Constant;
 import com.silita.common.IsNullCommon;
 import com.silita.dao.IRoleMapper;
-import com.silita.dao.SysLogsMapper;
 import com.silita.dao.TbRoleModuleMapper;
 import com.silita.model.TbRole;
 import com.silita.service.IRoleService;
 import com.silita.service.abs.AbstractService;
-import com.silita.utils.oldProjectUtils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,6 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
     private IRoleMapper roleMapper;
     @Autowired
     private TbRoleModuleMapper tbRoleModuleMapper;
-    @Autowired
-    private SysLogsMapper sysLogsMapper;
 
     /**
      * 添加角色 及 赋角色权限
