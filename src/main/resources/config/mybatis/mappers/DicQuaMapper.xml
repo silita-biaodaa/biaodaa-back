@@ -338,6 +338,9 @@
         <if test="benchName != null and benchName != ''">
             and d.bench_name like CONCAT('%',#{benchName},'%')
         </if>
+        <if test="zid != null and zid != ''">
+            and d.id=#{zid}
+        </if>
         order by order_no
     </select>
     <select id="queryDicQuaListMap" resultType="java.util.Map" parameterType="map">

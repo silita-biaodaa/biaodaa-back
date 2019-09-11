@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,6 +189,79 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         for (String s : regionSource.keySet()) {
             System.out.println(s);
         }
+    }
+
+
+    /**
+     * 获取公告统计
+     * @return
+     */
+    @Override
+    public Map<String, Object> getNoticeCount() {
+        Map<String,Object> resultMap = new HashMap<>();
+        try {
+            Map<String, Object> param = new HashMap<>();
+            param.put("yesterday", MyDateUtils.getYesterdays());
+            param.put("today", MyDateUtils.getTodays());
+            Map<String, String> regionSource = RegionCommon.regionSource;
+            int yesterdayCounts = 0;
+            int todayCounts = 0;
+            int totalCounts = 0;
+            for (String source : regionSource.keySet()) {
+                param.put("source", source);
+                Map<String, Object> map = tbNtMianMapper.queryNoticeCount(param);
+                Integer yesterdayCount = MapUtils.getInteger(map, "yesterdayCount");
+                yesterdayCounts = yesterdayCounts + yesterdayCount;
+                Integer todayCount = MapUtils.getInteger(map, "todayCount");
+                todayCounts = todayCounts + todayCount;
+                Integer totalCount = MapUtils.getInteger(map, "todayCount");
+                totalCounts = totalCounts + totalCount;
+            }
+            resultMap.put("yesterdayCounts", yesterdayCounts);
+            resultMap.put("todayCounts", todayCounts);
+            resultMap.put("totalCounts",totalCounts);
+        }catch (Exception e){
+            logger.error("获取公告统计",e);
+        }
+        return resultMap;
+    }
+    /**
+     * 公告站点统计
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> getSiteNoticeCount(Map<String, Object> param) {
+        String source = MapUtils.getString(param, "source");
+        Map<String,Object> resultMap = new HashMap<>();
+        if (StringUtil.isEmpty(source)){
+            Map<String, String> regionSource = RegionCommon.regionSource;
+            for (String pro : regionSource.keySet()) {
+                param.put("source", pro);
+                List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
+                for (Map<String, Object> map : list) {
+                    resultMap.put(MapUtils.getString(map,"srcSite"),MapUtils.getInteger(map,"siteCount"));
+                }
+            }
+            return resultMap;
+        }
+        List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
+        for (Map<String, Object> map : list) {
+            resultMap.put(MapUtils.getString(map,"srcSite"),MapUtils.getInteger(map,"siteCount"));
+        }
+        return resultMap;
+    }
+
+    /**
+     * 获取地区
+     * @return
+     */
+    @Override
+    public Map<String, Object> getRegion() {
+        Map<String, Object> regionSource = RegionCommon.regionSourcePinYin;
+        List<Map<String,Object>> listMap = new ArrayList<>();
+        listMap.add(regionSource);
+        return regionSource;
     }
 
 }

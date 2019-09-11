@@ -106,6 +106,17 @@ public interface TbNtMianMapper {
      */
     int  queryNtMainCount(TbNtMian tbNtMian);
 
+    /**
+     * 获取公告统计
+     * @return
+     */
+    Map<String,Object> queryNoticeCount(Map<String,Object> param);
 
+    /**
+     * 公告站点统计
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> querySiteNoticeCount(Map<String,Object> param);
 
 }

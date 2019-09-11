@@ -72,6 +72,23 @@ public interface INoticeService {
      * @param tbNtChange
      */
     void saveTbNtChange(TbNtChange tbNtChange);
+    /**
+     * 获取公告统计
+     * @return
+     */
+    Map<String,Object> getNoticeCount();
 
+    /**
+     * 公告站点统计
+     * @param param
+     * @return
+     */
+    Map<String, Object> getSiteNoticeCount(Map<String,Object> param);
+
+    /**
+     * 获取地区
+     * @return
+     */
+    Map<String,Object> getRegion();
 
 }

@@ -499,6 +499,38 @@
     </select>
 
 
+    <select id="queryNoticeCount" resultType="java.util.Map" parameterType="map">
+     SELECT
+      (SELECT
+        COUNT(0)
+      FROM
+        biaodaa_admin.tb_nt_mian_${source}
+      WHERE DATE(pub_date) = #{yesterday} AND src_site NOT LIKE '%旧公告系统%') yesterdayCount,
+      (SELECT
+        COUNT(0)
+      FROM
+        biaodaa_admin.tb_nt_mian_${source}
+      WHERE DATE(pub_date) = #{today} AND src_site NOT LIKE '%旧公告系统%') todayCount,
+      (SELECT COUNT(0) FROM biaodaa_admin.tb_nt_mian_hunan WHERE src_site NOT LIKE '%旧公告系统%' ) AS totalCount
+    FROM
+      biaodaa_admin.tb_nt_mian_${source}
+      GROUP BY yesterdayCount,todayCount,totalCount
+    </select>
+    <select id="querySiteNoticeCount" resultType="java.util.Map" parameterType="map">
+        SELECT
+          <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX(src_site, '&', 2),'&',- 1)]]> AS srcSite,
+          COUNT(0) AS siteCount
+        FROM
+          biaodaa_admin.tb_nt_mian_${source}
+          WHERE src_site NOT LIKE '%旧公告系统%'
+          <if test="startDate != null and startDate != ''">
+              and DATE(pub_date) &gt;= #{startDate}
+          </if>
+        <if test="endDate != null and endDate != ''">
+            and DATE(pub_date) &lt;= #{endDate}
+        </if>
+        GROUP BY src_site
+    </select>
 
     <sql id="ntStatus">
        ( CASE

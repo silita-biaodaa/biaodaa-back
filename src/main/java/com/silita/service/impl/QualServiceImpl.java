@@ -101,10 +101,8 @@ public class QualServiceImpl extends AbstractService implements IQualService {
     @Override
     public Map<String,Object> getDicQuaListMaps(Map<String, Object> param) {
         List<Map<String, Object>> dicQuaListMap = new ArrayList<>();
-
         List<Map<String, Object>> list = dicQuaMapper.queryDicQuaBenchNameListMap(param);
         for (Map<String, Object> map : list) {
-
             String parentId = (String) map.get("parentId");
             if (StringUtil.isNotEmpty(parentId)) {
                 param.put("parentId", parentId);
@@ -158,8 +156,6 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         }
         Integer pageNo = MapUtils.getInteger(param, "pageNo");
         Integer pageSize = MapUtils.getInteger(param, "pageSize");
-
-
         return super.getPagingResultMap(dicQuaListMap,pageNo,pageSize);
     }
 
