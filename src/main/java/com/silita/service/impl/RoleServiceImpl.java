@@ -47,7 +47,6 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
                 return resultMap;
             }
             roleMapper.addRole(param);
-            String desc = MapUtils.getString(param, "desc");
             String ids = MapUtils.getString(param, "ids");
             Integer integer = roleMapper.queryRoleMaxRid();
 
@@ -65,11 +64,6 @@ public class RoleServiceImpl extends AbstractService implements IRoleService {
                 param.put("list", mapList);
                 tbRoleModuleMapper.insertRoleModule(param);
             }
-            param.put("pid", CommonUtil.getUUID());
-            param.put("optType", "角色信息");
-            param.put("optDesc", "添加角色:" + desc);
-            param.put("operand", "");
-            sysLogsMapper.insertLogs(param);//添加操作日志
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
         }catch (Exception e){
