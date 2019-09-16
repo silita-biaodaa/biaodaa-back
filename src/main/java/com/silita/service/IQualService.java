@@ -71,4 +71,11 @@ public interface IQualService {
     List<Map<String,Object>> qualGradeList();
 
     List<Map<String,Object>> listQual();
+
+    /**
+     * 获取资质
+     *
+     * @param param
+     */
+    List<Map<String, Object>> queryQua(Map<String, Object> param);
 }

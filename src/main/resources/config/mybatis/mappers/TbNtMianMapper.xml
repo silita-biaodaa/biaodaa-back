@@ -501,20 +501,34 @@
 
     <select id="queryNoticeCount" resultType="java.util.Map" parameterType="map">
      SELECT
-      (SELECT
-        COUNT(0)
-      FROM
-        biaodaa_admin.tb_nt_mian_${source}
-      WHERE DATE(pub_date) = #{yesterday} AND src_site NOT LIKE '%旧公告系统%') yesterdayCount,
-      (SELECT
-        COUNT(0)
-      FROM
-        biaodaa_admin.tb_nt_mian_${source}
-      WHERE DATE(pub_date) = #{today} AND src_site NOT LIKE '%旧公告系统%') todayCount,
-      (SELECT COUNT(0) FROM biaodaa_admin.tb_nt_mian_hunan WHERE src_site NOT LIKE '%旧公告系统%' ) AS totalCount
+      t1.yesterdayCount,
+      t2.todayCount,
+      t3.totalCount
     FROM
-      biaodaa_admin.tb_nt_mian_${source}
-      GROUP BY yesterdayCount,todayCount,totalCount
+      (SELECT
+        COUNT(0) AS yesterdayCount,
+        '1' AS pkid
+      FROM
+        biaodaa_admin.tb_nt_mian_${source}
+      WHERE DATE(pub_date) = #{yesterday}
+        AND src_site NOT LIKE '%旧公告系统%') t1
+      JOIN
+        (SELECT
+          COUNT(0) AS todayCount,
+          '1' AS pkid
+        FROM
+          biaodaa_admin.tb_nt_mian_${source}
+        WHERE DATE(pub_date) = #{today}
+          AND src_site NOT LIKE '%旧公告系统%') t2
+        ON t1.pkid = t2.pkid
+      JOIN
+        (SELECT
+          COUNT(0) AS totalCount,
+          '1' AS pkid
+        FROM
+          biaodaa_admin.tb_nt_mian_${source}
+        WHERE src_site NOT LIKE '%旧公告系统%') t3
+        ON t2.pkid = t3.pkid
     </select>
     <select id="querySiteNoticeCount" resultType="java.util.Map" parameterType="map">
         SELECT

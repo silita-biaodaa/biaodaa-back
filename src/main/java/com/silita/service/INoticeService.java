@@ -83,7 +83,7 @@ public interface INoticeService {
      * @param param
      * @return
      */
-    Map<String, Object> getSiteNoticeCount(Map<String,Object> param);
+    List<Map<String, Object>> getSiteNoticeCount(Map<String,Object> param);
 
     /**
      * 获取地区

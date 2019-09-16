@@ -362,5 +362,32 @@
         order by order_no
     </select>
 
+    <!--获取一级资质-->
+    <select id="queryQuaOnes" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.qua_name AS quaName,
+        d.qua_code AS quaCode
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE d.level = '1'
+        and (d.biz_type = '0'
+        or d.biz_type = #{bizType})
+        order by order_no
+    </select>
+    <!--获取二级资质-->
+    <select id="queryQuaTwos" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE d.level = #{noticeLevel}
+        and d.parent_id=#{zzIdOne}
+        and d.qua_name &lt;&gt; '地质灾害防治工程'
+        order by order_no
+    </select>
+
 
 </mapper>

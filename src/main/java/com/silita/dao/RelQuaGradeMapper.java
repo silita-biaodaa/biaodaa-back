@@ -56,4 +56,10 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      * @return
      */
     Integer queryRelQuaGrade(String quaCode);
+
+    /**
+     * 通过子级code找到对应的等级code
+     * @return
+     */
+    List<Map<String,Object>> queryRelQuaGrades(String quaCode);
 }

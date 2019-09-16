@@ -231,8 +231,9 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
      * @return
      */
     @Override
-    public Map<String, Object> getSiteNoticeCount(Map<String, Object> param) {
+    public List<Map<String, Object>> getSiteNoticeCount(Map<String, Object> param) {
         String source = MapUtils.getString(param, "source");
+        List<Map<String,Object>> listMap = new ArrayList<>();
         Map<String,Object> resultMap = new HashMap<>();
         if (StringUtil.isEmpty(source)){
             Map<String, String> regionSource = RegionCommon.regionSource;
@@ -240,16 +241,18 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
                 param.put("source", pro);
                 List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
                 for (Map<String, Object> map : list) {
-                    resultMap.put(MapUtils.getString(map,"srcSite"),MapUtils.getInteger(map,"siteCount"));
+                    listMap.add(map);
+                    //resultMap.put(MapUtils.getString(map,"srcSite"),MapUtils.getInteger(map,"siteCount"));
                 }
             }
-            return resultMap;
+            return listMap;
         }
         List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
         for (Map<String, Object> map : list) {
-            resultMap.put(MapUtils.getString(map,"srcSite"),MapUtils.getInteger(map,"siteCount"));
+            //resultMap.put(MapUtils.getString(map,"srcSite"),MapUtils.getInteger(map,"siteCount"));
+            listMap.add(map);
         }
-        return resultMap;
+        return listMap;
     }
 
     /**

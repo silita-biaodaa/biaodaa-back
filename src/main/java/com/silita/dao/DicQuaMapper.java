@@ -118,4 +118,15 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
     List<Map<String,Object>> queryDicQuaListMap(Map<String,Object> param);
 
     List<Map<String,Object>> queryDicQuaBenchNameListMap(Map<String,Object> param);
+
+    /**
+     * 获取一级资质
+     */
+
+    List<Map<String, Object>> queryQuaOnes(Map<String, Object> param);
+
+    /**
+     * 获取资质级别
+     */
+    List<Map<String, Object>> queryQuaTwos(Map<String, Object> param);
 }
