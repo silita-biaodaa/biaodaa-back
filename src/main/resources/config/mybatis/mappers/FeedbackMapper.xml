@@ -18,7 +18,9 @@
           t.starttime as startTime,
           t.state,
           t.remark,
-          t2.expired_date as expiredDate
+          t2.expired_date as expiredDate,
+          t1.inviter_code as inviterCode,
+          t1.own_invite_code AS ownInviteCode
         FROM
           mishu_write.`feedback` t
           JOIN mishu_write.`sys_user_info` t1

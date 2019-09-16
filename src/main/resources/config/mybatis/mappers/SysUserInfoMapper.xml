@@ -435,7 +435,13 @@
         select own_invite_code from mishu_write.`sys_user_info` where pkid=#{userId}
     </select>
     <select id="queryPhone" resultType="java.util.Map" parameterType="map">
-        SELECT pkid,phone_no AS phoneNo FROM mishu_write.`sys_user_info` where 1=1
+        SELECT
+          pkid,
+          phone_no AS phoneNo,
+          inviter_code as inviterCode,
+          own_invite_code AS ownInviteCode
+        FROM mishu_write.`sys_user_info`
+        where 1=1
         <if test="orderList != null and orderList.size >0">
            and  pkid in
             (
