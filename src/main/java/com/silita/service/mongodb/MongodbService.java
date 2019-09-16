@@ -337,6 +337,7 @@ public class MongodbService {
                 maps.put("userId", orderInfo.getUserId());
                 maps.put("created", dates);
                 maps.put("vipDay", "充值" + orderInfo.getVipDays() + "天会员");
+                maps.put("vipDays",orderInfo.getVipDays());
                 if (vipDays != null && vipDays == 30) {
                     maps.put("behavior", "充值一个月");
                 } else if (vipDays != null && vipDays == 90) {

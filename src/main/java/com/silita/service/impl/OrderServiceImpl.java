@@ -33,12 +33,15 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
         List<Map<String, Object>> list = sysUserInfoMapper.queryPhone(param);
         Map<String, Object> maps = new HashMap<>();
         for (Map<String, Object> map : list) {
-            maps.put(MapUtils.getString(map, "pkid"), MapUtils.getString(map, "phoneNo"));
+            maps.put(MapUtils.getString(map, "pkid"), MapUtils.getString(map, "phoneNo")+","+MapUtils.getString(map, "inviterCode")+","+MapUtils.getString(map, "ownInviteCode"));
         }
         for (Map<String, Object> map : orderList) {
             String phone = MapUtils.getString(maps, MapUtils.getString(map, "userId"));
             if (StringUtil.isNotEmpty(phone)) {
-                map.put("phoneNo", phone);
+                String[] split = phone.split(",");
+                map.put("phoneNo", split[0]);
+                map.put("inviterCode", split[1]);
+                map.put("ownInviteCode", split[2]);
             }
         }
         List<Map<String, Object>> newList = new ArrayList<>();
