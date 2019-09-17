@@ -246,9 +246,9 @@
         SELECT
           t.`id`,
           t.`name`,
-          t.`code`,
+          t.`code` as quaCode,
           t.`type`,
-          t.`create_time`
+          t.`create_time` as createTime
         FROM
           biaodaa_admin.dic_common t
         WHERE NOT t.type = 'qua_name'
