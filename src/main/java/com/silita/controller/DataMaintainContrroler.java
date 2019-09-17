@@ -173,6 +173,11 @@ public class DataMaintainContrroler {
         return result;
     }
 
+    /**
+     * 获取评标办法别名列表
+     * @param dicAlias
+     * @return
+     */
     @RequestMapping(value = "/listPbModeAlias",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> listPbModeAlias(@RequestBody DicAlias dicAlias) {
@@ -181,7 +186,7 @@ public class DataMaintainContrroler {
         result.put("data", null);
         try{
             List<DicAlias> list = dataMaintainService.listPbModeAliasByStdCode(dicAlias);
-            result.put("msg", "获取评标办法别名成功！");
+            result.put("msg", "操作成功");
             result.put("data", list);
         } catch (Exception e) {
             result.put("code",0);
