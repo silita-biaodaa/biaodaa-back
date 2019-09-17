@@ -26,6 +26,7 @@ public class CommonController extends BaseController {
     INtContentService ntContentService;
     @Autowired
     INoticeZhaoBiaoService noticeZhaoBiaoService;
+    private TbNtMian tbNtMian;
 
     /**
      * 返回地区（省/市）
@@ -40,6 +41,7 @@ public class CommonController extends BaseController {
 
     /**
      * 获取公告原文详情
+     *
      * @param
      * @return
      */
@@ -51,7 +53,39 @@ public class CommonController extends BaseController {
     }*/
     @RequestMapping(value = "/listRelevantNotice", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Map<String,Object> listRelevantNotice(@RequestBody TbNtMian tbNtMian) {
+    public Map<String, Object> listRelevantNotice(@RequestBody TbNtMian tbNtMian) {
         return super.successMap(noticeZhaoBiaoService.listNtMain(tbNtMian));
     }
+
+    @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> list(@RequestBody Map<String, Object> param) {
+        return super.successMap(commonService.getList(param));
+    }
+
+    /**
+     * 批量删除公告词典数据
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/deleteDicCommonIds", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> deleteDicCommonIds(@RequestBody Map<String, Object> param) {
+        commonService.deleteDicCommonIds(param);
+        return super.successMap();
+    }
+    /**
+     * 批量删除公告词典数据
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/updateDicCommonId", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> updateDicCommonId(@RequestBody Map<String, Object> param) {
+        return commonService.updateDicCommonId(param);
+    }
+
+
 }

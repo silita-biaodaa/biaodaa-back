@@ -362,6 +362,22 @@
         order by order_no
     </select>
 
+    <select id="queryDicQuaListMaps" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.qua_name as quaName,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode,
+        d.parent_id AS parentId
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE 1=1
+        <if test="parentId != null and parentId != ''">
+            and d.id=#{parentId}
+        </if>
+        order by order_no
+    </select>
+
     <!--获取一级资质-->
     <select id="queryQuaOnes" resultType="java.util.Map" parameterType="map">
         SELECT
@@ -371,8 +387,6 @@
         FROM
         biaodaa_admin.dic_qua d
         WHERE d.level = '1'
-        and (d.biz_type = '0'
-        or d.biz_type = #{bizType})
         order by order_no
     </select>
     <!--获取二级资质-->
@@ -380,7 +394,8 @@
         SELECT
         d.id,
         d.bench_name AS benchName,
-        d.qua_code AS quaCode
+        d.qua_code AS quaCode,
+        d.qua_name as quaName
         FROM
         biaodaa_admin.dic_qua d
         WHERE d.level = #{noticeLevel}

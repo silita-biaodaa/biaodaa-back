@@ -198,4 +198,7 @@ public class Constant {
 
     public static String MSG_MISTAKE = "手机号或密码错误";
 
+    public static String MSG_PBMODE = "该名称已存在";
+    public static String CODE_PBMODE = "0";
+
 }

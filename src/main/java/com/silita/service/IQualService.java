@@ -75,7 +75,6 @@ public interface IQualService {
     /**
      * 获取资质
      *
-     * @param param
      */
-    List<Map<String, Object>> queryQua(Map<String, Object> param);
+    List<Map<String, Object>> getQua();
 }

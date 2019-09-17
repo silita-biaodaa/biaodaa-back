@@ -155,5 +155,8 @@
             </foreach>
         </where>
     </delete>
+    <delete id="deleteAilas" parameterType="map">
+        DELETE FROM biaodaa_admin.`dic_alias` WHERE std_code = #{stdCode}
+    </delete>
 
 </mapper>

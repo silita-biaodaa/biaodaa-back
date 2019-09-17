@@ -77,4 +77,10 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
 
     void insertAilas(List<DicAlias> list);
 
+    /**
+     * 删除别名
+     * @param param
+     */
+    void deleteAilas(Map<String,Object> param);
+
 }

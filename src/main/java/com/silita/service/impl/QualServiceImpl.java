@@ -101,18 +101,39 @@ public class QualServiceImpl extends AbstractService implements IQualService {
      */
     @Override
     public Map<String, Object> getDicQuaListMaps(Map<String, Object> param) {
+
+
+        String ids = MapUtils.getString(param, "ids");
+        if (StringUtil.isNotEmpty(ids)) {
+            String[] split = ids.split(",");
+            param.put("id", split[0]);
+            if (split.length >= 2) {
+                param.put("zid", split[1]);
+            }
+        }
+        String id = MapUtils.getString(param, "id");
         List<Map<String, Object>> dicQuaListMap = new ArrayList<>();
         List<Map<String, Object>> list = dicQuaMapper.queryDicQuaBenchNameListMap(param);
         for (Map<String, Object> map : list) {
             String parentId = (String) map.get("parentId");
             if (StringUtil.isNotEmpty(parentId)) {
                 param.put("parentId", parentId);
-                List<Map<String, Object>> list1 = dicQuaMapper.queryDicQuaListMap(param);
+                List<Map<String, Object>> list1 = null;
+                if (parentId.equals(id)) {
+                    list1 = dicQuaMapper.queryDicQuaListMap(param);
+                } else {
+                    list1 = dicQuaMapper.queryDicQuaListMaps(param);
+                }
                 for (Map<String, Object> map1 : list1) {
                     String parentId1 = (String) map1.get("parentId");
                     if (StringUtil.isNotEmpty(parentId1)) {
                         param.put("parentId", parentId1);
-                        List<Map<String, Object>> list2 = dicQuaMapper.queryDicQuaListMap(param);
+                        List<Map<String, Object>> list2 = null;
+                        if (parentId1.equals(id)) {
+                            list2 = dicQuaMapper.queryDicQuaListMap(param);
+                        } else {
+                            list2 = dicQuaMapper.queryDicQuaListMaps(param);
+                        }
                         for (Map<String, Object> map2 : list2) {
                             String parentId2 = (String) map2.get("parentId");
                             if (StringUtil.isNotEmpty(parentId2)) {
@@ -120,37 +141,101 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                                 List<Map<String, Object>> list3 = dicQuaMapper.queryDicQuaListMap(param);
                                 for (Map<String, Object> map3 : list3) {
                                     String benchName = (String) map.get("benchName");
-                                    if (StringUtil.isNotEmpty(benchName)) {
-                                        Map<String, Object> threeMap = new HashMap<>();
-                                        threeMap.put("quaName", map3.get("quaName"));
-                                        threeMap.put("id", map.get("id"));
-                                        threeMap.put("code", map.get("quaCode"));
-                                        threeMap.put("benchName", map.get("benchName"));
-                                        dicQuaListMap.add(threeMap);
+                                    if (StringUtil.isNotEmpty(ids)) {
+                                        if (parentId2.equals(id)) {
+                                            if (StringUtil.isNotEmpty(benchName)) {
+                                                Map<String, Object> threeMap = new HashMap<>();
+                                                threeMap.put("quaName", map3.get("quaName"));
+                                                threeMap.put("id", map3.get("id"));
+                                                threeMap.put("quaBig", map2.get("quaName"));
+                                                threeMap.put("quaTiny", map1.get("quaName"));
+                                                threeMap.put("quaMajor", "");
+                                                threeMap.put("zid", map.get("id"));
+                                                threeMap.put("code", map.get("quaCode"));
+                                                threeMap.put("benchName", map.get("benchName"));
+                                                dicQuaListMap.add(threeMap);
+                                            }
+                                        }
+                                    } else {
+                                        if (StringUtil.isNotEmpty(benchName)) {
+                                            Map<String, Object> threeMap = new HashMap<>();
+                                            threeMap.put("quaName", map3.get("quaName"));
+                                            threeMap.put("id", map3.get("id"));
+                                            threeMap.put("quaBig", map2.get("quaName"));
+                                            threeMap.put("quaTiny", map1.get("quaName"));
+                                            threeMap.put("quaMajor", "");
+                                            threeMap.put("zid", map.get("id"));
+                                            threeMap.put("benchName", map.get("benchName"));
+                                            threeMap.put("code", map.get("quaCode"));
+                                            dicQuaListMap.add(threeMap);
+                                        }
                                     }
                                 }
                             } else {
                                 String benchName = (String) map.get("benchName");
-                                if (StringUtil.isNotEmpty(benchName)) {
-                                    Map<String, Object> towMap = new HashMap<>();
-                                    towMap.put("quaName", map2.get("quaName"));
-                                    towMap.put("id", map.get("id"));
-                                    towMap.put("code", map.get("quaCode"));
-                                    towMap.put("benchName", map.get("benchName"));
-                                    dicQuaListMap.add(towMap);
+                                if (StringUtil.isNotEmpty(ids)) {
+                                    if (parentId1.equals(id)) {
+                                        if (StringUtil.isNotEmpty(benchName)) {
+                                            Map<String, Object> towMap = new HashMap<>();
+                                            towMap.put("quaName", map2.get("quaName"));
+                                            towMap.put("id", map2.get("id"));
+                                            towMap.put("zid", map.get("id"));
+                                            towMap.put("code", map.get("quaCode"));
+                                            towMap.put("benchName", map.get("benchName"));
+                                            towMap.put("quaBig", map1.get("quaName"));
+                                            towMap.put("quaTiny", "");
+                                            towMap.put("quaMajor", "");
+                                            dicQuaListMap.add(towMap);
+                                        }
+                                    }
+                                } else {
+                                    if (StringUtil.isNotEmpty(benchName)) {
+                                        Map<String, Object> towMap = new HashMap<>();
+                                        towMap.put("quaName", map2.get("quaName"));
+                                        towMap.put("id", map2.get("id"));
+                                        towMap.put("zid", map.get("id"));
+                                        towMap.put("code", map.get("quaCode"));
+                                        towMap.put("benchName", map.get("benchName"));
+                                        towMap.put("quaBig", map1.get("quaName"));
+                                        towMap.put("quaMajor", "");
+                                        towMap.put("quaTiny", "");
+                                        dicQuaListMap.add(towMap);
+                                    }
                                 }
                             }
                         }
                     } else {
                         String benchName = (String) map.get("benchName");
-                        if (StringUtil.isNotEmpty(benchName)) {
-                            Map<String, Object> oneMap = new HashMap<>();
-                            oneMap.put("quaName", map1.get("quaName"));
-                            oneMap.put("id", map.get("id"));
-                            oneMap.put("code", map.get("quaCode"));
-                            oneMap.put("benchName", map.get("benchName"));
-                            dicQuaListMap.add(oneMap);
+                        if (StringUtil.isNotEmpty(ids)) {
+                            if (parentId.equals(id)) {
+                                if (StringUtil.isNotEmpty(benchName)) {
+                                    Map<String, Object> oneMap = new HashMap<>();
+                                    oneMap.put("quaBig", "");
+                                    oneMap.put("quaTiny", "");
+                                    oneMap.put("quaMajor", "");
+                                    oneMap.put("quaName", map1.get("quaName"));
+                                    oneMap.put("id", map1.get("id"));
+                                    oneMap.put("zid", map.get("id"));
+                                    oneMap.put("code", map.get("quaCode"));
+                                    oneMap.put("benchName", map.get("benchName"));
+                                    dicQuaListMap.add(oneMap);
+                                }
+                            }
+                        } else {
+                            if (StringUtil.isNotEmpty(benchName)) {
+                                Map<String, Object> oneMap = new HashMap<>();
+                                oneMap.put("quaBig", "");
+                                oneMap.put("quaTiny", "");
+                                oneMap.put("quaMajor", "");
+                                oneMap.put("quaName", map1.get("quaName"));
+                                oneMap.put("id", map1.get("id"));
+                                oneMap.put("zid", map.get("id"));
+                                oneMap.put("benchName", map.get("benchName"));
+                                oneMap.put("code", map.get("quaCode"));
+                                dicQuaListMap.add(oneMap);
+                            }
                         }
+
                     }
                 }
             }
@@ -281,13 +366,11 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         return qualCateList;
     }
 
-
     /**
      * 获取资质
-     *
-     * @param param
      */
-    public List<Map<String, Object>> queryQua(Map<String, Object> param) {
+    public List<Map<String, Object>> getQua() {
+        Map<String, Object> param = new HashMap<>();
         List<Map<String, Object>> list = dicQuaMapper.queryQuaOnes(param);
         List<Map<String, Object>> oneQuaListtMap = new ArrayList<>();
         //遍历资质一级
@@ -299,15 +382,12 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             param.put("noticeLevel", "2");
             List<Map<String, Object>> list1 = dicQuaMapper.queryQuaTwos(param);
             List<Map<String, Object>> towQuaListtMap = new ArrayList<>();
-
             for (Map<String, Object> map2 : list1) {
                 Map<String, Object> towQuaMap = new HashMap<>();
                 String tow = (String) map2.get("id");
                 param.put("zzIdOne", tow);
-                String towQualevel = (String) map2.get("quaCode");
-                List<Map<String, Object>> list8 = relQuaGradeMapper.queryRelQuaGrades(towQualevel);
-                List<Map<String, Object>> levelThreeListMap = new ArrayList<>();
-                if (null == list8 || list8.size() <= 0) {
+                List<Map<String, Object>> threeQuaListtMap = new ArrayList<>();
+                if (null == MapUtils.getString(map2, "benchName")) {
                     param.put("noticeLevel", "3");
                     List<Map<String, Object>> list2 = dicQuaMapper.queryQuaTwos(param);
                     for (Map<String, Object> map3 : list2) {
@@ -315,68 +395,50 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                         String three = (String) map3.get("id");
                         param.put("zzIdOne", three);
                         param.put("noticeLevel", "4");
-                        String threeQualevel = (String) map3.get("quaCode");
-                        List<Map<String, Object>> list9 = relQuaGradeMapper.queryRelQuaGrades(threeQualevel);
-                        List<Map<String, Object>> levelFourListMap = new ArrayList<>();
-                        if (null == list9 || list9.size() <= 0) {
+                        List<Map<String, Object>> fourQuaListtMap = new ArrayList<>();
+                        if (null == MapUtils.getString(map3, "benchName")) {
                             List<Map<String, Object>> list3 = dicQuaMapper.queryQuaTwos(param);
                             for (Map<String, Object> map4 : list3) {
                                 Map<String, Object> fourQuaMap = new HashMap<>();
-                                String quaCode = (String) map4.get("quaCode");
-                                List<Map<String, Object>> list5 = relQuaGradeMapper.queryRelQuaGrades(quaCode);
-                                List<Map<String, Object>> levelFiveListMap = new ArrayList<>();
-                                for (Map<String, Object> map5 : list5) {
-                                    Map<String, Object> levelMap = new HashMap<>();
-                                    levelMap.put("code", map5.get("quaCode"));
-                                    levelMap.put("name", map5.get("quaName"));
-                                    levelFiveListMap.add(levelMap);
-                                }
                                 String benchName = (String) map4.get("benchName");
                                 if (StringUtils.isNotEmpty(benchName)) {
                                     fourQuaMap.put("code", map4.get("quaCode"));
+                                    fourQuaMap.put("id", map4.get("id"));
                                     fourQuaMap.put("name", map4.get("benchName"));
-                                    fourQuaMap.put("data", levelFiveListMap);
-                                    towQuaListtMap.add(fourQuaMap);
+                                    fourQuaListtMap.add(fourQuaMap);
                                 }
-                            }
-
-                        } else {
-                            for (Map<String, Object> map7 : list9) {
-                                Map<String, Object> levelMap3 = new HashMap<>();
-                                String b;
-                                levelMap3.put("code", map7.get("quaCode"));
-                                levelMap3.put("name", map7.get("quaName"));
-                                levelFourListMap.add(levelMap3);
                             }
                         }
                         String benchName = (String) map3.get("benchName");
+                        threeQuaMap.put("code", map3.get("quaCode"));
+                        threeQuaMap.put("id", map3.get("id"));
                         if (StringUtils.isNotEmpty(benchName)) {
-                            threeQuaMap.put("code", map3.get("quaCode"));
                             threeQuaMap.put("name", map3.get("benchName"));
-                            threeQuaMap.put("data", levelFourListMap);
-                            towQuaListtMap.add(threeQuaMap);
+                        }else{
+                            threeQuaMap.put("name", map3.get("quaName"));
                         }
+                        if(null != fourQuaListtMap && fourQuaListtMap.size() >= 1) {
+                            threeQuaMap.put("data", fourQuaListtMap);
+                        }
+                        threeQuaListtMap.add(threeQuaMap);
                     }
-
-                } else {
-                    for (Map<String, Object> map6 : list8) {
-                        Map<String, Object> levelMap2 = new HashMap<>();
-                        levelMap2.put("code", map6.get("quaCode"));
-                        levelMap2.put("name", map6.get("quaName"));
-                        levelThreeListMap.add(levelMap2);
-                        String a;
-                    }
-
                 }
                 String benchName = (String) map2.get("benchName");
+                towQuaMap.put("code", map2.get("quaCode"));
+                towQuaMap.put("id", map2.get("id"));
                 if (StringUtils.isNotEmpty(benchName)) {
-                    towQuaMap.put("code", map2.get("quaCode"));
                     towQuaMap.put("name", map2.get("benchName"));
-                    towQuaMap.put("data", levelThreeListMap);
-                    towQuaListtMap.add(towQuaMap);
+                }else{
+                    towQuaMap.put("name", map2.get("quaName"));
+
                 }
+                if(null != threeQuaListtMap && threeQuaListtMap.size() >= 1){
+                    towQuaMap.put("data", threeQuaListtMap);
+                }
+                towQuaListtMap.add(towQuaMap);
             }
             oneQuaMap.put("code", map.get("quaCode"));
+            oneQuaMap.put("id", map.get("id"));
             oneQuaMap.put("name", map.get("quaName"));
             oneQuaMap.put("data", towQuaListtMap);
             oneQuaListtMap.add(oneQuaMap);

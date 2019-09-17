@@ -115,8 +115,19 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     Integer queryQuaparentIdIsNull(Map<String,Object> param);
 
+    /**
+     * 获取资质标准名称
+     * @param param
+     * @return
+     */
     List<Map<String,Object>> queryDicQuaListMap(Map<String,Object> param);
+    List<Map<String,Object>> queryDicQuaListMaps(Map<String,Object> param);
 
+    /**
+     * 获取所有资质
+     * @param param
+     * @return
+     */
     List<Map<String,Object>> queryDicQuaBenchNameListMap(Map<String,Object> param);
 
     /**

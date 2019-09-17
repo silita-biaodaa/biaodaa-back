@@ -45,6 +45,9 @@
         `update_time` = NOW()
         WHERE id = #{id}
     </update>
+    <update id="updateDicCommonId" parameterType="map">
+        UPDATE biaodaa_admin.`dic_common` t SET t.name = #{name} WHERE id = #{id}
+    </update>
 
     <select id="listDicCommonByType" parameterType="com.silita.model.DicCommon" resultType="com.silita.model.DicCommon">
         SELECT *
@@ -65,15 +68,25 @@
             </foreach>
         </where>
     </delete>
+    <delete id="deleteDicCommonIds" parameterType="map">
+        DELETE
+        FROM
+          biaodaa_admin.`dic_common`
+        WHERE id IN
+        <foreach collection="list" item="list" open="("
+                 separator="," close=")">
+            #{list}
+        </foreach>
+    </delete>
 
-   <!-- <select id="queryParentGrade" resultType="java.util.Map">
-        select id as id
-                ,`name` as `name`
-                ,`code` as `code`
-        from dic_common
-        where `type` = 'qua_grade'
-        AND (parent_id IS NULL OR parent_id = '')
-    </select>-->
+    <!-- <select id="queryParentGrade" resultType="java.util.Map">
+         select id as id
+                 ,`name` as `name`
+                 ,`code` as `code`
+         from dic_common
+         where `type` = 'qua_grade'
+         AND (parent_id IS NULL OR parent_id = '')
+     </select>-->
 
     <select id="queryParentGrade" resultType="java.util.Map">
         select id as id
@@ -229,6 +242,29 @@
         SELECT t.name,t.name FROM `dic_common` t WHERE t.type &lt;&gt; 'qua_grade'
     </select>
 
+    <select id="queryList" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t.`id`,
+          t.`name`,
+          t.`code`,
+          t.`type`,
+          t.`create_time`
+        FROM
+          biaodaa_admin.dic_common t
+        WHERE NOT t.type = 'qua_name'
+          AND t.type = #{type}
+          <if test="name != null and name != ''">
+              and t.name like CONCAT('%',#{name},'%')
+          </if>
+          GROUP BY t.`name`
+          ORDER BY t.`code`
+    </select>
+    <select id="queryDicCommonCode" resultType="java.lang.String">
+        SELECT t.code FROM biaodaa_admin.`dic_common` t WHERE t.id = #{id}
+    </select>
+    <select id="queryDicCommonName" resultType="java.lang.Integer" parameterType="map">
+        select ifnull(count(1),0) from biaodaa_admin.`dic_common` t where t.name = #{name} and t.type = #{type}
+    </select>
 
 
 </mapper>

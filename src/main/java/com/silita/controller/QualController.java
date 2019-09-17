@@ -165,4 +165,13 @@ public class QualController extends BaseController {
     public Map<String,Object> qualGradeNoticList(){
         return successMap(qualService.listQual());
     }
+    /**
+     * 全部资质等级列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/qualSpinner", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String,Object> qualSpinner(){
+        return successMap(qualService.getQua());
+    }
 }
