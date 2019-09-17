@@ -75,8 +75,9 @@ public class CommonController extends BaseController {
         commonService.deleteDicCommonIds(param);
         return super.successMap();
     }
+
     /**
-     * 批量删除公告词典数据
+     * 修改评标名称
      *
      * @param param
      * @return
@@ -86,6 +87,7 @@ public class CommonController extends BaseController {
     public Map<String, Object> updateDicCommonId(@RequestBody Map<String, Object> param) {
         return commonService.updateDicCommonId(param);
     }
+
 
 
 }

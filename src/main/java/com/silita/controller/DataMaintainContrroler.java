@@ -46,7 +46,12 @@ public class DataMaintainContrroler {
         return result;
     }
 
-
+    /**
+     * 添加评标办法
+     * @param dicCommon
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/insertPbMode", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> insertPbMode(@RequestBody DicCommon dicCommon, ServletRequest request) {

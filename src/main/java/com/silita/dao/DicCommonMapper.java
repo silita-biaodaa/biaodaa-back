@@ -203,4 +203,5 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
     Integer queryDicCommonName(Map<String,Object> param);
 
 
+
 }

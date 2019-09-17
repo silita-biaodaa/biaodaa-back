@@ -16,6 +16,7 @@
         )
     </insert>
 
+
     <update id="updateDicCommonById" parameterType="com.silita.model.DicCommon">
         UPDATE dic_common SET
         <if test="parentId !=null and parentId!=''">
