@@ -10,6 +10,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 添加资质
+     *
      * @param qua
      * @return
      */
@@ -17,6 +18,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 修改资质
+     *
      * @param qua
      * @return
      */
@@ -24,6 +26,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 修改资质
+     *
      * @param qua
      * @return
      */
@@ -31,6 +34,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 删除资质
+     *
      * @param id
      * @return
      */
@@ -38,26 +42,30 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 查询资质
+     *
      * @param param
      * @return
      */
-    List<DicQua> queryDicQuaList(Map<String,Object> param);
+    List<DicQua> queryDicQuaList(Map<String, Object> param);
 
     /**
      * 查询资质类别
+     *
      * @return
      */
-    List<Map<String,Object>> queryQualCateList();
+    List<Map<String, Object>> queryQualCateList();
 
     /**
      * 查询资质count
+     *
      * @param param
      * @return
      */
-    Integer queryQualCountByName(Map<String,Object> param);
+    Integer queryQualCountByName(Map<String, Object> param);
 
     /**
      * 根据资质code查询详情
+     *
      * @param quaCode
      * @return
      */
@@ -65,6 +73,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 根据主键查询详情
+     *
      * @param pkid
      * @return
      */
@@ -72,6 +81,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 根据资质code查询详情
+     *
      * @param quaName
      * @return
      */
@@ -79,6 +89,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 根据资质code查询详情
+     *
      * @param quaName
      * @return
      */
@@ -86,6 +97,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 根据标准名称查询资质code
+     *
      * @param quaName
      * @return
      */
@@ -93,42 +105,65 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
 
     /**
      * 查询资质标准名
+     *
      * @return
      */
-    List<Map<String,Object>> queryBenchName();
+    List<Map<String, Object>> queryBenchName();
 
 
+    List<Map<String, Object>> queryQuaparentId(Map<String, Object> param);
 
-
-    /**
-     * 获取资质大类
-     */
-
-    List<Map<String,Object>> queryQuaOne(Map<String,Object> param);
-
-    /**
-     * 获取资质最后一级标准名称-
-     */
-    List<Map<String,Object>> queryQuaTwo(Map<String,Object> param);
-
-    List<Map<String,Object>> queryQuaparentId(Map<String,Object> param);
-
-    Integer queryQuaparentIdIsNull(Map<String,Object> param);
+    Integer queryQuaparentIdIsNull(Map<String, Object> param);
 
     /**
      * 获取资质标准名称
+     *
      * @param param
      * @return
      */
-    List<Map<String,Object>> queryDicQuaListMap(Map<String,Object> param);
-    List<Map<String,Object>> queryDicQuaListMaps(Map<String,Object> param);
+    List<Map<String, Object>> queryDicQuaListMap(Map<String, Object> param);
+
+    List<Map<String, Object>> queryDicQuaListMaps(Map<String, Object> param);
 
     /**
      * 获取所有资质
+     *
      * @param param
      * @return
      */
-    List<Map<String,Object>> queryDicQuaBenchNameListMap(Map<String,Object> param);
+    List<Map<String, Object>> queryDicQuaBenchNameListMap(Map<String, Object> param);
+
+    /**
+     * 获取一级资质
+     */
+    List<Map<String, Object>> queryQuaOne(Map<String, Object> param);
+
+    /**
+     * 获取二级资质
+     */
+    List<Map<String, Object>> queryQuaTwo(Map<String, Object> param);
+
+    /**
+     * 获取三级资质
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> queryQuaThree(Map<String, Object> param);
+
+    /**
+     * 获取四级资质
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> queryQuaFout(Map<String, Object> param);
+
+    /**
+     * 获取标准名称
+     * @param param
+     * @return
+     */
+    List<String> queryBenchNames(Map<String,Object> param);
+
 
     /**
      * 获取一级资质

@@ -9,8 +9,10 @@ import com.silita.service.IDataMaintainService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.*;
 
@@ -68,6 +70,12 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         return dicCommonMapper.listDicCommonByType(dicCommon);
     }
 
+    /**
+     * 更新评标办法
+     *
+     * @param dicCommon
+     * @return
+     */
     @Override
     public String updatePbModeById(DicCommon dicCommon) {
         String msg = null;
@@ -110,6 +118,12 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     }
 
 
+    /**
+     * 添加评标办法别名
+     *
+     * @param dicAlias
+     * @return
+     */
     @Override
     public String insertPbModeAliasByStdCode(DicAlias dicAlias) {
         String msg = null;
@@ -130,10 +144,43 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     }
 
     @Override
-    public List<DicAlias> listPbModeAliasByStdCode(DicAlias dicAlias) {
-        return dicAliasMapper.listDicAliasByStdCode(dicAlias);
+    public List<Map<String,Object>> listPbModeAliasByStdCode(DicAlias dicAlias) {
+        String rank = dicAlias.getRank();
+        if (StringUtil.isEmpty(rank)) {
+            dicAlias.setRank("create_time");
+            dicAlias.setSort("desc");
+        } else {
+            String sort = dicAlias.getSort();
+            if (rank.equals("时间")) {
+                dicAlias.setRank("create_time");
+                if (sort.equals("降序")) {
+                    dicAlias.setSort("desc");
+                } else {
+                    dicAlias.setSort("asc");
+                }
+            } else {
+                dicAlias.setRank("std_code");
+                if (sort.equals("降序")) {
+                    dicAlias.setSort("desc");
+                } else {
+                    dicAlias.setSort("asc");
+                }
+            }
+        }
+        dicAlias.setRank(dicAlias.getRank() + " " + dicAlias.getSort());
+        List<Map<String, Object>> list = dicAliasMapper.listDicAliasByStdCode(dicAlias);
+        for (Map<String, Object> map : list) {
+            map.put("createTime",MapUtils.getString(map,"createTime"));
+        }
+        return list;
     }
 
+    /**
+     * 更新评标办法别名
+     *
+     * @param dicAlias
+     * @return
+     */
     @Override
     public String updatePbModeAliasById(DicAlias dicAlias) {
         String msg = null;

@@ -56,7 +56,7 @@ public interface IDataMaintainService  {
      * @param dicAlias
      * @return
      */
-    List<DicAlias> listPbModeAliasByStdCode(DicAlias dicAlias);
+    List<Map<String,Object>> listPbModeAliasByStdCode(DicAlias dicAlias);
 
     /**
      * 根据主键更新评标办法别名

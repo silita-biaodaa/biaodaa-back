@@ -47,7 +47,7 @@ public class QualController extends BaseController {
     }
 
     /**
-     * 查询
+     * 查询资质列表查询及筛选
      *
      * @param param
      * @return
@@ -166,7 +166,7 @@ public class QualController extends BaseController {
         return successMap(qualService.listQual());
     }
     /**
-     * 全部资质等级列表
+     * 资质下拉选项
      * @return
      */
     @ResponseBody

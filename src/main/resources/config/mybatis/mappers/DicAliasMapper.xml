@@ -59,8 +59,14 @@
         WHERE id = #{id}
     </update>
 
-    <select id="listDicAliasByStdCode" parameterType="com.silita.model.DicAlias" resultType="com.silita.model.DicAlias">
-        SELECT *
+    <select id="listDicAliasByStdCode" parameterType="com.silita.model.DicAlias" resultType="java.util.Map">
+        SELECT
+        `id`,
+        `name`,
+        `code`,
+        `std_code` as stdCode,
+        `std_type` as stdType,
+        `create_time` as createTime
         FROM dic_alias
         WHERE 1=1
         <if test="stdCode != null and stdCode != ''">
@@ -72,10 +78,9 @@
         <if test="stdType != null and stdType != ''">
             and std_type = #{stdType}
         </if>
-        <if test="start != null and start != ''">
-            LIMIT #{start}, #{pageSize}
+        <if test="rank != null and rank != ''">
+            order by ${rank}
         </if>
-        order by create_time desc
     </select>
 
     <select id="getDicAliasCountByStdCode" parameterType="com.silita.model.DicAlias" resultType="java.lang.Integer">

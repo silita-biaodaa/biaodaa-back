@@ -29,7 +29,7 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      * @param dicAlias
      * @return
      */
-    public List<DicAlias> listDicAliasByStdCode(DicAlias dicAlias);
+    public List<Map<String,Object>> listDicAliasByStdCode(DicAlias dicAlias);
 
     /***
      * 根据stdCode获取词典别名列表

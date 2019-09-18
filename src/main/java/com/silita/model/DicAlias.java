@@ -64,4 +64,13 @@ public class DicAlias  extends Pagination {
      */
     private String updateBy;
 
+    /**
+     * 升序/降序
+     */
+    private String sort;
+    /**
+     * 按什么排序
+     */
+    private String rank;
+
 }

@@ -117,15 +117,7 @@ public class NoticeController extends BaseController {
         return successMap(noticeService.getSiteNoticeCount(param));
     }
 
-    /**
-     * 获取公告统计
-     * @return
-     */
-    @RequestMapping(value = "/region", method = RequestMethod.POST, produces="application/json;charset=utf-8")
-    @ResponseBody
-    public Map<String,Object> region() {
-        return successMap(noticeService.getRegion());
-    }
+
 
 
 

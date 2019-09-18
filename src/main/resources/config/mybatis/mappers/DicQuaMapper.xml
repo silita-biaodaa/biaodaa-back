@@ -268,38 +268,7 @@
         AND t.`bench_name` = '工程设计建筑行业（建筑工程）'
     </select>
 
-    <!--获取资质大类-->
-    <select id="queryQuaOne" resultType="java.util.Map" parameterType="map">
-        SELECT
-        d.id,
-        d.qua_name AS quaName,
-        d.qua_code AS quaCode
-        FROM
-        biaodaa_admin.dic_qua d
-        WHERE d.level = '1'
-        <if test="id != null and id != ''">
-            and d.id = #{id}
-        </if>
-        <if test="parentId != null and parentId != ''">
-            and d.id=#{parentId}
-        </if>
-        order by order_no
-    </select>
-    <!--获取资质最后一级标准名称-->
-    <select id="queryQuaTwo" resultType="java.util.Map" parameterType="map">
-        SELECT
-        d.id,
-        d.bench_name AS benchName,
-        d.qua_code AS quaCode,
-        d.parent_id AS parentId
-        FROM
-        biaodaa_admin.dic_qua d
-        WHERE d.level = #{noticeLevel}
-        <if test="benchName != null and benchName != ''">
-            and d.bench_name like CONCAT('%',#{benchName},'%')
-        </if>
-        order by order_no
-    </select>
+
     <!--获取资质最后一级标准名称-->
     <select id="queryQuaparentId" resultType="java.util.Map" parameterType="map">
         SELECT
@@ -378,6 +347,75 @@
         order by order_no
     </select>
 
+    <!--获取资质大类-->
+    <select id="queryQuaOne" resultType="java.util.Map" parameterType="map">
+        SELECT
+          d.id,
+          d.qua_name AS quaName,
+          d.qua_code AS quaCode
+        FROM
+          biaodaa_admin.dic_qua d
+        WHERE d.level = '1'
+        <if test="id != null and id != ''">
+            and d.id = #{id}
+        </if>
+        order by order_no
+    </select>
+    <!--获取资质最后一级标准名称-->
+    <select id="queryQuaTwo" resultType="java.util.Map" parameterType="map">
+         SELECT
+            d.id,
+            d.bench_name AS benchName,
+            d.qua_code AS quaCode,
+            d.qua_name as quaName
+          FROM
+            biaodaa_admin.dic_qua d
+          WHERE 1=1
+          <if test="zzIdOne != null and zzIdOne != ''">
+              and d.parent_id=#{zzIdOne}
+          </if>
+          <if test="two != null and two != ''">
+              and d.id = #{two}
+          </if>
+            order by d.order_no
+    </select>
+
+    <select id="queryQuaThree" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode,
+        d.qua_name as quaName
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE 1=1
+        <if test="zzIdOne != null and zzIdOne != ''">
+            and d.parent_id=#{zzIdOne}
+        </if>
+        <if test="three != null and three != ''">
+            and d.id = #{three}
+        </if>
+        order by d.order_no
+    </select>
+
+    <select id="queryQuaFout" resultType="java.util.Map" parameterType="map">
+        SELECT
+        d.id,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode,
+        d.qua_name as quaName
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE 1=1
+        <if test="zzIdOne != null and zzIdOne != ''">
+            and d.parent_id=#{zzIdOne}
+        </if>
+        <if test="four != null and four != ''">
+            and d.id = #{four}
+        </if>
+        order by d.order_no
+    </select>
+
     <!--获取一级资质-->
     <select id="queryQuaOnes" resultType="java.util.Map" parameterType="map">
         SELECT
@@ -400,8 +438,14 @@
         biaodaa_admin.dic_qua d
         WHERE d.level = #{noticeLevel}
         and d.parent_id=#{zzIdOne}
-        and d.qua_name &lt;&gt; '地质灾害防治工程'
         order by order_no
+    </select>
+    <select id="queryBenchNames" resultType="java.lang.String" parameterType="map">
+        SELECT
+          bench_name AS benchName
+        FROM
+          biaodaa_admin.`dic_qua`
+        WHERE bench_name LIKE CONCAT('%',#{benchName}, '%')
     </select>
 
 

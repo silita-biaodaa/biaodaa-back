@@ -231,10 +231,11 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
      * @return
      */
     @Override
-    public List<Map<String, Object>> getSiteNoticeCount(Map<String, Object> param) {
+    public Map<String, Object> getSiteNoticeCount(Map<String, Object> param) {
+        Map<String,Object> resultMap = new HashMap<>();
+        int count = 0;
         String source = MapUtils.getString(param, "source");
         List<Map<String,Object>> listMap = new ArrayList<>();
-        Map<String,Object> resultMap = new HashMap<>();
         if (StringUtil.isEmpty(source)){
             Map<String, String> regionSource = RegionCommon.regionSource;
             for (String pro : regionSource.keySet()) {
@@ -242,29 +243,24 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
                 List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
                 for (Map<String, Object> map : list) {
                     listMap.add(map);
-                    //resultMap.put(MapUtils.getString(map,"srcSite"),MapUtils.getInteger(map,"siteCount"));
+                    Integer siteCount = MapUtils.getInteger(map, "siteCount");
+                    count = count+siteCount;//统计总数量
                 }
             }
-            return listMap;
+            resultMap.put("sumTotal",count);
+            resultMap.put("list",listMap);
+            return resultMap;
         }
         List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
         for (Map<String, Object> map : list) {
-            //resultMap.put(MapUtils.getString(map,"srcSite"),MapUtils.getInteger(map,"siteCount"));
             listMap.add(map);
+            Integer siteCount = MapUtils.getInteger(map, "siteCount");
+            count = count+siteCount;//统计总数量
         }
-        return listMap;
+        resultMap.put("sumTotal",count);
+        resultMap.put("list",listMap);
+        return resultMap;
     }
 
-    /**
-     * 获取地区
-     * @return
-     */
-    @Override
-    public Map<String, Object> getRegion() {
-        Map<String, Object> regionSource = RegionCommon.regionSourcePinYin;
-        List<Map<String,Object>> listMap = new ArrayList<>();
-        listMap.add(regionSource);
-        return regionSource;
-    }
 
 }

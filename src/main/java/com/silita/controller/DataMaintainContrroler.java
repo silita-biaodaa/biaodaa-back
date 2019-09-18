@@ -184,7 +184,7 @@ public class DataMaintainContrroler {
         result.put("code", 1);
         result.put("data", null);
         try{
-            List<DicAlias> list = dataMaintainService.listPbModeAliasByStdCode(dicAlias);
+            List<Map<String,Object>> list = dataMaintainService.listPbModeAliasByStdCode(dicAlias);
             result.put("msg", "操作成功");
             result.put("data", list);
         } catch (Exception e) {
