@@ -51,7 +51,7 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         if (count == 0) {
             dicCommonMapper.insertDicCommon(dicCommon);
             resultMap = new HashMap<String, Object>(4);
-            resultMap.put("msg", "添加评标办法成功！");
+            resultMap.put("msg", "操作成功");
             resultMap.put("code", "1");
         }
         return resultMap;

@@ -66,7 +66,6 @@ public class DataMaintainContrroler {
                 result.put("msg","评标办法已存在，添加失败！");
             } else {
                 result.put("msg", params.get("msg"));
-                result.put("id", params.get("id"));
                 result.put("code", params.get("code"));
             }
         } catch (Exception e) {
@@ -140,7 +139,7 @@ public class DataMaintainContrroler {
             String userName = JWTUtil.getUsername(request);
             dicAlias.setCreateBy(userName);
             String msg = dataMaintainService.insertPbModeAliasByStdCode(dicAlias);
-            result.put("msg", msg);
+            result.put("msg", "操作成功");
             if(StringUtils.isEmpty(msg)) {
                 result.put("code",0);
                 result.put("msg","评标办法别名已存在，添加失败！");
@@ -161,7 +160,7 @@ public class DataMaintainContrroler {
             String userName = JWTUtil.getUsername(request);
             dicAlias.setUpdateBy(userName);
             String msg = dataMaintainService.updatePbModeAliasById(dicAlias);
-            result.put("msg", msg);
+            result.put("msg", "操作成功");
             if(StringUtils.isEmpty(msg)) {
                 result.put("code",0);
                 result.put("msg","评标办法别名已存在，更新失败！");
@@ -203,7 +202,7 @@ public class DataMaintainContrroler {
         try{
             String idsStr = (String) param.get("idsStr");
             dataMaintainService.deletePbModeAliasByIds(idsStr);
-            result.put("msg", "删除评标办法别名成功！");
+            result.put("msg", "操作成功");
         } catch (Exception e) {
             result.put("code",0);
             result.put("msg",e.getMessage());
