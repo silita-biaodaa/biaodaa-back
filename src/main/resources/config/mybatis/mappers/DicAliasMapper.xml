@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.silita.dao.DicAliasMapper" >
+<mapper namespace="com.silita.dao.DicAliasMapper">
 
     <insert id="insertDicAlias" parameterType="com.silita.model.DicAlias">
         INSERT INTO
@@ -24,11 +24,11 @@
         `create_by`
         )
         VALUES
-        <foreach collection="list"  item="list" separator=",">
-        (
-        #{list.id}, #{list.name}, #{list.code}, #{list.stdCode}, #{list.stdType},
-        NOW(), #{list.createBy}
-        )
+        <foreach collection="list" item="list" separator=",">
+            (
+            #{list.id}, #{list.name}, #{list.code}, #{list.stdCode}, #{list.stdType},
+            NOW(), #{list.createBy}
+            )
         </foreach>
     </insert>
 
@@ -115,28 +115,26 @@
 
     <select id="queryAliasListCode" resultType="java.util.Map" parameterType="map">
         SELECT
-          t.id,
-          t.name,
-          t.std_code as stdCode
+        t.id,
+        t.name,
+        t.std_code as stdCode
         FROM
-          biaodaa_admin.`dic_alias` t
+        biaodaa_admin.`dic_alias` t
         WHERE t.std_code = #{stdCode}
         and t.std_type='1'
         <if test="name != null and name != ''">
-           and t.name like CONCAT('%',#{name},'%')
+            and t.name like CONCAT('%',#{name},'%')
         </if>
         LIMIT #{start}, #{pageSize}
     </select>
 
     <select id="queryAliasListCodeCount" resultType="java.lang.Integer" parameterType="map">
         SELECT
-          ifnull(count(1),0)
+        ifnull(count(1),0)
         FROM
-          biaodaa_admin.`dic_alias` t
+        biaodaa_admin.`dic_alias` t
         WHERE t.std_code = #{stdCode}
-        <if test="stdType != null and stdType != ''">
-            and t.std_type='1'
-        </if>
+        and t.std_type='1'
         <if test="name != null and name != ''">
             and t.name like CONCAT('%',#{name},'%')
         </if>
