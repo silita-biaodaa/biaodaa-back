@@ -441,5 +441,24 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         return oneQuaListtMap;
     }
 
+    /**
+     * 获取资质属性
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String,Object> getBizType(Map<String, Object> param) {
+       return dicQuaMapper.queryBizType(param);
+    }
+
+    /**
+     * 修改资质属性
+     * @param param
+     */
+    @Override
+    public void updateBizType(Map<String, Object> param) {
+        dicQuaMapper.updateBizType(param);
+    }
+
 
 }

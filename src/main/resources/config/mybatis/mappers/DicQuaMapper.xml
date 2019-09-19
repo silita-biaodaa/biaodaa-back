@@ -184,6 +184,9 @@
           bench_name = #{benchName}
         where `id` = #{id}
     </update>
+    <update id="updateBizType" parameterType="map">
+        UPDATE `dic_qua` SET biz_type = #{bizType} where id = #{id}
+    </update>
 
     <delete id="delDicQual" parameterType="java.lang.String">
         delete from `dic_qua` where `id` = #{id};
@@ -446,6 +449,9 @@
         FROM
           biaodaa_admin.`dic_qua`
         WHERE bench_name LIKE CONCAT('%',#{benchName}, '%')
+    </select>
+    <select id="queryBizType" resultType="java.util.Map" parameterType="map">
+        SELECT  biz_type as bizType FROM `dic_qua` WHERE id = #{id}
     </select>
 
 

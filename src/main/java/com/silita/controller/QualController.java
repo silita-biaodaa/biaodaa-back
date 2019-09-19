@@ -146,6 +146,7 @@ public class QualController extends BaseController {
         return successMap(relQuaGradeService.getQualGradeList(param));
     }
 
+
     /**
      * 全部资质等级列表
      * @return
@@ -173,5 +174,27 @@ public class QualController extends BaseController {
     @RequestMapping(value = "/qualSpinner", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String,Object> qualSpinner(){
         return successMap(qualService.getQua());
+    }
+
+    /**
+     * 查询资质属性
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getBizType", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> getBizType(@RequestBody Map<String,Object> param) {
+        return successMap(qualService.getBizType(param));
+    }
+    /**
+     * 修改资质属性
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateBizType", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> updateBizType(@RequestBody Map<String,Object> param) {
+        qualService.updateBizType(param);
+        return successMap();
     }
 }

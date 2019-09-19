@@ -175,4 +175,16 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * 获取资质级别
      */
     List<Map<String, Object>> queryQuaTwos(Map<String, Object> param);
+
+    /**
+     * 获取资质属性
+     * @param param
+     * @return
+     */
+    Map<String,Object> queryBizType(Map<String,Object> param);
+
+    /**
+     * 修改资质属性
+     */
+    void updateBizType(Map<String,Object> param);
 }

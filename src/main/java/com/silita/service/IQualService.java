@@ -77,4 +77,17 @@ public interface IQualService {
      *
      */
     List<Map<String, Object>> getQua();
+
+    /**
+     * 获取资质属性
+     * @param param
+     * @return
+     */
+    Map<String,Object> getBizType(Map<String,Object> param);
+
+    /**
+     * 修改资质属性
+     * @param param
+     */
+    void updateBizType(Map<String,Object> param);
 }
