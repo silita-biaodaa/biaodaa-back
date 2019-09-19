@@ -331,7 +331,7 @@ public class MongodbService {
             String tradeType = orderInfo.getTradeType();
             Integer orderStatus = orderInfo.getOrderStatus();
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
-                String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd");
+                String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd HH:mm:ss");
                 Integer vipDays = orderInfo.getVipDays();
                 maps.put("orderNo", orderInfo.getOrderNo());
                 maps.put("userId", orderInfo.getUserId());
