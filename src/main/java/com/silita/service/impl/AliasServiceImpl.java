@@ -6,6 +6,8 @@ import com.silita.dao.DicAliasMapper;
 import com.silita.model.DicAlias;
 import com.silita.service.IAliasService;
 import com.silita.service.abs.AbstractService;
+import com.silita.utils.DataHandlingUtil;
+import com.silita.utils.stringUtils.PinYinUtil;
 import org.apache.commons.collections.MapUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -38,30 +40,34 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
      * @return
      */
     @Override
-    public Map<String,Object> gitAliasListStdCode(Map<String, Object> param) {
+    public Map<String, Object> gitAliasListStdCode(Map<String, Object> param) {
         DicAlias dicAlias = new DicAlias();
         dicAlias.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
         dicAlias.setPageSize(MapUtils.getInteger(param, "pageSize"));
-        dicAlias.setStdCode(MapUtils.getString(param,"code"));
-        dicAlias.setName(MapUtils.getString(param,"name"));
-        dicAlias.setStdType(MapUtils.getString(param,"type"));
-        Map<String,Object> params = new HashMap<>();
-        params.put("list",dicAliasMapper.queryAliasListCode(dicAlias));
-        params.put("total",dicAliasMapper.queryAliasListCodeCount(dicAlias));
-        return super.handlePageCount(params,dicAlias);
+        dicAlias.setStdCode(MapUtils.getString(param, "code"));
+        dicAlias.setName(MapUtils.getString(param, "name"));
+        dicAlias.setStdType(MapUtils.getString(param, "type"));
+        Map<String, Object> params = new HashMap<>();
+        params.put("list", dicAliasMapper.queryAliasListCode(dicAlias));
+        params.put("total", dicAliasMapper.queryAliasListCodeCount(dicAlias));
+        return super.handlePageCount(params, dicAlias);
     }
 
+    /**
+     * 删除别名
+     * @param param
+     * @return
+     */
     @Override
-    public Map<String,Object> delAilas(Map<String, Object> param) {
-        Map<String,Object> resultMap = new HashMap<>();
-        String id = MapUtils.getString(param, "id");
-        String[] split = id.split(",");
-        List<String> ids = Arrays.asList(split);
-        param.put("ids",ids);
+    public Map<String, Object> delAilasByIds(Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String ids = MapUtils.getString(param, "ids");
+        String[] split = ids.split(",");
+        List<String> id = Arrays.asList(split);
+        param.put("ids", id);
         dicAliasMapper.delAilasByIds(param);
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
-
         return resultMap;
     }
 
@@ -223,6 +229,29 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         return null;
     }
 
+    /**
+     * 添加等级别名
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> insertLevelAilas(Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Integer integer = dicAliasMapper.queryName(param);
+        if (null != integer && integer != 0) {
+            resultMap.put("code", "0");
+            resultMap.put("msg", "别名已存在");
+            return resultMap;
+        }
+        String name = MapUtils.getString(param, "name");
+        param.put("id", DataHandlingUtil.getUUID());
+        param.put("stdType", Constant.GRADE_STD_TYPE);
+        param.put("code", "alias_grade_" + PinYinUtil.cn2py(name) + "_" + System.currentTimeMillis());
+        dicAliasMapper.insertLevelAilas(param);
+        resultMap.put("code",Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.MSG_SUCCESS);
+        return resultMap;
+    }
 
 
 }

@@ -31,7 +31,7 @@ public interface IAliasService {
      * 删除别名
      * @param param
      */
-    Map<String,Object> delAilas(Map<String,Object> param);
+    Map<String,Object> delAilasByIds(Map<String,Object> param);
 
 
     /**
@@ -42,6 +42,13 @@ public interface IAliasService {
      * @return
      */
     Map<String,Object> insertAilas(Sheet sheet, String stdCode, String fileName) throws IOException, Exception;
+
+    /**
+     * 添加别名
+     * @param param
+     * @return
+     */
+    Map<String,Object> insertLevelAilas(Map<String,Object> param);
 
 
 }

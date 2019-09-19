@@ -83,4 +83,16 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      */
     void deleteAilas(Map<String,Object> param);
 
+    /**
+     * 添加资质别名
+     * @param param
+     */
+    void insertLevelAilas(Map<String,Object> param);
+
+    /**
+     * 查询别名名称是否存在
+     * @return
+     */
+    Integer queryName(Map<String,Object> param);
+
 }

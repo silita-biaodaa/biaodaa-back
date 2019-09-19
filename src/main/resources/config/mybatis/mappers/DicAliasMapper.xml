@@ -31,6 +31,22 @@
             )
         </foreach>
     </insert>
+    <insert id="insertLevelAilas" parameterType="map">
+        INSERT INTO dic_alias (
+        `id`,
+        `name`,
+        `code`,
+        `std_code`,
+        `std_type`,
+        `create_time`,
+        `create_by`
+        )
+        VALUES
+            (
+            #{id}, #{name}, #{code}, #{stdCode}, #{stdType},
+            NOW(), #{createBy}
+            )
+    </insert>
 
     <update id="updateDicAliasById" parameterType="com.silita.model.DicAlias">
         UPDATE dic_alias SET
@@ -121,7 +137,6 @@
         FROM
         biaodaa_admin.`dic_alias` t
         WHERE t.std_code = #{stdCode}
-        and t.std_type='1'
         <if test="name != null and name != ''">
             and t.name like CONCAT('%',#{name},'%')
         </if>
@@ -134,10 +149,17 @@
         FROM
         biaodaa_admin.`dic_alias` t
         WHERE t.std_code = #{stdCode}
-        and t.std_type='1'
         <if test="name != null and name != ''">
             and t.name like CONCAT('%',#{name},'%')
         </if>
+    </select>
+
+    <select id="queryName" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+          IFNULL(COUNT(1), 0)
+        FROM
+          biaodaa_admin.`dic_alias` t
+        WHERE t.std_code = #{stdCode} and t.name = #{name}
     </select>
 
     <delete id="deleteDicAliasByStdCodes" parameterType="String">

@@ -42,6 +42,8 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     TbNtTextHunanMapper tbNtTextHunanMapper;
     @Autowired
     TbNtAssociateGpMapper tbNtAssociateGpMapper;
+    @Autowired
+    TbNtSiteMapper tbNtSiteMapper;
 
     @Override
     public Map<String, Object> addNotice(TbNtMian mian) {
@@ -232,7 +234,13 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
      */
     @Override
     public Map<String, Object> getSiteNoticeCount(Map<String, Object> param) {
+
         Map<String,Object> resultMap = new HashMap<>();
+        List<Map<String, Object>> list1 = tbNtSiteMapper.querySiteUtl();
+        Map<String,Object> maps = new HashMap<>();
+        for (Map<String, Object> map : list1) {
+            maps.put(MapUtils.getString(map,"name"),map.get("url"));
+        }
         int count = 0;
         String source = MapUtils.getString(param, "source");
         List<Map<String,Object>> listMap = new ArrayList<>();
@@ -242,6 +250,10 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
                 param.put("source", pro);
                 List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
                 for (Map<String, Object> map : list) {
+                    String srcSite = MapUtils.getString(maps, map.get("srcSite"));
+                    if(StringUtil.isNotEmpty(srcSite)){
+                        map.put("url",srcSite);
+                    }
                     listMap.add(map);
                     Integer siteCount = MapUtils.getInteger(map, "siteCount");
                     count = count+siteCount;//统计总数量
@@ -253,6 +265,10 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         }
         List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
         for (Map<String, Object> map : list) {
+            String srcSite = MapUtils.getString(maps, map.get("srcSite"));
+            if(StringUtil.isNotEmpty(srcSite)){
+                map.put("url",srcSite);
+            }
             listMap.add(map);
             Integer siteCount = MapUtils.getInteger(map, "siteCount");
             count = count+siteCount;//统计总数量

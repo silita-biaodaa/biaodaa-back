@@ -440,4 +440,6 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         }
         return oneQuaListtMap;
     }
+
+
 }
