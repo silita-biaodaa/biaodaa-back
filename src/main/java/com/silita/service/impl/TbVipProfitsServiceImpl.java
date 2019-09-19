@@ -6,6 +6,7 @@ import com.silita.dao.TbVipProfitsMapper;
 import com.silita.service.ITbVipProfitsService;
 import com.silita.service.mongodb.MongodbService;
 import com.silita.utils.dateUtils.MyDateUtils;
+import com.sun.xml.internal.xsom.impl.scd.Iterators;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,12 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
                 } else if (settingsCode.equals("a-operate")) {
                     map.put("behavior", "标大大赠送");
                     map.put("vipDay", "标大大赠送" + MapUtils.getInteger(map, "vipDay") + "天会员");
+                }else if(settingsCode.equals("a-binding")){
+                    map.put("behavior","关注公众号并绑定赠送");
+                    map.put("vipDay","关注公众号并绑定赠送" + MapUtils.getInteger(map,"vipDay") + "天会员");
+                }else if(settingsCode.equals("a-isinvite")){
+                    map.put("behavior","被邀请");
+                    map.put("vipDay","被邀请赠送" + MapUtils.getInteger(map,"vipDay") + "天会员");
                 }
             }
             topUpListMap.addAll(list);
