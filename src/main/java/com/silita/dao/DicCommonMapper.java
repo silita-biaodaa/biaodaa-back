@@ -152,6 +152,27 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
     String getCommonNameById(@Param("id") String id);
 
     /**
+     * 根据id获取别名name
+     * @param param
+     * @return
+     */
+    String getCommonNameId(Map<String,Object> param);
+
+    /**
+     * 根据name获取id
+     * @param param
+     * @return
+     */
+    String getCommonIdName(Map<String,Object> param);
+
+    /**
+     * 根据order_no 获取 name
+     * @param param
+     * @return
+     */
+    String getCommonNameOrderNo(Map<String,Object> param);
+
+    /**
      * 根据名称查询资质信息
      *
      * @param name
@@ -183,6 +204,12 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
     void deleteDicCommonIds(Map<String, Object> param);
 
     /**
+     * 删除评标办法
+     * @param param
+     */
+    void deleteGradeLevel(Map<String,Object> param);
+
+    /**
      * 根据id获取code
      * @param param
      * @return
@@ -190,7 +217,7 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
     String queryDicCommonCode(Map<String,Object> param);
 
     /**
-     * 修改评标办法名称
+     * 修改名称
      * @param param
      */
     void updateDicCommonId(Map<String,Object> param);
@@ -202,6 +229,37 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      */
     Integer queryDicCommonName(Map<String,Object> param);
 
+    /**
+     * 添加等级
+     * @param param
+     */
+    void insertGradeLevel(Map<String,Object> param);
 
+    /**
+     * 更新等级
+     * @param param
+     */
+    void updateGradeLevel(Map<String,Object> param);
+
+    /**
+     * 获取最大的order_no
+     * @param param
+     * @return
+     */
+    Integer queryMaxOrderNo(Map<String,Object> param);
+
+    /**
+     * 获取最小order_no
+     * @param param
+     * @return
+     */
+    Integer queryMinOredrNo(Map<String,Object> param);
+
+    /**
+     * 通过id 获取order_no
+     * @param param
+     * @return
+     */
+    Integer queryOrderNo(Map<String,Object> param);
 
 }

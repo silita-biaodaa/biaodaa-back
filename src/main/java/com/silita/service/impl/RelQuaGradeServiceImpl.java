@@ -19,6 +19,12 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
     @Autowired
     RelQuaGradeMapper quaGradeMapper;
 
+    /**
+     * 添加资质等级
+     *
+     * @param grade
+     * @return
+     */
     @Override
     public Map<String, Object> addQuaGrade(RelQuaGrade grade) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -57,11 +63,22 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
         return resultMap;
     }
 
+    /**
+     * 删除
+     *
+     * @param param
+     */
     @Override
     public void delQuaGrade(Map<String, Object> param) {
         quaGradeMapper.delQuaCrade(param);
     }
 
+    /**
+     * 获取资质下的等级
+     *
+     * @param param
+     * @return
+     */
     @Override
     public List<RelQuaGrade> getQualGradeList(Map<String, Object> param) {
         return quaGradeMapper.queryQuaGrade(param);

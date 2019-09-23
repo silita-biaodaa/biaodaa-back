@@ -26,7 +26,10 @@ public class CommonServiceImpl implements ICommonService {
     SysAreaMapper sysAreaMapper;
     @Autowired
     DicAliasMapper dicAliasMapper;
-
+    /**
+     * 获取省/市
+     * @return
+     */
     @Override
     public List<Map<String, Object>> getArea() {
         List<Map<String, Object>> parentArea = sysAreaMapper.listSysAreaByParentId("0");

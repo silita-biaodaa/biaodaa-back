@@ -43,6 +43,29 @@ public interface IGradeService {
     Map<String, Object> delGrade(Map<String, Object> param);
 
     /**
+     * 添加等级
+     * @param param
+     * @return
+     */
+    Map<String,Object> insertGradeLevel(Map<String,Object> param);
+
+    /**
+     * 更新等级
+     * @param param
+     * @return
+     */
+    Map<String,Object> updateGradeLevel(Map<String,Object> param);
+
+
+    /**
+     * 删除等级
+     * @param param
+     */
+
+    void deleteGradeLevel(Map<String,Object> param);
+
+
+    /**
      * 添加等级别名
      *
      * @param alias

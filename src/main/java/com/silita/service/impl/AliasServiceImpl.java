@@ -245,7 +245,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         }
         String name = MapUtils.getString(param, "name");
         param.put("id", DataHandlingUtil.getUUID());
-        param.put("stdType", Constant.GRADE_STD_TYPE);
+       // param.put("stdType", Constant.GRADE_STD_TYPE);
         param.put("code", "alias_grade_" + PinYinUtil.cn2py(name) + "_" + System.currentTimeMillis());
         dicAliasMapper.insertLevelAilas(param);
         resultMap.put("code",Constant.CODE_SUCCESS);

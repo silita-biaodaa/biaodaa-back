@@ -8,7 +8,6 @@ import com.silita.model.DicQua;
 import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
 import com.silita.service.IRelQuaGradeService;
-import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,19 +58,21 @@ public class QualController extends BaseController {
 
 
     /**
-     * 添加
+     * 添加资质
      *
-     * @param qua
+     * @param param
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> add(@RequestBody DicQua qua, ServletRequest request) {
-        return qualService.addQual(qua,JWTUtil.getUsername(request));
+    public Map<String, Object> add(@RequestBody Map<String,Object> param, ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        param.put("createBy", userName);
+        return qualService.addQual(param);
     }
 
     /**
-     * 删除
+     * 删除资质
      *
      * @param param
      * @return
@@ -81,8 +80,22 @@ public class QualController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> del(@RequestBody Map<String,Object> param) {
-        qualService.delQual(MapUtils.getString(param,"id"));
-        return successMap(null);
+        qualService.delQual(param);
+        return successMap();
+    }
+    /**
+     * 修改资质
+     *
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/upd", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> upd(@RequestBody Map<String,Object> param,ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        param.put("updateBy", userName);
+        qualService.updQual(param);
+        return successMap();
     }
 
     /**

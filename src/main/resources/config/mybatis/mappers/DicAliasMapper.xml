@@ -74,6 +74,9 @@
         `update_time` = NOW()
         WHERE id = #{id}
     </update>
+    <update id="updateStdCode" parameterType="map">
+        UPDATE `dic_alias` SET std_code = #{stdCodes},update_time = NOW(),update_by = #{updateBy} where std_code = #{stdCode}
+    </update>
 
     <select id="listDicAliasByStdCode" parameterType="com.silita.model.DicAlias" resultType="java.util.Map">
         SELECT

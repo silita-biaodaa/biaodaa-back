@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.silita.dao.RelQuaGradeMapper" >
+    <update id="updateQualCode" parameterType="map">
+        UPDATE `rel_qua_grade` SET qua_code = #{stdCodes} where qua_code = #{stdCode}
+    </update>
 
     <select id="queryQuaGrade" parameterType="java.util.Map" resultType="com.silita.model.RelQuaGrade">
         select t.id as id
@@ -23,6 +26,12 @@
 
     <delete id="delQuaCrade" parameterType="java.util.Map">
         DELETE FROM `rel_qua_grade` WHERE `id` = #{id}
+    </delete>
+    <delete id="deleteRelQuaGrade" parameterType="map">
+        delete from `rel_qua_grade` WHERE grade_code = #{stdCode}
+    </delete>
+    <delete id="deleteRelQuaCode" parameterType="map">
+         delete from `rel_qua_grade` WHERE qua_code = #{stdCode}
     </delete>
 
     <select id="queryQuaGradeCout" parameterType="com.silita.model.RelQuaGrade" resultType="java.lang.Integer">

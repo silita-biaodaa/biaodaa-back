@@ -24,7 +24,7 @@ import static com.sun.tools.doclint.Entity.nu;
 import static org.bouncycastle.asn1.x500.style.RFC4519Style.l;
 
 public class QualAnalysisTest extends ConfigTest {
-
+/*
     @Autowired
     IGradeService gradeService;
     @Autowired
@@ -66,7 +66,7 @@ public class QualAnalysisTest extends ConfigTest {
                 if (value.contains("企业无")) {
                     dicQua.setBizType(Constant.BIZ_TYPE_NOTIC);
                 }
-                qualService.addQual(dicQua, null);
+                //qualService.addQual(dicQua, null);
             }
             System.out.println("------------------value:" + value + "------------------");
         }
@@ -498,5 +498,5 @@ public class QualAnalysisTest extends ConfigTest {
         if (StringUtils.isNotEmpty(grade)) {
             relQuaGradeService.addQuaGrade(relQuaGrade);
         }
-    }
+    }*/
 }

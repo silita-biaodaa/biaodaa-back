@@ -14,17 +14,23 @@ public interface IQualService {
     /**
      * 添加资质
      *
-     * @param qua
-     * @param username
+     * @param param
      */
-    Map<String, Object> addQual(DicQua qua, String username);
+    Map<String, Object> addQual(Map<String,Object> param);
 
     /**
      * 删除资质
      *
-     * @param id
+     * @param param
      */
-    void delQual(String id);
+    void delQual(Map<String,Object> param);
+
+    /**
+     * 修改资质
+     * @param param
+     * @return
+     */
+    Map<String,Object> updQual(Map<String,Object> param);
 
     /**
      * 获取资质类别

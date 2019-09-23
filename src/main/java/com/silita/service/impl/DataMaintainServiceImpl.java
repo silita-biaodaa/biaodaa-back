@@ -30,12 +30,17 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     @Autowired
     DicAliasMapper dicAliasMapper;
 
-
+    /**
+     * 获取省份code
+     * @return
+     */
     @Override
     public Map<String, String> listProvince() {
         return DataHandlingUtil.getpProvinceCode();
     }
-
+    /**
+     * 根据省份添加评标办法
+     */
     @Override
     public Map<String, Object> insertPbModeBySource(DicCommon dicCommon) {
         Map resultMap = null;
@@ -58,7 +63,9 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
         }
         return resultMap;
     }
-
+    /**
+     * 根据省份查询评标办法
+     */
     @Override
     public List<DicCommon> listPbModeBySource(DicCommon dicCommon) {
         String type = dicCommon.getType();

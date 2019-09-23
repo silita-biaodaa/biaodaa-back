@@ -62,4 +62,22 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      * @return
      */
     List<Map<String,Object>> queryRelQuaGrades(String quaCode);
+
+    /**
+     * 根据等级grade_code 删除资质管理表达式中的所有有关的数据
+     * @param param
+     */
+    void deleteRelQuaGrade(Map<String,Object> param);
+
+    /**
+     * 根据等级qua_code 删除资质管理表达式中的所有有关的数据
+     * @param param
+     */
+    void deleteRelQuaCode(Map<String,Object> param);
+
+    /**
+     * 修改资质关系表达式的quaCode
+     * @param param
+     */
+    void updateQualCode(Map<String,Object> param);
 }

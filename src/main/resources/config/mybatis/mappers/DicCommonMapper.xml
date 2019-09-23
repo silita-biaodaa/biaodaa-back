@@ -15,6 +15,18 @@
           #{createBy}
         )
     </insert>
+    <insert id="insertGradeLevel" parameterType="map">
+        INSERT INTO
+        dic_common(
+          `id`,`parent_id`, `name`, `code`, `type`,
+          `order_no`,`create_time`,
+          `create_by`
+        )
+        VALUES(
+          #{id}, #{parentId}, #{name}, #{code}, #{type},
+          #{orderNo}, NOW(),#{createBy}
+        )
+    </insert>
 
 
     <update id="updateDicCommonById" parameterType="com.silita.model.DicCommon">
@@ -49,6 +61,10 @@
     <update id="updateDicCommonId" parameterType="map">
         UPDATE biaodaa_admin.`dic_common` t SET t.name = #{name} WHERE id = #{id}
     </update>
+    <update id="updateGradeLevel" parameterType="map">
+        update biaodaa_admin.`dic_common` t SET t.name = #{name},t.code = #{code},t.update_time = NOW(),t.update_by = #{createBy} WHERE id = #{id}
+    </update>
+
 
     <select id="listDicCommonByType" parameterType="com.silita.model.DicCommon" resultType="com.silita.model.DicCommon">
         SELECT *
@@ -78,6 +94,12 @@
                  separator="," close=")">
             #{list}
         </foreach>
+    </delete>
+    <delete id="deleteGradeLevel" parameterType="map">
+         DELETE
+        FROM
+          biaodaa_admin.`dic_common`
+        WHERE id = #{id}
     </delete>
 
     <!-- <select id="queryParentGrade" resultType="java.util.Map">
@@ -265,6 +287,31 @@
     </select>
     <select id="queryDicCommonName" resultType="java.lang.Integer" parameterType="map">
         select ifnull(count(1),0) from biaodaa_admin.`dic_common` t where t.name = #{name} and t.type = #{type}
+    </select>
+    <select id="queryMaxOrderNo" resultType="java.lang.Integer" parameterType="map">
+        SELECT MAX(order_no) FROM `dic_common` WHERE 1=1
+        <if test="parentId != null and parentId != ''">
+            and parent_id = #{parentId}
+        </if>
+    </select>
+    <select id="queryMinOredrNo" resultType="java.lang.Integer" parameterType="map">
+        SELECT MIN(order_no) FROM `dic_common` WHERE 1=1
+        <if test="parentId != null and parentId != ''">
+            and parent_id = #{parentId}
+        </if>
+
+    </select>
+    <select id="getCommonNameId" resultType="java.lang.String" parameterType="map">
+        SELECT `name` FROM `dic_common` WHERE id = #{id}
+    </select>
+    <select id="getCommonIdName" resultType="java.lang.String" parameterType="map">
+       SELECT `id` FROM `dic_common` WHERE `name` = #{names} and `type`= 'qua_grade'
+    </select>
+    <select id="queryOrderNo" resultType="java.lang.Integer" parameterType="map">
+         SELECT order_no FROM `dic_common` WHERE id = #{id}
+    </select>
+    <select id="getCommonNameOrderNo" resultType="java.lang.String" parameterType="map">
+       SELECT `name` FROM `dic_common` WHERE order_no = #{orderNo}
     </select>
 
 

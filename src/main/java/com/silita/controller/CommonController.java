@@ -87,7 +87,4 @@ public class CommonController extends BaseController {
     public Map<String, Object> updateDicCommonId(@RequestBody Map<String, Object> param) {
         return commonService.updateDicCommonId(param);
     }
-
-
-
 }

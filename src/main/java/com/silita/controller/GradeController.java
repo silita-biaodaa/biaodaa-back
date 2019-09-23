@@ -149,5 +149,43 @@ public class GradeController extends BaseController {
         return this.successMap(gradeService.getGradeListMap(relQuaGrade));
     }
 
+    /**
+     * 添加等级
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/insertGradeLevel", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> insertGradeLevel(@RequestBody Map<String, Object> param,ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        param.put("createBy", userName);
+        return gradeService.insertGradeLevel(param);
+    }
+    /**
+     * 更新等级
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/updateGradeLevel", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> updateGradeLevel(@RequestBody Map<String, Object> param,ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        param.put("createBy", userName);
+        return gradeService.updateGradeLevel(param);
+    }
+
+    /**
+     * 删除等级
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/deleteGradeLevel", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String, Object> deleteGradeLevel(@RequestBody Map<String, Object> param) {
+        gradeService.deleteGradeLevel(param);
+        return this.successMap();
+    }
 
 }

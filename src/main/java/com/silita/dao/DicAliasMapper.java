@@ -95,4 +95,10 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      */
     Integer queryName(Map<String,Object> param);
 
+    /**
+     * 修改别名stdCode
+     * @param param
+     */
+    void updateStdCode(Map<String,Object> param);
+
 }

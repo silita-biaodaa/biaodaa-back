@@ -2,6 +2,7 @@ package com.silita.dao;
 
 import com.silita.model.DicQua;
 import com.silita.utils.MyMapper;
+import com.sun.corba.se.spi.ior.ObjectKey;
 
 import java.util.List;
 import java.util.Map;
@@ -11,18 +12,18 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
     /**
      * 添加资质
      *
-     * @param qua
+     * @param param
      * @return
      */
-    int insertDicQual(DicQua qua);
+    int insertDicQual(Map<String,Object> param);
 
     /**
      * 修改资质
      *
-     * @param qua
+     * @param param
      * @return
      */
-    int updateDicQual(DicQua qua);
+    void updateDicQual(Map<String,Object> param);
 
     /**
      * 修改资质
@@ -35,10 +36,38 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
     /**
      * 删除资质
      *
-     * @param id
+     * @param param
      * @return
      */
-    int delDicQual(String id);
+    int delDicQual(Map<String,Object> param);
+
+    /**
+     * 获取标准名称是否存在
+     * @param param
+     * @return
+     */
+    Integer querySingleBenchName(Map<String,Object> param);
+    /**
+     * 获取标准名称是否存在
+     * @param param
+     * @return
+     */
+    Integer querySingleQuaName(Map<String,Object> param);
+
+    /**
+     * 获取等级是几级
+     * @param param
+     * @return
+     */
+    Integer queryLevel(Map<String,Object> param);
+
+
+    /**
+     * 获取资质code
+     * @param param
+     * @return
+     */
+    String queryCode(Map<String,Object> param);
 
     /**
      * 查询资质

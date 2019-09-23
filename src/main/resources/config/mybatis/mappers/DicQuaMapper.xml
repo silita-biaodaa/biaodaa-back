@@ -21,7 +21,7 @@
         <result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <insert id="insertDicQual" parameterType="com.silita.model.DicQua">
+    <insert id="insertDicQual" parameterType="map">
         INSERT INTO `dic_qua`(
         <if test="id != null and id != ''">
             `id`,
@@ -65,15 +65,7 @@
         <if test="createBy != null and createBy != ''">
             `create_by`,
         </if>
-        <if test="updateTime != null">
-            `update_time`,
-        </if>
-        <if test="updateBy != null and updateBy != ''">
-            `update_by`,
-        </if>
-        <if test="createTime != null">
             `create_time`
-        </if>
         )
         VALUES (
         <if test="id != null and id != ''">
@@ -118,19 +110,11 @@
         <if test="createBy != null and createBy != ''">
             #{createBy},
         </if>
-        <if test="updateTime != null">
-            #{updateTime},
-        </if>
-        <if test="updateBy != null and updateBy != ''">
-            #{updateBy},
-        </if>
-        <if test="createTime != null">
-            #{createTime}
-        </if>
+            NOW()
         )
     </insert>
 
-    <update id="updateDicQual" parameterType="com.silita.model.DicQua">
+    <update id="updateDicQual" parameterType="map">
         update `dic_qua`
         set
         <if test="parentId != null and parentId != ''">
@@ -166,15 +150,13 @@
         <if test="desc != null and desc != ''">
             `desc` = #{desc},
         </if>
-        <if test="createBy != null and createBy != ''">
-            `create_by` = #{createBy},
-        </if>
         <if test="updateBy != null">
             `update_by` = #{updateBy},
         </if>
-        <if test="updateTime != null">
-            `update_time` = #{updateTime}
+        <if test="benchName != null and benchName != ''">
+            `bench_name` = #{benchName},
         </if>
+        `update_time` = NOW()
         where `id` = #{id}
     </update>
 
@@ -188,7 +170,7 @@
         UPDATE `dic_qua` SET biz_type = #{bizType} where id = #{id}
     </update>
 
-    <delete id="delDicQual" parameterType="java.lang.String">
+    <delete id="delDicQual" parameterType="map">
         delete from `dic_qua` where `id` = #{id};
     </delete>
 
@@ -353,11 +335,11 @@
     <!--获取资质大类-->
     <select id="queryQuaOne" resultType="java.util.Map" parameterType="map">
         SELECT
-          d.id,
-          d.qua_name AS quaName,
-          d.qua_code AS quaCode
+        d.id,
+        d.qua_name AS quaName,
+        d.qua_code AS quaCode
         FROM
-          biaodaa_admin.dic_qua d
+        biaodaa_admin.dic_qua d
         WHERE d.level = '1'
         <if test="id != null and id != ''">
             and d.id = #{id}
@@ -366,21 +348,21 @@
     </select>
     <!--获取资质最后一级标准名称-->
     <select id="queryQuaTwo" resultType="java.util.Map" parameterType="map">
-         SELECT
-            d.id,
-            d.bench_name AS benchName,
-            d.qua_code AS quaCode,
-            d.qua_name as quaName
-          FROM
-            biaodaa_admin.dic_qua d
-          WHERE 1=1
-          <if test="zzIdOne != null and zzIdOne != ''">
-              and d.parent_id=#{zzIdOne}
-          </if>
-          <if test="two != null and two != ''">
-              and d.id = #{two}
-          </if>
-            order by d.order_no
+        SELECT
+        d.id,
+        d.bench_name AS benchName,
+        d.qua_code AS quaCode,
+        d.qua_name as quaName
+        FROM
+        biaodaa_admin.dic_qua d
+        WHERE 1=1
+        <if test="zzIdOne != null and zzIdOne != ''">
+            and d.parent_id=#{zzIdOne}
+        </if>
+        <if test="two != null and two != ''">
+            and d.id = #{two}
+        </if>
+        order by d.order_no
     </select>
 
     <select id="queryQuaThree" resultType="java.util.Map" parameterType="map">
@@ -452,6 +434,19 @@
     </select>
     <select id="queryBizType" resultType="java.util.Map" parameterType="map">
         SELECT  biz_type as bizType FROM `dic_qua` WHERE id = #{id}
+    </select>
+    <select id="queryCode" resultType="java.lang.String" parameterType="map">
+        SELECT qua_code FROM `dic_qua` WHERE id = #{id}
+    </select>
+    <select id="querySingleBenchName" resultType="java.lang.Integer" parameterType="map">
+        select ifnull(count(1),0) from `dic_qua` WHERE bench_name = #{benchName}
+    </select>
+
+    <select id="queryLevel" resultType="java.lang.Integer" parameterType="map">
+        select t.level  from `dic_qua` t WHERE t.id = #{parentId} GROUP BY t.level
+    </select>
+    <select id="querySingleQuaName" resultType="java.lang.Integer" parameterType="map">
+         select ifnull(count(1),0) from `dic_qua` WHERE qua_name = #{quaName}
     </select>
 
 

@@ -75,6 +75,12 @@ public class DataMaintainContrroler {
        return result;
     }
 
+    /**
+     * 更新评标办法
+     * @param dicCommon
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/updatePbMode",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> updatePbMode(@RequestBody DicCommon dicCommon, ServletRequest request) {
@@ -96,6 +102,11 @@ public class DataMaintainContrroler {
         return result;
     }
 
+    /**
+     * 查询评标办法
+     * @param dicCommon
+     * @return
+     */
     @RequestMapping(value = "/listPbMode",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> listPbMode(@RequestBody DicCommon dicCommon) {
@@ -113,6 +124,11 @@ public class DataMaintainContrroler {
         return result;
     }
 
+    /**
+     * 删除评标办法
+     * @param param
+     * @return
+     */
     @RequestMapping(value = "/deletePbMode",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> deletePbMode(@RequestBody Map<String,Object> param) {
@@ -129,7 +145,12 @@ public class DataMaintainContrroler {
         return result;
     }
 
-
+    /**
+     * 添加评标办法别名
+     * @param dicAlias
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/insertPbModeAlias", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> insertPbModeAlias(@RequestBody DicAlias dicAlias, ServletRequest request) {
@@ -151,6 +172,12 @@ public class DataMaintainContrroler {
         return result;
     }
 
+    /**
+     * 更新评标办法别名
+     * @param dicAlias
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/updatePbModeAlias",method = RequestMethod.POST,produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> updatePbModeAlias(@RequestBody DicAlias dicAlias, ServletRequest request) {
