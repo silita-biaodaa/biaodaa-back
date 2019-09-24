@@ -67,10 +67,19 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
     /**
      * 获取符合该资质的等级
      *
-     * @param relQuaGrade
+     * @param param
      * @return
      */
-    List<Map<String, Object>> queryGradeListMap(RelQuaGrade relQuaGrade);
+    List<Map<String, Object>> queryGradeListMap(Map<String,Object> param);
+    /**
+     * 获取符合该资质的等级
+     *
+     * @param param
+     * @return
+     */
+    List<Map<String, Object>> queryGradeListMaps(Map<String,Object> param);
+
+
 
 
     //统计资质等级
@@ -92,8 +101,9 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
     Integer queryDicCommonGradeListCount(RelQuaGrade relQuaGrade);
 
 
-    //用于下拉选项
-    List<Map<String, Object>> queryGradeListMapPullDown(RelQuaGrade relQuaGrade);
+
+    //获取资质等级类别
+    String queryParentId(Map<String,Object> param);
 
     /**
      * 资质等级下拉选项
@@ -142,6 +152,13 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     String getNameByCode(String code);
+
+    /**
+     * 根据name获取code
+     * @param param
+     * @return
+     */
+    String getCodeByName(Map<String,Object> param);
 
     /**
      * 根据id获取别名name
@@ -261,5 +278,12 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     Integer queryOrderNo(Map<String,Object> param);
+
+    /**
+     * 根据等级类别获取等级code
+     * @param param
+     * @return
+     */
+    List<String> queryLevelCode(Map<String,Object> param);
 
 }

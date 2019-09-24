@@ -140,13 +140,13 @@ public class GradeController extends BaseController {
 
     /**
      * 获取符合该资质的等级
-     * @param relQuaGrade
+     * @param param
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/sec/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> secListMap(@RequestBody RelQuaGrade relQuaGrade) {
-        return this.successMap(gradeService.getGradeListMap(relQuaGrade));
+    public Map<String, Object> secListMap(@RequestBody Map<String,Object> param) {
+        return this.successMap(gradeService.getGradeListMap(param));
     }
 
     /**

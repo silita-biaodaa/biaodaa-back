@@ -3,7 +3,8 @@
 <mapper namespace="com.silita.dao.TbNtMianMapper">
 
     <select id="listNtMain" parameterType="com.silita.model.TbNtMian" resultType="java.util.Map">
-        SELECT `pkid`, `title`, `pub_date` AS pubDate,<![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX(src_site,'&',2),'&',-1)]]> as srcSite, `nt_status` AS ntStatus
+        SELECT `pkid`, `title`, `pub_date` AS pubDate,
+        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX(src_site,'&',2),'&',-1)]]> as srcSite, `nt_status` AS ntStatus
         FROM ${tableName}
         WHERE 1=1 AND is_enable = 1
         <if test="proviceCode !=null and proviceCode!=''">
@@ -74,7 +75,8 @@
         (SELECT `name` FROM twf_dict WHERE `type` = 1 AND code = main.biness_type) AS biness_type,
         (SELECT `name` FROM twf_dict WHERE `type` = 4 AND code = tenders.pro_type) AS pro_type,
         'qualStr', tenders.controll_sum, tenders.pro_sum, tenders.pro_duration,
-        (SELECT `name` FROM dic_common WHERE `code` = tenders.pb_mode) AS pb_mode, tenders.bid_bonds, tenders.bid_bonds_end_time,
+        (SELECT `name` FROM dic_common WHERE `code` = tenders.pb_mode) AS pb_mode, tenders.bid_bonds,
+        tenders.bid_bonds_end_time,
         tenders.enroll_end_time, tenders.enroll_addr, tenders.audit_time, tenders.bid_end_time, tenders.opening_addr,
         (SELECT `name` FROM twf_dict WHERE `type` = 6 AND code = tenders.filing_pfm) AS filing_pfm,
         (SELECT `name` FROM twf_dict WHERE `type` = 2 AND code = tenders.nt_td_status) AS nt_td_status,
@@ -375,35 +377,35 @@
         where `title` = #{title}
     </select>
     <select id="queryZhaoBiaoExcel" resultType="java.util.LinkedHashMap" parameterType="map">
-         SELECT
-          <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX( mian.title,'"',2),'"',-1)]]> as title,
-          <include refid="ntStatus"/>,
-          CONCAT(b.segment, '标段') AS segment,
-          mian.pub_date as pubDate,
-          mian.city_code as cityCode,
-          mian.county_code as countyCode,
-          <include refid="binessType"/>,
-          b.pro_type as proType,
-          b.`qua_name` as quaName,
-          b.controll_sum as controllSum,
-          b.pro_sum as proSum,
-          b.pro_duration as proDuration,
-          b.`pb_mode` as pbMode,
-          b.bid_bonds as bidBonds,
-          b.bid_bonds_end_time as bidBondsEndTime,
-          b.enroll_end_time as enrollEndTime,
-          b.enroll_addr as enrollAddr,
-          b.audit_time as auditTime,
-          b.bid_end_time as bidEndTime,
-          b.opening_addr as openingAddr,
+        SELECT
+        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX( mian.title,'"',2),'"',-1)]]> as title,
+        <include refid="ntStatus"/>,
+        CONCAT(b.segment, '标段') AS segment,
+        mian.pub_date as pubDate,
+        mian.city_code as cityCode,
+        mian.county_code as countyCode,
+        <include refid="binessType"/>,
+        b.pro_type as proType,
+        b.`qua_name` as quaName,
+        b.controll_sum as controllSum,
+        b.pro_sum as proSum,
+        b.pro_duration as proDuration,
+        b.`pb_mode` as pbMode,
+        b.bid_bonds as bidBonds,
+        b.bid_bonds_end_time as bidBondsEndTime,
+        b.enroll_end_time as enrollEndTime,
+        b.enroll_addr as enrollAddr,
+        b.audit_time as auditTime,
+        b.bid_end_time as bidEndTime,
+        b.opening_addr as openingAddr,
         <include refid="filingPfm"/>,
         <include refid="ntTdStatus"/>,
-          b.opening_person as openingPerson,
-          mian.url,
-          b.pkid as pkid,
-          b.nt_id as ntId
+        b.opening_person as openingPerson,
+        mian.url,
+        b.pkid as pkid,
+        b.nt_id as ntId
         FROM
-          tb_nt_mian_${source} mian
+        tb_nt_mian_${source} mian
         LEFT JOIN tb_nt_tenders_${source} b
         ON mian.pkid = b.`nt_id`
         WHERE 1=1 AND mian.is_enable = 1
@@ -437,7 +439,7 @@
         SELECT
         ifnull(count(0),0)
         FROM
-          tb_nt_mian_${source} mian
+        tb_nt_mian_${source} mian
         LEFT JOIN tb_nt_tenders_${source} b
         ON mian.pkid = b.`nt_id`
         WHERE 1=1 AND mian.is_enable = 1
@@ -498,7 +500,6 @@
         </if>
     </select>
 
-
     <select id="queryNoticeCount" resultType="java.util.Map" parameterType="map">
      SELECT
       t1.yesterdayCount,
@@ -530,16 +531,18 @@
         WHERE src_site NOT LIKE '%旧公告系统%') t3
         ON t2.pkid = t3.pkid
     </select>
+
+
     <select id="querySiteNoticeCount" resultType="java.util.Map" parameterType="map">
         SELECT
-          <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX(src_site, '&', 2),'&',- 1)]]> AS srcSite,
-          COUNT(0) AS siteCount
+        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX(src_site, '&', 2),'&',- 1)]]> AS srcSite,
+        COUNT(0) AS siteCount
         FROM
-          biaodaa_admin.tb_nt_mian_${source}
-          WHERE src_site NOT LIKE '%旧公告系统%'
-          <if test="startDate != null and startDate != ''">
-              and DATE(pub_date) &gt;= #{startDate}
-          </if>
+        biaodaa_admin.tb_nt_mian_${source}
+        WHERE src_site NOT LIKE '%旧公告系统%'
+        <if test="startDate != null and startDate != ''">
+            and DATE(pub_date) &gt;= #{startDate}
+        </if>
         <if test="endDate != null and endDate != ''">
             and DATE(pub_date) &lt;= #{endDate}
         </if>

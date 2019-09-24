@@ -22,10 +22,16 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
     /**
      * 添加资质等级
      *
-     * @param quaGrade
+     * @param param
      * @return
      */
-    int insertQuaCrade(RelQuaGrade quaGrade);
+    void insertQuaCrade(Map<String,Object> param);
+
+    /**
+     * 批量添加资质等级
+     * @param param
+     */
+    void insertRelQuaGrade(Map<String,Object> param);
 
     /**
      * 查询资质等级个数
@@ -80,4 +86,5 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      * @param param
      */
     void updateQualCode(Map<String,Object> param);
+
 }

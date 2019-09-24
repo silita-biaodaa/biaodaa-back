@@ -2,6 +2,7 @@ package com.silita.service.impl;
 
 import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
+import com.silita.dao.DicCommonMapper;
 import com.silita.dao.DicQuaMapper;
 import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.DicAlias;
@@ -35,7 +36,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
     @Autowired
     RelQuaGradeMapper relQuaGradeMapper;
     @Autowired
-    RelQuaGradeMapper quaGradeMapper;
+    DicCommonMapper dicCommonMapper;
 
     /**
      * 添加资质
@@ -66,6 +67,22 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             Integer level = dicQuaMapper.queryLevel(param);
             param.put("level", level + 1);
             dicQuaMapper.insertDicQual(param);
+
+
+            String levelType = MapUtils.getString(param, "levelType");
+            if(levelType.equals("0")){
+                param.put("gradeCode","0");
+                param.put("id", DataHandlingUtil.getUUID());
+                relQuaGradeMapper.insertQuaCrade(param);
+            }else{
+                //Integer integer2 = dicCommonMapper.queryMinOredrNo(param);
+                List<String> list = dicCommonMapper.queryLevelCode(param);
+                for (String s : list) {
+                    param.put("id", DataHandlingUtil.getUUID());
+                    param.put("gradeCode",s);
+                    relQuaGradeMapper.insertQuaCrade(param);
+                }
+            }
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
         } catch (Exception e) {
@@ -112,7 +129,6 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     return resultMap;
                 }
             }
-
             Integer integer = dicQuaMapper.querySingleBenchName(param);
             if (null != integer && integer != 0) {//判断标准名称是否存在
                 resultMap.put("code", "0");
@@ -124,9 +140,25 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             String qualCode = "qual" + "_" + PinYinUtil.cn2py(quaName) + "_" + System.currentTimeMillis();
             param.put("stdCodes",qualCode);
             dicAliasMapper.updateStdCode(param);//修改资质别名stdCode
-            relQuaGradeMapper.updateQualCode(param);//修改资质关系表达式的quaCode
+           // relQuaGradeMapper.updateQualCode(param);//修改资质关系表达式的quaCode
             param.put("quaCode",qualCode);
             dicQuaMapper.updateDicQual(param);//修改资质
+            String levelType = MapUtils.getString(param, "levelType");
+            param.put("stdCode",qualCode);
+            if(levelType.equals("0")){
+                relQuaGradeMapper.deleteRelQuaCode(param);//根据等级qua_code 删除资质管理表达式中的所有有关的数据
+                param.put("gradeCode","0");
+                param.put("id", DataHandlingUtil.getUUID());
+                relQuaGradeMapper.insertQuaCrade(param);
+            }else{
+                relQuaGradeMapper.deleteRelQuaCode(param);//根据等级qua_code 删除资质管理表达式中的所有有关的数据
+                List<String> list = dicCommonMapper.queryLevelCode(param);
+                for (String s : list) {
+                    param.put("id", DataHandlingUtil.getUUID());
+                    param.put("gradeCode",s);
+                    relQuaGradeMapper.insertQuaCrade(param);
+                }
+            }
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
         } catch (Exception e) {
@@ -412,7 +444,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                 gradeMap = new HashMap<String, Object>();
                 gradeMap.put("quaCode", dicQuas.get(j).getQuaCode());
                 gradeMap.put("bizType", "1");
-                List<RelQuaGrade> relQuaGrades = quaGradeMapper.queryQuaGrade(gradeMap);
+                List<RelQuaGrade> relQuaGrades = relQuaGradeMapper.queryQuaGrade(gradeMap);
                 //公告资质等级
                 for (int k = 0; k < relQuaGrades.size(); k++) {
                     qualGradeMap = new HashMap();

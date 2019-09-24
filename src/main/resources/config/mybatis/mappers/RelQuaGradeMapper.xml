@@ -19,10 +19,18 @@
         and (t.biz_type = '0' or t.biz_type = #{bizType})
     </select>
 
-    <insert id="insertQuaCrade" parameterType="com.silita.model.RelQuaGrade">
+    <insert id="insertQuaCrade" parameterType="map">
         INSERT INTO `rel_qua_grade`(`id`,`qua_code`,`grade_type`,`biz_type`,`grade_code`)
         VALUES (#{id},#{quaCode},#{gradeType},#{bizType},#{gradeCode})
     </insert>
+    <insert id="insertRelQuaGrade" parameterType="map">
+        INSERT INTO `rel_qua_grade`(`id`,`qua_code`,`grade_type`,`biz_type`,`grade_code`)
+        values
+        <foreach collection="list" item="list" separator=",">
+            (#{id},#{quaCode},#{gradeType},#{bizType},#{list.gradeCode})
+        </foreach>
+    </insert>
+
 
     <delete id="delQuaCrade" parameterType="java.util.Map">
         DELETE FROM `rel_qua_grade` WHERE `id` = #{id}

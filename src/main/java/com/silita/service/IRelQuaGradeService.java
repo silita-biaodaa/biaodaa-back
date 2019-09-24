@@ -15,7 +15,7 @@ public interface IRelQuaGradeService {
      * @param grade
      * @return
      */
-    Map<String,Object> addQuaGrade(RelQuaGrade grade);
+   // Map<String,Object> addQuaGrade(RelQuaGrade grade);
 
     /**
      * 删除
@@ -29,4 +29,11 @@ public interface IRelQuaGradeService {
      * @return
      */
     List<RelQuaGrade> getQualGradeList(Map<String,Object> param);
+
+    /**
+     * 修改资质名称维护-资质等级
+     * @param param
+     * @return
+     */
+    Map<String,Object> updateRelQuaGrade(Map<String,Object> param);
 }

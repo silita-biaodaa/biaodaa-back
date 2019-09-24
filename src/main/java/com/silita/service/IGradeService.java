@@ -90,10 +90,10 @@ public interface IGradeService {
 
     /**
      * 获取符合该资质的等级
-     * @param relQuaGrade
+     * @param param
      * @return
      */
-    Map<String,Object> getGradeListMap(RelQuaGrade relQuaGrade);
+    List<Map<String,Object>> getGradeListMap(Map<String,Object> param);
 
     /**
      * 资质等级下拉选项

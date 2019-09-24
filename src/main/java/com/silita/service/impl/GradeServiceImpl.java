@@ -236,23 +236,23 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
             }
             Integer integer = dicCommonMapper.queryMinOredrNo(param);
             Integer integer1 = dicCommonMapper.queryOrderNo(param);
-            if(integer == integer1){
+            if (integer == integer1) {
                 dicCommonMapper.deleteGradeLevel(param);//删除等级
                 Integer orderNo = dicCommonMapper.queryMinOredrNo(param);
-                param.put("orderNo",orderNo);
+                param.put("orderNo", orderNo);
                 String commonNameOrderNo = dicCommonMapper.getCommonNameOrderNo(param);//获取name
-                String name = commonNameOrderNo+"及以上";
-                param.put("names",name);
+                String name = commonNameOrderNo + "及以上";
+                param.put("names", name);
                 String commonId2 = dicCommonMapper.getCommonIdName(param);
-                if(StringUtil.isNotEmpty(commonId2)){
-                    param.put("id",commonId2);
+                if (StringUtil.isNotEmpty(commonId2)) {
+                    param.put("id", commonId2);
                     String code2 = dicCommonMapper.queryDicCommonCode(param);
                     param.put("stdCode", code2);
                     relQuaGradeMapper.deleteRelQuaGrade(param);//删除资质管理表达式
                     dicAliasMapper.deleteAilas(param);//删除别名
                     dicCommonMapper.deleteGradeLevel(param);//删除等级
                 }
-            }else{
+            } else {
                 dicCommonMapper.deleteGradeLevel(param);//删除等级
             }
             if (StringUtil.isNotEmpty(commonId)) {
@@ -263,8 +263,8 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
                 relQuaGradeMapper.deleteRelQuaGrade(param);//删除资质管理表达式
                 dicCommonMapper.deleteGradeLevel(param);//删除等级
             }
-        }catch (Exception e){
-            logger.error("删除等级",e);
+        } catch (Exception e) {
+            logger.error("删除等级", e);
         }
     }
 
@@ -327,15 +327,15 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
     /**
      * 获取符合该资质的等级
      *
-     * @param relQuaGrade
+     * @param param
      * @return
      */
     @Override
-    public Map<String, Object> getGradeListMap(RelQuaGrade relQuaGrade) {
+    public List<Map<String, Object>> getGradeListMap(Map<String, Object> param) {
         Map<String, Object> params = new HashMap<>();
-        params.put("list", dicCommonMapper.queryGradeListMap(relQuaGrade));
-        params.put("total", dicCommonMapper.queryGradeListMapCount(relQuaGrade));
-        return super.handlePageCount(params, relQuaGrade);
+        //params.put("list", dicCommonMapper.queryGradeListMap(relQuaGrade));
+        //params.put("total", dicCommonMapper.queryGradeListMapCount(relQuaGrade));
+        return dicCommonMapper.queryGradeListMap(param);
     }
 
     /**
@@ -346,20 +346,22 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
      */
     @Override
     public List<Map<String, Object>> gitGradePullDownListMap(Map<String, Object> param) {
-        RelQuaGrade relQuaGrade = new RelQuaGrade();
-        relQuaGrade.setQuaCode(MapUtils.getString(param, "quaCode"));
-
-        List<Map<String, Object>> gradeListMap = dicCommonMapper.queryGradeListMapPullDown(relQuaGrade);
-        List<Map<String, Object>> listMap = new ArrayList<>();
-        for (Map<String, Object> map : gradeListMap) {
-            Map<String, Object> map1 = new HashMap<>();
-            map1.put("code", map.get("code"));
-            listMap.add(map1);
-            param.put("parentId", map.get("parentId"));
+        String parentId = dicCommonMapper.queryParentId(param);
+        if (StringUtil.isNotEmpty(parentId)) {
+            param.put("parentId", parentId);
+        } else {
+            param.put("parentId", "");
         }
-        param.put("listMapCode", listMap);
-        List<Map<String, Object>> list1 = dicCommonMapper.queryGradePullDownListMap(param);
-        return list1;
+        List<Map<String, Object>> list = dicCommonMapper.queryGradePullDownListMap(param);
+        if(null != list && list.size() >0){
+            for (Map<String, Object> map : list) {
+                String name = MapUtils.getString(map, "name");
+                if(name.equals("特级") || name.equals("甲级")){
+                    map.put("have","true");
+                }
+            }
+        }
+        return list;
     }
 
 

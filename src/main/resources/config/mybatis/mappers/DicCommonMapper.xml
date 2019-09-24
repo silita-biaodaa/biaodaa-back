@@ -88,7 +88,7 @@
     <delete id="deleteDicCommonIds" parameterType="map">
         DELETE
         FROM
-          biaodaa_admin.`dic_common`
+        biaodaa_admin.`dic_common`
         WHERE id IN
         <foreach collection="list" item="list" open="("
                  separator="," close=")">
@@ -132,24 +132,24 @@
 
     <select id="queryDicCommonGradeList" resultType="java.util.Map" parameterType="map">
         SELECT
-          t.id,
-          t.parent_id AS typology,
-          t.name,
-          t.code
+        t.id,
+        t.parent_id AS typology,
+        t.name,
+        t.code
         FROM
-          biaodaa_admin.dic_common t
+        biaodaa_admin.dic_common t
         WHERE t.type = 'qua_grade'
         <if test="name != null and name != ''">
             and t.name = #{name}
         </if>
         ORDER BY t.parent_id,
-          t.order_no
+        t.order_no
         LIMIT #{start}, #{pageSize}
     </select>
 
     <select id="queryDicCommonGradeListCount" resultType="java.lang.Integer" parameterType="map">
         SELECT
-          ifnull(count(1),0)
+        ifnull(count(1),0)
         FROM
         biaodaa_admin.dic_common t
         WHERE t.type = 'qua_grade'
@@ -181,7 +181,7 @@
         </where>
     </select>
 
-    <select id="listDicCommonNameByType" parameterType="com.silita.model.DicCommon" resultType="Map">
+    <select id="listDicCommonNameByType" parameterType="com.silita.model.DicCommon" resultType="java.util.Map">
         SELECT `name`, `code`
         FROM dic_common WHERE `type` = #{type}
         LIMIT #{start}, #{pageSize}
@@ -193,11 +193,11 @@
         where `code` = #{code}
     </select>
 
-    <select id="getNameByCode" parameterType="String" resultType="String">
+    <select id="getNameByCode" parameterType="String" resultType="java.lang.String">
        SELECT `name` FROM dic_common WHERE `code` = #{code}
     </select>
 
-    <select id="getCommonNameById" parameterType="String" resultType="String">
+    <select id="getCommonNameById" parameterType="String" resultType="java.lang.String">
         SELECT `name` FROM `dic_common` WHERE `id` = #{id}
     </select>
 
@@ -218,7 +218,6 @@
         ON c.code=r.grade_code
         WHERE r.qua_code=#{quaCode}
         order by order_no
-         LIMIT #{start}, #{pageSize}
     </select>
 
     <select id="queryGradeListMapCount" resultType="java.lang.Integer">
@@ -230,36 +229,22 @@
         WHERE r.qua_code=#{quaCode}
     </select>
 
-    <select id="queryGradeListMapPullDown" resultType="java.util.Map" parameterType="map">
-        SELECT
-        c.code as code,
-        c.parent_id AS parentId
-        FROM `dic_common` c
-        JOIN `rel_qua_grade` r
-        ON c.code=r.grade_code
-        WHERE r.qua_code=#{quaCode}
-        order by order_no
-    </select>
-
     <!--资质等级下拉选项-->
     <select id="queryGradePullDownListMap" resultType="java.util.Map" parameterType="map">
         SELECT
-          c.name,
-          c.code
+          t.name,
+          t.code,
+          t.`parent_id` AS parentId,
+          t2.`grade_code` AS have
         FROM
-          dic_common c
-        WHERE c.type = 'qua_grade'
-        <if test="parentId != null and parentId != ''">
-            AND c.parent_id = #{parentId}
-        </if>
-        <if test="listMapCode != null and listMapCode.size >0">
-            AND (
-            <foreach collection="listMapCode" item="list" separator="and">
-                c.code &lt;&gt; #{list.code}
-            </foreach>
-            )
-        </if>
-        order by order_no
+          `dic_common` t
+          LEFT JOIN `rel_qua_grade` t2
+            ON t.code = t2.grade_code
+            AND t2.qua_code = #{quaCode} and not t2.grade_code = '0'
+        WHERE t.type = 'qua_grade'
+          AND t.parent_id = #{parentId}
+          and t.name not like '%及以上%'
+          ORDER BY order_no
     </select>
     <select id="queryPbMode" resultType="java.util.Map" parameterType="map">
         SELECT t.name,t.name FROM `dic_common` t WHERE t.type &lt;&gt; 'qua_grade'
@@ -267,20 +252,20 @@
 
     <select id="queryList" resultType="java.util.Map" parameterType="map">
         SELECT
-          t.`id`,
-          t.`name`,
-          t.`code` as quaCode,
-          t.`type`,
-          t.`create_time` as createTime
+        t.`id`,
+        t.`name`,
+        t.`code` as quaCode,
+        t.`type`,
+        t.`create_time` as createTime
         FROM
-          biaodaa_admin.dic_common t
+        biaodaa_admin.dic_common t
         WHERE NOT t.type = 'qua_name'
-          AND t.type = #{type}
-          <if test="name != null and name != ''">
-              and t.name like CONCAT('%',#{name},'%')
-          </if>
-          GROUP BY t.`name`
-          ORDER BY t.`code`
+        AND t.type = #{type}
+        <if test="name != null and name != ''">
+            and t.name like CONCAT('%',#{name},'%')
+        </if>
+        GROUP BY t.`name`
+        ORDER BY t.`code`
     </select>
     <select id="queryDicCommonCode" resultType="java.lang.String">
         SELECT t.code FROM biaodaa_admin.`dic_common` t WHERE t.id = #{id}
@@ -312,6 +297,32 @@
     </select>
     <select id="getCommonNameOrderNo" resultType="java.lang.String" parameterType="map">
        SELECT `name` FROM `dic_common` WHERE order_no = #{orderNo}
+    </select>
+    <select id="queryGradeListMaps" resultType="java.util.Map" parameterType="map">
+
+    </select>
+    <select id="queryParentId" resultType="java.lang.String" parameterType="map">
+        SELECT
+          t.parent_id
+        FROM
+          `dic_common` t
+          JOIN `rel_qua_grade` r
+            ON t.code = r.grade_code
+        WHERE r.qua_code = #{quaCode}
+        GROUP BY t.parent_id
+    </select>
+    <select id="queryLevelCode" resultType="java.lang.String" parameterType="map">
+        SELECT
+         t.`code`
+         FROM
+         `dic_common` t
+         WHERE t.`type` = 'qua_grade'
+         and not t.name = '甲级'
+         and not t.name = '特级'
+         AND parent_id = #{levelType}
+    </select>
+    <select id="getCodeByName" resultType="java.lang.String" parameterType="map">
+        select  t.code from `dic_common` t where t.name = #{name} and t.type = 'qua_grade'
     </select>
 
 

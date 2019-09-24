@@ -94,8 +94,7 @@ public class QualController extends BaseController {
     public Map<String, Object> upd(@RequestBody Map<String,Object> param,ServletRequest request) {
         String userName = JWTUtil.getUsername(request);
         param.put("updateBy", userName);
-        qualService.updQual(param);
-        return successMap();
+        return qualService.updQual(param);
     }
 
     /**
@@ -130,11 +129,11 @@ public class QualController extends BaseController {
      * @param quaGrade
      * @return
      */
-    @ResponseBody
+/*    @ResponseBody
     @RequestMapping(value = "/grade/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> gradeAdd(@RequestBody RelQuaGrade quaGrade) {
         return relQuaGradeService.addQuaGrade(quaGrade);
-    }
+    }*/
 
     /**
      * 删除资质等级

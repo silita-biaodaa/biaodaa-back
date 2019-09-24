@@ -92,7 +92,6 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
                 }
             });
         }
-
         return topUpListMap;
     }
 }
