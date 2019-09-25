@@ -11,12 +11,13 @@ import java.util.Map;
  */
 public interface IQualService {
 
+
     /**
      * 添加资质
-     *
      * @param param
+     * @return
      */
-    Map<String, Object> addQual(Map<String,Object> param);
+    Map<String,Object> addQual(Map<String,Object> param);
 
     /**
      * 删除资质
@@ -25,12 +26,9 @@ public interface IQualService {
      */
     void delQual(Map<String,Object> param);
 
-    /**
-     * 修改资质
-     * @param param
-     * @return
-     */
-    Map<String,Object> updQual(Map<String,Object> param);
+
+
+    Map<String, Object> updQuals(Map<String, Object> param);
 
     /**
      * 获取资质类别

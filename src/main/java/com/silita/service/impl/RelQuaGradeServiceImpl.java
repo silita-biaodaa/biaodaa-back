@@ -116,11 +116,11 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
                                 String codeByName = dicCommonMapper.getCodeByName(param);
                                 if (StringUtil.isNotEmpty(codeByName)) {
                                     list1.add(codeByName);
-                                    param.put("id", DataHandlingUtil.getUUID());
-                                    param.put("gradeCode", s);
-                                    quaGradeMapper.insertQuaCrade(param);
                                 }
                             }
+                            param.put("id", DataHandlingUtil.getUUID());
+                            param.put("gradeCode", s);
+                            quaGradeMapper.insertQuaCrade(param);
                         }
                     }
                     if (null != list1 && list1.size() > 0) {

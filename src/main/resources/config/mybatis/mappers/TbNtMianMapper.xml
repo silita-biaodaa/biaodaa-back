@@ -218,7 +218,7 @@
         WHERE pkid = #{pkid}
     </update>
 
-    <select id="getNtCategoryByPkId" parameterType="com.silita.model.TbNtMian" resultType="String">
+    <select id="getNtCategoryByPkId" parameterType="com.silita.model.TbNtMian" resultType="java.lang.String">
         SELECT nt_category AS ntCategory
         FROM ${tableName}
         WHERE pkid = #{pkid}
@@ -240,13 +240,13 @@
         WHERE pkid = #{pkid}
     </update>
 
-    <select id="getSegCountByPkId" parameterType="com.silita.model.TbNtMian" resultType="Integer">
+    <select id="getSegCountByPkId" parameterType="com.silita.model.TbNtMian" resultType="java.lang.Integer">
         SELECT seg_count AS segCount
         FROM ${tableName}
         WHERE pkid = #{pkid}
     </select>
 
-    <select id="getNtStatusByPkId" parameterType="com.silita.model.TbNtMian" resultType="String">
+    <select id="getNtStatusByPkId" parameterType="com.silita.model.TbNtMian" resultType="java.lang.String">
         SELECT `nt_status` AS ntStatus
         FROM ${tableName}
         WHERE pkid = #{pkid}

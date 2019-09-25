@@ -352,16 +352,7 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
         } else {
             param.put("parentId", "");
         }
-        List<Map<String, Object>> list = dicCommonMapper.queryGradePullDownListMap(param);
-        if(null != list && list.size() >0){
-            for (Map<String, Object> map : list) {
-                String name = MapUtils.getString(map, "name");
-                if(name.equals("特级") || name.equals("甲级")){
-                    map.put("have","true");
-                }
-            }
-        }
-        return list;
+        return dicCommonMapper.queryGradePullDownListMap(param);
     }
 
 

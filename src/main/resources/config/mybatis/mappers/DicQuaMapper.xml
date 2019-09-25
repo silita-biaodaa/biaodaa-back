@@ -448,6 +448,9 @@
     <select id="querySingleQuaName" resultType="java.lang.Integer" parameterType="map">
          select ifnull(count(1),0) from `dic_qua` WHERE qua_name = #{quaName}
     </select>
+    <select id="queryQuaLevel" resultType="java.util.Map" parameterType="map">
+        select t.id,t.parent_id as parentId,t.qua_name as quaName,t.level from `dic_qua` t where t.qua_name = #{quaMajor} and t.parent_id = #{pid}
+    </select>
 
 
 </mapper>

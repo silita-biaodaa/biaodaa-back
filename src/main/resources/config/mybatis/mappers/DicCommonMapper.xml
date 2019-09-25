@@ -228,7 +228,6 @@
         ON c.code=r.grade_code
         WHERE r.qua_code=#{quaCode}
     </select>
-
     <!--资质等级下拉选项-->
     <select id="queryGradePullDownListMap" resultType="java.util.Map" parameterType="map">
         SELECT
@@ -317,8 +316,6 @@
          FROM
          `dic_common` t
          WHERE t.`type` = 'qua_grade'
-         and not t.name = '甲级'
-         and not t.name = '特级'
          AND parent_id = #{levelType}
     </select>
     <select id="getCodeByName" resultType="java.lang.String" parameterType="map">

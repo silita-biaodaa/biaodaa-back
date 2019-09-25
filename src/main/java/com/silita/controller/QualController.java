@@ -71,6 +71,7 @@ public class QualController extends BaseController {
         return qualService.addQual(param);
     }
 
+
     /**
      * 删除资质
      *
@@ -94,7 +95,7 @@ public class QualController extends BaseController {
     public Map<String, Object> upd(@RequestBody Map<String,Object> param,ServletRequest request) {
         String userName = JWTUtil.getUsername(request);
         param.put("updateBy", userName);
-        return qualService.updQual(param);
+        return qualService.updQuals(param);
     }
 
     /**

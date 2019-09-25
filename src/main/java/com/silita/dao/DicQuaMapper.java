@@ -216,4 +216,10 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * 修改资质属性
      */
     void updateBizType(Map<String,Object> param);
+
+    /**
+     * 获取资质是否存在  并且获取资质等级
+     * @return
+     */
+    Map<String,Object> queryQuaLevel(Map<String,Object> param);
 }
