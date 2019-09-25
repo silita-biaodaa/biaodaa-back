@@ -12,5 +12,5 @@ public interface TbNtSiteMapper extends MyMapper<TbNtSite> {
      * 获取公告站点地址
      * @return
      */
-    List<Map<String,Object>> querySiteUtl();
+    List<Map<String,Object>> querySiteUtl(Map<String,Object> param);
 }

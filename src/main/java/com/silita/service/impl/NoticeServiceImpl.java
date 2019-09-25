@@ -107,7 +107,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         recycle.setCreateBy(username);
         recycle.setDelType("4");
         //将公告数据填进回收站
-        if("1".equals(main.getNtCategory())) {
+        if ("1".equals(main.getNtCategory())) {
             recycleHunanMapper.inertRecycleForNtMain(recycle);
         } else {
             recycleHunanMapper.inertRecycleForBids(recycle);
@@ -184,8 +184,6 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     }
 
 
-
-
     public static void main(String[] args) {
         Map<String, String> regionSource = RegionCommon.regionSource;
         for (String s : regionSource.keySet()) {
@@ -196,11 +194,12 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
 
     /**
      * 获取公告统计
+     *
      * @return
      */
     @Override
     public Map<String, Object> getNoticeCount() {
-        Map<String,Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         try {
             Map<String, Object> param = new HashMap<>();
             param.put("yesterday", MyDateUtils.getYesterdays());
@@ -221,62 +220,72 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
             }
             resultMap.put("yesterdayCounts", yesterdayCounts);
             resultMap.put("todayCounts", todayCounts);
-            resultMap.put("totalCounts",totalCounts);
-        }catch (Exception e){
-            logger.error("获取公告统计",e);
+            resultMap.put("totalCounts", totalCounts);
+        } catch (Exception e) {
+            logger.error("获取公告统计", e);
         }
         return resultMap;
     }
-    /**
-     * 公告站点统计
-     * @param param
-     * @return
-     */
+
+
+
     @Override
-    public Map<String, Object> getSiteNoticeCount(Map<String, Object> param) {
-
-        Map<String,Object> resultMap = new HashMap<>();
-        List<Map<String, Object>> list1 = tbNtSiteMapper.querySiteUtl();
-        Map<String,Object> maps = new HashMap<>();
-        for (Map<String, Object> map : list1) {
-            maps.put(MapUtils.getString(map,"name"),map.get("url"));
-        }
-        int count = 0;
-        String source = MapUtils.getString(param, "source");
-        List<Map<String,Object>> listMap = new ArrayList<>();
-        if (StringUtil.isEmpty(source)){
-            Map<String, String> regionSource = RegionCommon.regionSource;
-            for (String pro : regionSource.keySet()) {
-                param.put("source", pro);
-                List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
-                for (Map<String, Object> map : list) {
-                    String srcSite = MapUtils.getString(maps, map.get("srcSite"));
-                    if(StringUtil.isNotEmpty(srcSite)){
-                        map.put("url",srcSite);
+    public Map<String, Object> getCount(Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            int count = 0;
+            String source = MapUtils.getString(param, "source");
+            if (StringUtil.isEmpty(source)) {
+                List<Map<String, Object>> list1 = tbNtSiteMapper.querySiteUtl(param);
+                Map<String, String> regionSource = RegionCommon.regionSource;
+                for (Map<String, Object> map : list1) {
+                    String name = MapUtils.getString(map, "name");
+                    for (String s : regionSource.keySet()) {
+                        param.put("source", s);
+                        count = siteCount(map, param, count, name);
                     }
-                    listMap.add(map);
-                    Integer siteCount = MapUtils.getInteger(map, "siteCount");
-                    count = count+siteCount;//统计总数量
                 }
+                siteCount(list1);
+                resultMap.put("sumTotal", count);
+                resultMap.put("list", list1);
+                return resultMap;
             }
-            resultMap.put("sumTotal",count);
-            resultMap.put("list",listMap);
-            return resultMap;
-        }
-        List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
-        for (Map<String, Object> map : list) {
-            String srcSite = MapUtils.getString(maps, map.get("srcSite"));
-            if(StringUtil.isNotEmpty(srcSite)){
-                map.put("url",srcSite);
+            param.put("sourced", RegionCommon.regionSource.get(source));
+            List<Map<String, Object>> list1 = tbNtSiteMapper.querySiteUtl(param);
+            for (Map<String, Object> map : list1) {
+                String name = MapUtils.getString(map, "name");
+                count = siteCount(map, param, count, name);
             }
-            listMap.add(map);
-            Integer siteCount = MapUtils.getInteger(map, "siteCount");
-            count = count+siteCount;//统计总数量
+            siteCount(list1);
+            resultMap.put("sumTotal", count);
+            resultMap.put("list", list1);
+        } catch (Exception e) {
+            logger.error("公告站点统计", e);
         }
-        resultMap.put("sumTotal",count);
-        resultMap.put("list",listMap);
         return resultMap;
     }
 
+    public Integer siteCount(Map<String, Object> map, Map<String, Object> param, int count, String name) {
 
+        List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
+        for (Map<String, Object> stringObjectMap : list) {
+            String srcSite = MapUtils.getString(stringObjectMap, "srcSite");
+            if (name.equals(srcSite)) {
+                Integer siteCount = MapUtils.getInteger(stringObjectMap, "siteCount");
+                map.put("siteCount", siteCount);
+                count = count + siteCount;
+
+            }
+        }
+        return count;
+    }
+
+    public void siteCount(List<Map<String, Object>> list1) {
+        for (Map<String, Object> map : list1) {
+            Integer siteCount = MapUtils.getInteger(map, "siteCount");
+            if (null == siteCount) {
+                map.put("siteCount", 0);
+            }
+        }
+    }
 }

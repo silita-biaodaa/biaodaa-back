@@ -114,14 +114,7 @@ public class NoticeController extends BaseController {
     @RequestMapping(value = "/siteNoticeCount", method = RequestMethod.POST, produces="application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> siteNoticeCount(@RequestBody Map<String,Object> param) {
-        return successMap(noticeService.getSiteNoticeCount(param));
+        return successMap(noticeService.getCount(param));
     }
-
-
-
-
-
-
-
 
 }

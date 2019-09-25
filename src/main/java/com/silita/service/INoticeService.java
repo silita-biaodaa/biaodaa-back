@@ -77,13 +77,12 @@ public interface INoticeService {
      * @return
      */
     Map<String,Object> getNoticeCount();
-
     /**
      * 公告站点统计
      * @param param
      * @return
      */
-    Map<String, Object> getSiteNoticeCount(Map<String,Object> param);
+    Map<String,Object> getCount(Map<String,Object> param);
 
 
 }
