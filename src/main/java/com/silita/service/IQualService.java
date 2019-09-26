@@ -94,4 +94,11 @@ public interface IQualService {
      * @param param
      */
     void updateBizType(Map<String,Object> param);
+
+    /**
+     * 资质解析列表筛选
+     * @param dicQua
+     * @return
+     */
+    Map<String,Object> getQualAnalysis(DicQua dicQua);
 }

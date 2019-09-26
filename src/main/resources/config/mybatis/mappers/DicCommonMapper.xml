@@ -308,6 +308,7 @@
           JOIN `rel_qua_grade` r
             ON t.code = r.grade_code
         WHERE r.qua_code = #{quaCode}
+        and parent_id is not null
         GROUP BY t.parent_id
     </select>
     <select id="queryLevelCode" resultType="java.lang.String" parameterType="map">

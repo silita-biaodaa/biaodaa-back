@@ -228,7 +228,11 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     }
 
 
-
+    /**
+     * 公告站点统计
+     * @param param
+     * @return
+     */
     @Override
     public Map<String, Object> getCount(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();

@@ -337,7 +337,8 @@
         SELECT
         d.id,
         d.qua_name AS quaName,
-        d.qua_code AS quaCode
+        d.qua_code AS quaCode,
+        d.biz_Type as bizType
         FROM
         biaodaa_admin.dic_qua d
         WHERE d.level = '1'
@@ -352,7 +353,8 @@
         d.id,
         d.bench_name AS benchName,
         d.qua_code AS quaCode,
-        d.qua_name as quaName
+        d.qua_name as quaName,
+        d.biz_Type as bizType
         FROM
         biaodaa_admin.dic_qua d
         WHERE 1=1
@@ -448,8 +450,73 @@
     <select id="querySingleQuaName" resultType="java.lang.Integer" parameterType="map">
          select ifnull(count(1),0) from `dic_qua` WHERE qua_name = #{quaName}
     </select>
+    <select id="querySingleQuaNames" resultType="java.lang.String" parameterType="map">
+         select qua_name from `dic_qua` WHERE  id = #{quaId}
+    </select>
     <select id="queryQuaLevel" resultType="java.util.Map" parameterType="map">
         select t.id,t.parent_id as parentId,t.qua_name as quaName,t.level from `dic_qua` t where t.qua_name = #{quaMajor} and t.parent_id = #{pid}
+    </select>
+    <select id="queryQualAnalysis" resultType="java.util.Map" parameterType="com.silita.model.DicQua">
+        select * from (SELECT
+        t6.`id`,
+        t6.`qua_code` AS quaCode,
+        IFNULL(t6.`create_by`, 'system') AS createBy,
+        CONCAT(IFNULL(t6.`bench_name`,''),IFNULL(t4.`name`,'')) AS quaLevel,
+        CONCAT(IFNULL(t7.`name`,''),IFNULL(t3.`name`,'')) AS jointAilas
+        FROM
+        `dic_alias` t3
+        JOIN `dic_common` t4
+        ON t3.`std_code` = t4.`code`
+        RIGHT JOIN `rel_qua_grade` t5
+        ON t4.`code` = t5.`grade_code`
+        RIGHT JOIN `dic_qua` t6
+        ON t5.`qua_code` = t6.`qua_code`
+        LEFT JOIN `dic_alias` t7
+        ON t6.`qua_code` = t7.`std_code`
+        WHERE 1=1
+        and t6.bench_name is not null
+        <if test="createBy != null and createBy != ''">
+            and t6.create_by = #{createBy}
+        </if>
+        <if test="rank != null and rank != ''">
+            order by t6.${rank}
+        </if>
+        LIMIT #{start}, #{pageSize}
+        ) qua
+        where 1=1
+        <if test="benchName != null and benchName != ''">
+            and qua.quaLevel like CONCAT('%',#{benchName},'%')
+        </if>
+        <if test="qualAilas != null and qualAilas != ''">
+            and qua.jointAilas like CONCAT('%',#{qualAilas},'%')
+        </if>
+    </select>
+    <select id="queryQualAnalysisCount" resultType="java.lang.Integer" parameterType="com.silita.model.DicQua">
+        SELECT
+          ifnull(count(1),0)
+        FROM
+        `dic_alias` t3
+        JOIN `dic_common` t4
+        ON t3.`std_code` = t4.`code`
+        RIGHT JOIN `rel_qua_grade` t5
+        ON t4.`code` = t5.`grade_code`
+        RIGHT JOIN `dic_qua` t6
+        ON t5.`qua_code` = t6.`qua_code`
+        LEFT JOIN `dic_alias` t7
+        ON t6.`qua_code` = t7.`std_code`
+        WHERE 1=1
+        <if test="createBy != null and createBy != ''">
+            and t6.create_by = #{createBy}
+        </if>
+        <if test="benchName != null and benchName != ''">
+            and t6.bench_name like CONCAT('%',#{benchName},'%')
+        </if>
+        <if test="qualAilas != null and qualAilas != ''">
+            and (t3.name like CONCAT('%',#{qualAilas},'%')  or t7.name like CONCAT('%',#{qualAilas},'%'))
+        </if>
+    </select>
+    <select id="querySingleBenchNames" resultType="java.lang.String" parameterType="map">
+        select bench_name from `dic_qua` WHERE id = #{quaId}
     </select>
 
 

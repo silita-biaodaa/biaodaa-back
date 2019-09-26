@@ -210,4 +210,16 @@ public class QualController extends BaseController {
         qualService.updateBizType(param);
         return successMap();
     }
+    /**
+     * 资质解析列表筛选
+     * @param dicQua
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/qualAnalysis", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> qualAnalysis (@RequestBody DicQua dicQua) {
+        return successMap(qualService.getQualAnalysis(dicQua));
+    }
+
+
 }

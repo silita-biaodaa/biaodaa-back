@@ -1,5 +1,6 @@
 package com.silita.model;
 
+import com.silita.utils.split.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class DicQua {
+public class DicQua extends Pagination {
     /**
      * 主键
      */
@@ -99,8 +100,18 @@ public class DicQua {
      */
     private String parentName;
 
+    private String rank;
+
+    private String sort;
+
+    private String qualAilas;
+
+
     /**
      * 等级list
      */
     private List gradeList;
+
+
+
 }

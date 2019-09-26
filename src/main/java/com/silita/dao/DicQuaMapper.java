@@ -52,7 +52,20 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * @param param
      * @return
      */
+    String querySingleBenchNames(Map<String,Object> param);
+    /**
+     * 获取标准名称是否存在
+     * @param param
+     * @return
+     */
     Integer querySingleQuaName(Map<String,Object> param);
+
+    /**
+     * 获取标准名称是否存在
+     * @param param
+     * @return
+     */
+    String querySingleQuaNames(Map<String,Object> param);
 
     /**
      * 获取等级是几级
@@ -222,4 +235,18 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * @return
      */
     Map<String,Object> queryQuaLevel(Map<String,Object> param);
+
+    /**
+     * 资质解析维护
+     * @param dicQua
+     * @return
+     */
+    List<Map<String,Object>> queryQualAnalysis(DicQua dicQua);
+
+    /**
+     * 统计资质解析维护
+     * @param dicQua
+     * @return
+     */
+    Integer queryQualAnalysisCount(DicQua dicQua);
 }

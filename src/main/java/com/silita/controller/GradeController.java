@@ -121,7 +121,7 @@ public class GradeController extends BaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/cate/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/option/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> cateListMap(@RequestBody Map<String, Object> param) {
         return this.successMap(gradeService.gitGradePullDownListMap(param));
     }
