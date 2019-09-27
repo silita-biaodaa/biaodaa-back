@@ -101,4 +101,10 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      */
     void updateStdCode(Map<String,Object> param);
 
+    /**
+     * 添加资质解析词典
+     * @param param
+     */
+    void addQualAilas(Map<String,Object> param);
+
 }

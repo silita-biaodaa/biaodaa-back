@@ -249,4 +249,10 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * @return
      */
     Integer queryQualAnalysisCount(DicQua dicQua);
+
+    /**
+     * 根据标准名称查询是否存在该资质
+     * @return
+     */
+    String queryQuaCodeBenchName();
 }

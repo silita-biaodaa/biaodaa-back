@@ -8,6 +8,7 @@ import com.silita.model.DicQua;
 import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
 import com.silita.service.IRelQuaGradeService;
+import org.jcodings.util.ObjHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -220,6 +221,18 @@ public class QualController extends BaseController {
     public Map<String, Object> qualAnalysis (@RequestBody DicQua dicQua) {
         return successMap(qualService.getQualAnalysis(dicQua));
     }
+    /**
+     * 添加资质解析词典
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/addAilas", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> addAilas (@RequestBody Map<String,Object> param) {
+        return successMap(qualService.getaddAilas(param));
+    }
+
+
 
 
 }

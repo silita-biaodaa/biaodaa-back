@@ -518,6 +518,9 @@
     <select id="querySingleBenchNames" resultType="java.lang.String" parameterType="map">
         select bench_name from `dic_qua` WHERE id = #{quaId}
     </select>
+    <select id="queryQuaCodeBenchName" resultType="java.lang.String" parameterType="map">
+        select qua_code from `dic_qua` WHERE bench_name = #{benchName}
+    </select>
 
 
 </mapper>
