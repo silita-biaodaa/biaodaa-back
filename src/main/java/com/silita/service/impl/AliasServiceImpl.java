@@ -3,6 +3,7 @@ package com.silita.service.impl;
 import com.silita.common.BasePageModel;
 import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
+import com.silita.dao.DicQuaMapper;
 import com.silita.model.DicAlias;
 import com.silita.service.IAliasService;
 import com.silita.service.abs.AbstractService;
@@ -13,6 +14,7 @@ import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.util.StringUtil;
 
 import java.io.IOException;
 import java.util.*;
@@ -22,6 +24,8 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
 
     @Autowired
     DicAliasMapper dicAliasMapper;
+    @Autowired
+    DicQuaMapper dicQuaMapper;
 
 
 /*    @Override
@@ -54,7 +58,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
     }
 
     /**
-     * 删除别名
+     * 批量删除别名
      * @param param
      * @return
      */
@@ -66,6 +70,35 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         List<String> id = Arrays.asList(split);
         param.put("ids", id);
         dicAliasMapper.delAilasByIds(param);
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
+        return resultMap;
+    }
+
+    /**
+     * 根据id删除别名
+     * @param param
+     * @return
+     */
+    @Override
+    public Map<String, Object> delAilasById(Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
+        String ids = MapUtils.getString(param, "ids");
+        String[] split = ids.split(",");
+        List<String> id = Arrays.asList(split);
+        for (String s : id) {
+            param.put("id",s);
+            Map<String, Object> map = dicAliasMapper.queryNameId(param);
+            String name = MapUtils.getString(map, "name");
+            String stdCode = MapUtils.getString(map, "stdCode");
+            param.put("quaCode",stdCode);
+            String benchName = dicQuaMapper.queryBenchNameQuaCode(param);
+            if(StringUtil.isNotEmpty(name) && StringUtil.isNotEmpty(benchName)){
+                if(!name.equals(benchName)){
+                    dicAliasMapper.deleteIdAilas(param);
+                }
+            }
+        }
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;

@@ -60,6 +60,10 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
      */
     public void deleteDicAliasByIds(Object[] ids);
 
+    /**
+     * 批量删除别名
+     * @param param
+     */
     void delAilasByIds(Map<String,Object> param);
 
     /**
@@ -78,10 +82,15 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
     void insertAilas(List<DicAlias> list);
 
     /**
-     * 删除别名
+     * 根据stdCode删除别名
      * @param param
      */
     void deleteAilas(Map<String,Object> param);
+    /**
+     * 根据id删除别名
+     * @param param
+     */
+    void deleteIdAilas(Map<String,Object> param);
 
     /**
      * 添加资质别名
@@ -102,9 +111,23 @@ public interface DicAliasMapper extends MyMapper<DicAlias> {
     void updateStdCode(Map<String,Object> param);
 
     /**
+     * 修改别名name
+     * @param param
+     */
+    void updateName(Map<String,Object> param);
+
+
+    /**
      * 添加资质解析词典
      * @param param
      */
     void addQualAilas(Map<String,Object> param);
+
+    /**
+     * 根据id查询别名和code
+     * @param param
+     * @return
+     */
+    Map<String,Object> queryNameId(Map<String,Object> param);
 
 }

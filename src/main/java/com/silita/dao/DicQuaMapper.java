@@ -254,5 +254,13 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      * 根据标准名称查询是否存在该资质
      * @return
      */
-    String queryQuaCodeBenchName();
+    String queryQuaCodeBenchName(Map<String,Object> param);
+
+    /**
+     * 根据quaCode获取标准名称
+     * @param param
+     * @return
+     */
+    String queryBenchNameQuaCode(Map<String,Object> param);
+
 }

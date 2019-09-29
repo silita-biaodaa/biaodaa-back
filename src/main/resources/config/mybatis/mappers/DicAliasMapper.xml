@@ -80,6 +80,9 @@
     <update id="updateStdCode" parameterType="map">
         UPDATE `dic_alias` SET std_code = #{stdCodes},update_time = NOW(),update_by = #{updateBy} where std_code = #{stdCode}
     </update>
+    <update id="updateName" parameterType="map">
+         UPDATE `dic_alias` t SET t.name = #{benchName}  where t.name = #{benchNameAilas}
+    </update>
 
     <select id="listDicAliasByStdCode" parameterType="com.silita.model.DicAlias" resultType="java.util.Map">
         SELECT
@@ -166,7 +169,10 @@
           IFNULL(COUNT(1), 0)
         FROM
           biaodaa_admin.`dic_alias` t
-        WHERE t.std_code = #{stdCode} and t.name = #{name}
+        WHERE t.name = #{name}
+    </select>
+    <select id="queryNameId" resultType="java.util.Map" parameterType="map">
+        select t.name,t.std_code as stdCode from  biaodaa_admin.`dic_alias` t where id = #{id}
     </select>
 
     <delete id="deleteDicAliasByStdCodes" parameterType="String">
@@ -189,6 +195,9 @@
     </delete>
     <delete id="deleteAilas" parameterType="map">
         DELETE FROM biaodaa_admin.`dic_alias` WHERE std_code = #{stdCode}
+    </delete>
+    <delete id="deleteIdAilas" parameterType="map">
+        DELETE FROM biaodaa_admin.`dic_alias` WHERE id = #{id}
     </delete>
 
 </mapper>

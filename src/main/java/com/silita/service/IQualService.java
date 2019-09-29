@@ -107,5 +107,12 @@ public interface IQualService {
      * @param param
      * @return
      */
-    Map<String,Object> getaddAilas(Map<String,Object> param);
+    Map<String,Object> addAilas(Map<String,Object> param);
+
+    /**
+     * 根据别名id删除资质解析词典
+     * @param param
+     * @return
+     */
+    Map<String,Object> delAilas(Map<String,Object> param);
 }

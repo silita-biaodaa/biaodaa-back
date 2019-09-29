@@ -338,7 +338,7 @@
         d.id,
         d.qua_name AS quaName,
         d.qua_code AS quaCode,
-        d.biz_Type as bizType
+        d.biz_type as bizType
         FROM
         biaodaa_admin.dic_qua d
         WHERE d.level = '1'
@@ -354,7 +354,7 @@
         d.bench_name AS benchName,
         d.qua_code AS quaCode,
         d.qua_name as quaName,
-        d.biz_Type as bizType
+        d.biz_type as bizType
         FROM
         biaodaa_admin.dic_qua d
         WHERE 1=1
@@ -372,7 +372,8 @@
         d.id,
         d.bench_name AS benchName,
         d.qua_code AS quaCode,
-        d.qua_name as quaName
+        d.qua_name as quaName,
+        d.biz_type as bizType
         FROM
         biaodaa_admin.dic_qua d
         WHERE 1=1
@@ -390,7 +391,9 @@
         d.id,
         d.bench_name AS benchName,
         d.qua_code AS quaCode,
-        d.qua_name as quaName
+        d.qua_name as quaName,
+        d.biz_type as bizType,
+        d.biz_type as bizType
         FROM
         biaodaa_admin.dic_qua d
         WHERE 1=1
@@ -459,10 +462,11 @@
     <select id="queryQualAnalysis" resultType="java.util.Map" parameterType="com.silita.model.DicQua">
         select * from (SELECT
         t6.`id`,
+        t7.id as ailasId,
         t6.`qua_code` AS quaCode,
-        IFNULL(t6.`create_by`, 'system') AS createBy,
         CONCAT(IFNULL(t6.`bench_name`,''),IFNULL(t4.`name`,'')) AS quaLevel,
-        CONCAT(IFNULL(t7.`name`,''),IFNULL(t3.`name`,'')) AS jointAilas
+        CONCAT(IFNULL(t7.`name`,''),IFNULL(t3.`name`,'')) AS jointAilas,
+        ifnull(t7.create_by,'system') AS createBy
         FROM
         `dic_alias` t3
         JOIN `dic_common` t4
@@ -471,7 +475,7 @@
         ON t4.`code` = t5.`grade_code`
         RIGHT JOIN `dic_qua` t6
         ON t5.`qua_code` = t6.`qua_code`
-        LEFT JOIN `dic_alias` t7
+        JOIN `dic_alias` t7
         ON t6.`qua_code` = t7.`std_code`
         WHERE 1=1
         and t6.bench_name is not null
@@ -520,6 +524,9 @@
     </select>
     <select id="queryQuaCodeBenchName" resultType="java.lang.String" parameterType="map">
         select qua_code from `dic_qua` WHERE bench_name = #{benchName}
+    </select>
+    <select id="queryBenchNameQuaCode" resultType="java.lang.String">
+        select bench_name from `dic_qua` WHERE qua_code = #{quaCode}
     </select>
 
 

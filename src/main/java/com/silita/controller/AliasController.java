@@ -46,6 +46,17 @@ public class AliasController extends BaseController {
         return aliasService.delAilasByIds(param);
     }
     /**
+     * 删除资质别名
+     *
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/qual/del", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> delQual(@RequestBody Map<String, Object> param) {
+        return aliasService.delAilasById(param);
+    }
+    /**
      * 添加别名
      *
      * @param param
@@ -55,8 +66,8 @@ public class AliasController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> add(@RequestBody Map<String, Object> param, ServletRequest request) {
-        String userName = JWTUtil.getUsername(request);
-        param.put("createBy", userName);
+        //String userName = JWTUtil.getUsername(request);
+        param.put("createBy", "system");
         return aliasService.insertLevelAilas(param);
     }
 

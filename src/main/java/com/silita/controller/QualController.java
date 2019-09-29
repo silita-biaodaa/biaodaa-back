@@ -67,8 +67,8 @@ public class QualController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> add(@RequestBody Map<String,Object> param, ServletRequest request) {
-        String userName = JWTUtil.getUsername(request);
-        param.put("createBy", userName);
+        //String userName = JWTUtil.getUsername(request);
+        param.put("createBy", "system");
         return qualService.addQual(param);
     }
 
@@ -228,8 +228,20 @@ public class QualController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/addAilas", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> addAilas (@RequestBody Map<String,Object> param) {
-        return successMap(qualService.getaddAilas(param));
+    public Map<String, Object> addAilas (@RequestBody Map<String,Object> param,ServletRequest request) {
+        String userName = JWTUtil.getUsername(request);
+        param.put("createBy", userName);
+        return qualService.addAilas(param);
+    }
+    /**
+     * 根据别名id删除资质解析词典
+     * @param param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delAilas", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> delAilas (@RequestBody Map<String,Object> param) {
+        return qualService.delAilas(param);
     }
 
 
