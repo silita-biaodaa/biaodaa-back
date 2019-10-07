@@ -19,6 +19,7 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      */
     List<RelQuaGrade> queryQuaGrade(Map<String, Object> param);
 
+
     /**
      * 添加资质等级
      *
@@ -48,6 +49,12 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      * @return
      */
     Integer delQuaCrade(Map<String,Object> param);
+
+    /**
+     * 删除资质关系表达式
+     * @param param
+     */
+    void deleteIsNotLevel(Map<String,Object> param);
 
     /**
      * 获取等级个数
@@ -86,5 +93,20 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      * @param param
      */
     void updateQualCode(Map<String,Object> param);
+
+    /**
+     * 判断资质关系表达式中该资质是否拥有该等级
+     * @param param
+     * @return
+     */
+    Integer queryQualLevelBoolean(Map<String,Object> param);
+
+    /**
+     * 获取资质关系表达式id
+     * @param param
+     * @return
+     */
+    List<String> queryRelId(Map<String,Object> param);
+
 
 }

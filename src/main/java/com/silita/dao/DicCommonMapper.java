@@ -286,4 +286,6 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      */
     List<String> queryLevelCode(Map<String,Object> param);
 
+
+
 }

@@ -41,6 +41,9 @@
     <delete id="deleteRelQuaCode" parameterType="map">
          delete from `rel_qua_grade` WHERE qua_code = #{stdCode}
     </delete>
+    <delete id="deleteIsNotLevel" parameterType="map">
+        delete from `rel_qua_grade` WHERE qua_code = #{quaCode} and grade_code = '0'
+    </delete>
 
     <select id="queryQuaGradeCout" parameterType="com.silita.model.RelQuaGrade" resultType="java.lang.Integer">
         select count(1)
@@ -79,4 +82,15 @@
         WHERE r.qua_code=#{quaCode}
         order by order_no
     </select>
+    <select id="queryQualLevelBoolean" resultType="java.lang.Integer" parameterType="map">
+        select ifnull(count(1),0) from `rel_qua_grade` where qua_code = #{quaCode}
+        <if test="gradeCode != null and gradeCode != ''">
+            and grade_code = #{gradeCode}
+        </if>
+        and not grade_code = '0'
+    </select>
+    <select id="queryRelId" resultType="java.lang.String" parameterType="map">
+        select id from rel_qua_grade where qua_code = #{quaCode}
+    </select>
+
 </mapper>

@@ -479,13 +479,6 @@
         ON t6.`qua_code` = t7.`std_code`
         WHERE 1=1
         and t6.bench_name is not null
-        <if test="createBy != null and createBy != ''">
-            and t6.create_by = #{createBy}
-        </if>
-        <if test="rank != null and rank != ''">
-            order by t6.${rank}
-        </if>
-        LIMIT #{start}, #{pageSize}
         ) qua
         where 1=1
         <if test="benchName != null and benchName != ''">
@@ -494,10 +487,19 @@
         <if test="qualAilas != null and qualAilas != ''">
             and qua.jointAilas like CONCAT('%',#{qualAilas},'%')
         </if>
+        <if test="createBy != null and createBy != ''">
+            and (${createBy})
+        </if>
+        <if test="rank != null and rank != ''">
+            order by t6.${rank}
+        </if>
+        LIMIT #{start}, #{pageSize}
     </select>
     <select id="queryQualAnalysisCount" resultType="java.lang.Integer" parameterType="com.silita.model.DicQua">
-        SELECT
-          ifnull(count(1),0)
+        select ifnull(count(1),0) from (SELECT
+        CONCAT(IFNULL(t6.`bench_name`,''),IFNULL(t4.`name`,'')) AS quaLevel,
+        CONCAT(IFNULL(t7.`name`,''),IFNULL(t3.`name`,'')) AS jointAilas,
+        ifnull(t7.create_by,'system') AS createBy
         FROM
         `dic_alias` t3
         JOIN `dic_common` t4
@@ -506,17 +508,20 @@
         ON t4.`code` = t5.`grade_code`
         RIGHT JOIN `dic_qua` t6
         ON t5.`qua_code` = t6.`qua_code`
-        LEFT JOIN `dic_alias` t7
+        JOIN `dic_alias` t7
         ON t6.`qua_code` = t7.`std_code`
         WHERE 1=1
-        <if test="createBy != null and createBy != ''">
-            and t6.create_by = #{createBy}
-        </if>
+        and t6.bench_name is not null
+        ) qua
+        where 1=1
         <if test="benchName != null and benchName != ''">
-            and t6.bench_name like CONCAT('%',#{benchName},'%')
+            and qua.quaLevel like CONCAT('%',#{benchName},'%')
         </if>
         <if test="qualAilas != null and qualAilas != ''">
-            and (t3.name like CONCAT('%',#{qualAilas},'%')  or t7.name like CONCAT('%',#{qualAilas},'%'))
+            and qua.jointAilas like CONCAT('%',#{qualAilas},'%')
+        </if>
+        <if test="createBy != null and createBy != ''">
+            and ${createBy}
         </if>
     </select>
     <select id="querySingleBenchNames" resultType="java.lang.String" parameterType="map">
@@ -527,6 +532,166 @@
     </select>
     <select id="queryBenchNameQuaCode" resultType="java.lang.String">
         select bench_name from `dic_qua` WHERE qua_code = #{quaCode}
+    </select>
+    <select id="queryQualAnalysisList" resultType="java.util.Map" parameterType="map">
+        SELECT
+        t.id,
+        CONCAT(t.name, IFNULL(al.name,'')) AS jointAilas,
+        i.name AS quaLevel,
+        t.createBy
+        FROM
+        (SELECT
+        a.name,
+        r.grade_code,
+        r.id,
+        IFNULL(a.`create_by`,'system') AS createBy
+        FROM
+        dic_alias a
+        LEFT JOIN rel_qua_grade r
+        ON a.std_code = r.qua_code
+        WHERE r.grade_code != '') AS t
+        LEFT JOIN dic_alias al
+        ON al.std_code = t.grade_code
+        LEFT JOIN dic_qua_info i
+        ON t.id = i.id
+        WHERE 1=1
+        and t.name IS NOT NULL
+        AND al.name IS NOT NULL
+        <if test="benchName != null and benchName != ''">
+            and i.name like CONCAT('%',#{benchName},'%')
+        </if>
+        <if test="qualAilas != null and qualAilas != ''">
+            and CONCAT(t.name, IFNULL(al.name,'')) like CONCAT('%',#{qualAilas},'%')
+        </if>
+        <if test="createBy != null and createBy != '' and createBy == '系统'">
+            and (t.createBy = 'system' or t.createBy = '' or t.createBy = null)
+        </if>
+        <if test="createBy != null and createBy != '' and createBy != '系统'">
+            and (not t.createBy = 'system' or not t.createBy = '' or not t.createBy = null)
+        </if>
+        <if test="rank == null or rank == ''">
+            ORDER BY t.name
+        </if>
+        <if test="rank != null and rank != ''">
+            order by t6.${rank}
+        </if>
+        LIMIT #{start}, #{pageSize}
+    </select>
+    <select id="queryQualAnalysisListCount" resultType="java.lang.Integer" parameterType="map">
+        SELECT
+          ifnull(count(1),0)
+        FROM
+        (SELECT
+        a.name,
+        r.grade_code,
+        r.id,
+        IFNULL(a.`create_by`,'system') AS createBy
+        FROM
+        dic_alias a
+        LEFT JOIN rel_qua_grade r
+        ON a.std_code = r.qua_code
+        WHERE r.grade_code != '') AS t
+        LEFT JOIN dic_alias al
+        ON al.std_code = t.grade_code
+        LEFT JOIN dic_qua_info i
+        ON t.id = i.id
+        WHERE 1=1
+        and t.name IS NOT NULL
+        AND al.name IS NOT NULL
+        <if test="benchName != null and benchName != ''">
+            and t.quaLevel like CONCAT('%',#{benchName},'%')
+        </if>
+        <if test="qualAilas != null and qualAilas != ''">
+            and CONCAT(t.name, IFNULL(al.name,'')) like CONCAT('%',#{qualAilas},'%')
+        </if>
+        <if test="createBy != null and createBy != '' and createBy == '系统'">
+            and (t.createBy = 'system' or t.createBy = '' or t.createBy = null)
+        </if>
+        <if test="createBy != null and createBy != '' and createBy != '系统'">
+            and (not t.createBy = 'system' or not t.createBy = '' or not t.createBy = null)
+        </if>
+    </select>
+    <select id="queryQualAnalysisLists" resultType="java.util.Map" parameterType="map">
+      SELECT
+          t5.`id`,
+          t7.id as ailasId,
+          CONCAT(
+            IFNULL(t6.`bench_name`, ''),
+            IFNULL(t4.`name`, '')
+          ) AS quaLevel,
+          CONCAT(
+            IFNULL(t7.`name`, ''),
+            IFNULL(t3.`name`, '')
+          ) AS jointAilas,
+          IFNULL(t7.create_by, 'system') AS createBy,
+          t7.`create_time` AS createTime
+        FROM
+          `dic_alias` t3
+          JOIN `dic_common` t4
+            ON t3.`std_code` = t4.`code`
+          JOIN `rel_qua_grade` t5
+            ON t4.`code` = t5.`grade_code`
+          JOIN `dic_qua` t6
+            ON t5.`qua_code` = t6.`qua_code`
+          JOIN `dic_alias` t7
+            ON t6.`qua_code` = t7.`std_code`
+        WHERE 1 = 1
+          AND t6.`qua_code` = #{quaCode}
+          AND t7.`name` = #{name}
+    </select>
+    <select id="queryQualAnalysisOne" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t5.`id`,
+          t7.id as ailasId,
+          CONCAT(
+            IFNULL(t6.`bench_name`, ''),
+            IFNULL(t4.`name`, '')
+          ) AS quaLevel,
+          CONCAT(
+            IFNULL(t7.`name`, ''),
+            IFNULL(t3.`name`, '')
+          ) AS jointAilas,
+          IFNULL(t7.create_by, 'system') AS createBy,
+          t7.`create_time` AS createTime
+        FROM
+          `dic_alias` t3
+          JOIN `dic_common` t4
+            ON t3.`std_code` = t4.`code`
+          JOIN `rel_qua_grade` t5
+            ON t4.`code` = t5.`grade_code`
+          JOIN `dic_qua` t6
+            ON t5.`qua_code` = t6.`qua_code`
+          JOIN `dic_alias` t7
+            ON t6.`qua_code` = t7.`std_code`
+        WHERE 1 = 1
+          AND t6.`id` = #{id}
+    </select>
+    <select id="queryQualAnalysisTow" resultType="java.util.Map" parameterType="map">
+        SELECT
+          t5.`id`,
+          t7.id as ailasId,
+          CONCAT(
+            IFNULL(t6.`bench_name`, ''),
+            IFNULL(t4.`name`, '')
+          ) AS quaLevel,
+          CONCAT(
+            IFNULL(t7.`name`, ''),
+            IFNULL(t3.`name`, '')
+          ) AS jointAilas,
+          IFNULL(t7.create_by, 'system') AS createBy,
+          t7.`create_time` AS createTime
+        FROM
+          `dic_alias` t3
+          JOIN `dic_common` t4
+            ON t3.`std_code` = t4.`code`
+          right JOIN `rel_qua_grade` t5
+            ON t4.`code` = t5.`grade_code`
+          JOIN `dic_qua` t6
+            ON t5.`qua_code` = t6.`qua_code`
+          JOIN `dic_alias` t7
+            ON t6.`qua_code` = t7.`std_code`
+        WHERE 1 = 1
+          AND t6.`qua_code` = #{quaCode}
     </select>
 
 

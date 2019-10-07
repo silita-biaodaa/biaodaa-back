@@ -237,18 +237,54 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
     Map<String,Object> queryQuaLevel(Map<String,Object> param);
 
     /**
-     * 资质解析维护
+     * 资质解析维护列表
      * @param dicQua
      * @return
      */
     List<Map<String,Object>> queryQualAnalysis(DicQua dicQua);
 
     /**
-     * 统计资质解析维护
+     * 统计资质解析维护列表统计
      * @param dicQua
      * @return
      */
     Integer queryQualAnalysisCount(DicQua dicQua);
+
+    /**
+     * 资质解析维护列表
+     * @param dicQua
+     * @return
+     */
+    List<Map<String,Object>> queryQualAnalysisList(DicQua dicQua);
+
+    /**
+     * 获取资质解析维护需要添加的数据
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> queryQualAnalysisLists(Map<String,Object> param);
+    /**
+     * 获取资质解析维护需要添加的数据
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> queryQualAnalysisOne(Map<String,Object> param);
+    /**
+     * 获取资质解析维护需要添加的数据
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> queryQualAnalysisTow(Map<String,Object> param);
+
+
+
+    /**
+     * 统计资质解析维护列表统计
+     * @param dicQua
+     * @return
+     */
+    Integer queryQualAnalysisListCount(DicQua dicQua);
+
 
     /**
      * 根据标准名称查询是否存在该资质

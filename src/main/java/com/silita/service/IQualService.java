@@ -101,6 +101,12 @@ public interface IQualService {
      * @return
      */
     Map<String,Object> getQualAnalysis(DicQua dicQua);
+    /**
+     * 资质解析列表筛选
+     * @param dicQua
+     * @return
+     */
+    Map<String,Object> getQualAnalysisList(DicQua dicQua);
 
     /**
      * 添加资质解析词典

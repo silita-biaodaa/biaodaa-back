@@ -222,17 +222,27 @@ public class QualController extends BaseController {
         return successMap(qualService.getQualAnalysis(dicQua));
     }
     /**
+     * 资质解析列表筛选
+     * @param dicQua
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/qualAnalysisList", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> qualAnalysisList (@RequestBody DicQua dicQua) {
+        return successMap(qualService.getQualAnalysisList(dicQua));
+    }
+    /**
      * 添加资质解析词典
      * @param param
      * @return
      */
-    @ResponseBody
+/*    @ResponseBody
     @RequestMapping(value = "/addAilas", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> addAilas (@RequestBody Map<String,Object> param,ServletRequest request) {
         String userName = JWTUtil.getUsername(request);
         param.put("createBy", userName);
         return qualService.addAilas(param);
-    }
+    }*/
     /**
      * 根据别名id删除资质解析词典
      * @param param

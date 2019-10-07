@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.DicQuaAnalysisMapper" >
+    <insert id="insertAanlysis" parameterType="map">
+        INSERT INTO `dic_qua_analysis` (
+        rel_id,
+        joint_ailas,
+        qua_level,
+        create_by,
+        create_time
+        )
+        VALUES
+        <foreach collection="list" item="list" separator=",">
+            (#{list.id},#{list.ailasId},#{list.jointAilas},#{list.quaLevel},#{list.createBy},#{list.createTime})
+        </foreach>
+    </insert>
+    <delete id="deleteAanlysis" parameterType="map">
+        delete from `dic_qua_analysis` where not create_by = 'system' and ailas_id = #{ailasId}
+    </delete>
+    <delete id="deleteAanlysisRelId" parameterType="map">
+        delete from `dic_qua_analysis` where rel_id = #{relId}
+    </delete>
+
+    <select id="queryQuaAnalysisList" resultType="java.util.Map" parameterType="com.silita.model.DicQuaAnalysis">
+      SELECT
+      id,
+      rel_id AS relId,
+      ailas_id as ailasId,
+      joint_ailas as jointAilas,
+      qua_level as quaLevel,
+      create_by AS createBy
+      FROM
+      `dic_qua_analysis`
+      WHERE 1 = 1
+      <if test="jointAilas != null and jointAilas != ''">
+        AND joint_ailas LIKE CONCAT('',#{jointAilas}, '')
+      </if>
+      <if test="quaLevel != null and quaLevel != ''">
+        AND qua_level LIKE CONCAT('',#{quaLevel}, '')
+      </if>
+      <if test="createBy != null and createBy != '' and createBy == 'system'">
+        AND create_by = 'system'
+      </if>
+      <if test="createBy != null and createBy != '' and createBy != 'system'">
+        AND NOT create_by = 'system'
+      </if>
+      order by create_time desc
+      LIMIT #{start}, #{pageSize}
+  </select>
+  <select id="queryQuaAnalysisListCount" resultType="java.lang.Integer" parameterType="map">
+    SELECT
+      ifnull(count(1),0)
+    FROM
+    `dic_qua_analysis`
+    WHERE 1 = 1
+    <if test="jointAilas != null and jointAilas != ''">
+      AND joint_ailas LIKE CONCAT('',#{jointAilas}, '')
+    </if>
+    <if test="quaLevel != null and quaLevel != ''">
+      AND qua_level LIKE CONCAT('',, '')
+    </if>
+    <if test="createBy != null and createBy != '' and createBy == 'system'">
+      AND create_by = 'system'
+    </if>
+    <if test="createBy != null and createBy != '' and createBy != 'system'">
+      AND NOT create_by = 'system'
+    </if>
+  </select>
+    <select id="queryRelId" resultType="java.lang.String" parameterType="map">
+        select rel_id from `dic_qua_analysis` where id = #{id}
+    </select>
+
+
+</mapper>
