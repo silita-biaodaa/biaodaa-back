@@ -153,6 +153,8 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      */
     String getNameByCode(String code);
 
+    Integer queryOrderNoByCode(String code);
+
     /**
      * 根据name获取code
      * @param param
@@ -285,6 +287,13 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      * @return
      */
     List<String> queryLevelCode(Map<String,Object> param);
+
+    /**
+     * 根据orderNo或取code
+     * @param orderNo
+     * @return
+     */
+    String queryCodeByOrderNo(String orderNo);
 
 
 

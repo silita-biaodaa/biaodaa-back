@@ -108,7 +108,7 @@ public class QualController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/alias/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> aliasAdd(@RequestBody DicAlias alias,ServletRequest request) {
-        alias.setCreateBy(JWTUtil.getUsername(request));
+        alias.setCreateBy("system");
         return qualService.aliasAdd(alias);
     }
 

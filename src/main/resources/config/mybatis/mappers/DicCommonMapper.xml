@@ -322,6 +322,12 @@
     <select id="getCodeByName" resultType="java.lang.String" parameterType="map">
         select  t.code from `dic_common` t where t.name = #{name} and t.type = 'qua_grade'
     </select>
+    <select id="queryOrderNoByCode" resultType="java.lang.Integer" parameterType="map">
+         SELECT order_no as orderNo FROM dic_common WHERE `code` = #{code} and `type` = 'qua_grade'
+    </select>
+    <select id="queryCodeByOrderNo" resultType="java.lang.String" parameterType="map">
+        SELECT `code` FROM dic_common WHERE `order_no` = #{orderNo} and `type` = 'qua_grade'
+    </select>
 
 
 </mapper>

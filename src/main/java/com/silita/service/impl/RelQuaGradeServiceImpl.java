@@ -3,6 +3,7 @@ package com.silita.service.impl;
 import com.silita.common.Constant;
 import com.silita.dao.DicCommonMapper;
 import com.silita.dao.DicQuaAnalysisMapper;
+import com.silita.dao.DicQuaMapper;
 import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.RelQuaGrade;
 import com.silita.service.IRelQuaGradeService;
@@ -26,6 +27,8 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
     DicCommonMapper dicCommonMapper;
     @Autowired
     DicQuaAnalysisMapper dicQuaAnalysisMapper;
+    @Autowired
+    DicQuaMapper dicQuaMapper;
 
     /**
      * 添加资质等级
@@ -107,24 +110,30 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
             quaGradeMapper.deleteRelQuaCode(param);//根据等级qua_code 删除资质管理表达式中的所有有关的数据
 
             List<String> list2 = quaGradeMapper.queryRelId(param);//获取该资质拥有的等级
-            for (String s : list2) {
-                param.put("relId",s);
-                dicQuaAnalysisMapper.deleteAanlysisRelId(param);//删除资质解析组合数据
+            if (null != list2 && list2.size() > 0) {
+                for (String s : list2) {
+                    param.put("relId", s);
+                    dicQuaAnalysisMapper.deleteAanlysisRelId(param);//删除资质解析组合数据
+                }
             }
-
-
             String codes = MapUtils.getString(param, "codes");
             if (StringUtil.isNotEmpty(codes)) {
                 String[] split = codes.split(",");
                 List<String> list = Arrays.asList(split);
                 List<String> list1 = new ArrayList<>();
                 if (split.length >= 2) {
+                    List<Integer> list3 = new ArrayList<>();
+                    for (String s : list) {
+                        Integer integer = dicCommonMapper.queryOrderNoByCode(s);
+                        list3.add(integer);
+                    }
+                    String code = dicCommonMapper.queryCodeByOrderNo(Collections.min(list3).toString());
                     for (String s : list) {
                         String nameByCode = dicCommonMapper.getNameByCode(s);
                         if (StringUtil.isNotEmpty(nameByCode)) {
-                            if (!nameByCode.equals("甲级") && !nameByCode.equals("特级")) {
+                            if (!code.equals(s)) {
                                 param.put("name", nameByCode + "及以上");
-                                String codeByName = dicCommonMapper.getCodeByName(param);
+                                String codeByName = dicCommonMapper.getCodeByName(param);//根据name获取code
                                 if (StringUtil.isNotEmpty(codeByName)) {
                                     list1.add(codeByName);
                                 }
@@ -140,6 +149,12 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
                             param.put("gradeCode", s1);
                             quaGradeMapper.insertQuaCrade(param);
                         }
+
+                        List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);
+                        if (null != list5 && list5.size() > 0) {
+                            param.put("list", list5);
+                            dicQuaAnalysisMapper.insertAanlysis(param);
+                        }
                         resultMap.put("code", Constant.CODE_SUCCESS);
                         resultMap.put("msg", Constant.MSG_SUCCESS);
                         return resultMap;
@@ -148,44 +163,33 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
                     for (String s : list) {
                         String nameByCode = dicCommonMapper.getNameByCode(s);
                         if (StringUtil.isNotEmpty(nameByCode)) {
-                            if (nameByCode.equals("特级") || nameByCode.equals("甲级")) {
-                                param.put("id", DataHandlingUtil.getUUID());
-                                param.put("gradeCode", s);
-                                quaGradeMapper.insertQuaCrade(param);
-                                resultMap.put("code", Constant.CODE_SUCCESS);
-                                resultMap.put("msg", Constant.MSG_SUCCESS);
-                                return resultMap;
-                            } else {
-                                param.put("name", nameByCode + "及以上");
-                                String codeByName = dicCommonMapper.getCodeByName(param);
-                                if (StringUtil.isNotEmpty(codeByName)) {
-                                    list1.add(codeByName);
-                                }
-                                param.put("id", DataHandlingUtil.getUUID());
-                                param.put("gradeCode", s);
-                                quaGradeMapper.insertQuaCrade(param);
-                            }
-                        }
-                    }
-                    if (null != list1 && list1.size() > 0) {
-                        for (String s : list1) {
-                            param.put("gradeCode", s);
                             param.put("id", DataHandlingUtil.getUUID());
+                            param.put("gradeCode", s);
                             quaGradeMapper.insertQuaCrade(param);
+                            List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);
+                            if (null != list5 && list5.size() > 0) {
+                                param.put("list", list5);
+                                dicQuaAnalysisMapper.insertAanlysis(param);
+                            }
+                            resultMap.put("code", Constant.CODE_SUCCESS);
+                            resultMap.put("msg", Constant.MSG_SUCCESS);
+                            return resultMap;
                         }
-                        resultMap.put("code", Constant.CODE_SUCCESS);
-                        resultMap.put("msg", Constant.MSG_SUCCESS);
-                        return resultMap;
                     }
                 }
             }
             param.put("id", DataHandlingUtil.getUUID());
             param.put("gradeCode", "0");
             quaGradeMapper.insertQuaCrade(param);
+            List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);
+            if (null != list5 && list5.size() > 0) {
+                param.put("list", list5);
+                dicQuaAnalysisMapper.insertAanlysis(param);
+            }
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
-        }catch (Exception e){
-            logger.error("修改资质名称维护-资质等级",e);
+        } catch (Exception e) {
+            logger.error("修改资质名称维护-资质等级", e);
         }
         return resultMap;
 

@@ -18,8 +18,7 @@ public class RelQuaGradeController extends BaseController {
     @ResponseBody
     @RequestMapping("/upd")
     public Map<String,Object> upd(@RequestBody Map<String,Object> param){
-        relQuaGradeService.updateRelQuaGrade(param);
-        return this.successMap();
+        return relQuaGradeService.updateRelQuaGrade(param);
     }
 
 }

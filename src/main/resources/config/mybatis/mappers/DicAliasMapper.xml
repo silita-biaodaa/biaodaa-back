@@ -197,7 +197,7 @@
         DELETE FROM biaodaa_admin.`dic_alias` WHERE std_code = #{stdCode}
     </delete>
     <delete id="deleteIdAilas" parameterType="map">
-        DELETE FROM biaodaa_admin.`dic_alias` WHERE id = #{id} and not create_by = 'system'
+        DELETE FROM biaodaa_admin.`dic_alias` WHERE id = #{id}
     </delete>
 
 </mapper>
