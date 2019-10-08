@@ -10,7 +10,6 @@ import com.silita.service.IQualService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
-import com.sun.deploy.net.proxy.pac.PACFunctions;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
@@ -84,7 +83,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                         param.put("level", 3);
                         param.put("quaName", quaName);
                         param.put("benchName", benchName);
-                        param.put("quaId",uuid);
+                        param.put("qualId",uuid);
                         dicQuaMapper.insertDicQual(param);
                     }
                 } else if (null == map || map.size() > 0) {
@@ -106,7 +105,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("level", 3);
                     param.put("quaName", quaName);
                     param.put("benchName", benchName);
-                    param.put("quaId",uuid1);
+                    param.put("qualId",uuid1);
                     dicQuaMapper.insertDicQual(param);
                 }
             } else if (StringUtil.isNotEmpty(quaBig) && StringUtil.isNotEmpty(quaTiny)) {
@@ -133,7 +132,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                                 param.put("stdCode", qualCode);
                                 param.put("quaName", quaName);
                                 param.put("benchName", benchName);
-                                param.put("quaId",uuid);
+                                param.put("qualId",uuid);
                                 dicQuaMapper.insertDicQual(param);
                             }
                         } else {
@@ -156,7 +155,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                             param.put("stdCode", qualCode);
                             param.put("quaCode", qualCode);
                             param.put("stdCodes", qualCode);
-                            param.put("quaId",uuid);
+                            param.put("qualId",uuid);
                             dicQuaMapper.insertDicQual(param);
                         }
                     }
@@ -188,7 +187,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("level", 4);
                     param.put("quaName", quaName);
                     param.put("benchName", benchName);
-                    param.put("quaId",uuid2);
+                    param.put("qualId",uuid2);
                     dicQuaMapper.insertDicQual(param);
 
                 }
@@ -202,7 +201,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                 param.put("level", 2);
                 param.put("quaName", quaName);
                 param.put("benchName", benchName);
-                param.put("quaId",uuid);
+                param.put("qualId",uuid);
                 dicQuaMapper.insertDicQual(param);
             }
 
@@ -478,7 +477,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                 param.put("benchNameAilas", benchNameAilas);
                 dicAliasMapper.updateName(param);
             }
-            param.put("id",quaId);
+            param.put("qualId",quaId);
             String code = dicQuaMapper.queryCode(param);//获取资质code
             if(StringUtil.isNotEmpty(code)) {
                 param.put("stdCode", code);
@@ -725,6 +724,23 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         alias.setCode(code);
         alias.setStdType(Constant.QUAL_LEVEL_PARENT);
         dicAliasMapper.insertDicAlias(alias);
+        String stdCode = alias.getStdCode();
+        param.put("qualCode",stdCode);
+        param.put("qualAilasName",alias.getName());
+        Integer integer = relQuaGradeMapper.queryRelQuaGradeCount(param);
+        if(null != integer && integer > 0){
+            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);
+            if(null != list && list.size() >0){
+                param.put("list",list);
+                dicQuaAnalysisMapper.insertAanlysis(param);
+            }
+        }else{
+            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisTow(param);
+            if(null != list && list.size() >0){
+                param.put("list",list);
+                dicQuaAnalysisMapper.insertAanlysis(param);
+            }
+        }
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
@@ -1178,15 +1194,6 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         }*/
         return resultMap;
     }
-
-    public static void main(String[] args) {
-        String s = "乙级及以上";
-        String[] s2 = s.split("及以上");
-        for (String s1 : s2) {
-            System.out.println(s1);
-        }
-    }
-
 
     /**
      * 根据别名id删除资质解析词典

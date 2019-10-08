@@ -26,6 +26,11 @@ public class DicQuaAnalysis extends Pagination {
     private String ailasId;
 
     /**
+     * 等级别名id
+     */
+    private String levelAilasId;
+
+    /**
      * 资质别名+等级别名 = 组合别名
      */
     private String jointAilas;

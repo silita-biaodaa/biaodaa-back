@@ -25,6 +25,11 @@ public interface DicQuaAnalysisMapper extends MyMapper<DicQuaAnalysis> {
      * 添加资质解析组合数据
      * @param param
      */
+    void insertAanlysisOne(Map<String,Object> param);
+    /**
+     * 添加资质解析组合数据
+     * @param param
+     */
     void insertAanlysis(Map<String,Object> param);
 
     /**
@@ -41,6 +46,31 @@ public interface DicQuaAnalysisMapper extends MyMapper<DicQuaAnalysis> {
      * 根据id获取资质关系表达式id
      */
     String queryRelId(Map<String,Object> param);
+
+    /**
+     * 删除资质解析组合数据
+     * @param param
+     */
+    void deleteAilasId(Map<String,Object> param);
+
+    /**
+     * 删除资质解析组合数据
+     * @param param
+     */
+    void deleteLevelAilasId(Map<String,Object> param);
+
+    /**
+     * 判断组合别名是否存在
+     * @param param
+     * @return
+     */
+    Integer queryJointAilas(Map<String,Object> param);
+    /**
+     * 判断组合别名是否存在
+     * @param param
+     * @return
+     */
+    Integer queryQuaLevel(Map<String,Object> param);
 
 
 }

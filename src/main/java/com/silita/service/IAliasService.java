@@ -55,12 +55,13 @@ public interface IAliasService {
     Map<String, Object> insertAilas(Sheet sheet, String stdCode, String fileName) throws IOException, Exception;
 
     /**
-     * 添加别名
+     * 添加等级别名
      *
      * @param param
      * @return
      */
     Map<String, Object> insertLevelAilas(Map<String, Object> param);
+
 
 
 }

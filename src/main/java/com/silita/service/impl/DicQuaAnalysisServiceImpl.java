@@ -7,14 +7,12 @@ import com.silita.service.IDicQuaAnalysisService;
 import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
-import org.apache.commons.collections.MapUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -23,8 +21,6 @@ public class DicQuaAnalysisServiceImpl extends AbstractService implements IDicQu
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(DicQuaAnalysisServiceImpl.class);
     @Autowired
     private DicQuaAnalysisMapper dicQuaAnalysisMapper;
-    @Autowired
-    private DicQuaMapper dicQuaMapper;
     @Autowired
     private RelQuaGradeMapper relQuaGradeMapper;
     @Autowired
@@ -55,6 +51,40 @@ public class DicQuaAnalysisServiceImpl extends AbstractService implements IDicQu
      * @param param
      * @return
      */
+    @Override
+    public Map<String, Object> insertQuaAnalysis(Map<String, Object> param) {
+        Map<String, Object> resultMap = new HashMap<>();
+        try {
+            Integer integer = dicQuaAnalysisMapper.queryJointAilas(param);
+            if(null != integer && integer > 0){
+                resultMap.put("code", "0");
+                resultMap.put("msg", "别名已存在");
+                return resultMap;
+            }
+            Integer integer1 = dicQuaAnalysisMapper.queryQuaLevel(param);
+            if(null != integer1 && integer1 > 0){
+                resultMap.put("code", "0");
+                resultMap.put("msg", "标准名称重复");
+                return resultMap;
+            }
+
+            dicQuaAnalysisMapper.insertAanlysisOne(param);
+            resultMap.put("code", Constant.CODE_SUCCESS);
+            resultMap.put("msg", Constant.MSG_SUCCESS);
+        } catch (Exception e) {
+            logger.error("添加资质解析词典", e);
+        }
+        return resultMap;
+    }
+/*
+    */
+/**
+     * 添加资质解析数据
+     *
+     * @param param
+     * @return
+     *//*
+
     @Override
     public Map<String, Object> insertQuaAnalysis(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -182,6 +212,7 @@ public class DicQuaAnalysisServiceImpl extends AbstractService implements IDicQu
         }
         return resultMap;
     }
+*/
 
     /**
      * 删除资质解析数据
@@ -192,9 +223,12 @@ public class DicQuaAnalysisServiceImpl extends AbstractService implements IDicQu
     @Override
     public Map<String, Object> delQuaAnalysis(Map<String, Object> param) {
         Map<String,Object> resultMap = new HashMap<>();
-        String ailasId = MapUtils.getString(param, "ailasId");
+       /* String ailasId = MapUtils.getString(param, "ailasId");
         param.put("id",ailasId);
         dicAliasMapper.deleteIdAilas(param);
+        String levelAilasId = MapUtils.getString(param, "levelAilasId");
+        param.put("id",levelAilasId);
+        dicAliasMapper.deleteIdAilas(param);*/
         dicQuaAnalysisMapper.deleteAanlysis(param);
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);

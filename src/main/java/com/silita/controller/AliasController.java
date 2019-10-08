@@ -57,7 +57,7 @@ public class AliasController extends BaseController {
         return aliasService.delAilasById(param);
     }
     /**
-     * 添加别名
+     * 添加等级别名
      *
      * @param param
      * @param request

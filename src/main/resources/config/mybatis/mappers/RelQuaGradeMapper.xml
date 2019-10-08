@@ -92,5 +92,8 @@
     <select id="queryRelId" resultType="java.lang.String" parameterType="map">
         select id from rel_qua_grade where qua_code = #{quaCode}
     </select>
+    <select id="queryRelQuaGradeCount" resultType="java.lang.Integer">
+        select ifnull(count(1),0) from rel_qua_grade where qua_code = #{quaCode} and (not grade_code = '0' or not grade_code ='')
+    </select>
 
 </mapper>

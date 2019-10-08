@@ -2,6 +2,7 @@ package com.silita.service.impl;
 
 import com.silita.common.Constant;
 import com.silita.dao.DicCommonMapper;
+import com.silita.dao.DicQuaAnalysisMapper;
 import com.silita.dao.RelQuaGradeMapper;
 import com.silita.model.RelQuaGrade;
 import com.silita.service.IRelQuaGradeService;
@@ -23,6 +24,8 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
     RelQuaGradeMapper quaGradeMapper;
     @Autowired
     DicCommonMapper dicCommonMapper;
+    @Autowired
+    DicQuaAnalysisMapper dicQuaAnalysisMapper;
 
     /**
      * 添加资质等级
@@ -102,6 +105,14 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
             String quaCode = MapUtils.getString(param, "quaCode");
             param.put("stdCode", quaCode);
             quaGradeMapper.deleteRelQuaCode(param);//根据等级qua_code 删除资质管理表达式中的所有有关的数据
+
+            List<String> list2 = quaGradeMapper.queryRelId(param);//获取该资质拥有的等级
+            for (String s : list2) {
+                param.put("relId",s);
+                dicQuaAnalysisMapper.deleteAanlysisRelId(param);//删除资质解析组合数据
+            }
+
+
             String codes = MapUtils.getString(param, "codes");
             if (StringUtil.isNotEmpty(codes)) {
                 String[] split = codes.split(",");

@@ -615,6 +615,7 @@
       SELECT
           t5.`id`,
           t7.id as ailasId,
+          t3.id as levelAilasId,
           CONCAT(
             IFNULL(t6.`bench_name`, ''),
             IFNULL(t4.`name`, '')
@@ -643,6 +644,7 @@
         SELECT
           t5.`id`,
           t7.id as ailasId,
+          t3.id as levelAilasId,
           CONCAT(
             IFNULL(t6.`bench_name`, ''),
             IFNULL(t4.`name`, '')
@@ -664,12 +666,28 @@
           JOIN `dic_alias` t7
             ON t6.`qua_code` = t7.`std_code`
         WHERE 1 = 1
-          AND t6.`id` = #{id}
+          <if test="qualId != null and qualId != ''">
+              AND t6.`id` = #{qualId}
+          </if>
+          <if test="qualCode != null and qualCode != ''">
+              and t6.qua_code = #{qualCode}
+          </if>
+          <if test="qualAilasName != null and qualAilasName != ''">
+              and t7.`name` = #{qualAilasName}
+          </if>
+          <if test="levelAilasName != null and levelAilasName != ''">
+              AND t3.`name` = #{levelAilasName}
+          </if>
+          <if test="levelCode != null and levelCode != ''">
+              and t4.`code` = #{levelCode}
+          </if>
+
     </select>
     <select id="queryQualAnalysisTow" resultType="java.util.Map" parameterType="map">
         SELECT
           t5.`id`,
           t7.id as ailasId,
+          ifnull(t3.id,'') as levelAilasId,
           CONCAT(
             IFNULL(t6.`bench_name`, ''),
             IFNULL(t4.`name`, '')
@@ -691,7 +709,21 @@
           JOIN `dic_alias` t7
             ON t6.`qua_code` = t7.`std_code`
         WHERE 1 = 1
-          AND t6.`qua_code` = #{quaCode}
+        <if test="qualId != null and qualId != ''">
+            AND t6.`id` = #{qualId}
+        </if>
+        <if test="qualCode != null and qualCode != ''">
+            and t6.qua_code = #{qualCode}
+        </if>
+        <if test="qualAilasName != null and qualAilasName != ''">
+            and t7.`name` = #{qualAilasName}
+        </if>
+        <if test="levelAilasName != null and levelAilasName != ''">
+            AND t3.`name` = #{levelAilasName}
+        </if>
+        <if test="levelCode != null and levelCode != ''">
+            and t4.`code` = #{levelCode}
+        </if>
     </select>
 
 

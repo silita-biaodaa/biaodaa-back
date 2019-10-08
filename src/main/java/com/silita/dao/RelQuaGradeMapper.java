@@ -108,5 +108,11 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
      */
     List<String> queryRelId(Map<String,Object> param);
 
+    /**
+     * 根据资质qua_code统计数量
+     * @return
+     */
+    Integer queryRelQuaGradeCount(Map<String,Object> param);
+
 
 }
