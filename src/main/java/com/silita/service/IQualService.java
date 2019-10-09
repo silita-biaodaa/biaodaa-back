@@ -26,7 +26,11 @@ public interface IQualService {
      */
     void delQual(Map<String,Object> param);
 
-
+    /**
+     * 修改资质
+     * @param param
+     * @return
+     */
 
     Map<String, Object> updQuals(Map<String, Object> param);
 
@@ -95,30 +99,4 @@ public interface IQualService {
      */
     void updateBizType(Map<String,Object> param);
 
-    /**
-     * 资质解析列表筛选
-     * @param dicQua
-     * @return
-     */
-    Map<String,Object> getQualAnalysis(DicQua dicQua);
-    /**
-     * 资质解析列表筛选
-     * @param dicQua
-     * @return
-     */
-    Map<String,Object> getQualAnalysisList(DicQua dicQua);
-
-    /**
-     * 添加资质解析词典
-     * @param param
-     * @return
-     */
-    Map<String,Object> addAilas(Map<String,Object> param);
-
-    /**
-     * 根据别名id删除资质解析词典
-     * @param param
-     * @return
-     */
-    Map<String,Object> delAilas(Map<String,Object> param);
 }

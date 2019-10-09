@@ -14,21 +14,21 @@
         VALUES
             (#{relId},#{ailasId},#{levelAilasId},#{jointAilas},#{quaLevel},#{createBy},NOW())
     </insert>
-        <insert id="insertAanlysis" parameterType="map">
-            INSERT INTO `dic_qua_analysis` (
-            rel_id,
-            ailas_id,
-            level_ailas_id,
-            joint_ailas,
-            qua_level,
-            create_by,
-            create_time
-            )
-            VALUES
-            <foreach collection="list" item="list" separator=",">
-                (#{list.id},#{list.ailasId},#{list.levelAilasId},#{list.jointAilas},#{list.quaLevel},#{list.createBy},#{list.createTime})
-            </foreach>
-        </insert>
+    <insert id="insertAanlysis" parameterType="map">
+        INSERT INTO `dic_qua_analysis` (
+        rel_id,
+        ailas_id,
+        level_ailas_id,
+        joint_ailas,
+        qua_level,
+        create_by,
+        create_time
+        )
+        VALUES
+        <foreach collection="list" item="list" separator=",">
+            (#{list.id},#{list.ailasId},#{list.levelAilasId},#{list.jointAilas},#{list.quaLevel},#{list.createBy},#{list.createTime})
+        </foreach>
+    </insert>
     <delete id="deleteAanlysis" parameterType="map">
         delete from `dic_qua_analysis` where not create_by = 'system' and id = #{id}
     </delete>
@@ -74,11 +74,15 @@
         <if test="quaLevel != null and quaLevel != ''">
             AND qua_level LIKE CONCAT('%',#{quaLevel}, '%')
         </if>
-        <if test="createBy != null and createBy != '' and createBy == 'system'">
-            AND create_by = 'system'
+        <if test="createBy != null and createBy != ''">
+            <if test="createBy == 'system'">
+                AND create_by = 'system'
+            </if>
         </if>
-        <if test="createBy != null and createBy != '' and createBy != 'system'">
-            AND NOT create_by = 'system'
+        <if test="createBy != null and createBy != ''">
+            <if test="createBy != 'system'">
+                AND NOT create_by = 'system'
+            </if>
         </if>
         order by create_time desc
         LIMIT #{start}, #{pageSize}
@@ -101,11 +105,15 @@
         <if test="quaLevel != null and quaLevel != ''">
             AND qua_level LIKE CONCAT('%',#{quaLevel}, '%')
         </if>
-        <if test="createBy != null and createBy != '' and createBy == 'system'">
-            AND create_by = 'system'
+        <if test="createBy != null and createBy != ''">
+            <if test="createBy == 'system'">
+                AND create_by = 'system'
+            </if>
         </if>
-        <if test="createBy != null and createBy != '' and createBy != 'system'">
-            AND NOT create_by = 'system'
+        <if test="createBy != null and createBy != ''">
+            <if test="createBy != 'system'">
+                AND NOT create_by = 'system'
+            </if>
         </if>
     </select>
     <select id="queryRelId" resultType="java.lang.String" parameterType="map">

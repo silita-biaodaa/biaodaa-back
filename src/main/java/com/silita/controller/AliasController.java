@@ -1,6 +1,5 @@
 package com.silita.controller;
 
-import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.service.IAliasService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
-import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/alias")
@@ -66,7 +64,6 @@ public class AliasController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> add(@RequestBody Map<String, Object> param, ServletRequest request) {
-        //String userName = JWTUtil.getUsername(request);
         param.put("createBy", "system");
         return aliasService.insertLevelAilas(param);
     }

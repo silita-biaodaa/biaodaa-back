@@ -31,50 +31,6 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
     DicQuaMapper dicQuaMapper;
 
     /**
-     * 添加资质等级
-     *
-     * @param grade
-     * @return
-     */
-/*    @Override
-    public Map<String, Object> addQuaGrade(RelQuaGrade grade) {
-        Map<String, Object> resultMap = new HashMap<>();
-        Integer count = 0;
-        if (grade.getGradeCode().contains("|")) {
-            String[] gradeCode = grade.getGradeCode().split("\\|");
-            List<String> codeList = new ArrayList<>();
-            for (String str : gradeCode) {
-                grade.setGradeCode(str);
-                count = quaGradeMapper.queryQuaGradeCout(grade);
-                if (count <= 0) {
-                    codeList.add(str);
-                }
-            }
-            if (null != codeList && codeList.size() > 0) {
-                for (String str : codeList) {
-                    grade.setGradeCode(str);
-                    grade.setId(DataHandlingUtil.getUUID());
-                    quaGradeMapper.insertQuaCrade(grade);
-                }
-            }
-            resultMap.put("code", Constant.CODE_SUCCESS);
-            resultMap.put("msg", Constant.MSG_SUCCESS);
-            return resultMap;
-        }
-        count = quaGradeMapper.queryQuaGradeCout(grade);
-        if (count > 0) {
-            resultMap.put("code", Constant.CODE_WARN_400);
-            resultMap.put("msg", Constant.MSG_WARN_400);
-            return resultMap;
-        }
-        grade.setId(DataHandlingUtil.getUUID());
-        quaGradeMapper.insertQuaCrade(grade);
-        resultMap.put("code", Constant.CODE_SUCCESS);
-        resultMap.put("msg", Constant.MSG_SUCCESS);
-        return resultMap;
-    }*/
-
-    /**
      * 删除
      *
      * @param param
@@ -106,9 +62,8 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
         Map<String, Object> resultMap = new HashMap<>();
         try {
             String quaCode = MapUtils.getString(param, "quaCode");
+            param.put("qualCode",quaCode);
             param.put("stdCode", quaCode);
-            quaGradeMapper.deleteRelQuaCode(param);//根据等级qua_code 删除资质管理表达式中的所有有关的数据
-
             List<String> list2 = quaGradeMapper.queryRelId(param);//获取该资质拥有的等级
             if (null != list2 && list2.size() > 0) {
                 for (String s : list2) {
@@ -116,6 +71,8 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
                     dicQuaAnalysisMapper.deleteAanlysisRelId(param);//删除资质解析组合数据
                 }
             }
+            quaGradeMapper.deleteRelQuaCode(param);//根据等级qua_code 删除资质管理表达式中的所有有关的数据
+
             String codes = MapUtils.getString(param, "codes");
             if (StringUtil.isNotEmpty(codes)) {
                 String[] split = codes.split(",");

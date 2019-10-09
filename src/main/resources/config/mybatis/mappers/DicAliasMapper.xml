@@ -185,13 +185,11 @@
         </where>
     </delete>
     <delete id="delAilasByIds" parameterType="map">
-        delete from dic_alias
-        <where>
+        delete from dic_alias where
             id IN
             <foreach collection="ids" open="(" close=")" separator="," item="ids">
                 #{ids}
             </foreach>
-        </where>
     </delete>
     <delete id="deleteAilas" parameterType="map">
         DELETE FROM biaodaa_admin.`dic_alias` WHERE std_code = #{stdCode}

@@ -1,14 +1,10 @@
 package com.silita.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.model.DicAlias;
-import com.silita.model.DicQua;
-import com.silita.model.RelQuaGrade;
 import com.silita.service.IQualService;
 import com.silita.service.IRelQuaGradeService;
-import org.jcodings.util.ObjHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,7 +63,6 @@ public class QualController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> add(@RequestBody Map<String,Object> param, ServletRequest request) {
-        //String userName = JWTUtil.getUsername(request);
         param.put("createBy", "system");
         return qualService.addQual(param);
     }
@@ -126,16 +121,6 @@ public class QualController extends BaseController {
         return qualService.updateQuaAlias(alias);
     }
 
-    /**
-     * 添加资质等级
-     * @param quaGrade
-     * @return
-     */
-/*    @ResponseBody
-    @RequestMapping(value = "/grade/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> gradeAdd(@RequestBody RelQuaGrade quaGrade) {
-        return relQuaGradeService.addQuaGrade(quaGrade);
-    }*/
 
     /**
      * 删除资质等级
@@ -211,48 +196,8 @@ public class QualController extends BaseController {
         qualService.updateBizType(param);
         return successMap();
     }
-    /**
-     * 资质解析列表筛选
-     * @param dicQua
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/qualAnalysis", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> qualAnalysis (@RequestBody DicQua dicQua) {
-        return successMap(qualService.getQualAnalysis(dicQua));
-    }
-    /**
-     * 资质解析列表筛选
-     * @param dicQua
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/qualAnalysisList", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> qualAnalysisList (@RequestBody DicQua dicQua) {
-        return successMap(qualService.getQualAnalysisList(dicQua));
-    }
-    /**
-     * 添加资质解析词典
-     * @param param
-     * @return
-     */
-/*    @ResponseBody
-    @RequestMapping(value = "/addAilas", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> addAilas (@RequestBody Map<String,Object> param,ServletRequest request) {
-        String userName = JWTUtil.getUsername(request);
-        param.put("createBy", userName);
-        return qualService.addAilas(param);
-    }*/
-    /**
-     * 根据别名id删除资质解析词典
-     * @param param
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "/delAilas", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String, Object> delAilas (@RequestBody Map<String,Object> param) {
-        return qualService.delAilas(param);
-    }
+
+
 
 
 

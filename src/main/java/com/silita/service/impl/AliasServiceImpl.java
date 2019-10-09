@@ -1,6 +1,5 @@
 package com.silita.service.impl;
 
-import com.silita.common.BasePageModel;
 import com.silita.common.Constant;
 import com.silita.dao.DicAliasMapper;
 import com.silita.dao.DicQuaAnalysisMapper;
@@ -11,7 +10,6 @@ import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.PinYinUtil;
 import org.apache.commons.collections.MapUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,15 +28,6 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
     @Autowired
     DicQuaAnalysisMapper dicQuaAnalysisMapper;
 
-
-/*    @Override
-    public List<DicAlias> getAliasList(Map<String, Object> param) {
-        DicAlias dicAlias = new DicAlias();
-        dicAlias.setName(MapUtils.getString(param, "name"));
-        dicAlias.setStdCode(MapUtils.getString(param, "stdCode"));
-        dicAlias.setStdType(MapUtils.getString(param, "stdType"));
-        return dicAliasMapper.listDicAliasByStdCode(dicAlias);
-    }*/
 
     /**
      * 根据quaCode获取资质别名

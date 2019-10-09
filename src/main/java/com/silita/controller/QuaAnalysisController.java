@@ -4,7 +4,6 @@ import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.controller.base.BaseController;
 import com.silita.model.DicQuaAnalysis;
 import com.silita.service.IDicQuaAnalysisService;
-import com.silita.service.impl.DicQuaAnalysisServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
