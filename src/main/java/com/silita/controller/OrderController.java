@@ -16,7 +16,7 @@ public class OrderController {
     @Autowired
     private IOrderService orderService;
     /**
-     * 邀请人信息
+     * 订单列表
      * @return
      */
     @ResponseBody
