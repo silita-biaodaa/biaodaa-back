@@ -61,13 +61,6 @@ public class DicQuaAnalysisServiceImpl extends AbstractService implements IDicQu
                 resultMap.put("msg", "别名已存在");
                 return resultMap;
             }
-            Integer integer1 = dicQuaAnalysisMapper.queryQuaLevel(param);
-            if(null != integer1 && integer1 > 0){
-                resultMap.put("code", "0");
-                resultMap.put("msg", "标准名称重复");
-                return resultMap;
-            }
-
             dicQuaAnalysisMapper.insertAanlysisOne(param);
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
