@@ -1,11 +1,11 @@
 package com.silita.controller;
 
+import com.silita.common.MyRedisTemplate;
 import com.silita.controller.base.BaseController;
 import com.silita.model.TbNtMian;
 import com.silita.service.ICommonService;
 import com.silita.service.INoticeZhaoBiaoService;
 import com.silita.service.INtContentService;
-import com.silita.utils.RedisShardedPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +21,8 @@ import java.util.Map;
 @Controller
 public class CommonController extends BaseController {
 
+    @Autowired
+    MyRedisTemplate myRedisTemplate;
     @Autowired
     ICommonService commonService;
     @Autowired
@@ -101,7 +103,7 @@ public class CommonController extends BaseController {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> map = new HashMap<>();
         String key = "filter_company";
-        RedisShardedPoolUtil.del(key);
+        myRedisTemplate.del(key);
         Map<String, Object> notice = new HashMap<>();
         notice.put("bizType", "1");
         Map<String, Object> com = new HashMap<>();
@@ -116,7 +118,7 @@ public class CommonController extends BaseController {
         map.put("pbMode", pbMode);
         map.put("noticeQua", noticeList);
         map.put("comQua", comList);
-        RedisShardedPoolUtil.set(key, map);
+        myRedisTemplate.setObject(key,map);
         /*seccussMap(resultMap, map);
         return resultMap;*/
         return successMap();

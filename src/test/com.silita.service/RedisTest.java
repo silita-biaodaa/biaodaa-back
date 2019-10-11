@@ -5,9 +5,7 @@ package com.silita.service;
 import com.silita.common.MyRedisTemplate;
 import com.silita.model.OrderInfo;
 import com.silita.service.mongodb.MongodbService;
-import com.silita.utils.RedisShardedPoolUtil;
 import com.silita.utils.dateUtils.MyDateUtils;
-import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -32,7 +30,7 @@ public class RedisTest extends ConfigTest {
 
 
     @Test
-    public void test() {
+    public void test(){
 
         Object sys_area_region = myRedisTemplate.getObject("sys_area_region");
 
@@ -53,9 +51,8 @@ public class RedisTest extends ConfigTest {
     @Test
     public void test44() {
         String key = "filter_company";
-        Object obj = RedisShardedPoolUtil.get(key);
-        Map<String, Object> map = new HashMap<>();
-        System.out.println(map = (Map<String, Object>) obj);
+        System.out.println(myRedisTemplate.getObject(key));
+        myRedisTemplate.del(key);
     }
 
     @Test
