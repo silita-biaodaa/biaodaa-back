@@ -43,6 +43,16 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         dicAlias.setStdCode(MapUtils.getString(param, "code"));
         dicAlias.setName(MapUtils.getString(param, "name"));
         dicAlias.setStdType(MapUtils.getString(param, "type"));
+        String rank = MapUtils.getString(param, "rank");
+        if (StringUtil.isNotEmpty(rank)) {
+            if (rank.equals("createTime")) {
+                rank = "create_time";
+                dicAlias.setRank(rank);
+            }else if(rank.equals("code")){
+                dicAlias.setRank(rank);
+            }
+        }
+        dicAlias.setSort(MapUtils.getString(param, "sort"));
         Map<String, Object> params = new HashMap<>();
         params.put("list", dicAliasMapper.queryAliasListCode(dicAlias));
         params.put("total", dicAliasMapper.queryAliasListCodeCount(dicAlias));
@@ -51,6 +61,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
 
     /**
      * 批量删除别名
+     *
      * @param param
      * @return
      */
@@ -62,7 +73,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         List<String> id = Arrays.asList(split);
         param.put("ids", id);
         dicAliasMapper.delAilasByIds(param);
-        param.put("list",id);
+        param.put("list", id);
         dicQuaAnalysisMapper.deleteLevelAilasId(param);
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -71,6 +82,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
 
     /**
      * 根据id删除别名
+     *
      * @param param
      * @return
      */
@@ -81,19 +93,19 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         String[] split = ids.split(",");
         List<String> id = Arrays.asList(split);
         for (String s : id) {
-            param.put("id",s);
+            param.put("id", s);
             Map<String, Object> map = dicAliasMapper.queryNameId(param);
             String name = MapUtils.getString(map, "name");
             String stdCode = MapUtils.getString(map, "stdCode");
-            param.put("quaCode",stdCode);
+            param.put("quaCode", stdCode);
             String benchName = dicQuaMapper.queryBenchNameQuaCode(param);
-            if(StringUtil.isNotEmpty(name) && StringUtil.isNotEmpty(benchName)){
-                if(!name.equals(benchName)){
+            if (StringUtil.isNotEmpty(name) && StringUtil.isNotEmpty(benchName)) {
+                if (!name.equals(benchName)) {
                     dicAliasMapper.deleteIdAilas(param);
                 }
             }
         }
-        param.put("list",id);
+        param.put("list", id);
         dicQuaAnalysisMapper.deleteAilasId(param);
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -260,6 +272,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
 
     /**
      * 添加等级别名
+     *
      * @param param
      * @return
      */
@@ -277,29 +290,28 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         param.put("code", "alias_grade_" + PinYinUtil.cn2py(name) + "_" + System.currentTimeMillis());
         dicAliasMapper.insertLevelAilas(param);
         String stdType = MapUtils.getString(param, "stdType");
-        if(stdType.equals("3")){
-            param.put("levelAilasName",name);
-            param.put("levelCode",param.get("stdCode"));
+        if (stdType.equals("3")) {
+            param.put("levelAilasName", name);
+            param.put("levelCode", param.get("stdCode"));
             List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);
-            if(null != list && list.size() > 0){
-                param.put("list",list);
+            if (null != list && list.size() > 0) {
+                param.put("list", list);
                 dicQuaAnalysisMapper.insertAanlysis(param);
             }
 
-        }else if(stdType.equals("1")){
-            param.put("qualAilasName",name);
-            param.put("qualCode",param.get("stdCode"));
+        } else if (stdType.equals("1")) {
+            param.put("qualAilasName", name);
+            param.put("qualCode", param.get("stdCode"));
             List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);
-            if(null != list && list.size() > 0){
-                param.put("list",list);
+            if (null != list && list.size() > 0) {
+                param.put("list", list);
                 dicQuaAnalysisMapper.insertAanlysis(param);
             }
         }
-        resultMap.put("code",Constant.CODE_SUCCESS);
-        resultMap.put("msg",Constant.MSG_SUCCESS);
+        resultMap.put("code", Constant.CODE_SUCCESS);
+        resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
     }
-
 
 
 }

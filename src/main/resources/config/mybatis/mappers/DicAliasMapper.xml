@@ -142,14 +142,20 @@
         SELECT
         t.id,
         t.name,
-        t.std_code as stdCode
+        t.std_code as stdCode,
+        t.create_time as createTime
         FROM
         biaodaa_admin.`dic_alias` t
         WHERE t.std_code = #{stdCode}
         <if test="name != null and name != ''">
             and t.name like CONCAT('%',#{name},'%')
         </if>
-        order by t.create_time desc
+        <if test="rank == null or rank =='' or sort == null or sort == ''">
+            order by t.create_time desc
+        </if>
+        <if test="rank != null and rank !='' and sort != null and sort != ''">
+            order by ${rank} ${sort}
+        </if>
         LIMIT #{start}, #{pageSize}
     </select>
 

@@ -296,5 +296,12 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
     String queryCodeByOrderNo(String orderNo);
 
 
+    /**
+     * 获取评标办法
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> queryPbModes(Map<String,Object> param);
+
 
 }

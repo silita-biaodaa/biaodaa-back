@@ -1,9 +1,11 @@
 package com.silita.service;
 
 //import com.mongodb.*;
+
 import com.silita.common.MyRedisTemplate;
 import com.silita.model.OrderInfo;
 import com.silita.service.mongodb.MongodbService;
+import com.silita.utils.RedisShardedPoolUtil;
 import com.silita.utils.dateUtils.MyDateUtils;
 import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
@@ -46,6 +48,14 @@ public class RedisTest extends ConfigTest {
         }
 
 
+    }
+
+    @Test
+    public void test44() {
+        String key = "filter_company";
+        Object obj = RedisShardedPoolUtil.get(key);
+        Map<String, Object> map = new HashMap<>();
+        System.out.println(map = (Map<String, Object>) obj);
     }
 
     @Test
@@ -959,7 +969,7 @@ public class RedisTest extends ConfigTest {
         int totalCount = 0;
         Map<String, Integer> map = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
-            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyy-MM-dd");
+            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(), "yyy-MM-dd");
             //System.out.println("orderNo:"+orderInfo.getOrderNo()+"; userId:"+orderInfo.getUserId()+"; createTime:"+timeCycle+"; Time:"+orderInfo.getCreateTime());
             totalCount++;
             if (timeCycle.equals(todayDate)) {
@@ -997,7 +1007,7 @@ public class RedisTest extends ConfigTest {
     public void test41() {
         Query query = new Query();
 
-       // Date parsetow = MyDateUtils.getTransitionDate(tomorrowTime);
+        // Date parsetow = MyDateUtils.getTransitionDate(tomorrowTime);
 
         query.addCriteria(Criteria.where("orderStatus").gte(2));
 
@@ -1012,7 +1022,7 @@ public class RedisTest extends ConfigTest {
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         for (OrderInfo orderInfo : orderInfos) {
 
-            System.out.println("a:"+orderInfo.getOrderStatus()+"; b:"+orderInfo.getStdCode());
+            System.out.println("a:" + orderInfo.getOrderStatus() + "; b:" + orderInfo.getStdCode());
             /*String timeZones = MyDateUtils.getTimeZones(orderInfo.getCreateTime().toString());
             String timeZone = MyDateUtils.getTimeZone(orderInfo.getCreateTime().toString());
             Date dates = MyDateUtils.getStringTrueDate(timeZones);
@@ -1029,7 +1039,7 @@ public class RedisTest extends ConfigTest {
     }
 
     @Test
-    public void test50(){
+    public void test50() {
 
         Map<String, Integer> userType = mongodbService.getUserType();
         System.out.println(userType);
@@ -1042,8 +1052,9 @@ public class RedisTest extends ConfigTest {
 
         }*/
     }
+
     @Test
-    public void test51(){
+    public void test51() {
         Query query = new Query();
         query.addCriteria(
                 new Criteria().andOperator(

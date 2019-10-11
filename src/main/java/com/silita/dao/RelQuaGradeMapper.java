@@ -115,4 +115,11 @@ public interface RelQuaGradeMapper extends MyMapper<RelQuaGrade>{
     Integer queryRelQuaGradeCount(Map<String,Object> param);
 
 
+    /**
+     * 通过子级code找到对应的等级code 用于redis缓存
+     * @return
+     */
+    List<Map<String,Object>> queryRelQuaGradeRedis(String quaCode);
+
+
 }

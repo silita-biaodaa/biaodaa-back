@@ -64,4 +64,25 @@ public interface SysAreaMapper {
      * @return
      */
     List<Map<String, Object>> listCodeAndNameByParentId(String areaParentId);
+
+    /**
+     * 获取省份
+     * @return
+     */
+    List<Map<String,Object>> queryProvinceList();
+
+
+
+    /**
+     * 获取城市
+     * @param pkid
+     * @return
+     */
+    List<Map<String,Object>> queryCityList(String pkid);
+
+    /**
+     * 获取省的code
+     * @return
+     */
+    List<String> queryCode();
 }

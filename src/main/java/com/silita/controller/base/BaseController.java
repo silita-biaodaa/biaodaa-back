@@ -52,6 +52,12 @@ public class BaseController {
         }
     }
 
+    public void seccussMap(Map resultMap,Object data){
+        resultMap.put("code",Constant.CODE_SUCCESS);
+        resultMap.put("msg",Constant.MSG_SUCCESS);
+        resultMap.put("data",data);
+    }
+
 
 
     /**
