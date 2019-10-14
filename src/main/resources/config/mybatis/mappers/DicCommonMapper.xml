@@ -328,6 +328,10 @@
     <select id="queryCodeByOrderNo" resultType="java.lang.String" parameterType="map">
         SELECT `code` FROM dic_common WHERE `order_no` = #{orderNo} and `type` = 'qua_grade'
     </select>
+    <!--获取评标办法-->
+    <select id="queryPbModes" resultType="java.util.Map" parameterType="map">
+      SELECT common.name,common.code FROM `dic_common` common WHERE common.type=#{pbModeType}
+    </select>
 
 
 </mapper>

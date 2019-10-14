@@ -34,4 +34,34 @@ public interface ICommonService {
     Map<String,Object> updateDicCommonId(Map<String,Object> param);
 
 
+
+    /**
+     * 获取省市
+     * @return
+     */
+    List<Map<String,Object>> getAreas();
+
+    /**
+     * 获取评标办法
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> queryPbModes(Map<String,Object> param);
+
+
+
+    /**
+     * 获取公告类型
+     * @return
+     */
+    List<Map<String,Object>> type();
+
+    /**
+     * 获取资质
+     * @param param
+     * @return
+     */
+    List<Map<String,Object>> queryQua(Map<String,Object> param);
+
+
 }

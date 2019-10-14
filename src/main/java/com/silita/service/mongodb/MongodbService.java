@@ -419,6 +419,13 @@ public class MongodbService {
                 } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(10));
                 }
+            }else if(payStatus.equals("已失效")){
+                if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
+                        StringUtil.isNotEmpty(orderEnd))) {
+                    criteria.and("orderStatus").is(2);
+                } else {
+                    criteria.orOperator(Criteria.where("orderStatus").is(2));
+                }
             }
         }
         if (StringUtil.isNotEmpty(tradeTypes)) {
@@ -479,7 +486,7 @@ public class MongodbService {
             String tradeType = orderInfo.getTradeType();
             String stdCode = orderInfo.getStdCode();
             if (null != orderStatus && StringUtil.isNotEmpty(tradeType) && StringUtil.isNotEmpty(stdCode)) {
-                if (orderStatus != null && (orderStatus == 9 || orderStatus == 1 || orderStatus == 10)
+                if (orderStatus != null && (orderStatus == 9 || orderStatus == 1 || orderStatus == 10 || orderStatus == 2)
                         && (tradeType.equals("APP") || tradeType.equals("ios app") || tradeType.equals("NATIVE")
                         || tradeType.equals("MWEB")) && (stdCode.equals("month") || stdCode.equals("year") || stdCode.equals("quarter")
                         || stdCode.equals("hlafYear") || stdCode.equals("report_com") || stdCode.equals("report_vip"))) {
@@ -512,6 +519,8 @@ public class MongodbService {
                         maps.put("payStatus", "未付款");
                     } else if (orderStatus != null && orderStatus == 10) {
                         maps.put("payStatus", "已退款");
+                    }else if(orderStatus != null && orderStatus == 2){
+                        maps.put("payStatus", "已失效");
                     }
                     double iosMoney = fee;
                     String iosMoneytow = iosMoney + "";

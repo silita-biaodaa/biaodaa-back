@@ -101,6 +101,7 @@ public class PropertiesUtils {
 
     private static Properties properties = new Properties();
 
+
     static {
         try {
             for (String str : PROPERTIES) {
@@ -117,6 +118,7 @@ public class PropertiesUtils {
     public static String getProperty(String key) {
         return properties.getProperty(key);
     }
+
 
     public static String getProperty(String key, String defaultValue) {
         return properties.getProperty(key, defaultValue);

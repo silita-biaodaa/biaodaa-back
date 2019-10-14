@@ -96,4 +96,15 @@
         select ifnull(count(1),0) from rel_qua_grade where qua_code = #{quaCode} and (not grade_code = '0' or not grade_code ='')
     </select>
 
+    <!--通过子级code找到对应的等级-->
+    <select id="queryRelQuaGradeRedis" resultType="java.util.Map" parameterType="map">
+        SELECT c.name AS quaName,
+          c.code AS quaCode
+        FROM `dic_common` c
+        JOIN `rel_qua_grade` r
+        ON c.code=r.grade_code
+        WHERE r.qua_code=#{quaCode}
+        order by order_no
+    </select>
+
 </mapper>

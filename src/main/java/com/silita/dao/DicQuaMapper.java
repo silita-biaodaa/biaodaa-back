@@ -299,4 +299,15 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      */
     String queryBenchNameQuaCode(Map<String,Object> param);
 
+    /**
+     * 获取一级资质 用于redis缓存
+     */
+
+    List<Map<String, Object>> queryQuaOneRedis(Map<String, Object> param);
+
+    /**
+     * 获取资质级别 用于redis缓存
+     */
+    List<Map<String, Object>> queryQuaTwoRedis(Map<String, Object> param);
+
 }
