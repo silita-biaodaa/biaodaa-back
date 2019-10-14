@@ -154,7 +154,7 @@
             order by t.create_time desc
         </if>
         <if test="rank != null and rank !='' and sort != null and sort != ''">
-            order by ${rank} ${sort}
+            order by t.${rank} ${sort}
         </if>
         LIMIT #{start}, #{pageSize}
     </select>

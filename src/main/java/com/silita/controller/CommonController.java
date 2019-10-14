@@ -100,7 +100,7 @@ public class CommonController extends BaseController {
     @ResponseBody
     public Map<String, Object> updateRedis() {
         Map<String, Object> param = new HashMap<>();
-        Map<String, Object> resultMap = new HashMap<>();
+        //Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> map = new HashMap<>();
         String key = "filter_company";
         myRedisTemplate.del(key);
