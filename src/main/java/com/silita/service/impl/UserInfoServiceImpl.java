@@ -118,7 +118,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      * @param param
      * @return
      */
-
     @Override
     public Map<String, Object> getActiveUserList(Map<String, Object> param) {
         mongodbUtils.isNull(param);

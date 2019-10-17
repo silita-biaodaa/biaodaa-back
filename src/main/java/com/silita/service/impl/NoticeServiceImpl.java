@@ -16,10 +16,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service("noticeService")
 public class NoticeServiceImpl extends AbstractService implements INoticeService {
@@ -44,6 +42,8 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     TbNtAssociateGpMapper tbNtAssociateGpMapper;
     @Autowired
     TbNtSiteMapper tbNtSiteMapper;
+    @Autowired
+    TbSiteCountMapper tbSiteCountMapper;
 
     @Override
     public Map<String, Object> addNotice(TbNtMian mian) {
@@ -229,10 +229,57 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
 
 
     /**
-     * 公告站点统计
+     * 公告站点统计 添加进siteCount表中
+     *
      * @param param
      * @return
      */
+    @Override
+    public void insertSiteCounts(Map<String, Object> param) {
+        //Map<String, Object> resultMap = new HashMap<>();
+        try {
+            Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse("2017-01-01");//定义起始日期
+            Date d2 = new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-16");//定义结束日期
+            Calendar dd = Calendar.getInstance();//定义日期实例
+            dd.setTime(d1);//设置日期起始时间
+            while (dd.getTime().before(d2)) {//判断是否到结束日期
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM--dd");
+
+                String str = sdf.format(dd.getTime());
+
+                System.out.println(str);//输出日期结果
+                param.put("startDate",str);
+                param.put("endDate",str);
+                param.put("pubDate",str);
+                List<Map<String, Object>> list1 = tbNtSiteMapper.querySiteUtl(param);//获取站点url
+                Map<String, String> regionSource = RegionCommon.regionSource; //获取地区
+                for (Map<String, Object> map : list1) {
+                    String name = MapUtils.getString(map, "name");
+                    for (String s : regionSource.keySet()) {
+                        param.put("source", s);
+                        siteCounts(map, param, name);
+                    }
+                }
+                siteCounts(list1);
+                //resultMap.put("list", list1);
+                param.put("list1",list1);
+                tbSiteCountMapper.insertSiteCount(param);
+                dd.add(Calendar.DAY_OF_YEAR, 1);//进行当前日期日天数加1
+            }
+
+        } catch (Exception e) {
+            logger.error("公告站点统计异常", e);
+        }
+    }
+
+    /**
+     * 公告站点统计
+     *
+     * @param param
+     * @return
+     */
+
     @Override
     public Map<String, Object> getCount(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -264,9 +311,26 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
             resultMap.put("sumTotal", count);
             resultMap.put("list", list1);
         } catch (Exception e) {
-            logger.error("公告站点统计", e);
+            logger.error("公告站点统计异常", e);
         }
         return resultMap;
+    }
+
+    public void siteCounts(Map<String, Object> map, Map<String, Object> param, String name) {
+
+        List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
+        if(null != list && list.size() > 0){
+            for (Map<String, Object> stringObjectMap : list) {
+                String srcSite = MapUtils.getString(stringObjectMap, "srcSite");
+                if (name.equals(srcSite)) {
+                    Integer siteCount = MapUtils.getInteger(stringObjectMap, "siteCount");
+                    map.put("siteCount", siteCount);
+
+
+                }
+            }
+        }
+
     }
 
     public Integer siteCount(Map<String, Object> map, Map<String, Object> param, int count, String name) {
@@ -277,11 +341,21 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
             if (name.equals(srcSite)) {
                 Integer siteCount = MapUtils.getInteger(stringObjectMap, "siteCount");
                 map.put("siteCount", siteCount);
+
                 count = count + siteCount;
 
             }
         }
         return count;
+    }
+
+    public void siteCounts(List<Map<String, Object>> list1) {
+        for (Map<String, Object> map : list1) {
+            Integer siteCount = MapUtils.getInteger(map, "siteCount");
+            if (null == siteCount) {
+                map.put("siteCount", 0);
+            }
+        }
     }
 
     public void siteCount(List<Map<String, Object>> list1) {

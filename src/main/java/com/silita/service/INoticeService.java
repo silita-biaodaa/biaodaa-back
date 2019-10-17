@@ -77,6 +77,8 @@ public interface INoticeService {
      * @return
      */
     Map<String,Object> getNoticeCount();
+
+    void insertSiteCounts(Map<String, Object> param);
     /**
      * 公告站点统计
      * @param param

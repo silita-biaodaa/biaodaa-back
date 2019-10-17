@@ -50,9 +50,28 @@ public class RedisTest extends ConfigTest {
 
     @Test
     public void test44() {
-        String key = "filter_company";
-        System.out.println(myRedisTemplate.getObject(key));
-        myRedisTemplate.del(key);
+        try {
+            Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse("2015-06-01");//定义起始日期
+
+            Date d2 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-05-01");//定义结束日期
+
+            Calendar dd = Calendar.getInstance();//定义日期实例
+
+            dd.setTime(d1);//设置日期起始时间
+
+            while (dd.getTime().before(d2)) {//判断是否到结束日期
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM--dd");
+
+                String str = sdf.format(dd.getTime());
+
+                System.out.println(str);//输出日期结果
+
+                dd.add(Calendar.DAY_OF_YEAR, 1);//进行当前日期月份加1
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Test
