@@ -249,9 +249,9 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
                 String str = sdf.format(dd.getTime());
 
                 System.out.println(str);//输出日期结果
-                param.put("startDate",str);
-                param.put("endDate",str);
-                param.put("pubDate",str);
+                param.put("startDate", str);
+                param.put("endDate", str);
+                param.put("pubDate", str);
                 List<Map<String, Object>> list1 = tbNtSiteMapper.querySiteUtl(param);//获取站点url
                 Map<String, String> regionSource = RegionCommon.regionSource; //获取地区
                 for (Map<String, Object> map : list1) {
@@ -263,7 +263,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
                 }
                 siteCounts(list1);
                 //resultMap.put("list", list1);
-                param.put("list1",list1);
+                param.put("list1", list1);
                 tbSiteCountMapper.insertSiteCount(param);
                 dd.add(Calendar.DAY_OF_YEAR, 1);//进行当前日期日天数加1
             }
@@ -316,17 +316,70 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         return resultMap;
     }
 
+    @Override
+    public void insertSite() {
+        Map<String, Object> param = new HashMap<>();
+        List<String> lists = new ArrayList<>();
+//        lists.add("beij");
+//        lists.add("fuj");
+//        lists.add("gans");
+//        lists.add("guangd");
+//        lists.add("guangx");
+//        lists.add("guiz");
+//        lists.add("hain");
+//        lists.add("hebei");
+//        lists.add("henan");
+//        lists.add("jiangs");
+//        lists.add("jiangx");
+//        lists.add("jil");
+//        lists.add("liaon");
+//        lists.add("neimg");
+//        lists.add("ningx");
+//        lists.add("qingh");
+//        lists.add("sanx");
+//        lists.add("shand");
+//        lists.add("shangh");
+//        lists.add("shanxi");
+//        lists.add("sichuan");
+//        lists.add("tianj");
+//        lists.add("xinjiang");
+//        lists.add("xizang");
+//        lists.add("yunn");
+//        lists.add("zhej");
+//        lists.add("chongq");
+//        lists.add("hubei");
+        lists.add("heilj");
+        lists.add("hunan");
+        for (String listsoutce : lists) {
+            String source = listsoutce;
+            param.put("source", source);
+            param.put("sources", source);
+            List<String> list = tbNtMianMapper.queryNoticeSitePubDate(param);//获取地区时间
+            for (String s : list) {
+                param.put("startDate", s);
+                param.put("pubDate", s);
+                param.put("sourced", RegionCommon.regionSource.get(source));
+                List<Map<String, Object>> list1 = tbNtSiteMapper.querySiteUtl(param);
+                for (Map<String, Object> map : list1) {
+                    String name = MapUtils.getString(map, "name");
+                    siteCounts(map, param, name);
+                }
+                siteCount(list1);
+                param.put("list1", list1);
+                tbSiteCountMapper.insertSiteCount(param);
+            }
+        }
+    }
+
     public void siteCounts(Map<String, Object> map, Map<String, Object> param, String name) {
 
-        List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
-        if(null != list && list.size() > 0){
+        List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCounts(param);
+        if (null != list && list.size() > 0) {
             for (Map<String, Object> stringObjectMap : list) {
                 String srcSite = MapUtils.getString(stringObjectMap, "srcSite");
                 if (name.equals(srcSite)) {
                     Integer siteCount = MapUtils.getInteger(stringObjectMap, "siteCount");
                     map.put("siteCount", siteCount);
-
-
                 }
             }
         }

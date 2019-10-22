@@ -13,10 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 @RequestMapping("/notice")
@@ -130,7 +126,14 @@ public class NoticeController extends BaseController {
         noticeService.insertSiteCounts(param);
         return successMap();
     }
-
-
-
+    /**
+     * 获取站点公告统计
+     * @return
+     */
+    @RequestMapping(value = "/noticeSites", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> noticeSites() {
+        noticeService.insertSite();
+        return successMap();
+    }
 }

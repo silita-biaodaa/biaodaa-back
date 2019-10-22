@@ -118,5 +118,8 @@ public interface TbNtMianMapper {
      * @return
      */
     List<Map<String,Object>> querySiteNoticeCount(Map<String,Object> param);
+    List<Map<String,Object>> querySiteNoticeCounts(Map<String,Object> param);
+
+    List<String> queryNoticeSitePubDate(Map<String,Object> param);
 
 }

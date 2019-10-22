@@ -451,7 +451,7 @@
         select t.level  from `dic_qua` t WHERE t.id = #{parentId} GROUP BY t.level
     </select>
     <select id="querySingleQuaName" resultType="java.lang.Integer" parameterType="map">
-         select ifnull(count(1),0) from `dic_qua` WHERE not bench_name = null and not bench_name='' and qua_name = #{quaName}
+         select ifnull(count(1),0) from `dic_qua` WHERE  not bench_name='' and qua_name = #{quaName}
     </select>
     <select id="querySingleQuaNames" resultType="java.lang.String" parameterType="map">
          select qua_name from `dic_qua` WHERE  id = #{quaId}
