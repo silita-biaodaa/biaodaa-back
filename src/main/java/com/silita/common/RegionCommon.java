@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegionCommon {
-
-
     public static Map<String,String> regionSource = new HashMap<>();
-
     public static Map<String,Object> regionSourcePinYin = new HashMap<>();
 
     static {
@@ -78,8 +75,4 @@ public class RegionCommon {
         regionSource.put("yunn","云南省");
         regionSource.put("zhej","浙江省");
     }
-
-
-
-
 }

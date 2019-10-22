@@ -1,9 +1,6 @@
 package com.silita.service.impl;
 
-import com.silita.dao.SysLogsMapper;
-import com.silita.dao.SysUserInfoMapper;
-import com.silita.dao.TbVipInfoMapper;
-import com.silita.dao.TbVipProfitsMapper;
+import com.silita.dao.*;
 import com.silita.service.ITbVipInfoService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.oldProjectUtils.CommonUtil;
@@ -26,6 +23,8 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
     private SysUserInfoMapper sysUserInfoMapper;
     @Autowired
     SysLogsMapper logsMapper;
+    @Autowired
+    TbMessageMapper tbMessageMapper;
 
     /**
      * 新增 || 编辑  会员信息
@@ -35,6 +34,7 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
     @Override
     public void addVipInfo(Map<String, Object> param) {
         Integer vipDay = MapUtils.getInteger(param, "vipDay");
+        String userId = MapUtils.getString(param, "userId");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Map<String, Object> map = tbVipInfoMapper.queryVipInfoUserCount(param);
@@ -68,6 +68,11 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
             String phone = sysUserInfoMapper.queryPhoneSingle(param);
             param.put("operand", phone);
             logsMapper.insertLogs(param);//添加操作日志
+            param.put("userId",userId);
+            param.put("msgTitle","赠送会员成功通知");
+            param.put("msgType","system");
+            param.put("msgContent","已赠送您"+vipDay+"天会员，请查收！");
+            tbMessageMapper.insertMessage(param);
         } catch (Exception e) {
             e.printStackTrace();
         }
