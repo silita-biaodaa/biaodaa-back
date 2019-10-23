@@ -64,15 +64,14 @@
           t3.desc
         FROM
           biaodaa_admin.`tb_user` t
-        JOIN biaodaa_admin.`tb_user_role` t2
+        left JOIN biaodaa_admin.`tb_user_role` t2
         on t.uid = t2.uid
-        JOIN biaodaa_admin.`tb_role` t3
-        ON t2.`rid` = t3.`rid`
-          WHERE 1=1
+        left JOIN biaodaa_admin.`tb_role` t3
+        ON t2.`rid` = t3.`rid` AND NOT t3.desc = '超级管理员'
+        WHERE not t.sflag = 1
           <if test="phone != null and phone != ''">
               AND phone LIKE CONCAT('%',#{phone},'%')
           </if>
-        and t3.desc &lt;&gt; '超级管理员'
         GROUP BY uid
         order by t.created desc
         LIMIT #{start}, #{pageSize}
