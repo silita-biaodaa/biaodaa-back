@@ -36,6 +36,11 @@ public class QualServiceImpl extends AbstractService implements IQualService {
     @Autowired
     DicQuaAnalysisMapper dicQuaAnalysisMapper;
 
+    @Override
+    public void addQualTest(Map<String, Object> param) {
+        dicQuaMapper.insertDicQual(param);
+    }
+
     /**
      * 添加资质
      *
@@ -969,4 +974,5 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             }
         }
     }
+
 }

@@ -564,7 +564,7 @@
         SELECT
           pub_date
         FROM
-          tb_nt_mian_${sources}
+          tb_nt_mian_${source}
         GROUP BY pub_date
     </select>
 

@@ -11,6 +11,13 @@ import java.util.Map;
  */
 public interface IQualService {
 
+    /**
+     * 添加资质
+     * @param param
+     * @return
+     */
+    void addQualTest(Map<String,Object> param);
+
 
     /**
      * 添加资质

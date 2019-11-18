@@ -276,7 +276,6 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
     public Map<String, Object> getInviterInfo(Map<String, Object> param) {
         Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
         List<Map<String, Object>> list = sysUserInfoMapper.queryInviterInfo(param);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
             if (list != null && list.size() > 0) {
                 for (Map<String, Object> map : list) {

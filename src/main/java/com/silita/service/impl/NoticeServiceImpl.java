@@ -234,7 +234,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
      * @param param
      * @return
      */
-    @Override
+  /*  @Override
     public void insertSiteCounts(Map<String, Object> param) {
         //Map<String, Object> resultMap = new HashMap<>();
         try {
@@ -273,12 +273,12 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         }
     }
 
-    /**
+    *//**
      * 公告站点统计
      *
      * @param param
      * @return
-     */
+     *//*
 
     @Override
     public Map<String, Object> getCount(Map<String, Object> param) {
@@ -320,36 +320,6 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     public void insertSite() {
         Map<String, Object> param = new HashMap<>();
         List<String> lists = new ArrayList<>();
-//        lists.add("beij");
-//        lists.add("fuj");
-//        lists.add("gans");
-//        lists.add("guangd");
-//        lists.add("guangx");
-//        lists.add("guiz");
-//        lists.add("hain");
-//        lists.add("hebei");
-//        lists.add("henan");
-//        lists.add("jiangs");
-//        lists.add("jiangx");
-//        lists.add("jil");
-//        lists.add("liaon");
-//        lists.add("neimg");
-//        lists.add("ningx");
-//        lists.add("qingh");
-//        lists.add("sanx");
-//        lists.add("shand");
-//        lists.add("shangh");
-//        lists.add("shanxi");
-//        lists.add("sichuan");
-//        lists.add("tianj");
-//        lists.add("xinjiang");
-//        lists.add("xizang");
-//        lists.add("yunn");
-//        lists.add("zhej");
-//        lists.add("chongq");
-//        lists.add("hubei");
-        lists.add("heilj");
-        lists.add("hunan");
         for (String listsoutce : lists) {
             String source = listsoutce;
             param.put("source", source);
@@ -369,8 +339,8 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
                 tbSiteCountMapper.insertSiteCount(param);
             }
         }
-    }
-
+    }*/
+/*
     public void siteCounts(Map<String, Object> map, Map<String, Object> param, String name) {
 
         List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCounts(param);
@@ -384,9 +354,9 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
             }
         }
 
-    }
+    }*/
 
-    public Integer siteCount(Map<String, Object> map, Map<String, Object> param, int count, String name) {
+/*    public Integer siteCount(Map<String, Object> map, Map<String, Object> param, int count, String name) {
 
         List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
         for (Map<String, Object> stringObjectMap : list) {
@@ -400,7 +370,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
             }
         }
         return count;
-    }
+    }*/
 
     public void siteCounts(List<Map<String, Object>> list1) {
         for (Map<String, Object> map : list1) {
@@ -411,12 +381,12 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         }
     }
 
-    public void siteCount(List<Map<String, Object>> list1) {
+   /* public void siteCount(List<Map<String, Object>> list1) {
         for (Map<String, Object> map : list1) {
             Integer siteCount = MapUtils.getInteger(map, "siteCount");
             if (null == siteCount) {
                 map.put("siteCount", 0);
             }
         }
-    }
+    }*/
 }
