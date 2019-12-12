@@ -9,13 +9,9 @@ import com.silita.service.abs.AbstractService;
 import com.silita.utils.DataHandlingUtil;
 import com.silita.utils.stringUtils.WordProcessingUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
@@ -26,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -244,7 +241,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                         // 去除 pkid 和 ntId
                         detail.remove("pkid");
                         detail.remove("ntId");
-                        //一列数据
+               /*         //一列数据
                         for (Map.Entry<String, Object> entry : detail.entrySet()) {
                             //替换变更后的值
                             if (changeField.size() > 0) {
@@ -266,7 +263,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                                     cell.setCellValue(String.valueOf(entry.getValue()));
                                 }
                             }
-                        }
+                        }*/
                         String cityCode = (String) regionMap.get(detail.get("cityCode"));
                         if (StringUtil.isNotEmpty(cityCode)) {
                             row.getCell(4).setCellValue(cityCode);

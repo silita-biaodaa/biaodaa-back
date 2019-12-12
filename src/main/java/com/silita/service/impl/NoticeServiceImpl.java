@@ -276,7 +276,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     *//**
      * 公告站点统计
      *
-     * @param param
+     * @param
      * @return
      *//*
 

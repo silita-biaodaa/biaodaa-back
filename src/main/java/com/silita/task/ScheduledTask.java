@@ -27,12 +27,12 @@ public class ScheduledTask {
      * 添加所有公告站点统计数据
      * 只执行一次
      */
-    @Scheduled(cron = "0 14 14 29 10 2019 ?")
+  /*  @Scheduled(cron = "0 14 14 29 10 2019 ?")
     //@Scheduled(cron = "0 0/1 * * * ?")
     public void addSiteAll() {
         ExecutorProcessPool pool = ExecutorProcessPool.getInstance();
         pool.execute(new SendSubscriptionTask(tbNtSiteMapper, tbNtMianMapper, tbSiteCountMapper));
-    }
+    }*/
     /**
      * 添加当天公告站点统计数据
      */

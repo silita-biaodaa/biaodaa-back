@@ -1,8 +1,10 @@
 package com.silita.service.mongodb;
 
 
+import com.silita.dao.TbReportInfoMapper;
 import com.silita.model.OrderInfo;
 import com.silita.utils.dateUtils.MyDateUtils;
+import com.silita.utils.stringUtils.StringUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -20,6 +22,8 @@ import java.util.*;
 public class MongodbService {
     @Autowired
     MongoTemplate mongoTemplate;
+    @Autowired
+    TbReportInfoMapper tbReportInfoMapper;
 
     /**
      * 获取用户状态 ：统计次数为 1:付费、统计次数 2及以上：续费 没有 则是 注册
@@ -112,7 +116,7 @@ public class MongodbService {
         int todayCount = 0;
         Map<String, Integer> map = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
-            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd");
+            String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(), "yyyy-MM-dd");
             if (timeCycle.equals(todayDate)) {
                 todayCount++;
             } else if (timeCycle.equals(yesterdayDate)) {
@@ -198,7 +202,7 @@ public class MongodbService {
             String tradeType = orderInfo.getTradeType();
             Integer orderStatus = orderInfo.getOrderStatus();
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
-                String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd");
+                String timeCycle = MyDateUtils.getTimeZone(orderInfo.getCreateTime(), "yyyy-MM-dd");
                 Integer fee = orderInfo.getFee();
                 if (timeCycle.equals(yesterdayDate)) {
                     //昨日订单
@@ -331,13 +335,13 @@ public class MongodbService {
             String tradeType = orderInfo.getTradeType();
             Integer orderStatus = orderInfo.getOrderStatus();
             if (StringUtil.isNotEmpty(stdCode) && StringUtil.isNotEmpty(tradeType) && orderStatus != null) {
-                String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd HH:mm:ss");
+                String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss");
                 Integer vipDays = orderInfo.getVipDays();
                 maps.put("orderNo", orderInfo.getOrderNo());
                 maps.put("userId", orderInfo.getUserId());
                 maps.put("created", dates);
                 maps.put("vipDay", "充值" + orderInfo.getVipDays() + "天会员");
-                maps.put("vipDays",orderInfo.getVipDays());
+                maps.put("vipDays", orderInfo.getVipDays());
                 if (vipDays != null && vipDays == 30) {
                     maps.put("behavior", "充值一个月");
                 } else if (vipDays != null && vipDays == 90) {
@@ -358,7 +362,7 @@ public class MongodbService {
      *
      * @return
      */
-    public List<Map<String, Object>> getOrderList(Map<String,Object> param) {
+    public List<Map<String, Object>> getOrderList(Map<String, Object> param) {
         Query query = new Query();
         //订单列表
         String orderType = MapUtils.getString(param, "orderType");
@@ -419,7 +423,7 @@ public class MongodbService {
                 } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(10));
                 }
-            }else if(payStatus.equals("已失效")){
+            } else if (payStatus.equals("已失效")) {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
                         StringUtil.isNotEmpty(orderEnd))) {
                     criteria.and("orderStatus").is(2);
@@ -489,14 +493,15 @@ public class MongodbService {
                 if (orderStatus != null && (orderStatus == 9 || orderStatus == 1 || orderStatus == 10 || orderStatus == 2)
                         && (tradeType.equals("APP") || tradeType.equals("ios app") || tradeType.equals("NATIVE")
                         || tradeType.equals("MWEB")) && (stdCode.equals("month") || stdCode.equals("year") || stdCode.equals("quarter")
-                        || stdCode.equals("hlafYear") || stdCode.equals("report_com") || stdCode.equals("report_vip"))) {
+                        || stdCode.equals("hlafYear") || stdCode.equals("report_com") || stdCode.equals("report_vip")
+                        || stdCode.equals("special_query_vip") || stdCode.equals("special_query_com"))) {
                     Map<String, Object> maps = new HashMap<>();
                     Integer vipDays = orderInfo.getVipDays();
                     Integer fee = orderInfo.getFee();
                     maps.put("userId", orderInfo.getUserId());
                     maps.put("orderNo", orderInfo.getOrderNo());
                     maps.put("orderStatus", orderStatus);
-                    String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime(),"yyyy-MM-dd HH:mm:ss");
+                    String dates = MyDateUtils.getTimeZone(orderInfo.getCreateTime(), "yyyy-MM-dd HH:mm:ss");
                     maps.put("createTime", dates);
                     maps.put("stdCode", stdCode);
                     maps.put("count", 1);
@@ -512,6 +517,11 @@ public class MongodbService {
                         maps.put("orderType", "普通用户");
                     } else if (stdCode.equals("report_vip")) {
                         maps.put("orderType", "会员用户");
+                    } else if (stdCode.equals("special_query_vip") || stdCode.equals("special_query_com")) {
+                        String repTitle = tbReportInfoMapper.queryRepTitle(orderInfo.getOrderNo());
+                        if(StringUtil.isNotEmpty(repTitle)){
+                            maps.put("orderType",repTitle);
+                        }
                     }
                     if (orderStatus != null && orderStatus == 9) {
                         maps.put("payStatus", "已付款");
@@ -519,7 +529,7 @@ public class MongodbService {
                         maps.put("payStatus", "未付款");
                     } else if (orderStatus != null && orderStatus == 10) {
                         maps.put("payStatus", "已退款");
-                    }else if(orderStatus != null && orderStatus == 2){
+                    } else if (orderStatus != null && orderStatus == 2) {
                         maps.put("payStatus", "已失效");
                     }
                     double iosMoney = fee;
@@ -551,7 +561,7 @@ public class MongodbService {
     /**
      * 判空
      */
-    public void isNull(Map<String,Object> param){
+    public void isNull(Map<String, Object> param) {
         String orderType = MapUtils.getString(param, "orderType");
         //付款状态
         String payStatus = MapUtils.getString(param, "payStatus");
@@ -570,44 +580,44 @@ public class MongodbService {
         String state = MapUtils.getString(param, "state");
         String type = MapUtils.getString(param, "type");
 
-        if(StringUtil.isEmpty(createStartDate)){
-            param.put("createStartDate","");
+        if (StringUtil.isEmpty(createStartDate)) {
+            param.put("createStartDate", "");
         }
-        if(StringUtil.isEmpty(createdEndData)){
-            param.put("createdEndData","");
+        if (StringUtil.isEmpty(createdEndData)) {
+            param.put("createdEndData", "");
         }
-        if(StringUtil.isEmpty(startDate)){
-            param.put("startDate","");
+        if (StringUtil.isEmpty(startDate)) {
+            param.put("startDate", "");
         }
-        if(StringUtil.isEmpty(endDate)){
-            param.put("endDate","");
+        if (StringUtil.isEmpty(endDate)) {
+            param.put("endDate", "");
         }
-        if(StringUtil.isEmpty(phoneNo)){
-            param.put("phoneNo","");
+        if (StringUtil.isEmpty(phoneNo)) {
+            param.put("phoneNo", "");
         }
-        if(StringUtil.isEmpty(orderType)){
-            param.put("orderType","");
+        if (StringUtil.isEmpty(orderType)) {
+            param.put("orderType", "");
         }
-        if(StringUtil.isEmpty(payStatus)){
-            param.put("payStatus","");
+        if (StringUtil.isEmpty(payStatus)) {
+            param.put("payStatus", "");
         }
-        if(StringUtil.isEmpty(tradeTypes)){
-            param.put("tradeTypes","");
+        if (StringUtil.isEmpty(tradeTypes)) {
+            param.put("tradeTypes", "");
         }
-        if(StringUtil.isEmpty(orderStart)){
-            param.put("orderStart","");
+        if (StringUtil.isEmpty(orderStart)) {
+            param.put("orderStart", "");
         }
-        if(StringUtil.isEmpty(orderEnd)){
-            param.put("orderEnd","");
+        if (StringUtil.isEmpty(orderEnd)) {
+            param.put("orderEnd", "");
         }
-        if(StringUtil.isEmpty(type)){
-            param.put("type","");
+        if (StringUtil.isEmpty(type)) {
+            param.put("type", "");
         }
-        if(StringUtil.isEmpty(state)){
-            param.put("state","");
+        if (StringUtil.isEmpty(state)) {
+            param.put("state", "");
         }
-        if(StringUtil.isEmpty(phone)){
-            param.put("phone","");
+        if (StringUtil.isEmpty(phone)) {
+            param.put("phone", "");
         }
 
     }

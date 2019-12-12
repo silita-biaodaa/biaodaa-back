@@ -50,7 +50,8 @@ public class OrderServiceImpl extends AbstractService implements IOrderService {
             for (Map<String, Object> map : orderList) {
                 String stdCode = MapUtils.getString(map, "stdCode");
                 Integer orderStatus = MapUtils.getInteger(map, "orderStatus");
-                if (orderStatus != null && orderStatus == 9 && !stdCode.equals("report_vip") && !stdCode.equals("report_com")) {
+                if (orderStatus != null && orderStatus == 9 && !stdCode.equals("report_vip")  && !stdCode.equals("report_com")
+                        && !stdCode.equals("special_query_vip") && !stdCode.equals("special_query_com")) {
                     if (newList != null && newList.size() > 0) {
                         String userId = MapUtils.getString(totalMaps, MapUtils.getString(map, "userId"));
                         if (StringUtil.isNotEmpty(userId)) {

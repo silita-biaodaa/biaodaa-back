@@ -12,16 +12,19 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tk.mybatis.mapper.util.StringUtil;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,9 +79,9 @@ public class NoticeZhaobiaoController extends BaseController {
         return super.successMap(noticeZhaoBiaoService.listNtMain(tbNtMian));
     }
 
-    @RequestMapping(value = "/exportTendersExcel",method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/exportTendersExcel", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public void listTendersDetail(@RequestBody Map<String,Object> param, HttpServletResponse response) {
+    public void listTendersDetail(@RequestBody Map<String, Object> param, HttpServletResponse response) {
         String storeAddress = MapUtils.getString(param, "storeAddress");
         try {
             //long curr_time = System.currentTimeMillis();
@@ -94,6 +97,7 @@ public class NoticeZhaobiaoController extends BaseController {
             e.printStackTrace();
         }
     }
+
 
     @RequestMapping(value = "/updateNtMainStatus", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody

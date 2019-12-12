@@ -47,9 +47,6 @@
             NOW(), #{createBy}
             )
     </insert>
-    <insert id="addQualAilas" parameterType="map">
-
-    </insert>
 
     <update id="updateDicAliasById" parameterType="com.silita.model.DicAlias">
         UPDATE dic_alias SET
