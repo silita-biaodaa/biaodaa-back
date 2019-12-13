@@ -84,7 +84,7 @@ public interface INoticeService {
      * @param param
      * @return
      */
-   // Map<String,Object> getCount(Map<String,Object> param);
+    Map<String,Object> getCount(Map<String,Object> param);
 
     /**
      * 添加公告站点统计数据

@@ -184,14 +184,6 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
     }
 
 
-    public static void main(String[] args) {
-        Map<String, String> regionSource = RegionCommon.regionSource;
-        for (String s : regionSource.keySet()) {
-            System.out.println(s);
-        }
-    }
-
-
     /**
      * 获取公告统计
      *
@@ -278,7 +270,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
      *
      * @param
      * @return
-     *//*
+     */
 
     @Override
     public Map<String, Object> getCount(Map<String, Object> param) {
@@ -316,7 +308,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         return resultMap;
     }
 
-    @Override
+   /* @Override
     public void insertSite() {
         Map<String, Object> param = new HashMap<>();
         List<String> lists = new ArrayList<>();
@@ -356,7 +348,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
 
     }*/
 
-/*    public Integer siteCount(Map<String, Object> map, Map<String, Object> param, int count, String name) {
+    public Integer siteCount(Map<String, Object> map, Map<String, Object> param, int count, String name) {
 
         List<Map<String, Object>> list = tbNtMianMapper.querySiteNoticeCount(param);
         for (Map<String, Object> stringObjectMap : list) {
@@ -370,7 +362,7 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
             }
         }
         return count;
-    }*/
+    }
 
     public void siteCounts(List<Map<String, Object>> list1) {
         for (Map<String, Object> map : list1) {
@@ -381,12 +373,12 @@ public class NoticeServiceImpl extends AbstractService implements INoticeService
         }
     }
 
-   /* public void siteCount(List<Map<String, Object>> list1) {
+    public void siteCount(List<Map<String, Object>> list1) {
         for (Map<String, Object> map : list1) {
             Integer siteCount = MapUtils.getInteger(map, "siteCount");
             if (null == siteCount) {
                 map.put("siteCount", 0);
             }
         }
-    }*/
+    }
 }
