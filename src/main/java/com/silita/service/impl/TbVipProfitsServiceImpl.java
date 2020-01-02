@@ -58,8 +58,10 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
                 topUpListMap.addAll(listInviterCode);
             }
         }
-        String vId = tbVipInfoMapper.queryVipInfoSingle(param);
+        String vId = tbVipInfoMapper.queryVipInfoSingle(param);//获取单个用户会员信息
         param.put("vId", vId);
+        //会员明细：
+        //1、赠送;2、注册;3、活动
         List<Map<String, Object>> list = tbVipProfitsMapper.queryVipProfitsSingle(param);
         if (list != null && list.size() > 0) {
             for (Map<String, Object> map : list) {
@@ -72,18 +74,18 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
                 } else if (settingsCode.equals("a-operate")) {
                     map.put("behavior", "标大大赠送");
                     map.put("vipDay", "标大大赠送" + MapUtils.getInteger(map, "vipDay") + "天会员");
-                }else if(settingsCode.equals("a-binding")){
-                    map.put("behavior","关注公众号并绑定赠送");
-                    map.put("vipDay","关注公众号并绑定赠送" + MapUtils.getInteger(map,"vipDay") + "天会员");
-                }else if(settingsCode.equals("a-isinvite")){
-                    map.put("behavior","被邀请");
-                    map.put("vipDay","被邀请赠送" + MapUtils.getInteger(map,"vipDay") + "天会员");
+                } else if (settingsCode.equals("a-binding")) {
+                    map.put("behavior", "关注公众号并绑定赠送");
+                    map.put("vipDay", "关注公众号并绑定赠送" + MapUtils.getInteger(map, "vipDay") + "天会员");
+                } else if (settingsCode.equals("a-isinvite")) {
+                    map.put("behavior", "被邀请");
+                    map.put("vipDay", "被邀请赠送" + MapUtils.getInteger(map, "vipDay") + "天会员");
                 }
             }
             topUpListMap.addAll(list);
         }
 
-        if (topUpListMap != null && topUpListMap.size() > 1) {
+        if (topUpListMap != null && topUpListMap.size() > 1) {//内存排序
             Collections.sort(topUpListMap, new Comparator<Map<String, Object>>() {
                 public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     String name1 = (String) o1.get("created");//name1是从你list里面拿出来的一个

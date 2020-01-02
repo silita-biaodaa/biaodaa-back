@@ -35,8 +35,8 @@ public class LogsServiceImpl extends AbstractService implements ILogsService {
         }
         Map<String,Object> resultMap = new HashMap<>();
         try{
-            resultMap.put("total", logsMapper.queryLogsListCount(logs));
-            resultMap.put("list", logsMapper.queryLogsList(logs));
+            resultMap.put("total", logsMapper.queryLogsListCount(logs));//查询及筛选操作列表统计
+            resultMap.put("list", logsMapper.queryLogsList(logs));//查询及筛选操作列表
         }catch (Exception e){
             logger.error("操作列表：",e);
         }

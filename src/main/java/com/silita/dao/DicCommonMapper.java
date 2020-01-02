@@ -153,6 +153,11 @@ public interface DicCommonMapper extends MyMapper<DicCommon> {
      */
     String getNameByCode(String code);
 
+    /**
+     * 根据code获取排序编号
+     * @param code
+     * @return
+     */
     Integer queryOrderNoByCode(String code);
 
     /**

@@ -26,7 +26,6 @@ public class VipProfitsController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> profits(@RequestBody Map<String, Object> param) {
-
         return successMap(iTbVipProfitsService.getVipProfitsSingle(param));
     }
 }

@@ -41,7 +41,7 @@ public class MongodbService {
                                 Criteria.where("stdCode").is("hlafYear"),
                                 Criteria.where("stdCode").is("year")
                         )));
-        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);//查询状态未9的且code必须为month或quarter或hlafYear
         Map<String, Integer> maps = new HashMap<>();
         for (OrderInfo orderInfo : orderInfos) {
             if (null != maps.get(orderInfo.getUserId())) {
@@ -176,7 +176,7 @@ public class MongodbService {
                                 Criteria.where("stdCode").is("hlafYear"),
                                 Criteria.where("stdCode").is("year")
                         )));
-        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
+        List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);//查询状态必须为9且code为年或半年或季或月
         Map<String, Object> maps = new HashMap<>();
         //昨日订单
         int yesterdayOrderCount = 0;
@@ -299,13 +299,13 @@ public class MongodbService {
         shiOne = shiOne + trueMoneyIosOne;
         zongOne = zongOne + zongIosOne;
 
-        maps.put("yesterdayOrder", yesterdayOrderCount);
-        maps.put("todayOrder", todayOrderCount);
-        maps.put("yesterdayPaid", yesterdayOne);
-        maps.put("todayPaid", todayOne);
-        maps.put("todayReceivable", yinOne);
-        maps.put("todayTrueMoney", shiOne);
-        maps.put("totalMoney", zongOne);
+        maps.put("yesterdayOrder", yesterdayOrderCount);//昨日订单
+        maps.put("todayOrder", todayOrderCount);//今日订单
+        maps.put("yesterdayPaid", yesterdayOne);//昨日已付
+        maps.put("todayPaid", todayOne);//今日已付
+        maps.put("todayReceivable", yinOne);//今日应收
+        maps.put("todayTrueMoney", shiOne);//今日实收
+        maps.put("totalMoney", zongOne);//总金额
 
         return maps;
     }
@@ -398,19 +398,28 @@ public class MongodbService {
                         Criteria.where("stdCode").is("report_com"),
                         Criteria.where("stdCode").is("report_vip")
                 );
+            }else if("重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                    || "公路专查".equals(orderType) || "水利专查".equals(orderType)){
+                criteria.orOperator(
+                        Criteria.where("stdCode").is("special_query_com"),
+                        Criteria.where("stdCode").is("special_query_vip")
+                );
+
             }
         }
         if (StringUtil.isNotEmpty(payStatus)) {
             if (payStatus.equals("已付款")) {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))) {
+                        StringUtil.isNotEmpty(orderEnd)) || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                        || "公路专查".equals(orderType) || "水利专查".equals(orderType)) {
                     criteria.and("orderStatus").is(9);
                 } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(9));
                 }
             } else if (payStatus.equals("未付款")) {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))) {
+                        StringUtil.isNotEmpty(orderEnd)) || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                        || "公路专查".equals(orderType) || "水利专查".equals(orderType)) {
                     criteria.and("orderStatus").is(1);
                 } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(1));
@@ -418,14 +427,16 @@ public class MongodbService {
 
             } else if (payStatus.equals("已退款")) {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))) {
+                        StringUtil.isNotEmpty(orderEnd)) || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                        || "公路专查".equals(orderType) || "水利专查".equals(orderType)) {
                     criteria.and("orderStatus").is(10);
                 } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(10));
                 }
             } else if (payStatus.equals("已失效")) {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))) {
+                        StringUtil.isNotEmpty(orderEnd)) || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                        || "公路专查".equals(orderType) || "水利专查".equals(orderType)) {
                     criteria.and("orderStatus").is(2);
                 } else {
                     criteria.orOperator(Criteria.where("orderStatus").is(2));
@@ -435,7 +446,8 @@ public class MongodbService {
         if (StringUtil.isNotEmpty(tradeTypes)) {
             if (tradeTypes.equals("安卓")) {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))) {
+                        StringUtil.isNotEmpty(orderEnd)) || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                        || "公路专查".equals(orderType) || "水利专查".equals(orderType)) {
                     criteria.and("tradeType").is("APP");
                 } else {
                     criteria.andOperator(Criteria.where("tradeType").is("APP"),
@@ -445,7 +457,8 @@ public class MongodbService {
                 }
             } else if (tradeTypes.equals("苹果")) {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))) {
+                        StringUtil.isNotEmpty(orderEnd)) || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                        || "公路专查".equals(orderType) || "水利专查".equals(orderType)) {
                     criteria.and("tradeType").is("ios app");
                 } else {
                     criteria.andOperator(Criteria.where("tradeType").is("ios app"),
@@ -456,7 +469,8 @@ public class MongodbService {
 
             } else if (tradeTypes.equals("扫码")) {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))) {
+                        StringUtil.isNotEmpty(orderEnd)) || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                        || "公路专查".equals(orderType) || "水利专查".equals(orderType)) {
                     criteria.and("tradeType").is("NATIVE");
                 } else {
                     criteria.andOperator(Criteria.where("tradeType").is("NATIVE"),
@@ -466,7 +480,8 @@ public class MongodbService {
                 }
             } else {
                 if ((orderType.equals("充值会员") || orderType.equals("综合查询")) || (StringUtil.isNotEmpty(orderStart) &&
-                        StringUtil.isNotEmpty(orderEnd))) {
+                        StringUtil.isNotEmpty(orderEnd)) || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                        || "公路专查".equals(orderType) || "水利专查".equals(orderType)) {
                     criteria.and("tradeType").is("MWEB");
                 } else {
                     criteria.andOperator(
@@ -478,8 +493,11 @@ public class MongodbService {
 
             }
         }
-        if ((StringUtil.isNotEmpty(orderType) && (orderType.equals("充值会员") || orderType.equals("综合查询"))) ||
-                StringUtil.isNotEmpty(payStatus) || StringUtil.isNotEmpty(tradeTypes) || StringUtil.isNotEmpty(orderStart) || StringUtil.isNotEmpty(orderEnd)) {
+        if ((StringUtil.isNotEmpty(orderType) && (orderType.equals("充值会员") || orderType.equals("综合查询")))
+                || "重庆人员专查".equals(orderType) || "重庆企业专查".equals(orderType) || "住建专查".equals(orderType)
+                || "公路专查".equals(orderType) || "水利专查".equals(orderType)
+                || StringUtil.isNotEmpty(payStatus) || StringUtil.isNotEmpty(tradeTypes)
+                || StringUtil.isNotEmpty(orderStart) || StringUtil.isNotEmpty(orderEnd)) {
             query.addCriteria(criteria);
         }
         query.with(new Sort(new Sort.Order(Sort.Direction.DESC, "createTime")));

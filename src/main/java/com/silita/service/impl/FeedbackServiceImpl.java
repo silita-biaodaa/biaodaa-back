@@ -49,13 +49,13 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
         TbFeedback feedback = new TbFeedback();
         feedback.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
         feedback.setPageSize(MapUtils.getInteger(param, "pageSize"));
-        int total = tbFeedbackMapper.queryFeedbackCount(feedback);
+        int total = tbFeedbackMapper.queryFeedbackCount(feedback);//获取统计意见反馈个数
         if (total <= 0) {
             return new HashMap<>();
         }
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("total", total);
-        resultMap.put("list", tbFeedbackMapper.queryFeedbackList(feedback));
+        resultMap.put("list", tbFeedbackMapper.queryFeedbackList(feedback));//查询意见反馈列表
         return super.handlePageCount(resultMap, feedback);
     }
 
@@ -68,8 +68,8 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
     @Override
     public Map<String,Object> getlistFeedback(Map<String, Object> param) {
         IsNullCommon.isNull(param);
-        Map<String, Integer> userTypeMap = mongodbService.getUserType();
-        List<Map<String, Object>> list = feedbackMapper.queryFeedbackList(param);
+        Map<String, Integer> userTypeMap = mongodbService.getUserType();//获取用户类型
+        List<Map<String, Object>> list = feedbackMapper.queryFeedbackList(param);//反馈列表
         String userType = MapUtils.getString(param, "userType");
         if (list != null && list.size() > 0) {
             for (Map<String, Object> map : list) {
@@ -123,7 +123,7 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
         String phone = sysUserInfoMapper.queryPhoneSingle(param);
         param.put("operand", phone);
         logsMapper.insertLogs(param);//添加操作日志
-        feedbackMapper.updateRemark(param);
+        feedbackMapper.updateRemark(param);//修改备注
     }
 
     /**
@@ -135,11 +135,11 @@ public class FeedbackServiceImpl extends AbstractService implements IFeedbackSer
         param.put("pid", CommonUtil.getUUID());
         param.put("optType", "意见反馈");
         param.put("optDesc", "编辑反馈状态");
-        param.put("pkid",feedbackMapper.queryPid(param));
-        String phone = sysUserInfoMapper.queryPhoneSingle(param);
+        param.put("pkid",feedbackMapper.queryPid(param));//获取用户id
+        String phone = sysUserInfoMapper.queryPhoneSingle(param);//查询单个手机号码
         param.put("operand", phone);
         logsMapper.insertLogs(param);//添加操作日志
-        feedbackMapper.updateState(param);
+        feedbackMapper.updateState(param);//修改反馈状态
     }
 
 

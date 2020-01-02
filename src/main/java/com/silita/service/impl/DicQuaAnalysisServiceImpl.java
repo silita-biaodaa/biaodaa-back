@@ -55,13 +55,13 @@ public class DicQuaAnalysisServiceImpl extends AbstractService implements IDicQu
     public Map<String, Object> insertQuaAnalysis(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            Integer integer = dicQuaAnalysisMapper.queryJointAilas(param);
+            Integer integer = dicQuaAnalysisMapper.queryJointAilas(param);//判断组合别名是否存在
             if(null != integer && integer > 0){
                 resultMap.put("code", "0");
                 resultMap.put("msg", "别名已存在");
                 return resultMap;
             }
-            dicQuaAnalysisMapper.insertAanlysisOne(param);
+            dicQuaAnalysisMapper.insertAanlysisOne(param);//添加资质解析组合数据
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class DicQuaAnalysisServiceImpl extends AbstractService implements IDicQu
     @Override
     public Map<String, Object> delQuaAnalysis(Map<String, Object> param) {
         Map<String,Object> resultMap = new HashMap<>();
-        dicQuaAnalysisMapper.deleteAanlysis(param);
+        dicQuaAnalysisMapper.deleteAanlysis(param);//删除资质解析组合数据
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;

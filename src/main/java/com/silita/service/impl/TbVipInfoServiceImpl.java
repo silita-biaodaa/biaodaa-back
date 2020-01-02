@@ -51,13 +51,13 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
                     c.add(Calendar.DATE, vipDay);
                     String date = sdf.format(c.getTime());
                     param.put("expiredDate", date);
-                    tbVipInfoMapper.updateVipIfo(param);
+                    tbVipInfoMapper.updateVipIfo(param);//编辑用户会员信息
                 } else {
                     Calendar c = Calendar.getInstance();
                     c.add(Calendar.DATE, vipDay);
                     String date = sdf.format(c.getTime());
                     param.put("expiredDate", date);
-                    tbVipInfoMapper.updateVipIfo(param);
+                    tbVipInfoMapper.updateVipIfo(param);//编辑用户会员信息
                 }
             } else {
                 Calendar c = Calendar.getInstance();
@@ -66,24 +66,24 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
                 param.put("expiredDate", date);
                 param.put("vId", DataHandlingUtil.getUUID());
                 param.put("userId", MapUtils.getString(map, "userId"));
-                tbVipInfoMapper.insertVipInfo(param);
+                tbVipInfoMapper.insertVipInfo(param);//新增会员用户信息
             }
             param.put("vProfitsId", DataHandlingUtil.getUUID());
-            tbVipProfitsMapper.insertVipProfits(param);
+            tbVipProfitsMapper.insertVipProfits(param);//新增用户会员明细
             //编辑用户状态  普通用户 -- 》 会员用户
             sysUserInfoMapper.updateUserState(param);
             param.put("pkid", MapUtils.getString(param, "userId"));
             param.put("pid", CommonUtil.getUUID());
             param.put("optType", "赠送会员");
             param.put("optDesc", "赠送" + vipDay + "天会员");
-            String phone = sysUserInfoMapper.queryPhoneSingle(param);
+            String phone = sysUserInfoMapper.queryPhoneSingle(param);//查询单个用户手机号码
             param.put("operand", phone);
             logsMapper.insertLogs(param);//添加操作日志
             param.put("userId", userId);
             param.put("msgTitle", "赠送会员成功通知");
             param.put("msgType", "system");
             param.put("msgContent", "已赠送您" + vipDay + "天会员，请查收！");
-            tbMessageMapper.insertMessage(param);
+            tbMessageMapper.insertMessage(param);//添加消息
         } catch (Exception e) {
             e.printStackTrace();
         }

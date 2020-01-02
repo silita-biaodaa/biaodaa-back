@@ -159,7 +159,7 @@ public class DataMaintainContrroler {
         try{
             String userName = JWTUtil.getUsername(request);
             dicAlias.setCreateBy(userName);
-            String msg = dataMaintainService.insertPbModeAliasByStdCode(dicAlias);
+            String msg = dataMaintainService.insertPbModeAliasByStdCode(dicAlias);//添加评标办法别名
             result.put("msg", "操作成功");
             if(StringUtils.isEmpty(msg)) {
                 result.put("code",0);
@@ -186,7 +186,7 @@ public class DataMaintainContrroler {
         try{
             String userName = JWTUtil.getUsername(request);
             dicAlias.setUpdateBy(userName);
-            String msg = dataMaintainService.updatePbModeAliasById(dicAlias);
+            String msg = dataMaintainService.updatePbModeAliasById(dicAlias);//根据主键更新评标办法别名
             result.put("msg", "操作成功");
             if(StringUtils.isEmpty(msg)) {
                 result.put("code",0);
@@ -211,7 +211,7 @@ public class DataMaintainContrroler {
         result.put("code", 1);
         result.put("data", null);
         try{
-            List<Map<String,Object>> list = dataMaintainService.listPbModeAliasByStdCode(dicAlias);
+            List<Map<String,Object>> list = dataMaintainService.listPbModeAliasByStdCode(dicAlias);//根据stdCode查询评标办法别名
             result.put("msg", "操作成功");
             result.put("data", list);
         } catch (Exception e) {
@@ -228,7 +228,7 @@ public class DataMaintainContrroler {
         result.put("code", 1);
         try{
             String idsStr = (String) param.get("idsStr");
-            dataMaintainService.deletePbModeAliasByIds(idsStr);
+            dataMaintainService.deletePbModeAliasByIds(idsStr);//批量删除评标办法别名
             result.put("msg", "操作成功");
         } catch (Exception e) {
             result.put("code",0);

@@ -17,6 +17,11 @@ import java.util.Map;
 public class LogsController extends BaseController {
     @Autowired
     private ILogsService logsService;
+    /**
+     * 操作列表
+     * @param logs
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String,Object> list(@RequestBody SysLogs logs){

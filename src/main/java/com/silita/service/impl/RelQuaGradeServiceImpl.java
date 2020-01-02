@@ -81,12 +81,12 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
                 if (split.length >= 2) {
                     List<Integer> list3 = new ArrayList<>();
                     for (String s : list) {
-                        Integer integer = dicCommonMapper.queryOrderNoByCode(s);
-                        list3.add(integer);
+                        Integer orderNo = dicCommonMapper.queryOrderNoByCode(s);//根据code获取排序编号
+                        list3.add(orderNo);
                     }
-                    String code = dicCommonMapper.queryCodeByOrderNo(Collections.min(list3).toString());
+                    String code = dicCommonMapper.queryCodeByOrderNo(Collections.min(list3).toString());//根据orderNo或取code
                     for (String s : list) {
-                        String nameByCode = dicCommonMapper.getNameByCode(s);
+                        String nameByCode = dicCommonMapper.getNameByCode(s);// 根据code获取name
                         if (StringUtil.isNotEmpty(nameByCode)) {
                             if (!code.equals(s)) {
                                 param.put("name", nameByCode + "及以上");
@@ -97,20 +97,20 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
                             }
                             param.put("id", DataHandlingUtil.getUUID());
                             param.put("gradeCode", s);
-                            quaGradeMapper.insertQuaCrade(param);
+                            quaGradeMapper.insertQuaCrade(param);//添加资质等级
                         }
                     }
                     if (null != list1 && list1.size() > 0) {
                         for (String s1 : list1) {
                             param.put("id", DataHandlingUtil.getUUID());
                             param.put("gradeCode", s1);
-                            quaGradeMapper.insertQuaCrade(param);
+                            quaGradeMapper.insertQuaCrade(param);//添加资质等级
                         }
 
-                        List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);
+                        List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);//获取资质解析维护需要添加的数据
                         if (null != list5 && list5.size() > 0) {
                             param.put("list", list5);
-                            dicQuaAnalysisMapper.insertAanlysis(param);
+                            dicQuaAnalysisMapper.insertAanlysis(param);//添加资质解析组合数据
                         }
                         resultMap.put("code", Constant.CODE_SUCCESS);
                         resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -118,15 +118,15 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
                     }
                 } else {
                     for (String s : list) {
-                        String nameByCode = dicCommonMapper.getNameByCode(s);
+                        String nameByCode = dicCommonMapper.getNameByCode(s);//据code获取name
                         if (StringUtil.isNotEmpty(nameByCode)) {
                             param.put("id", DataHandlingUtil.getUUID());
                             param.put("gradeCode", s);
-                            quaGradeMapper.insertQuaCrade(param);
-                            List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);
+                            quaGradeMapper.insertQuaCrade(param);//添加资质等级
+                            List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);//获取资质解析维护需要添加的数据
                             if (null != list5 && list5.size() > 0) {
                                 param.put("list", list5);
-                                dicQuaAnalysisMapper.insertAanlysis(param);
+                                dicQuaAnalysisMapper.insertAanlysis(param);//添加资质解析组合数据
                             }
                             resultMap.put("code", Constant.CODE_SUCCESS);
                             resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -137,11 +137,11 @@ public class RelQuaGradeServiceImpl implements IRelQuaGradeService {
             }
             param.put("id", DataHandlingUtil.getUUID());
             param.put("gradeCode", "0");
-            quaGradeMapper.insertQuaCrade(param);
-            List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);
+            quaGradeMapper.insertQuaCrade(param);//添加资质等级
+            List<Map<String, Object>> list5 = dicQuaMapper.queryQualAnalysisOne(param);//获取资质解析维护需要添加的数据
             if (null != list5 && list5.size() > 0) {
                 param.put("list", list5);
-                dicQuaAnalysisMapper.insertAanlysis(param);
+                dicQuaAnalysisMapper.insertAanlysis(param);//添加资质解析组合数据
             }
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
