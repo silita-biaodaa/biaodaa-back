@@ -15,6 +15,12 @@ import java.util.Map;
 public class RelQuaGradeController extends BaseController {
     @Autowired
     private IRelQuaGradeService relQuaGradeService;
+
+    /**
+     * 修改资质名称维护-资质等级
+     * @param param
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/upd")
     public Map<String,Object> upd(@RequestBody Map<String,Object> param){

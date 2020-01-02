@@ -61,8 +61,8 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
     public Map<String, Object> getDicCommonGradeList(RelQuaGrade relQuaGrade) {
 
         Map<String, Object> params = new HashMap<>();
-        params.put("list", dicCommonMapper.queryDicCommonGradeList(relQuaGrade));
-        params.put("total", dicCommonMapper.queryDicCommonGradeListCount(relQuaGrade));
+        params.put("list", dicCommonMapper.queryDicCommonGradeList(relQuaGrade));//等级维护 等级列表
+        params.put("total", dicCommonMapper.queryDicCommonGradeListCount(relQuaGrade));//等级维护 等级列表统计
 
         return super.handlePageCount(params, relQuaGrade);
     }
@@ -76,16 +76,16 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
         param.put("type", Constant.TYPE_QUA_GRADE);
         if (null != dicCommon.getId()) {
             param.put("id", dicCommon.getId());
-            count = dicCommonMapper.queryDicCommCountByName(param);
+            count = dicCommonMapper.queryDicCommCountByName(param);//查询名称个数
             if (count > 0) {
                 resultMap.put("code", Constant.CODE_WARN_400);
                 resultMap.put("msg", Constant.MSG_WARN_400);
                 return resultMap;
             }
             dicCommon.setUpdateBy(username);
-            dicCommonMapper.updateDicCommonById(dicCommon);
+            dicCommonMapper.updateDicCommonById(dicCommon);//根据id更新公共数据词典表数据
         } else {
-            count = dicCommonMapper.queryDicCommCountByName(param);
+            count = dicCommonMapper.queryDicCommCountByName(param);//查询名称个数
             if (count > 0) {
                 resultMap.put("code", Constant.CODE_WARN_400);
                 resultMap.put("msg", Constant.MSG_WARN_400);
@@ -95,7 +95,7 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
             dicCommon.setCode("grade_" + PinYinUtil.cn2py(dicCommon.getName()) + "_" + +System.currentTimeMillis());
             dicCommon.setType(Constant.TYPE_QUA_GRADE);
             dicCommon.setCreateBy(username);
-            dicCommonMapper.insertDicCommon(dicCommon);
+            dicCommonMapper.insertDicCommon(dicCommon);//添加公共数据词典表数据
         }
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -111,15 +111,15 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
     public Map<String, Object> delGrade(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
         String id = MapUtils.getString(param, "id");
-        List<DicCommon> dicCommons = dicCommonMapper.listDicCommonByIds(id.split(","));
+        List<DicCommon> dicCommons = dicCommonMapper.listDicCommonByIds(id.split(","));//根据id获取公共数据词典表数据
         DicCommon dic = dicCommons.get(0);
-        Integer count = relQuaGradeMapper.quaryGradeCountByCode(dic.getCode());
+        Integer count = relQuaGradeMapper.quaryGradeCountByCode(dic.getCode());//获取等级个数
         if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_407);
             resultMap.put("msg", Constant.MSG_WARN_407);
             return resultMap;
         }
-        dicCommonMapper.deleteDicCommonByIds(id.split(","));
+        dicCommonMapper.deleteDicCommonByIds(id.split(","));//根据id删除公共数据词典表数据
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
@@ -139,33 +139,33 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
             param.put("type", "qua_grade");//等级类型
             String name = MapUtils.getString(param, "name");
             param.put("code", "grade_" + PinYinUtil.cn2py(name) + "_" + System.currentTimeMillis());
-            Integer integer = dicCommonMapper.queryDicCommonName(param);
+            Integer integer = dicCommonMapper.queryDicCommonName(param);//根据名称判断该名称是否存在
             if (null != integer && integer != 0) { // 判断名称是否存在
                 resultMap.put("code", "0");
                 resultMap.put("msg", "等级名称已存在");
                 return resultMap;
             }
-            Integer orderNo = dicCommonMapper.queryMaxOrderNo(param);
+            Integer orderNo = dicCommonMapper.queryMaxOrderNo(param);//获取最大的排序编号order_no
             param.put("orderNo", orderNo + 1);//排序
-            dicCommonMapper.insertGradeLevel(param);
+            dicCommonMapper.insertGradeLevel(param);//添加等级
 
-            Integer maxOrderNo = dicCommonMapper.queryMaxOrderNo(param);//最大等级
+            Integer maxOrderNo = dicCommonMapper.queryMaxOrderNo(param);//获取最大的排序编号order_no
             if (null == maxOrderNo) {
                 maxOrderNo = 0;
             }
-            Integer minOredrNo = dicCommonMapper.queryMinOredrNo(param);//最小等级
+            Integer minOredrNo = dicCommonMapper.queryMinOredrNo(param);//获取最小的排序编号order_no
             if (null == minOredrNo) {
                 minOredrNo = 0;
             }
             if (maxOrderNo >= minOredrNo) {
                 String names = name + "及以上";
                 param.put("name", names);
-                Integer integer1 = dicCommonMapper.queryDicCommonName(param);
+                Integer integer1 = dicCommonMapper.queryDicCommonName(param);//根据名称判断该名称是否存在
                 if (null == integer1 || integer == 0) {
                     param.put("id", DataHandlingUtil.getUUID());
                     param.put("code", "grade_" + PinYinUtil.cn2py(names) + "_" + System.currentTimeMillis());
                     param.put("orderNo", maxOrderNo + 1);
-                    dicCommonMapper.insertGradeLevel(param);
+                    dicCommonMapper.insertGradeLevel(param);//添加等级
                     resultMap.put("code", Constant.CODE_SUCCESS);
                     resultMap.put("msg", Constant.MSG_SUCCESS);
                     return resultMap;
@@ -192,23 +192,23 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
             param.put("type", "qua_grade");//等级类型
             String name = MapUtils.getString(param, "name");
             param.put("code", "grade_" + PinYinUtil.cn2py(name) + "_" + System.currentTimeMillis());
-            Integer integer = dicCommonMapper.queryDicCommonName(param);
+            Integer integer = dicCommonMapper.queryDicCommonName(param);//根据名称判断该名称是否存在
             if (null != integer && integer != 0) { // 判断名称是否存在
                 resultMap.put("code", "0");
                 resultMap.put("msg", "等级名称已存在");
                 return resultMap;
             }
-            String commonName = dicCommonMapper.getCommonNameId(param);
-            dicCommonMapper.updateGradeLevel(param);
+            String commonName = dicCommonMapper.getCommonNameId(param);//根据id获取别名name
+            dicCommonMapper.updateGradeLevel(param);//更新等级
             String names = commonName + "及以上";
             param.put("names", names);
-            String commonIdName = dicCommonMapper.getCommonIdName(param);
-            if (StringUtil.isNotEmpty(commonIdName)) {
+            String commonIdName = dicCommonMapper.getCommonIdName(param);//根据name获取id
+            if (StringUtil.isNotEmpty(commonIdName)) {//判断name是否存在
                 param.put("id", commonIdName);
                 String name2 = name + "及以上";
                 param.put("name", name2);
                 param.put("code", "grade_" + PinYinUtil.cn2py(name2) + "_" + System.currentTimeMillis());
-                dicCommonMapper.updateGradeLevel(param);
+                dicCommonMapper.updateGradeLevel(param);//更新等级
             }
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -243,10 +243,10 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
                 String commonNameOrderNo = dicCommonMapper.getCommonNameOrderNo(param);//获取name
                 String name = commonNameOrderNo + "及以上";
                 param.put("names", name);
-                String commonId2 = dicCommonMapper.getCommonIdName(param);
+                String commonId2 = dicCommonMapper.getCommonIdName(param);//根据name获取id
                 if (StringUtil.isNotEmpty(commonId2)) {
                     param.put("id", commonId2);
-                    String code2 = dicCommonMapper.queryDicCommonCode(param);
+                    String code2 = dicCommonMapper.queryDicCommonCode(param);//根据id获取code
                     param.put("stdCode", code2);
                     relQuaGradeMapper.deleteRelQuaGrade(param);//删除资质管理表达式
                     dicAliasMapper.deleteAilas(param);//删除别名
@@ -257,7 +257,7 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
             }
             if (StringUtil.isNotEmpty(commonId)) {
                 param.put("id", commonId);
-                String code2 = dicCommonMapper.queryDicCommonCode(param);
+                String code2 = dicCommonMapper.queryDicCommonCode(param);//根据id获取code
                 param.put("stdCode", code2);
                 dicAliasMapper.deleteAilas(param);//删除别名
                 relQuaGradeMapper.deleteRelQuaGrade(param);//删除资质管理表达式
@@ -280,7 +280,7 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
         Map<String, Object> param = new HashMap<>();
         param.put("name", alias.getName());
         param.put("stdType", Constant.GRADE_STD_TYPE);
-        Integer count = dicAliasMapper.queryAliasByName(param);
+        Integer count = dicAliasMapper.queryAliasByName(param);//根据名称查询
         if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
             resultMap.put("msg", Constant.MSG_WARN_400);
@@ -290,7 +290,7 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
         String code = "alias_grade" + PinYinUtil.cn2py(alias.getName()) + "_" + System.currentTimeMillis();
         alias.setCode(code);
         alias.setStdType(Constant.GRADE_STD_TYPE);
-        dicAliasMapper.insertDicAlias(alias);
+        dicAliasMapper.insertDicAlias(alias);//添加词典别名
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
@@ -346,16 +346,21 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
      */
     @Override
     public List<Map<String, Object>> gitGradePullDownListMap(Map<String, Object> param) {
-        String parentId = dicCommonMapper.queryParentId(param);
+        String parentId = dicCommonMapper.queryParentId(param);//获取资质等级类别
         if (StringUtil.isNotEmpty(parentId)) {
             param.put("parentId", parentId);
         } else {
             param.put("parentId", "");
         }
-        return dicCommonMapper.queryGradePullDownListMap(param);
+        return dicCommonMapper.queryGradePullDownListMap(param);//资质等级下拉选项
     }
 
-
+    /**
+     * 修改等级别名
+     *
+     * @param dicAlias
+     * @return
+     */
     @Override
     public Map<String, Object> updateGradeAlias(DicAlias dicAlias) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -363,7 +368,7 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
         param.put("id", dicAlias.getId());
         param.put("name", dicAlias.getName());
         param.put("stdType", Constant.GRADE_STD_TYPE);
-        Integer count = dicAliasMapper.queryAliasByName(param);
+        Integer count = dicAliasMapper.queryAliasByName(param);//根据名称查询
         if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
             resultMap.put("msg", Constant.MSG_WARN_400);
@@ -371,7 +376,7 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
         }
         String code = "alias_grade" + PinYinUtil.cn2py(dicAlias.getName()) + "_" + System.currentTimeMillis();
         dicAlias.setCode(code);
-        dicAliasMapper.updateDicAliasById(dicAlias);
+        dicAliasMapper.updateDicAliasById(dicAlias);//更新词典别名
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;

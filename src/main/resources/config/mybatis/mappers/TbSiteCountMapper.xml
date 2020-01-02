@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.silita.dao.TbSiteCountMapper" >
+
+  <insert id="insertSiteCount" parameterType="map">
+    insert into
+      tb_site_count
+      (site_name,site_today_count,source,pub_date)
+    values
+    <foreach collection="list1" item="list" separator=",">
+      (#{list.name},#{list.siteCount},#{list.source},#{pubDate})
+    </foreach>
+  </insert>
+</mapper>

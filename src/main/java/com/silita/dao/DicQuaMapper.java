@@ -54,7 +54,7 @@ public interface DicQuaMapper extends MyMapper<DicQua> {
      */
     String querySingleBenchNames(Map<String,Object> param);
     /**
-     * 获取标准名称是否存在
+     * 获取资质名称是否存在
      * @param param
      * @return
      */

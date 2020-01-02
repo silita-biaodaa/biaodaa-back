@@ -40,7 +40,7 @@ public class RecycleServiceImpl extends AbstractService implements IRecycleServi
         recycle.setSource(MapUtils.getString(param,"source"));
         for (String id :pkids){
             recycle.setPkid(id);
-            tbNtRecycleHunanMapper.deleteRecyleLogic(recycle);
+            tbNtRecycleHunanMapper.deleteRecyleLogic(recycle);//删除回收站公告（逻辑删除）
         }
     }
 
@@ -53,14 +53,14 @@ public class RecycleServiceImpl extends AbstractService implements IRecycleServi
         TbNtMian mian;
         for (String id :pkids){
             recycle.setPkid(id);
-            ntRecycle = tbNtRecycleHunanMapper.queryNtRecycleDetail(recycle);
-            tbNtRecycleHunanMapper.deleteRecyleLogic(ntRecycle);
+            ntRecycle = tbNtRecycleHunanMapper.queryNtRecycleDetail(recycle);//查询回收站公告详情
+            tbNtRecycleHunanMapper.deleteRecyleLogic(ntRecycle);//删除回收站公告（逻辑删除）
             mian = new TbNtMian();
             mian.setTableName(DataHandlingUtil.SplicingTable(mian.getClass(),ntRecycle.getSource()));
             mian.setPkid(ntRecycle.getNtId());
             mian.setUpdateBy(MapUtils.getString(param,"username"));
             mian.setIsEnable("1");
-            tbNtMianMapper.deleteNtMainByPkId(mian);
+            tbNtMianMapper.deleteNtMainByPkId(mian);//根据主键删除公告id
         }
     }
 }

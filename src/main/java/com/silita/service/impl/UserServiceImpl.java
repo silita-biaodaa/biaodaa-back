@@ -116,7 +116,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     public Map<String, Object> updatePassword(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            Integer integer = tbUserMapper.querySingleUserPhone(param);
+            Integer integer = tbUserMapper.querySingleUserPhone(param);//查询手机号码是否存在
             if (null == integer || integer == 0) {
                 resultMap.put("msg", Constant.MSG_PHONE);
                 resultMap.put("code", Constant.CODE_PHONE);
@@ -125,18 +125,18 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             String password = MapUtils.getString(param, "password");
             String phone = MapUtils.getString(param, "phone");
             hashIterations = 2;
-            Object obj = new SimpleHash("MD5", password, phone, hashIterations);
+            Object obj = new SimpleHash("MD5", password, phone, hashIterations);//加密
             param.put("password", obj.toString());
-            Integer integer1 = tbUserMapper.querySingleUserPassword(param);
+            Integer integer1 = tbUserMapper.querySingleUserPassword(param);//查询原密码是否正确
             if (null == integer1 || integer1 == 0) {
                 resultMap.put("msg", Constant.MSG_PASSWORD);
                 resultMap.put("code", Constant.CODE_PASSWORD);
                 return resultMap;
             }
             String newPassword = MapUtils.getString(param, "newpassword");
-            Object md5Password = new SimpleHash("MD5", newPassword, phone, hashIterations);
+            Object md5Password = new SimpleHash("MD5", newPassword, phone, hashIterations);//加密
             param.put("newpassword", md5Password.toString());
-            tbUserMapper.updatePassword(param);
+            tbUserMapper.updatePassword(param);//修改密码
             resultMap.put("msg", Constant.MSG_SUCCESS);
             resultMap.put("code", Constant.CODE_SUCCESS);
             param.put("pid", CommonUtil.getUUID());
@@ -161,7 +161,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         String phone = MapUtils.getString(param, "phone");
         Object md5Password = new SimpleHash("MD5", password, phone, hashIterations);
         param.put("password", md5Password.toString());//md5加密
-        tbUserMapper.updateResetPassword(param);
+        tbUserMapper.updateResetPassword(param);//重置密码
         param.put("pid", CommonUtil.getUUID());
         param.put("optType", "用户账号");
         param.put("optDesc", "重置管理员密码:" + phone);
@@ -182,8 +182,8 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             tbUser.setPhone("");
         }
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("list", tbUserMapper.queryAccountList(tbUser));
-        resultMap.put("total", tbUserMapper.queryAccountListCount(tbUser));
+        resultMap.put("list", tbUserMapper.queryAccountList(tbUser));//账号管理查询及筛选
+        resultMap.put("total", tbUserMapper.queryAccountListCount(tbUser));//账号管理查询及筛选 统计
         return super.handlePageCount(resultMap, tbUser);
     }
 
@@ -199,22 +199,22 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         try {
             String phone1 = MapUtils.getString(param, "phone");
             String password = MapUtils.getString(param, "password");
-            String phone = tbUserMapper.queryAdministratorPhone(param);
+            String phone = tbUserMapper.queryAdministratorPhone(param);//获取手机号码
             Integer rid = MapUtils.getInteger(param, "rid");
             if (StringUtil.isNotEmpty(phone1) && StringUtil.isNotEmpty(password)) {//判断手机号码是否为空
                 if (phone.equals(phone1)) {//判断数据库中的号码和本次修改的号码是否相同
                     Object md5Password = new SimpleHash("MD5", password, phone1, hashIterations);//md5+盐 加密
                     param.put("password", md5Password.toString());
-                    tbUserMapper.updateUser(param);
+                    tbUserMapper.updateUser(param);//编辑管理员
                     if(null != rid || rid != 0) {
-                        tbUserRoleMapper.deleteUserRole(param);
-                        tbUserRoleMapper.insertUserRole(param);
+                        tbUserRoleMapper.deleteUserRole(param);//删除管理员对应角色
+                        tbUserRoleMapper.insertUserRole(param);//添加管理员对应角色
                     }
                     resultMap.put("msg", Constant.MSG_SUCCESS);
                     resultMap.put("code", Constant.CODE_SUCCESS);
                     return resultMap;
                 } else {
-                    Integer integer1 = tbUserMapper.querySingleUserPhone(param);
+                    Integer integer1 = tbUserMapper.querySingleUserPhone(param);//查询手机号码是否存在
                     if (null != integer1 && integer1 > 0) {//如果数据库存在此号码，直接跳过
                         resultMap.put("msg", Constant.MSG_PHONES);
                         resultMap.put("code", Constant.CODE_PHONES);
@@ -222,20 +222,20 @@ public class UserServiceImpl extends AbstractService implements IUserService {
                     }
                     Object md5Password = new SimpleHash("MD5", password, phone1, hashIterations);//md5+盐 加密
                     param.put("password", md5Password.toString());
-                    tbUserMapper.updateUser(param);
+                    tbUserMapper.updateUser(param);//编辑管理员
                     if(null != rid || rid != 0) {
-                        tbUserRoleMapper.deleteUserRole(param);
-                        tbUserRoleMapper.insertUserRole(param);
+                        tbUserRoleMapper.deleteUserRole(param);//删除管理员对应角色
+                        tbUserRoleMapper.insertUserRole(param);//添加管理员对应角色
                     }
                     resultMap.put("code", Constant.CODE_SUCCESS);
                     resultMap.put("msg", Constant.MSG_SUCCESS);
                     return resultMap;
                 }
             }
-            tbUserMapper.updateUser(param);
+            tbUserMapper.updateUser(param);//编辑管理员
             if(null != rid || rid != 0) {
-                tbUserRoleMapper.deleteUserRole(param);
-                tbUserRoleMapper.insertUserRole(param);
+                tbUserRoleMapper.deleteUserRole(param);//删除管理员对应角色
+                tbUserRoleMapper.insertUserRole(param);//添加管理员对应角色
             }
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -255,7 +255,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         IsNullCommon.isNull(param);
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            Integer integer1 = tbUserMapper.querySingleUserPhone(param);
+            Integer integer1 = tbUserMapper.querySingleUserPhone(param);//查询手机号码是否存在
             if (null != integer1 && integer1 > 0) {
                 resultMap.put("msg", Constant.MSG_PHONES);
                 resultMap.put("code", Constant.CODE_PHONES);
@@ -265,10 +265,10 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             String phone = MapUtils.getString(param, "phone");
             Object md5Password = new SimpleHash("MD5", password, phone, hashIterations);//md5+盐 加密
             param.put("password", md5Password.toString());
-            tbUserMapper.insertAdministrator(param);
-            Integer integer = tbUserMapper.queryMaxUId();
+            tbUserMapper.insertAdministrator(param);//添加管理员
+            Integer integer = tbUserMapper.queryMaxUId();//获取最大uid
             param.put("uid",integer);
-            tbUserRoleMapper.insertUserRole(param);
+            tbUserRoleMapper.insertUserRole(param);//添加管理员对应角色
             param.put("pid", CommonUtil.getUUID());
             param.put("optType", "用户账号");
             param.put("optDesc", "添加管理员账号" + phone);

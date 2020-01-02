@@ -1,11 +1,9 @@
 package com.silita.service.impl;
 
-import com.silita.dao.SysLogsMapper;
-import com.silita.dao.SysUserInfoMapper;
-import com.silita.dao.TbVipInfoMapper;
-import com.silita.dao.TbVipProfitsMapper;
+import com.silita.dao.*;
 import com.silita.service.ITbVipInfoService;
 import com.silita.utils.DataHandlingUtil;
+import com.silita.utils.dateUtils.MyDateUtils;
 import com.silita.utils.oldProjectUtils.CommonUtil;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,8 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
     private SysUserInfoMapper sysUserInfoMapper;
     @Autowired
     SysLogsMapper logsMapper;
+    @Autowired
+    TbMessageMapper tbMessageMapper;
 
     /**
      * 新增 || 编辑  会员信息
@@ -35,41 +35,66 @@ public class TbVipInfoServiceImpl implements ITbVipInfoService {
     @Override
     public void addVipInfo(Map<String, Object> param) {
         Integer vipDay = MapUtils.getInteger(param, "vipDay");
+        String userId = MapUtils.getString(param, "userId");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Map<String, Object> map = tbVipInfoMapper.queryVipInfoUserCount(param);
-            if (map != null && map.size() > 0) {
-                String expiredDate = MapUtils.getString(map, "expiredDate");
-                param.put("vId",MapUtils.getString(map,"vId"));
-                Date dates = sdf.parse(expiredDate);
-                Calendar c = Calendar.getInstance();
-                c.setTime(dates);
-                c.add(Calendar.DATE, vipDay);
-                String date = sdf.format(c.getTime());
-                param.put("expiredDate",date);
-                tbVipInfoMapper.updateVipIfo(param);
+            Map<String, Object> map = tbVipInfoMapper.queryVipInfoUserCount(param);//获取该用户会员信息是否为空
+            if (map != null && map.size() > 0) {//如果不为空
+                param.put("vId", MapUtils.getString(map, "vId"));
+                String expiredDate = MapUtils.getString(map, "expiredDate");//过期时间
+                String time = MyDateUtils.getTime("yyyy-MM-dd");//当前日期
+                int i = expiredDate.compareTo(time);
+                if (i >= 0) {
+                    Date dates = sdf.parse(expiredDate);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(dates);
+                    c.add(Calendar.DATE, vipDay);
+                    String date = sdf.format(c.getTime());
+                    param.put("expiredDate", date);
+                    tbVipInfoMapper.updateVipIfo(param);//编辑用户会员信息
+                } else {
+                    Calendar c = Calendar.getInstance();
+                    c.add(Calendar.DATE, vipDay);
+                    String date = sdf.format(c.getTime());
+                    param.put("expiredDate", date);
+                    tbVipInfoMapper.updateVipIfo(param);//编辑用户会员信息
+                }
             } else {
                 Calendar c = Calendar.getInstance();
                 c.add(Calendar.DATE, vipDay);
                 String date = sdf.format(c.getTime());
-                param.put("expiredDate",date);
-                param.put("vId",DataHandlingUtil.getUUID());
-                param.put("userId",MapUtils.getString(map,"userId"));
-                tbVipInfoMapper.insertVipInfo(param);
+                param.put("expiredDate", date);
+                param.put("vId", DataHandlingUtil.getUUID());
+                param.put("userId", MapUtils.getString(map, "userId"));
+                tbVipInfoMapper.insertVipInfo(param);//新增会员用户信息
             }
-            param.put("vProfitsId",DataHandlingUtil.getUUID());
-            tbVipProfitsMapper.insertVipProfits(param);
+            param.put("vProfitsId", DataHandlingUtil.getUUID());
+            tbVipProfitsMapper.insertVipProfits(param);//新增用户会员明细
             //编辑用户状态  普通用户 -- 》 会员用户
             sysUserInfoMapper.updateUserState(param);
-            param.put("pkid",MapUtils.getString(param, "userId"));
+            param.put("pkid", MapUtils.getString(param, "userId"));
             param.put("pid", CommonUtil.getUUID());
             param.put("optType", "赠送会员");
-            param.put("optDesc", "赠送"+vipDay+"天会员");
-            String phone = sysUserInfoMapper.queryPhoneSingle(param);
+            param.put("optDesc", "赠送" + vipDay + "天会员");
+            String phone = sysUserInfoMapper.queryPhoneSingle(param);//查询单个用户手机号码
             param.put("operand", phone);
             logsMapper.insertLogs(param);//添加操作日志
+            param.put("userId", userId);
+            param.put("msgTitle", "赠送会员成功通知");
+            param.put("msgType", "system");
+            param.put("msgContent", "已赠送您" + vipDay + "天会员，请查收！");
+            tbMessageMapper.insertMessage(param);//添加消息
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 3);
+        String date = sdf.format(c.getTime());
+        System.out.println(date);
+
     }
 }

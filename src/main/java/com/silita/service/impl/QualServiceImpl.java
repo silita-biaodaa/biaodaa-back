@@ -38,6 +38,15 @@ public class QualServiceImpl extends AbstractService implements IQualService {
 
     /**
      * 添加资质
+     * @param param
+     */
+    @Override
+    public void addQualTest(Map<String, Object> param) {
+        dicQuaMapper.insertDicQual(param);
+    }
+
+    /**
+     * 添加资质
      *
      * @param param
      */
@@ -51,14 +60,14 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             String quaName = MapUtils.getString(param, "quaName");//资质名称
             String benchName = MapUtils.getString(param, "benchName");//资质标准名称
 
-            Integer integer = dicQuaMapper.querySingleQuaName(param);
-            if (null != integer && integer != 0) {
+            Integer integer = dicQuaMapper.querySingleQuaName(param);//获取资质名称是否存在
+            if (null != integer && integer != 0) {//是否存在
                 resultMap.put("code", "0");
                 resultMap.put("msg", "资质名称已存在");
                 return resultMap;
             }
 
-            Integer integer1 = dicQuaMapper.querySingleBenchName(param);
+            Integer integer1 = dicQuaMapper.querySingleBenchName(param);//获取标准名称是否存在
             if (null != integer1 && integer1 != 0) {
                 resultMap.put("code", "0");
                 resultMap.put("msg", "资质标准名称已存在");
@@ -67,7 +76,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             if (StringUtil.isNotEmpty(quaBig) && StringUtil.isEmpty(quaTiny)) {
                 param.put("quaMajor", quaBig);
                 param.put("pid", qualType);
-                Map<String, Object> map = dicQuaMapper.queryQuaLevel(param);
+                Map<String, Object> map = dicQuaMapper.queryQuaLevel(param);//获取资质是否存在  并且获取资质等级
                 Integer level = MapUtils.getInteger(map, "level");
                 if (null != map && map.size() > 0) {
                     if (level == 2) {
@@ -82,7 +91,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                         param.put("quaName", quaName);
                         param.put("benchName", benchName);
                         param.put("qualId", uuid);
-                        dicQuaMapper.insertDicQual(param);
+                        dicQuaMapper.insertDicQual(param);//添加三级资质
                     }
                 } else if (null == map || map.size() > 0) {
                     String uuid = DataHandlingUtil.getUUID();
@@ -93,7 +102,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("level", 2);
                     param.put("quaName", quaBig);
                     param.put("benchName", "");
-                    dicQuaMapper.insertDicQual(param);
+                    dicQuaMapper.insertDicQual(param);// 添加二级资质
                     String uuid1 = DataHandlingUtil.getUUID();
                     param.put("id", uuid1);
                     param.put("parentId", uuid);
@@ -104,19 +113,19 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("quaName", quaName);
                     param.put("benchName", benchName);
                     param.put("qualId", uuid1);
-                    dicQuaMapper.insertDicQual(param);
+                    dicQuaMapper.insertDicQual(param);//添加三级资质
                 }
             } else if (StringUtil.isNotEmpty(quaBig) && StringUtil.isNotEmpty(quaTiny)) {
                 param.put("quaMajor", quaBig);
                 param.put("pid", qualType);
-                Map<String, Object> map = dicQuaMapper.queryQuaLevel(param);
+                Map<String, Object> map = dicQuaMapper.queryQuaLevel(param);//获取资质是否存在  并且获取资质等级
                 Integer level = MapUtils.getInteger(map, "level");
                 if (null != map && map.size() > 0) {
                     if (level == 2) {
                         String id = MapUtils.getString(map, "id");
                         param.put("quaMajor", quaTiny);
                         param.put("pid", id);
-                        Map<String, Object> map2 = dicQuaMapper.queryQuaLevel(param);
+                        Map<String, Object> map2 = dicQuaMapper.queryQuaLevel(param);//获取资质是否存在  并且获取资质等级
                         Integer level2 = MapUtils.getInteger(map2, "level");
                         if (null != map2 && map2.size() > 0) {
                             if (level2 == 3) {
@@ -131,7 +140,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                                 param.put("quaName", quaName);
                                 param.put("benchName", benchName);
                                 param.put("qualId", uuid);
-                                dicQuaMapper.insertDicQual(param);
+                                dicQuaMapper.insertDicQual(param);//添加资质
                             }
                         } else {
                             String uuid1 = DataHandlingUtil.getUUID();
@@ -142,7 +151,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                             param.put("level", 3);
                             param.put("quaName", quaTiny);
                             param.put("benchName", "");
-                            dicQuaMapper.insertDicQual(param);
+                            dicQuaMapper.insertDicQual(param);//添加三级资质
                             String uuid = DataHandlingUtil.getUUID();
                             param.put("id", uuid);
                             param.put("parentId", uuid1);
@@ -154,7 +163,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                             param.put("quaCode", qualCode);
                             param.put("stdCodes", qualCode);
                             param.put("qualId", uuid);
-                            dicQuaMapper.insertDicQual(param);
+                            dicQuaMapper.insertDicQual(param);//添加四级资质
                         }
                     }
                 } else if (null == map || map.size() > 0) {
@@ -166,7 +175,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("level", 2);
                     param.put("quaName", quaBig);
                     param.put("benchName", "");
-                    dicQuaMapper.insertDicQual(param);
+                    dicQuaMapper.insertDicQual(param);//添加二级资质
                     String uuid1 = DataHandlingUtil.getUUID();
                     param.put("id", uuid1);
                     param.put("parentId", uuid);
@@ -175,7 +184,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("level", 3);
                     param.put("quaName", quaTiny);
                     param.put("benchName", "");
-                    dicQuaMapper.insertDicQual(param);
+                    dicQuaMapper.insertDicQual(param);//添加三级资质
                     String uuid2 = DataHandlingUtil.getUUID();
                     param.put("id", uuid2);
                     param.put("parentId", uuid1);
@@ -186,7 +195,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("quaName", quaName);
                     param.put("benchName", benchName);
                     param.put("qualId", uuid2);
-                    dicQuaMapper.insertDicQual(param);
+                    dicQuaMapper.insertDicQual(param);//添加四级资质
 
                 }
             } else {
@@ -200,7 +209,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                 param.put("quaName", quaName);
                 param.put("benchName", benchName);
                 param.put("qualId", uuid);
-                dicQuaMapper.insertDicQual(param);
+                dicQuaMapper.insertDicQual(param);//添加资质
             }
 
             String levelType = MapUtils.getString(param, "levelType");
@@ -210,12 +219,12 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                 param.put("bizType", "");
                 relQuaGradeMapper.insertQuaCrade(param);//添加资质关系表达式
             } else {
-                List<String> list = dicCommonMapper.queryLevelCode(param);
+                List<String> list = dicCommonMapper.queryLevelCode(param);//根据等级类别获取等级code
                 for (String s : list) {
                     param.put("id", DataHandlingUtil.getUUID());
                     param.put("gradeCode", s);
                     param.put("bizType", "");
-                    relQuaGradeMapper.insertQuaCrade(param);
+                    relQuaGradeMapper.insertQuaCrade(param);//添加资质等级
                 }
             }
             //添加别名
@@ -223,7 +232,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             param.put("name", benchName);
             param.put("code", "alias_grade_" + PinYinUtil.cn2py(benchName) + "_" + System.currentTimeMillis());
             param.put("stdType", "1");
-            dicAliasMapper.insertLevelAilas(param);
+            dicAliasMapper.insertLevelAilas(param);//添加资质别名
 
             //获取资质解析组合数据
             String quaId = MapUtils.getString(param, "quaId");
@@ -250,15 +259,15 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             String code = dicQuaMapper.queryCode(param);//获取资质code
             param.put("stdCode", code);
             param.put("quaCode", code);
-            List<String> list = relQuaGradeMapper.queryRelId(param);
+            List<String> list = relQuaGradeMapper.queryRelId(param);//获取资质关系表达式id
             if (null != list && list.size() > 0) {
                 for (String s : list) {
                     param.put("relId", s);
-                    dicQuaAnalysisMapper.deleteAanlysisRelId(param);
+                    dicQuaAnalysisMapper.deleteAanlysisRelId(param);//删除资质解析组合数据
                 }
             }
             dicAliasMapper.deleteAilas(param);//根据code删除别名
-            relQuaGradeMapper.deleteRelQuaCode(param);
+            relQuaGradeMapper.deleteRelQuaCode(param);//根据等级qua_code 删除资质管理表达式中的所有有关的数据
             dicQuaMapper.delDicQual(param);//根据id删除资质
         } catch (Exception e) {
             logger.error("删除资质", e);
@@ -282,10 +291,10 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             String quaName = MapUtils.getString(param, "quaName");//资质名称
             String benchName = MapUtils.getString(param, "benchName");//资质标准名称
             String quaCode = MapUtils.getString(param, "quaCode");
-            String benchNameAilas = dicQuaMapper.querySingleBenchNames(param);
-            Integer integer = dicQuaMapper.querySingleQuaName(param);
+            String benchNameAilas = dicQuaMapper.querySingleBenchNames(param);//获取标准名称是否存在
+            Integer integer = dicQuaMapper.querySingleQuaName(param);//获取资质名称是否存在
             if (null != integer && integer != 0) {
-                String name = dicQuaMapper.querySingleQuaNames(param);
+                String name = dicQuaMapper.querySingleQuaNames(param);//获取标准名称是否存在
                 if (StringUtil.isNotEmpty(name)) {
                     if (!name.equals(quaName)) {
                         resultMap.put("code", "0");
@@ -294,12 +303,12 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     }
                 }
             }
-            Integer integer1 = dicQuaMapper.querySingleBenchName(param);
+            Integer integer1 = dicQuaMapper.querySingleBenchName(param);//获取标准名称是否存在
             if (null != integer1 && integer1 != 0) {
-                String name2 = dicQuaMapper.querySingleBenchNames(param);
+                String name2 = dicQuaMapper.querySingleBenchNames(param);//获取标准名称是否存在
                 if (StringUtil.isNotEmpty(name2)) {
                     if (!name2.equals(benchName)) {
-                        Integer integer2 = dicQuaMapper.querySingleBenchName(param);
+                        Integer integer2 = dicQuaMapper.querySingleBenchName(param);// 获取标准名称是否存在
                         if (null != integer2 && integer2 != 0) {
                             resultMap.put("code", "0");
                             resultMap.put("msg", "资质标准名称已存在");
@@ -308,35 +317,30 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     }
                 }
             }
-            List<String> list = relQuaGradeMapper.queryRelId(param);
+            List<String> list = relQuaGradeMapper.queryRelId(param);//获取资质关系表达式id
             if (null != list && list.size() > 0) {
                 for (String s : list) {
                     param.put("relId", s);
-                    dicQuaAnalysisMapper.deleteAanlysisRelId(param);
+                    dicQuaAnalysisMapper.deleteAanlysisRelId(param);//删除资质解析组合数据
                 }
             }
 
             if (StringUtil.isNotEmpty(quaBig) && StringUtil.isEmpty(quaTiny)) {
                 param.put("quaMajor", quaBig);
                 param.put("pid", qualType);
-                Map<String, Object> map = dicQuaMapper.queryQuaLevel(param);
+                Map<String, Object> map = dicQuaMapper.queryQuaLevel(param);//获取资质是否存在  并且获取资质等级
                 Integer level = MapUtils.getInteger(map, "level");
                 if (null != map && map.size() > 0) {
                     if (level == 2) {
                         String id = MapUtils.getString(map, "id");
                         param.put("id", quaId);
                         param.put("parentId", id);
-                        String qualCode = "qual" + "_" + PinYinUtil.cn2py(quaName) + "_" + System.currentTimeMillis();
-                        param.put("quaCode", qualCode);
                         param.put("level", 3);
                         param.put("quaName", quaName);
                         param.put("benchName", benchName);
-                        param.put("stdCode", quaCode);
-                        param.put("stdCodes", qualCode);
-                        dicAliasMapper.updateStdCode(param);//修改资质别名stdCode
                         dicQuaMapper.updateDicQual(param);//修改资质
                     }
-                } else if (null == map || map.size() > 0) {
+                } else if (null == map || map.size() <= 0) {
                     String uuid = DataHandlingUtil.getUUID();
                     param.put("id", uuid);
                     param.put("parentId", qualType);
@@ -345,17 +349,13 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("level", 2);
                     param.put("quaName", quaBig);
                     param.put("benchName", "");
-                    dicQuaMapper.insertDicQual(param);
+                    dicQuaMapper.insertDicQual(param);//添加资质
                     param.put("id", quaId);
                     param.put("parentId", uuid);
-                    String qualCode2 = "qual" + "_" + PinYinUtil.cn2py(quaName) + "_" + System.currentTimeMillis();
-                    param.put("quaCode", qualCode2);
                     param.put("level", 3);
                     param.put("quaName", quaName);
                     param.put("benchName", benchName);
-                    param.put("stdCode", quaCode);
-                    param.put("stdCodes", qualCode2);
-                    dicAliasMapper.updateStdCode(param);//修改资质别名stdCode
+                    param.remove("quaCode");
                     dicQuaMapper.updateDicQual(param);//修改资质
                 }
             } else if (StringUtil.isNotEmpty(quaBig) && StringUtil.isNotEmpty(quaTiny)) {
@@ -376,14 +376,9 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                                 String id2 = MapUtils.getString(map2, "id");
                                 param.put("id", quaId);
                                 param.put("parentId", id2);
-                                String qualCode = "qual" + "_" + PinYinUtil.cn2py(quaName) + "_" + System.currentTimeMillis();
                                 param.put("level", 4);
-                                param.put("quaCode", qualCode);
-                                param.put("stdCode", quaCode);
-                                param.put("stdCodes", qualCode);
                                 param.put("quaName", quaName);
                                 param.put("benchName", benchName);
-                                dicAliasMapper.updateStdCode(param);//修改资质别名stdCode
                                 dicQuaMapper.updateDicQual(param);//修改资质
                             } else {
                                 String uuid1 = DataHandlingUtil.getUUID();
@@ -394,18 +389,14 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                                 param.put("level", 3);
                                 param.put("quaName", quaTiny);
                                 param.put("benchName", "");
-                                dicQuaMapper.insertDicQual(param);
+                                dicQuaMapper.insertDicQual(param);//添加三级资质
                                 param.put("id", quaId);
-                                param.put("parentId", uuid1);
-                                String qualCode = "qual" + "_" + PinYinUtil.cn2py(quaName) + "_" + System.currentTimeMillis();
                                 param.put("level", 4);
-                                param.put("stdCode", quaCode);
-                                param.put("quaCode", qualCode);
+                                param.put("parentId", uuid1);
                                 param.put("quaName", quaName);
-                                param.put("stdCodes", qualCode);
                                 param.put("benchName", benchName);
-                                dicAliasMapper.updateStdCode(param);//修改资质别名stdCode
-                                dicQuaMapper.updateDicQual(param);//修改资质
+                                param.remove("quaCode");
+                                dicQuaMapper.updateDicQual(param);//修改四级资质
                             }
                         } else {
                             String uuid1 = DataHandlingUtil.getUUID();
@@ -416,18 +407,14 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                             param.put("level", 3);
                             param.put("quaName", quaTiny);
                             param.put("benchName", "");
-                            dicQuaMapper.insertDicQual(param);
+                            dicQuaMapper.insertDicQual(param);//添加三级资质
                             param.put("id", quaId);
                             param.put("parentId", uuid1);
-                            String qualCode = "qual" + "_" + PinYinUtil.cn2py(quaName) + "_" + System.currentTimeMillis();
                             param.put("level", 4);
-                            param.put("stdCode", quaCode);
-                            param.put("quaCode", qualCode);
-                            param.put("stdCodes", qualCode);
                             param.put("quaName", quaName);
                             param.put("benchName", benchName);
-                            dicAliasMapper.updateStdCode(param);//修改资质别名stdCode
-                            dicQuaMapper.updateDicQual(param);//修改资质
+                            param.remove("quaCode");
+                            dicQuaMapper.updateDicQual(param);//修改四级资质
                         }
                     }
                 } else if (null == map || map.size() == 0) {
@@ -439,7 +426,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("level", 2);
                     param.put("quaName", quaBig);
                     param.put("benchName", "");
-                    dicQuaMapper.insertDicQual(param);
+                    dicQuaMapper.insertDicQual(param);//添加二级资质
                     String uuid1 = DataHandlingUtil.getUUID();
                     param.put("id", uuid1);
                     param.put("parentId", uuid);
@@ -448,45 +435,35 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     param.put("level", 3);
                     param.put("quaName", quaTiny);
                     param.put("benchName", "");
-                    dicQuaMapper.insertDicQual(param);
+                    dicQuaMapper.insertDicQual(param);//添加三级资质
                     param.put("id", quaId);
                     param.put("parentId", uuid1);
-                    String qualCode3 = "qual" + "_" + PinYinUtil.cn2py(quaName) + "_" + System.currentTimeMillis();
-                    param.put("quaCode", qualCode3);
                     param.put("level", 4);
                     param.put("quaName", quaName);
                     param.put("benchName", benchName);
-                    param.put("stdCode", quaCode);
-                    param.put("stdCodes", qualCode3);
-                    dicAliasMapper.updateStdCode(param);//修改资质别名stdCode
-                    dicQuaMapper.updateDicQual(param);//修改资质
-
+                    param.remove("quaCode");
+                    dicQuaMapper.updateDicQual(param);//修改四级资质
                 }
             } else {
                 param.put("id", quaId);
                 param.put("parentId", qualType);
-                String qualCode3 = "qual" + "_" + PinYinUtil.cn2py(quaName) + "_" + System.currentTimeMillis();
-                param.put("quaCode", qualCode3);
                 param.put("level", 2);
                 param.put("quaName", quaName);
                 param.put("benchName", benchName);
-                param.put("stdCode", quaCode);
-                param.put("stdCodes", qualCode3);
-                dicAliasMapper.updateStdCode(param);//修改资质别名stdCode
                 dicQuaMapper.updateDicQual(param);//修改资质
             }
             String levelType = MapUtils.getString(param, "levelType");
+            param.put("stdCode", quaCode);
             getLevel(levelType, param);
             if (StringUtil.isNotEmpty(benchNameAilas)) {
                 param.put("benchName", benchName);
                 param.put("benchNameAilas", benchNameAilas);
-                dicAliasMapper.updateName(param);
+                dicAliasMapper.updateName(param);//修改别名name
             }
-            String stdCodes = MapUtils.getString(param, "stdCodes");
-            if(StringUtil.isNotEmpty(stdCodes)){
-                param.put("qualCode",stdCodes);
+            if (StringUtil.isNotEmpty(quaCode)) {
+                param.put("qualCode", quaCode);
             }
-            param.put("qualId",quaId);
+            param.put("qualId", quaId);
             addQuaAnalysis(param, levelType);
             resultMap.put("code", Constant.CODE_SUCCESS);
             resultMap.put("msg", Constant.MSG_SUCCESS);
@@ -545,18 +522,16 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             param.put("four", split[3]);
         }
 
-
-        String benchName1 = MapUtils.getString(param, "benchName");
+        String benchName1 = MapUtils.getString(param, "benchName");//标准名称
         Map<String, Object> result = new HashMap<>();
         if (StringUtil.isNotEmpty(benchName1)) {
-            List<String> list = dicQuaMapper.queryBenchNames(param);
+            List<String> list = dicQuaMapper.queryBenchNames(param);//获取标准名称
             for (String s : list) {
                 result.put(s, "0");
             }
         }
 
 
-        //param.put("noticeLevel","1");
         param.put("zzIdOne", "");
         List<Map<String, Object>> list = dicQuaMapper.queryQuaOne(param);
         List<Map<String, Object>> oneQuaListMap = new ArrayList<>();
@@ -565,26 +540,26 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             //把一级资质放入oneQuaMap中
             String one = (String) map.get("id");
             param.put("zzIdOne", one);
-            List<Map<String, Object>> list1 = dicQuaMapper.queryQuaTwo(param);
-            for (Map<String, Object> map2 : list1) {
+            List<Map<String, Object>> list1 = dicQuaMapper.queryQuaTwo(param);//获取二级资质
+            for (Map<String, Object> map2 : list1) {////遍历二级资质
                 Map<String, Object> towQuaMap = new HashMap<>();
                 String tow = (String) map2.get("id");
                 param.put("zzIdOne", tow);
                 if (null == MapUtils.getString(map2, "benchName")) {
-                    List<Map<String, Object>> list2 = dicQuaMapper.queryQuaThree(param);
-                    for (Map<String, Object> map3 : list2) {
+                    List<Map<String, Object>> list2 = dicQuaMapper.queryQuaThree(param);//获取三级资质
+                    for (Map<String, Object> map3 : list2) {//遍历三级资质
                         Map<String, Object> threeQuaMap = new HashMap<>();
                         String three = (String) map3.get("id");
                         param.put("zzIdOne", three);
                         if (null == MapUtils.getString(map3, "benchName")) {
-                            List<Map<String, Object>> list3 = dicQuaMapper.queryQuaFout(param);
-                            for (Map<String, Object> map4 : list3) {
+                            List<Map<String, Object>> list3 = dicQuaMapper.queryQuaFout(param);//获取四级资质
+                            for (Map<String, Object> map4 : list3) {//遍历四级资质
                                 Map<String, Object> fourQuaMap = new HashMap<>();
                                 String benchName = (String) map4.get("benchName");
-                                if (StringUtil.isEmpty(benchName1)) {
+                                if (StringUtil.isEmpty(benchName1)) {//判断四级资质标准名称是否存在
                                     if (StringUtils.isNotEmpty(benchName)) {
                                         param.put("quaCode", map4.get("quaCode"));
-                                        String s = dicCommonMapper.queryParentId(param);
+                                        String s = dicCommonMapper.queryParentId(param);//获取资质等级类别
                                         fourQuaMap.put("levelType", s);
                                         fourQuaMap.put("qualType", map.get("quaName"));
                                         fourQuaMap.put("quaBig", map2.get("quaName"));
@@ -599,9 +574,9 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                                 } else {
                                     String benchName2 = MapUtils.getString(result, MapUtils.getString(map4, "benchName"));
                                     if (StringUtil.isNotEmpty(benchName2)) {
-                                        if (StringUtils.isNotEmpty(benchName)) {
+                                        if (StringUtils.isNotEmpty(benchName)) {//判断四级资质标准名称是否存在
                                             param.put("quaCode", map4.get("quaCode"));
-                                            String s = dicCommonMapper.queryParentId(param);
+                                            String s = dicCommonMapper.queryParentId(param);//获取资质等级类别
                                             fourQuaMap.put("levelType", s);
                                             fourQuaMap.put("qualType", map.get("quaName"));
                                             fourQuaMap.put("quaBig", map2.get("quaName"));
@@ -618,10 +593,10 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                             }
                         }
                         String benchName = (String) map3.get("benchName");
-                        if (StringUtil.isEmpty(benchName1)) {
+                        if (StringUtil.isEmpty(benchName1)) {//判断三级资质标准名称是否存在
                             if (StringUtil.isNotEmpty(benchName)) {
                                 param.put("quaCode", map3.get("quaCode"));
-                                String s = dicCommonMapper.queryParentId(param);
+                                String s = dicCommonMapper.queryParentId(param);//获取资质等级类别
                                 threeQuaMap.put("levelType", s);
                                 threeQuaMap.put("qualType", map.get("quaName"));
                                 threeQuaMap.put("quaBig", map2.get("quaName"));
@@ -635,7 +610,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                             }
                         } else {
                             String benchName2 = MapUtils.getString(result, MapUtils.getString(map3, "benchName"));
-                            if (StringUtil.isNotEmpty(benchName2)) {
+                            if (StringUtil.isNotEmpty(benchName2)) {//判断三级资质标准名称是否存在
                                 if (StringUtils.isNotEmpty(benchName)) {
                                     param.put("quaCode", map3.get("quaCode"));
                                     String s = dicCommonMapper.queryParentId(param);
@@ -655,10 +630,10 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     }
                 }
                 String benchName = (String) map2.get("benchName");
-                if (StringUtil.isEmpty(benchName1)) {
+                if (StringUtil.isEmpty(benchName1)) {//判断二级资质标准名称是否存在
                     if (StringUtil.isNotEmpty(benchName)) {
                         param.put("quaCode", map2.get("quaCode"));
-                        String s = dicCommonMapper.queryParentId(param);
+                        String s = dicCommonMapper.queryParentId(param);////获取资质等级类别
                         towQuaMap.put("levelType", s);
                         towQuaMap.put("qualType", map.get("quaName"));
                         towQuaMap.put("quaBig", "");
@@ -672,10 +647,10 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                     }
                 } else {
                     String benchName2 = MapUtils.getString(result, MapUtils.getString(map2, "benchName"));
-                    if (StringUtil.isNotEmpty(benchName2)) {
+                    if (StringUtil.isNotEmpty(benchName2)) {//判断二级资质标准名称是否存在
                         if (StringUtils.isNotEmpty(benchName)) {
                             param.put("quaCode", map2.get("quaCode"));
-                            String s = dicCommonMapper.queryParentId(param);
+                            String s = dicCommonMapper.queryParentId(param);//获取资质等级类别
                             towQuaMap.put("levelType", s);
                             towQuaMap.put("qualType", map.get("quaName"));
                             towQuaMap.put("quaBig", "");
@@ -707,7 +682,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         Map<String, Object> param = new HashMap<>();
         param.put("stdType", Constant.QUAL_LEVEL_PARENT);
         param.put("name", alias.getName());
-        Integer count = dicAliasMapper.queryAliasByName(param);
+        Integer count = dicAliasMapper.queryAliasByName(param);//根据名称查询是否存在
         if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
             resultMap.put("msg", Constant.MSG_WARN_400);
@@ -717,22 +692,22 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         String code = "alias_qual_" + PinYinUtil.cn2py(alias.getName()) + "_" + System.currentTimeMillis();
         alias.setCode(code);
         alias.setStdType(Constant.QUAL_LEVEL_PARENT);
-        dicAliasMapper.insertDicAlias(alias);
+        dicAliasMapper.insertDicAlias(alias);//添加词典别名
         String stdCode = alias.getStdCode();
         param.put("qualCode", stdCode);
         param.put("qualAilasName", alias.getName());
-        Integer integer = relQuaGradeMapper.queryRelQuaGradeCount(param);
+        Integer integer = relQuaGradeMapper.queryRelQuaGradeCount(param);//根据资质qua_code统计数量
         if (null != integer && integer > 0) {
-            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);
+            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);//获取资质解析维护需要添加的数据
             if (null != list && list.size() > 0) {
                 param.put("list", list);
-                dicQuaAnalysisMapper.insertAanlysis(param);
+                dicQuaAnalysisMapper.insertAanlysis(param);//添加资质解析组合数据
             }
         } else {
-            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisTow(param);
+            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisTow(param);//获取资质解析维护需要添加的数据
             if (null != list && list.size() > 0) {
                 param.put("list", list);
-                dicQuaAnalysisMapper.insertAanlysis(param);
+                dicQuaAnalysisMapper.insertAanlysis(param);//添加资质解析组合数据
             }
         }
         resultMap.put("code", Constant.CODE_SUCCESS);
@@ -745,7 +720,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         Map<String, Object> param = new HashMap<>();
         param.put("stdType", Constant.QUAL_LEVEL_PARENT);
         for (DicAlias alias : dicAliasList) {
-            dicAliasMapper.insertDicAlias(alias);
+            dicAliasMapper.insertDicAlias(alias);//添加词典别名
         }
     }
 
@@ -761,7 +736,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         param.put("stdType", Constant.QUAL_LEVEL_PARENT);
         param.put("name", alias.getName());
         param.put("id", alias.getId());
-        Integer count = dicAliasMapper.queryAliasByName(param);
+        Integer count = dicAliasMapper.queryAliasByName(param);// 根据名称查询
         if (count > 0) {
             resultMap.put("code", Constant.CODE_WARN_400);
             resultMap.put("msg", Constant.MSG_WARN_400);
@@ -769,7 +744,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
         }
         String code = "alias_qual_" + PinYinUtil.cn2py(alias.getName()) + "_" + System.currentTimeMillis();
         alias.setCode(code);
-        dicAliasMapper.updateDicAliasById(alias);
+        dicAliasMapper.updateDicAliasById(alias);//更新词典别名
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
@@ -782,18 +757,18 @@ public class QualServiceImpl extends AbstractService implements IQualService {
      */
     @Override
     public List<Map<String, Object>> qualGradeList() {
-        List<Map<String, Object>> qualCradeList = dicQuaMapper.queryQualCateList();
+        List<Map<String, Object>> qualCradeList = dicQuaMapper.queryQualCateList();//查询资质类别
         List<DicQua> qualList = new ArrayList<>();
         if (null != qualCradeList && qualCradeList.size() > 0) {
             Map<String, Object> qualMap = new HashMap<>();
             for (Map<String, Object> qual : qualCradeList) {
                 qualMap.put("parentId", qual.get("id"));
-                qualList = dicQuaMapper.queryDicQuaList(qualMap);
+                qualList = dicQuaMapper.queryDicQuaList(qualMap);//查询资质
                 if (null != qualList && qualList.size() > 0) {
                     for (DicQua qua : qualList) {
                         qualMap.put("quaCode", qua.getQuaCode());
                         qualMap.put("bizType", Constant.BIZ_TYPE_COMPANY);
-                        qua.setGradeList(relQuaGradeMapper.queryQuaGrade(qualMap));
+                        qua.setGradeList(relQuaGradeMapper.queryQuaGrade(qualMap));//获取资质下的等级
                     }
                 }
                 qual.put("qualList", qualList);
@@ -855,34 +830,34 @@ public class QualServiceImpl extends AbstractService implements IQualService {
      */
     public List<Map<String, Object>> getQua() {
         Map<String, Object> param = new HashMap<>();
-        List<Map<String, Object>> list = dicQuaMapper.queryQuaOnes(param);
+        List<Map<String, Object>> list = dicQuaMapper.queryQuaOnes(param);// 获取一级资质
         List<Map<String, Object>> oneQuaListtMap = new ArrayList<>();
         //遍历资质一级
-        for (Map<String, Object> map : list) {
+        for (Map<String, Object> map : list) {//遍历一级资质
             //把一级资质放入oneQuaMap中
             Map<String, Object> oneQuaMap = new HashMap<>();
             String one = (String) map.get("id");
             param.put("zzIdOne", one);
             param.put("noticeLevel", "2");
-            List<Map<String, Object>> list1 = dicQuaMapper.queryQuaTwos(param);
+            List<Map<String, Object>> list1 = dicQuaMapper.queryQuaTwos(param);//获取资质级别
             List<Map<String, Object>> towQuaListtMap = new ArrayList<>();
-            for (Map<String, Object> map2 : list1) {
+            for (Map<String, Object> map2 : list1) {//遍历二级资质
                 Map<String, Object> towQuaMap = new HashMap<>();
                 String tow = (String) map2.get("id");
                 param.put("zzIdOne", tow);
                 List<Map<String, Object>> threeQuaListtMap = new ArrayList<>();
                 if (null == MapUtils.getString(map2, "benchName")) {
                     param.put("noticeLevel", "3");
-                    List<Map<String, Object>> list2 = dicQuaMapper.queryQuaTwos(param);
-                    for (Map<String, Object> map3 : list2) {
+                    List<Map<String, Object>> list2 = dicQuaMapper.queryQuaTwos(param);//获取资质级别
+                    for (Map<String, Object> map3 : list2) {//遍历三级资质
                         Map<String, Object> threeQuaMap = new HashMap<>();
                         String three = (String) map3.get("id");
                         param.put("zzIdOne", three);
                         param.put("noticeLevel", "4");
                         List<Map<String, Object>> fourQuaListtMap = new ArrayList<>();
                         if (null == MapUtils.getString(map3, "benchName")) {
-                            List<Map<String, Object>> list3 = dicQuaMapper.queryQuaTwos(param);
-                            for (Map<String, Object> map4 : list3) {
+                            List<Map<String, Object>> list3 = dicQuaMapper.queryQuaTwos(param);//获取资质级别
+                            for (Map<String, Object> map4 : list3) {//遍历四级资质
                                 Map<String, Object> fourQuaMap = new HashMap<>();
                                 String benchName = (String) map4.get("benchName");
                                 if (StringUtils.isNotEmpty(benchName)) {
@@ -896,7 +871,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                         String benchName = (String) map3.get("benchName");
                         threeQuaMap.put("quaCode", map3.get("quaCode"));
                         threeQuaMap.put("id", map3.get("id"));
-                        if (StringUtils.isNotEmpty(benchName)) {
+                        if (StringUtils.isNotEmpty(benchName)) {//判断三级资质标准名称是否存在
                             threeQuaMap.put("name", map3.get("benchName"));
                         } else {
                             threeQuaMap.put("name", map3.get("quaName"));
@@ -910,7 +885,7 @@ public class QualServiceImpl extends AbstractService implements IQualService {
                 String benchName = (String) map2.get("benchName");
                 towQuaMap.put("quaCode", map2.get("quaCode"));
                 towQuaMap.put("id", map2.get("id"));
-                if (StringUtils.isNotEmpty(benchName)) {
+                if (StringUtils.isNotEmpty(benchName)) {//判断二级资质标准名称是否存在
                     towQuaMap.put("name", map2.get("benchName"));
                 } else {
                     towQuaMap.put("name", map2.get("quaName"));
@@ -969,4 +944,5 @@ public class QualServiceImpl extends AbstractService implements IQualService {
             }
         }
     }
+
 }

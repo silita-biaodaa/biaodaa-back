@@ -61,6 +61,20 @@ public class QualController extends BaseController {
      * @return
      */
     @ResponseBody
+    @RequestMapping(value = "/adds", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> adds(@RequestBody Map<String,Object> param, ServletRequest request) {
+        param.put("createBy", "system");
+        qualService.addQualTest(param);
+        return successMap();
+    }
+
+    /**
+     * 添加资质
+     *
+     * @param param
+     * @return
+     */
+    @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> add(@RequestBody Map<String,Object> param, ServletRequest request) {
         param.put("createBy", "system");

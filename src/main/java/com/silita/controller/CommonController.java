@@ -104,7 +104,7 @@ public class CommonController extends BaseController {
         Map<String, Object> map = new HashMap<>();
         String key = "filter_company";
         myRedisTemplate.del(key);
-        Map<String, Object> notice = new HashMap<>();
+        /*Map<String, Object> notice = new HashMap<>();
         notice.put("bizType", "1");
         Map<String, Object> com = new HashMap<>();
         com.put("bizType", "2");
@@ -118,7 +118,7 @@ public class CommonController extends BaseController {
         map.put("pbMode", pbMode);
         map.put("noticeQua", noticeList);
         map.put("comQua", comList);
-        myRedisTemplate.setObject(key,map);
+        myRedisTemplate.setObject(key,map);*/
         /*seccussMap(resultMap, map);
         return resultMap;*/
         return successMap();

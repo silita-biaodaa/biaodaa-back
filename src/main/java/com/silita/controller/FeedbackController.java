@@ -24,7 +24,7 @@ public class FeedbackController extends BaseController {
     MongodbService mongodbService;
 
     /**
-     * 等级列表
+     * 意见反馈列表
      *
      * @return
      */

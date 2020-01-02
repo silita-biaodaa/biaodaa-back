@@ -107,6 +107,8 @@ public class NoticeController extends BaseController {
     public Map<String,Object> noticeCount() {
         return successMap(noticeService.getNoticeCount());
     }
+
+
     /**
      * 获取站点公告统计
      * @return
@@ -116,5 +118,24 @@ public class NoticeController extends BaseController {
     public Map<String,Object> siteNoticeCount(@RequestBody Map<String,Object> param) {
         return successMap(noticeService.getCount(param));
     }
-
+    /**
+     * 获取站点公告统计
+     * @return
+     *//*
+    @RequestMapping(value = "/siteNoticeCounts", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> siteNoticeCounts(@RequestBody Map<String,Object> param) {
+        noticeService.insertSiteCounts(param);
+        return successMap();
+    }
+    *//**
+     * 获取站点公告统计
+     * @return
+     *//*
+    @RequestMapping(value = "/noticeSites", method = RequestMethod.POST, produces="application/json;charset=utf-8")
+    @ResponseBody
+    public Map<String,Object> noticeSites() {
+        noticeService.insertSite();
+        return successMap();
+    }*/
 }

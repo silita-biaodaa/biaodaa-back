@@ -67,10 +67,10 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         } else {
             param.put("optDesc", "锁定账户");
         }
-        String phone = sysUserInfoMapper.queryPhoneSingle(param);
+        String phone = sysUserInfoMapper.queryPhoneSingle(param);//根据id获取手机号码
         param.put("operand", phone);
         logsMapper.insertLogs(param);//添加操作日志
-        sysUserInfoMapper.lockUser(param);
+        sysUserInfoMapper.lockUser(param);//锁定用户
     }
 
     /**
@@ -81,13 +81,13 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public Map<String, Object> listUserInfo(SysUserInfo userInfo) {
-        Integer total = sysUserInfoMapper.queryUserTotal(userInfo);
+        Integer total = sysUserInfoMapper.queryUserTotal(userInfo);//获取用户数量
         if (total <= 0) {
             return new HashMap<>();
         }
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("total", total);
-        resultMap.put("list", sysUserInfoMapper.queryUserList(userInfo));
+        resultMap.put("list", sysUserInfoMapper.queryUserList(userInfo));//获取用户列表
         return super.handlePageCount(resultMap, userInfo);
     }
 
@@ -108,7 +108,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         String today = sdf.format(to.getTime());
         param.put("yesterday", yesterday);
         param.put("today", today);
-        return sysUserInfoMapper.queryActiveUserCount(param);
+        return sysUserInfoMapper.queryActiveUserCount(param);//获取活跃用户统计
     }
 
 
@@ -118,16 +118,15 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      * @param param
      * @return
      */
-
     @Override
     public Map<String, Object> getActiveUserList(Map<String, Object> param) {
-        mongodbUtils.isNull(param);
-        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
-        List<Map<String, Object>> list = sysUserInfoMapper.queryActiveUserList(param);
+        mongodbUtils.isNull(param);//判断传值是否为空
+        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();//获取用户状态 ：统计次数为 1:付费、统计次数 2及以上：续费 没有 则是 注册
+        List<Map<String, Object>> list = sysUserInfoMapper.queryActiveUserList(param);//获取活跃用户
         String userType = MapUtils.getString(param, "userType");
         try {
             if (list != null && list.size() > 0) {
-                for (Map<String, Object> map : list) {
+                for (Map<String, Object> map : list) {//遍历用户类型
                     String created = MyDateUtils.strToDates(MapUtils.getString(map, "created"), "yyyy-MM-dd");
                     map.put("created", created);
                     Integer integer = userTypeMap.get(MapUtils.getString(map, "pkid"));
@@ -154,13 +153,13 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public Map<String, Object> getUserInfo(Map<String, Object> param) {
-        mongodbUtils.isNull(param);
-        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
-        List<Map<String, Object>> list = sysUserInfoMapper.queryUserInfoList(param);
+        mongodbUtils.isNull(param);//判断传值是否为空
+        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();//获取用户状态 ：统计次数为 1:付费、统计次数 2及以上：续费 没有 则是 注册
+        List<Map<String, Object>> list = sysUserInfoMapper.queryUserInfoList(param);//用户列表
         String userType = MapUtils.getString(param, "userType");
         try {
             if (list != null && list.size() > 0) {
-                for (Map<String, Object> map : list) {
+                for (Map<String, Object> map : list) {//遍历用户类型
                     String created = MyDateUtils.strToDates(MapUtils.getString(map, "created"), "yyyy-MM-dd");
                     Integer integer = userTypeMap.get(MapUtils.getString(map, "pkid"));
                     map.put("created", created);
@@ -190,30 +189,30 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         String yesterdays = MyDateUtils.getYesterdays();
         param.put("yesterday", yesterdays);
         param.put("today", todays);
-        Map<String, Object> map = sysUserInfoMapper.queryUserInfoCount(param);
+        Map<String, Object> map = sysUserInfoMapper.queryUserInfoCount(param);//获取用户统计
         try {
-            Map<String, Integer> userPayCount = mongodbUtils.getUserPayCount();
-            List<Map<String, Object>> userPayCounts = mongodbUtils.getUserPayCounts();
+            Map<String, Integer> userPayCount = mongodbUtils.getUserPayCount();//用户统计  统计今日/昨日  付费用户 及 总付费用户 和 付费用户
+            List<Map<String, Object>> userPayCounts = mongodbUtils.getUserPayCounts();//总付费用户
             param.put("listUserId", userPayCounts);
             Map<String, Object> maps = new HashMap<>();
-            List<Map<String, Object>> lists = sysUserInfoMapper.queryPhones(param);
+            List<Map<String, Object>> lists = sysUserInfoMapper.queryPhones(param);//根据用户id获取id和手机号码
             for (Map<String, Object> userId : lists) {
                 maps.put(MapUtils.getString(userId, "pkid"), MapUtils.getString(userId, "phoneNo"));
             }
             int count = 0;
-            for (Map<String, Object> payCount : userPayCounts) {
+            for (Map<String, Object> payCount : userPayCounts) {//统计总付费用户
                 String phone = MapUtils.getString(maps, MapUtils.getString(payCount, "userId"));
                 if (StringUtil.isNotEmpty(phone)) {
                     count++;
                 }
             }
-            map.put("yesterdayPay", MapUtils.getInteger(userPayCount, "yesterdayPay"));
-            map.put("todayPay", MapUtils.getInteger(userPayCount, "todayPay"));
-            map.put("totalPayUser", count);
-            Map<String, Integer> pastDue = mongodbUtils.getUserType();
-            List<Map<String, Object>> list = sysUserInfoMapper.queryPast();
+            map.put("yesterdayPay", MapUtils.getInteger(userPayCount, "yesterdayPay"));//昨日付费
+            map.put("todayPay", MapUtils.getInteger(userPayCount, "todayPay"));//今日付费
+            map.put("totalPayUser", count);//总付费
+            Map<String, Integer> pastDue = mongodbUtils.getUserType();//获取用户状态 ：统计次数为 1:付费、统计次数 2及以上：续费 没有 则是 注册
+            List<Map<String, Object>> list = sysUserInfoMapper.queryPast();//获取id及对应的过期时间
             int pastCount = 0;
-            for (Map<String, Object> stringObjectMap : list) {
+            for (Map<String, Object> stringObjectMap : list) {//统计过期用户
                 Integer integer = pastDue.get(MapUtils.getString(stringObjectMap, "pkid"));
                 if (null != integer && integer > 0) {
                     String beginTime = MapUtils.getString(stringObjectMap, "expiredDate");
@@ -241,14 +240,14 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public Map<String, Object> getSingleUserInfo(Map<String, Object> param) {
-        Map<String, Object> map = sysUserInfoMapper.querySingleUserInfo(param);
+        Map<String, Object> map = sysUserInfoMapper.querySingleUserInfo(param);//获取用户个人信息
         String inviterCode = MapUtils.getString(map, "inviterCode");
         param.put("inviterCode", inviterCode);
-        String phone = sysUserInfoMapper.queryInviterPhone(param);
+        String phone = sysUserInfoMapper.queryInviterPhone(param);//获取邀请人手机号
         if (StringUtil.isNotEmpty(phone)) {
             map.put("inviterPhone", phone);
         }
-        return sysUserInfoMapper.querySingleUserInfo(param);
+        return sysUserInfoMapper.querySingleUserInfo(param);//获取用户个人信息
     }
 
     /**
@@ -261,10 +260,10 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         param.put("pid", CommonUtil.getUUID());
         param.put("optType", "用户信息");
         param.put("optDesc", "添加用户备注");
-        String phone = sysUserInfoMapper.queryPhoneSingle(param);
+        String phone = sysUserInfoMapper.queryPhoneSingle(param);//查询单个手机号码
         param.put("operand", phone);
         logsMapper.insertLogs(param);//添加操作日志
-        sysUserInfoMapper.updateRemark(param);
+        sysUserInfoMapper.updateRemark(param);//修改备注
     }
 
     /**
@@ -275,12 +274,11 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
      */
     @Override
     public Map<String, Object> getInviterInfo(Map<String, Object> param) {
-        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();
-        List<Map<String, Object>> list = sysUserInfoMapper.queryInviterInfo(param);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Map<String, Integer> userTypeMap = mongodbUtils.getUserType();//获取用户类型
+        List<Map<String, Object>> list = sysUserInfoMapper.queryInviterInfo(param);//获取邀请人信息
         try {
             if (list != null && list.size() > 0) {
-                for (Map<String, Object> map : list) {
+                for (Map<String, Object> map : list) {//遍历用户类型
                     map.put("created", MapUtils.getString(map, "created"));
                     Integer integer = userTypeMap.get(MapUtils.getString(map, "pkid"));
                     UserTypeCommon.judge(integer, map);

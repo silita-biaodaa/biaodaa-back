@@ -87,7 +87,6 @@ public class UserInfoController extends BaseController {
    @ResponseBody
    @RequestMapping(value = "/active/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String,Object> activeList(@RequestBody Map<String,Object> param){
-
         return userInfoService.getActiveUserList(param);
     }
 

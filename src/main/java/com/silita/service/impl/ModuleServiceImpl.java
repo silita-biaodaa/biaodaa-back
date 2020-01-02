@@ -34,12 +34,12 @@ public class ModuleServiceImpl implements ModuleService {
         param.put("pid", 99);
         List<Map<String, Object>> listMap = new ArrayList<>();
 
-        List<Map<String, Object>> list = tbModuleMapper.queryUpdateUserModule(param);
-        for (Map<String, Object> map : list) {
+        List<Map<String, Object>> list = tbModuleMapper.queryUpdateUserModule(param);//查询可编辑的权限
+        for (Map<String, Object> map : list) {//遍历可编辑权限
             param.put("pid", MapUtils.getInteger(map, "id"));
-            List<Map<String, Object>> listTwo = tbModuleMapper.queryUpdateUserModule(param);
+            List<Map<String, Object>> listTwo = tbModuleMapper.queryUpdateUserModule(param);//根据pid查询可编辑的权限
             List<Map<String, Object>> listMap2 = new ArrayList<>();
-            for (Map<String, Object> map2 : listTwo) {
+            for (Map<String, Object> map2 : listTwo) {//遍历可编辑权限
                 if (MapUtils.getInteger(map, "pid") != 9903) {
                     listMap2.add(map2);
                 }

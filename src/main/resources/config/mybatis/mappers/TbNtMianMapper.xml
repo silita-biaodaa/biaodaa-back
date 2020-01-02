@@ -548,6 +548,25 @@
         </if>
         GROUP BY src_site
     </select>
+    <select id="querySiteNoticeCounts" resultType="java.util.Map" parameterType="map">
+        SELECT
+        <![CDATA[SUBSTRING_INDEX(SUBSTRING_INDEX(src_site, '&', 2),'&',- 1)]]> AS srcSite,
+        COUNT(0) AS siteCount
+        FROM
+        biaodaa_admin.tb_nt_mian_${source}
+        WHERE 1=1
+        <if test="startDate != null and startDate != ''">
+            and DATE(pub_date) = #{startDate}
+        </if>
+        GROUP BY src_site
+    </select>
+    <select id="queryNoticeSitePubDate" resultType="java.lang.String" parameterType="map">
+        SELECT
+          pub_date
+        FROM
+          tb_nt_mian_${source}
+        GROUP BY pub_date
+    </select>
 
     <sql id="ntStatus">
        ( CASE

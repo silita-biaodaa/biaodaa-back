@@ -12,14 +12,14 @@ import java.util.Map;
 public interface TbFeedbackMapper extends MyMapper<TbFeedback> {
 
     /**
-     * 查询列表
+     * 查询意见反馈列表
      * @param tbFeedback
      * @return
      */
     List<Map<String,Object>> queryFeedbackList(TbFeedback tbFeedback);
 
     /**
-     * 查询个数
+     * 统计意见反馈个数
      * @param tbFeedback
      * @return
      */
