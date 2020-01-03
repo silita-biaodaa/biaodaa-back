@@ -290,7 +290,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         param.put("id", DataHandlingUtil.getUUID());//生成uuid
         param.put("code", "alias_grade_" + PinYinUtil.cn2py(name) + "_" + System.currentTimeMillis());//拼接code
         dicAliasMapper.insertLevelAilas(param);//添加资质别名
-        String stdType = MapUtils.getString(param, "stdType");//获取类型  1：资质  2：等级
+        String stdType = MapUtils.getString(param, "stdType");//获取类型  1：资质  3：等级
         if (stdType.equals("3")) {
             param.put("levelAilasName", name);
             param.put("levelCode", param.get("stdCode"));

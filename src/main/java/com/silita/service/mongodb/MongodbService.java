@@ -4,7 +4,6 @@ package com.silita.service.mongodb;
 import com.silita.dao.TbReportInfoMapper;
 import com.silita.model.OrderInfo;
 import com.silita.utils.dateUtils.MyDateUtils;
-import com.silita.utils.stringUtils.StringUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -375,11 +374,7 @@ public class MongodbService {
         String orderStart = MapUtils.getString(param, "orderStart");
         //结束时间
         String orderEnd = MapUtils.getString(param, "orderEnd");
-
-        //
         Criteria criteria = new Criteria();
-
-
         if (StringUtil.isNotEmpty(orderStart) && StringUtil.isNotEmpty(orderEnd)) {
             Date parse = MyDateUtils.getTransitionDate(orderStart);
             String tomorrowTime = MyDateUtils.getTomorrowTime(orderEnd);
