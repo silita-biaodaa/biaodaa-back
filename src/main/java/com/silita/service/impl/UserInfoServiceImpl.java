@@ -267,7 +267,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
     }
 
     /**
-     * 邀请人信息
+     * 被邀请人信息
      *
      * @param param
      * @return
@@ -275,7 +275,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
     @Override
     public Map<String, Object> getInviterInfo(Map<String, Object> param) {
         Map<String, Integer> userTypeMap = mongodbUtils.getUserType();//获取用户类型
-        List<Map<String, Object>> list = sysUserInfoMapper.queryInviterInfo(param);//获取邀请人信息
+        List<Map<String, Object>> list = sysUserInfoMapper.queryInviterInfo(param);//根据邀请人码获取被邀请人信息
         try {
             if (list != null && list.size() > 0) {
                 for (Map<String, Object> map : list) {//遍历用户类型
@@ -285,7 +285,7 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
                 }
             }
         } catch (Exception e) {
-            logger.error("邀请人信息", e);
+            logger.error("被邀请人信息", e);
         }
         Map<String, Object> resultMap = new HashMap<>();
         int count = 0;
@@ -307,7 +307,14 @@ public class UserInfoServiceImpl extends AbstractService implements IUserInfoSer
         return mongodbUtils.getOrderCount();
     }
 
-
+    /**
+     * 分页
+     *
+     * @param param
+     * @param list
+     * @param userType
+     * @return
+     */
     public Map<String, Object> isNullUserType(Map<String, Object> param, List<Map<String, Object>> list, String userType) {
         List<Map<String, Object>> activeListMap = new ArrayList<>();
         List<Map<String, Object>> listMap = list;

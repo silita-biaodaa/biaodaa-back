@@ -37,6 +37,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
      */
     @Override
     public Map<String, Object> gitAliasListStdCode(Map<String, Object> param) {
+        //把参数赋值到DicAlias中
         DicAlias dicAlias = new DicAlias();
         dicAlias.setCurrentPage(MapUtils.getInteger(param, "currentPage"));
         dicAlias.setPageSize(MapUtils.getInteger(param, "pageSize"));
@@ -44,7 +45,7 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         dicAlias.setName(MapUtils.getString(param, "name"));
         dicAlias.setStdType(MapUtils.getString(param, "type"));
         String rank = MapUtils.getString(param, "rank");
-        if (StringUtil.isNotEmpty(rank)) {
+        if (StringUtil.isNotEmpty(rank)) {//判断
             if (rank.equals("createTime")) {
                 rank = "create_time";
                 dicAlias.setRank(rank);
@@ -54,8 +55,8 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         }
         dicAlias.setSort(MapUtils.getString(param, "sort"));
         Map<String, Object> params = new HashMap<>();
-        params.put("list", dicAliasMapper.queryAliasListCode(dicAlias));
-        params.put("total", dicAliasMapper.queryAliasListCodeCount(dicAlias));
+        params.put("list", dicAliasMapper.queryAliasListCode(dicAlias));//根据条件获取词典别名列表
+        params.put("total", dicAliasMapper.queryAliasListCodeCount(dicAlias));//根据条件获取词典别名总数
         return super.handlePageCount(params, dicAlias);
     }
 
@@ -72,9 +73,9 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
         String[] split = ids.split(",");
         List<String> id = Arrays.asList(split);
         param.put("ids", id);
-        dicAliasMapper.delAilasByIds(param);
+        dicAliasMapper.delAilasByIds(param);//批量删除别名
         param.put("list", id);
-        dicQuaAnalysisMapper.deleteLevelAilasId(param);
+        dicQuaAnalysisMapper.deleteLevelAilasId(param);//删除资质解析组合数据
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
@@ -89,24 +90,24 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
     @Override
     public Map<String, Object> delAilasById(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
-        String ids = MapUtils.getString(param, "ids");
-        String[] split = ids.split(",");
-        List<String> id = Arrays.asList(split);
+        String ids = MapUtils.getString(param, "ids");//获取id:(id,id)
+        String[] split = ids.split(",");//以逗号截取
+        List<String> id = Arrays.asList(split);//转换为list
         for (String s : id) {
             param.put("id", s);
-            Map<String, Object> map = dicAliasMapper.queryNameId(param);
+            Map<String, Object> map = dicAliasMapper.queryNameId(param);//根据id查询别名和code
             String name = MapUtils.getString(map, "name");
             String stdCode = MapUtils.getString(map, "stdCode");
             param.put("quaCode", stdCode);
-            String benchName = dicQuaMapper.queryBenchNameQuaCode(param);
+            String benchName = dicQuaMapper.queryBenchNameQuaCode(param);//根据quaCode获取标准名称
             if (StringUtil.isNotEmpty(name) && StringUtil.isNotEmpty(benchName)) {
-                if (!name.equals(benchName)) {
-                    dicAliasMapper.deleteIdAilas(param);
+                if (!name.equals(benchName)) {//原自动生成别名不能删除/ 必须留至少一个别名
+                    dicAliasMapper.deleteIdAilas(param);//根据id删除别名
                 }
             }
         }
         param.put("list", id);
-        dicQuaAnalysisMapper.deleteAilasId(param);
+        dicQuaAnalysisMapper.deleteAilasId(param);//删除资质解析组合数据
         resultMap.put("code", Constant.CODE_SUCCESS);
         resultMap.put("msg", Constant.MSG_SUCCESS);
         return resultMap;
@@ -279,33 +280,33 @@ public class AliasServiceImpl extends AbstractService implements IAliasService {
     @Override
     public Map<String, Object> insertLevelAilas(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
-        Integer integer = dicAliasMapper.queryName(param);
-        if (null != integer && integer != 0) {
+        Integer integer = dicAliasMapper.queryName(param);//查询别名名称是否存在
+        if (null != integer && integer != 0) {//判断别名是否存在
             resultMap.put("code", "0");
             resultMap.put("msg", "别名已存在");
             return resultMap;
         }
-        String name = MapUtils.getString(param, "name");
-        param.put("id", DataHandlingUtil.getUUID());
-        param.put("code", "alias_grade_" + PinYinUtil.cn2py(name) + "_" + System.currentTimeMillis());
-        dicAliasMapper.insertLevelAilas(param);
-        String stdType = MapUtils.getString(param, "stdType");
+        String name = MapUtils.getString(param, "name");//获取别名名称
+        param.put("id", DataHandlingUtil.getUUID());//生成uuid
+        param.put("code", "alias_grade_" + PinYinUtil.cn2py(name) + "_" + System.currentTimeMillis());//拼接code
+        dicAliasMapper.insertLevelAilas(param);//添加资质别名
+        String stdType = MapUtils.getString(param, "stdType");//获取类型  1：资质  2：等级
         if (stdType.equals("3")) {
             param.put("levelAilasName", name);
             param.put("levelCode", param.get("stdCode"));
-            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);
+            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);//获取资质解析维护需要添加的数据
             if (null != list && list.size() > 0) {
                 param.put("list", list);
-                dicQuaAnalysisMapper.insertAanlysis(param);
+                dicQuaAnalysisMapper.insertAanlysis(param);//添加资质解析组合数据
             }
 
         } else if (stdType.equals("1")) {
             param.put("qualAilasName", name);
             param.put("qualCode", param.get("stdCode"));
-            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);
+            List<Map<String, Object>> list = dicQuaMapper.queryQualAnalysisOne(param);//获取资质解析维护需要添加的数据
             if (null != list && list.size() > 0) {
                 param.put("list", list);
-                dicQuaAnalysisMapper.insertAanlysis(param);
+                dicQuaAnalysisMapper.insertAanlysis(param);//添加资质解析组合数据
             }
         }
         resultMap.put("code", Constant.CODE_SUCCESS);

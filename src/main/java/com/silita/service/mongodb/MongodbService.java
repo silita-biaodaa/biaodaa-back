@@ -318,6 +318,7 @@ public class MongodbService {
      */
     public List<Map<String, Object>> getTopUp(Map<String, Object> param) {
         Query query = new Query();
+        //根据基本条件筛选订单
         query.addCriteria(
                 new Criteria().andOperator(
                         Criteria.where("orderStatus").is(9), new Criteria().and("userId").is(MapUtils.getString(param, "userId")),
@@ -329,7 +330,7 @@ public class MongodbService {
                         )));
         List<OrderInfo> orderInfos = mongoTemplate.find(query, OrderInfo.class);
         List<Map<String, Object>> listMap = new ArrayList<>();
-        for (OrderInfo orderInfo : orderInfos) {
+        for (OrderInfo orderInfo : orderInfos) {//循环赋值
             Map<String, Object> maps = new HashMap<>();
             String stdCode = orderInfo.getStdCode();
             String tradeType = orderInfo.getTradeType();

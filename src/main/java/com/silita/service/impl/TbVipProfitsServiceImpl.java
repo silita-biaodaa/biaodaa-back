@@ -35,7 +35,7 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
     public List<Map<String, Object>> getVipProfitsSingle(Map<String, Object> param) {
         //订单
         List<Map<String, Object>> topUpListMap = mongodbUtils.getTopUp(param);
-        if (topUpListMap != null && topUpListMap.size() > 0) {
+        if (topUpListMap != null && topUpListMap.size() > 0) {//订单不为空  获取订单过期时间
             for (Map<String, Object> map : topUpListMap) {
                 Integer vipDays = MapUtils.getInteger(map, "vipDays");
                 String created = MapUtils.getString(map, "created");
@@ -43,7 +43,7 @@ public class TbVipProfitsServiceImpl implements ITbVipProfitsService {
                 map.put("expiredDate", tomorrowTime);
             }
         }
-        //邀请人
+        // 邀请人
         String ownInviteCode = sysUserInfoMapper.queryinviterCode(param);
         if (StringUtil.isNotEmpty(ownInviteCode)) {
             param.put("ownInviteCode", ownInviteCode);

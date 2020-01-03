@@ -15,13 +15,6 @@ public interface IAliasService {
 
     /**
      * 查询别名
-     * @param param
-     * @return
-     */
-    //List<DicAlias> getAliasList(Map<String,Object> param);
-
-    /**
-     * 查询别名
      *
      * @param param
      * @return

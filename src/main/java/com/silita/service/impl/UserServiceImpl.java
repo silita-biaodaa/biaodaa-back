@@ -93,10 +93,10 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     @Override
     public void updateLock(Map<String, Object> param) {
 
-        tbUserMapper.updateLock(param);
+        tbUserMapper.updateLock(param);//编辑用户解锁或锁定
         param.put("pid", CommonUtil.getUUID());
         param.put("optType", "用户账号");
-        String phone = tbUserMapper.queryAdministratorPhone(param);
+        String phone = tbUserMapper.queryAdministratorPhone(param);//获取管理员手机号
 
         if (MapUtils.getInteger(param, "lock") == 0) {
             param.put("optDesc", "解锁管理员账号:" + phone);
@@ -116,7 +116,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     public Map<String, Object> updatePassword(Map<String, Object> param) {
         Map<String, Object> resultMap = new HashMap<>();
         try {
-            Integer integer = tbUserMapper.querySingleUserPhone(param);//查询手机号码是否存在
+            Integer integer = tbUserMapper.querySingleUserPhone(param);//根据手机号码查询手机号码是否存在
             if (null == integer || integer == 0) {
                 resultMap.put("msg", Constant.MSG_PHONE);
                 resultMap.put("code", Constant.CODE_PHONE);
@@ -127,7 +127,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             hashIterations = 2;
             Object obj = new SimpleHash("MD5", password, phone, hashIterations);//加密
             param.put("password", obj.toString());
-            Integer integer1 = tbUserMapper.querySingleUserPassword(param);//查询原密码是否正确
+            Integer integer1 = tbUserMapper.querySingleUserPassword(param);//根据手机号码及密码查询原密码是否正确
             if (null == integer1 || integer1 == 0) {
                 resultMap.put("msg", Constant.MSG_PASSWORD);
                 resultMap.put("code", Constant.CODE_PASSWORD);

@@ -70,10 +70,6 @@ public class DataMaintainServiceImpl extends AbstractService implements IDataMai
     public List<DicCommon> listPbModeBySource(DicCommon dicCommon) {
         String type = dicCommon.getType();
         dicCommon.setType(type + "_pbmode");
-//        Map<String,Object> result = new HashMap<String, Object>();
-//        result.put("total", dicCommonMapper.getDicCommonCountByType(dicCommon));
-//        result.put("datas", dicCommonMapper.listDicCommonByType(dicCommon));
-//        return super.handlePageCount(result, dicCommon);
         return dicCommonMapper.listDicCommonByType(dicCommon);
     }
 

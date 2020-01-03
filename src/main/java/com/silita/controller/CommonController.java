@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,12 +49,11 @@ public class CommonController extends BaseController {
      * @param
      * @return
      */
-/*    @RequestMapping(value = "/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/detail", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public Map<String,Object> recycelDetail(@RequestBody Map<String,Object> param) throws IOException {
-
         return successMap(ntContentService.queryCentent(param));
-    }*/
+    }
     @RequestMapping(value = "/listRelevantNotice", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public Map<String, Object> listRelevantNotice(@RequestBody TbNtMian tbNtMian) {

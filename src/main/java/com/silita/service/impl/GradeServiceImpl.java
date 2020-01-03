@@ -296,14 +296,6 @@ public class GradeServiceImpl extends AbstractService implements IGradeService {
         return resultMap;
     }
 
-
-   /* @Override
-    public List<Map<String, Object>> getQualGradeList(Map<String, Object> param) {
-        //TODO:
-        List<Map<String, Object>> parentList = dicCommonMapper.queryParentGrade();
-        return parentList;
-    }*/
-
     /**
      * 等级下拉选项
      * 要求：该资质没有的等级

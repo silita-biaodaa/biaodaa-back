@@ -136,6 +136,11 @@ public interface SysUserInfoMapper extends MyMapper<SysUserInfo> {
      */
     List<Map<String,Object>> queryInviterInfo(Map<String,Object> param);
 
+    /**
+     * 根据用户id获取本账号邀请码
+     * @param param
+     * @return
+     */
     String queryinviterCode(Map<String,Object> param);
 
     /**

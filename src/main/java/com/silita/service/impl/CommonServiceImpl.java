@@ -68,7 +68,7 @@ public class CommonServiceImpl implements ICommonService {
             source = "hunan";
         }
         param.put("type", source + "_pbmode");
-        List<Map<String, Object>> list = dicCommonMapper.queryList(param);
+        List<Map<String, Object>> list = dicCommonMapper.queryList(param);//获取评标办法列表
         String region = RegionCommon.regionSource.get(source);
         for (Map<String, Object> map : list) {
             map.put("region", region);
@@ -89,13 +89,13 @@ public class CommonServiceImpl implements ICommonService {
         param.put("list", list);
         for (String s : list) {
             param.put("id", s);
-            String code = dicCommonMapper.queryDicCommonCode(param);
+            String code = dicCommonMapper.queryDicCommonCode(param);//根据id获取code
             if (StringUtil.isNotEmpty(code)) {
                 param.put("stdCode", code);
-                dicAliasMapper.deleteAilas(param);
+                dicAliasMapper.deleteAilas(param);//根据stdCode删除别名
             }
         }
-        dicCommonMapper.deleteDicCommonIds(param);
+        dicCommonMapper.deleteDicCommonIds(param);//批量删除评标办法
     }
 
     /**

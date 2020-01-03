@@ -241,7 +241,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                         // 去除 pkid 和 ntId
                         detail.remove("pkid");
                         detail.remove("ntId");
-               /*         //一列数据
+                        //一列数据
                         for (Map.Entry<String, Object> entry : detail.entrySet()) {
                             //替换变更后的值
                             if (changeField.size() > 0) {
@@ -263,7 +263,7 @@ public class NoticeZhaoBiaoServiceImpl extends AbstractService implements INotic
                                     cell.setCellValue(String.valueOf(entry.getValue()));
                                 }
                             }
-                        }*/
+                        }
                         String cityCode = (String) regionMap.get(detail.get("cityCode"));
                         if (StringUtil.isNotEmpty(cityCode)) {
                             row.getCell(4).setCellValue(cityCode);
