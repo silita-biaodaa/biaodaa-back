@@ -39,30 +39,30 @@
 
     <select id="getUserByUserName" parameterType="String" resultMap="UserResult">
         SELECT *
-        FROM tb_user
+        FROM biaodaa_admin.tb_user
         WHERE phone = #{userName};
     </select>
 
     <select id="getRolesAndPermissionsByUserName" parameterType="String" resultMap="RolesAndPermissions">
         SELECT role_name, permission_name
-		FROM tb_user u
-		LEFT JOIN tb_user_role ur ON u.uid = ur.uid
-		LEFT JOIN tb_role r ON ur.rid = r.rid
-		LEFT JOIN tb_role_permission rp ON r.rid = rp.rid
-		LEFT JOIN tb_permission p ON rp.pid = p.pid
+		FROM biaodaa_admin.tb_user u
+		LEFT JOIN biaodaa_admin.tb_user_role ur ON u.uid = ur.uid
+		LEFT JOIN biaodaa_admin.tb_role r ON ur.rid = r.rid
+		LEFT JOIN biaodaa_admin.tb_role_permission rp ON r.rid = rp.rid
+		LEFT JOIN biaodaa_admin.tb_permission p ON rp.pid = p.pid
 		WHERE u.user_name = #{userName}
     </select>
 
     <select id="listUser" parameterType="Map" resultMap="UserResult">
         SELECT *
-        FROM tb_user
+        FROM biaodaa_admin.tb_user
         <if test="start!=null and pageSize!=null">
             LIMIT #{start}, #{pageSize}
         </if>
     </select>
 
     <select id="getUserTotal" parameterType="Map" resultType="Integer">
-        SELECT COUNT(*) FROM tb_user
+        SELECT COUNT(*) FROM biaodaa_admin.tb_user
     </select>
 
 </mapper>
