@@ -70,11 +70,11 @@ public class HighwayServiceImpl implements IHighwayService {
         if("build".equals(type)||"design".equals(type)){
             //全国公路 在建或设计
             CountryHighway countryHighway=countryHighwayMapper.findById(pkid, type);
+            HighwayEditVo highwayEditVo=new HighwayEditVo();
             switch (countryHighway.getIsOpt()){
                 case 0:
                     result.put("code",1);
                     result.put("msg","获取成功！");
-                    HighwayEditVo highwayEditVo=new HighwayEditVo();
                     BeanUtil.copyProperties(countryHighway,highwayEditVo);
                     result.put("data",highwayEditVo);
                     countryHighwayMapper.lock(pkid,type);
@@ -84,8 +84,13 @@ public class HighwayServiceImpl implements IHighwayService {
                     result.put("msg","该记录已被锁定！");
                     break;
                 case 2:
-                    result.put("code",0);
-                    result.put("msg","该记录已被人工解析！");
+//                    result.put("code",0);
+//                    result.put("msg","该记录已被人工解析！");
+                    result.put("code",1);
+                    result.put("msg","获取成功！");
+                    BeanUtil.copyProperties(countryHighway,highwayEditVo);
+                    result.put("data",highwayEditVo);
+                    countryHighwayMapper.lock(pkid,type);
                     break;
             }
         }else if("hunan".equals(type)){
