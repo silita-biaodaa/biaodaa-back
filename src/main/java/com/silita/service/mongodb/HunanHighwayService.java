@@ -93,6 +93,14 @@ public class HunanHighwayService {
     }
 
     /**
+     * 恢复已审核
+     * @param pkid
+     */
+    public int reset(String pkid){
+        return updateOpt(pkid,2);
+    }
+
+    /**
      * 根据主键  更新状态
      * @param pkid
      * @param status

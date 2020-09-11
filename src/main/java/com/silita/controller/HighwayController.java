@@ -47,6 +47,14 @@ public class HighwayController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/reset", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
+    public Map<String, Object> reset(@RequestBody Map<String, Object> param){
+        String pkid=MapUtils.getString(param,"pkid");
+        String type=MapUtils.getString(param,"type");
+        return highwayService.reset(pkid,type);
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/release", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> release(@RequestBody Map<String, Object> param){
         String pkid=MapUtils.getString(param,"pkid");

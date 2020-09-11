@@ -130,4 +130,8 @@
     <update id="release">
         update mishu.cm_highway_${type} set is_opt=0 where pkid=#{pkid}
     </update>
+
+    <update id="reset">
+        update mishu.cm_highway_${type} set is_opt=2 where pkid=#{pkid}
+    </update>
 </mapper>

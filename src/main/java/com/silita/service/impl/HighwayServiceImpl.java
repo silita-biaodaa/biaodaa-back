@@ -130,6 +130,20 @@ public class HighwayServiceImpl implements IHighwayService {
     }
 
     @Override
+    public Map<String, Object> reset(String pkid, String type) {
+        Map<String, Object> result=new HashMap<>();
+        int validrows=0;
+        if("build".equals(type)||"design".equals(type)){
+            validrows=countryHighwayMapper.reset(pkid,type);
+        }else if("hunan".equals(type)){
+            validrows=hunanHighwayServicel.reset(pkid);
+        }
+        result.put("code",1);
+        result.put("msg",validrows==0?"恢复失败！":"恢复成功！");
+        return result;
+    }
+
+    @Override
     public Map<String, Object> release(String pkid, String type) {
         Map<String, Object> result=new HashMap<>();
         int validrows=0;

@@ -28,6 +28,9 @@ public interface CountryHighwayMapper {
     //释放
     int release(@Param("pkid")String pkid,@Param("type")String type);
 
+    //恢复已审核
+    int reset(@Param("pkid")String pkid,@Param("type")String type);
+
     //更新记录
     int update(@Param("pkid")String pkid,@Param("type")String type,@Param("mileageMan")String mileageMan);
 
