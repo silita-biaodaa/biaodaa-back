@@ -5,7 +5,7 @@
 
     <select id="findByPage"
             resultType="com.silita.model.CountryHighway">
-        select pkid,proj_name as projName,section,province,is_opt as isOpt,"build" as type,created from cm_highway_build
+        select pkid,proj_name as projName,section,province,is_opt as isOpt,"build" as type,created from mishu.cm_highway_build
         where
         1=1
         <choose>
@@ -27,7 +27,7 @@
         </if>
         union all
         select pkid,proj_name as projName,section,province,is_opt as isOpt ,"design" as type,created from
-        cm_highway_design
+        mishu.cm_highway_design
         where
         1=1
         <choose>
@@ -51,7 +51,7 @@
     </select>
     <select id="countTotal" resultType="java.lang.Integer">
         select SUM(a.total) from (
-        select count(1) as total from cm_highway_build
+        select count(1) as total from mishu.cm_highway_build
         where
         1=1
         <choose>
@@ -71,7 +71,7 @@
             and proj_name like '%${nameKey}%'
         </if>
         union all
-        select count(1) as total from cm_highway_design
+        select count(1) as total from mishu.cm_highway_design
         where
         1=1
         <choose>
@@ -94,17 +94,17 @@
     </select>
 
     <select id="findById" resultType="com.silita.model.CountryHighway">
-        select pkid,proj_name as projName ,section,section_start as sectionStart ,section_end as sectionEnd ,is_opt as isOpt,remark,mileage,case when mileage_man is null then mileage else mileage_man end as mileageMan,#{type} as type from cm_highway_${type} where pkid=#{pkid}
+        select pkid,proj_name as projName ,section,section_start as sectionStart ,section_end as sectionEnd ,is_opt as isOpt,remark,mileage,case when mileage_man is null then mileage else mileage_man end as mileageMan,#{type} as type from mishu.cm_highway_${type} where pkid=#{pkid}
     </select>
 
     <select id="countByIsOpt" resultType="java.lang.Long">
         select SUM(a.total) from (
-        select count(1) as total from cm_highway_build
+        select count(1) as total from mishu.cm_highway_build
         <if test="isOpt &gt;= 0 and isOpt &lt;= 2">
             where is_opt =#{isOpt}
         </if>
         union all
-        select count(1) as total from cm_highway_design
+        select count(1) as total from mishu.cm_highway_design
         <if test="isOpt &gt;= 0 and isOpt &lt;= 2">
             where is_opt =#{isOpt}
         </if>
@@ -113,21 +113,21 @@
 
     <select id="allProvinces" resultType="java.lang.String">
         select DISTINCT(case when a.province is null then '其他' else a.province end) from (
-        select distinct(province) from cm_highway_build
+        select distinct(province) from mishu.cm_highway_build
         union all
-        select distinct(province) from cm_highway_design
+        select distinct(province) from mishu.cm_highway_design
         ) a
     </select>
 
     <update id="lock">
-        update cm_highway_${type} set is_opt=1 where pkid=#{pkid}
+        update mishu.cm_highway_${type} set is_opt=1 where pkid=#{pkid}
     </update>
 
     <update id="update">
-        update cm_highway_${type} set is_opt=2,mileage_man=#{mileageMan} where pkid=#{pkid}
+        update mishu.cm_highway_${type} set is_opt=2,mileage_man=#{mileageMan} where pkid=#{pkid}
     </update>
 
     <update id="release">
-        update cm_highway_${type} set is_opt=0 where pkid=#{pkid}
+        update mishu.cm_highway_${type} set is_opt=0 where pkid=#{pkid}
     </update>
 </mapper>
