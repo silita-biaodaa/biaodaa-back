@@ -132,12 +132,16 @@ public class HunanHighwayService {
      * @param mileageMan
      * @return
      */
-    public int updateData(String pkid,String mileageMan){
+    public int updateData(String pkid,String mileageMan,String tunnelLen,String bridgeLen,String bridgeSpan,String bridgeWidth){
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(pkid));
         Update update = new Update();
         update.set("isOpt", 2);
         update.set("mileageMan", mileageMan);
+        update.set("tunnelLen", tunnelLen);
+        update.set("bridgeLen", bridgeLen);
+        update.set("bridgeSpan", bridgeSpan);
+        update.set("bridgeWidth", bridgeWidth);
         WriteResult upsert = mongoTemplate.upsert(query, update, "hunan_highway_achieve");
         return upsert.getN();
     }

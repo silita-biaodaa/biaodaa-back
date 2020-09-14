@@ -68,7 +68,11 @@ public class HighwayController extends BaseController {
         String pkid=MapUtils.getString(param,"pkid");
         String type=MapUtils.getString(param,"type");
         String mileageMan=MapUtils.getString(param,"mileageMan");
-        return highwayService.update(pkid,type,mileageMan);
+        String tunnelLen=MapUtils.getString(param,"tunnelLen");
+        String bridgeLen=MapUtils.getString(param,"bridgeLen");
+        String bridgeSpan=MapUtils.getString(param,"bridgeSpan");
+        String bridgeWidth=MapUtils.getString(param,"bridgeWidth");
+        return highwayService.update(pkid,type,mileageMan,tunnelLen,bridgeLen,bridgeSpan,bridgeWidth);
     }
 
     @ResponseBody

@@ -39,6 +39,18 @@ public class HighwayEditVo {
     //人工解析里程数
     private String mileageMan;
 
+    //企业名称
+    private String compName;
+
+    //隧道长度
+    private String tunnelLen;
+    //桥梁长度
+    private String bridgeLen;
+    //桥梁跨度
+    private String bridgeSpan;
+    //桥面宽度
+    private String bridgeWidth;
+
     //类型：build，design
     private String type;
 }

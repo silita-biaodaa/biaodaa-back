@@ -94,7 +94,8 @@
     </select>
 
     <select id="findById" resultType="com.silita.model.CountryHighway">
-        select pkid,proj_name as projName ,section,section_start as sectionStart ,section_end as sectionEnd ,is_opt as isOpt,remark,mileage,case when mileage_man is null then mileage else mileage_man end as mileageMan,#{type} as type from mishu.cm_highway_${type} where pkid=#{pkid}
+        select pkid,com_name as compName,proj_name as projName ,section,section_start as sectionStart ,section_end as sectionEnd ,is_opt as isOpt,remark,mileage,case when mileage_man is null then mileage else mileage_man end as mileageMan,#{type} as type,tunnel_len as tunnelLen,bridge_len as bridgeLen,bridge_span as bridgeSpan,bridge_width as bridgeWidth
+        from mishu.cm_highway_${type} a left join cm_company_gonglu as b on a.com_id=b.com_id where pkid=#{pkid}
     </select>
 
     <select id="countByIsOpt" resultType="java.lang.Long">
@@ -124,7 +125,7 @@
     </update>
 
     <update id="update">
-        update mishu.cm_highway_${type} set is_opt=2,mileage_man=#{mileageMan} where pkid=#{pkid}
+        update mishu.cm_highway_${type} set is_opt=2,mileage_man=#{mileageMan},tunnel_len=#{tunnelLen},bridge_len=#{bridgeLen},bridge_span=#{bridgeSpan},bridge_width=#{bridgeWidth} where pkid=#{pkid}
     </update>
 
     <update id="release">

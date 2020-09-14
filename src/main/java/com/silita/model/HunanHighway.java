@@ -31,6 +31,18 @@ public class HunanHighway {
 
     private String mainWorks;
 
+    //企业名称
+    private String corpName;
+
+    //隧道长度
+    private String tunnelLen;
+    //桥梁长度
+    private String bridgeLen;
+    //桥梁跨度
+    private String bridgeSpan;
+    //桥面宽度
+    private String bridgeWidth;
+
     //审核状态: 0未操作，1操作中，2已操作
     private  int  isOpt;
 

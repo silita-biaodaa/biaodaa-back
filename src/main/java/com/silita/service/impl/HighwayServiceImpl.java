@@ -96,11 +96,11 @@ public class HighwayServiceImpl implements IHighwayService {
         }else if("hunan".equals(type)){
             //湖南公路
             HunanHighway hunanHighway=hunanHighwayServicel.findById(pkid);
+            HighwayEditVo highwayEditVo=new HighwayEditVo();
             switch (hunanHighway.getIsOpt()){
                 case 0:
                     result.put("code",1);
                     result.put("msg","获取成功！");
-                    HighwayEditVo highwayEditVo=new HighwayEditVo();
                     highwayEditVo.setIsOpt(hunanHighway.getIsOpt());
                     highwayEditVo.setMileage(hunanHighway.getMileageMan());
                     highwayEditVo.setMileageMan(hunanHighway.getMileageMan());
@@ -110,6 +110,11 @@ public class HighwayServiceImpl implements IHighwayService {
                     highwayEditVo.setRemark(hunanHighway.getMainWorks());
                     highwayEditVo.setSectionStart(hunanHighway.getContractBeginNo());
                     highwayEditVo.setSectionEnd(hunanHighway.getContractFinishNo());
+                    highwayEditVo.setTunnelLen(hunanHighway.getTunnelLen());
+                    highwayEditVo.setBridgeLen(hunanHighway.getBridgeLen());
+                    highwayEditVo.setBridgeSpan(hunanHighway.getBridgeSpan());
+                    highwayEditVo.setBridgeWidth(hunanHighway.getBridgeWidth());
+                    highwayEditVo.setCompName(hunanHighway.getCorpName());
                     highwayEditVo.setType("hunan");
                     hunanHighwayServicel.lock(pkid);
                     result.put("data",highwayEditVo);
@@ -119,8 +124,25 @@ public class HighwayServiceImpl implements IHighwayService {
                     result.put("msg","该记录已被锁定！");
                     break;
                 case 2:
-                    result.put("code",0);
-                    result.put("msg","该记录已被人工解析！");
+                    result.put("code",1);
+                    result.put("msg","获取成功！");
+                    highwayEditVo.setIsOpt(hunanHighway.getIsOpt());
+                    highwayEditVo.setMileage(hunanHighway.getMileageMan());
+                    highwayEditVo.setMileageMan(hunanHighway.getMileageMan());
+                    highwayEditVo.setPkid(hunanHighway.getId());
+                    highwayEditVo.setProjName(hunanHighway.getProjectName());
+                    highwayEditVo.setSection(hunanHighway.getContractName());
+                    highwayEditVo.setRemark(hunanHighway.getMainWorks());
+                    highwayEditVo.setSectionStart(hunanHighway.getContractBeginNo());
+                    highwayEditVo.setSectionEnd(hunanHighway.getContractFinishNo());
+                    highwayEditVo.setTunnelLen(hunanHighway.getTunnelLen());
+                    highwayEditVo.setBridgeLen(hunanHighway.getBridgeLen());
+                    highwayEditVo.setBridgeSpan(hunanHighway.getBridgeSpan());
+                    highwayEditVo.setBridgeWidth(hunanHighway.getBridgeWidth());
+                    highwayEditVo.setCompName(hunanHighway.getCorpName());
+                    highwayEditVo.setType("hunan");
+                    hunanHighwayServicel.lock(pkid);
+                    result.put("data",highwayEditVo);
                     break;
             }
 
@@ -158,16 +180,16 @@ public class HighwayServiceImpl implements IHighwayService {
     }
 
     @Override
-    public Map<String, Object> update(String pkid, String type, String mileageMan) {
+    public Map<String, Object> update(String pkid, String type, String mileageMan,String tunnelLen,String bridgeLen,String bridgeSpan,String bridgeWidth) {
         Map<String, Object> result=new HashMap<>(2);
         int validRows=-1;
         try {
             if ("build".equals(type) || "design".equals(type)) {
                 //全国公路 在建或设计
-                validRows = countryHighwayMapper.update(pkid, type, mileageMan);
+                validRows = countryHighwayMapper.update(pkid, type, mileageMan,tunnelLen,bridgeLen,bridgeSpan,bridgeWidth);
             }else if("hunan".equals(type)){
                 //湖南公路
-                validRows = hunanHighwayServicel.updateData(pkid,mileageMan);
+                validRows = hunanHighwayServicel.updateData(pkid,mileageMan,tunnelLen,bridgeLen,bridgeSpan,bridgeWidth);
             }
             if (validRows > 0) {
                 result.put("code", 1);

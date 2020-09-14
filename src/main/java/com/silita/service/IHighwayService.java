@@ -17,7 +17,7 @@ public interface IHighwayService {
 
     Map<String,Object> release(String pkid, String type);
 
-    Map<String,Object> update(String pkid, String type,String mileageMan);
+    Map<String,Object> update(String pkid, String type,String mileageMan,String tunnelLen,String bridgeLen,String bridgeSpan,String bridgeWidth);
 
     Map<String,Object> count();
 
