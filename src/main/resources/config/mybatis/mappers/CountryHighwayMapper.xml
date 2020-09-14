@@ -95,7 +95,7 @@
 
     <select id="findById" resultType="com.silita.model.CountryHighway">
         select pkid,com_name as compName,proj_name as projName ,section,section_start as sectionStart ,section_end as sectionEnd ,is_opt as isOpt,remark,mileage,case when mileage_man is null then mileage else mileage_man end as mileageMan,#{type} as type,tunnel_len as tunnelLen,bridge_len as bridgeLen,bridge_span as bridgeSpan,bridge_width as bridgeWidth
-        from mishu.cm_highway_${type} a left join cm_company_gonglu as b on a.com_id=b.com_id where pkid=#{pkid}
+        from mishu.cm_highway_${type} a left join mishu.cm_company_gonglu as b on a.com_id=b.com_id where pkid=#{pkid}
     </select>
 
     <select id="countByIsOpt" resultType="java.lang.Long">
