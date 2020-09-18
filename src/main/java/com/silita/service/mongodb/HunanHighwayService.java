@@ -2,8 +2,10 @@ package com.silita.service.mongodb;
 
 import cn.hutool.core.util.StrUtil;
 import com.mongodb.WriteResult;
+import com.silita.dao.LogParseMapper;
 import com.silita.model.HighwayVo;
 import com.silita.model.HunanHighway;
+import com.silita.model.HunanHighwayTmp;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -30,6 +32,9 @@ public class HunanHighwayService {
     @Resource
     MongoTemplate mongoTemplate;
 
+    @Resource
+    LogParseMapper logParseMapper;
+
     /**
      * 列表查询
      * @param pageNo
@@ -38,7 +43,7 @@ public class HunanHighwayService {
      * @param isOpt
      * @return
      */
-    public Map<String,Object> list(int pageNo, int pageSize, String nameKey, int isOpt){
+    public Map<String,Object> list(int pageNo, int pageSize, String nameKey, int isOpt,String startDate, String endDate, String optUid){
         Map<String,Object> result=new HashMap<>();
         Query query = new Query();
         Criteria criteria=new Criteria();
@@ -56,18 +61,47 @@ public class HunanHighwayService {
         query.with(sort);
         List<HunanHighway> hunanHighways=mongoTemplate.find(query,HunanHighway.class);
         List<HighwayVo> highwayVoList = new ArrayList<>();
-        hunanHighways.forEach(hunanHighway -> {
-            HighwayVo highwayVo = new HighwayVo();
-            highwayVo.setSource("湖南省公路建设信用信息平台");
-            highwayVo.setType("hunan");
-            highwayVo.setPkid(hunanHighway.getId());
-            highwayVo.setIsOpt(hunanHighway.getIsOpt());
-            highwayVo.setProjName(hunanHighway.getProjectName());
-            highwayVo.setSection(hunanHighway.getContractName());
-            highwayVo.setProvince(hunanHighway.getLocation());
-            highwayVoList.add(highwayVo);
-        });
-        long total=mongoTemplate.count(query,HunanHighway.class);
+        long total=0L;
+        switch(isOpt){
+            case 0:
+                hunanHighways.forEach(hunanHighway -> {
+                    HighwayVo highwayVo = new HighwayVo();
+                    highwayVo.setSource("湖南省公路建设信用信息平台");
+                    highwayVo.setType("hunan");
+                    highwayVo.setPkid(hunanHighway.getId());
+                    highwayVo.setIsOpt(hunanHighway.getIsOpt());
+                    highwayVo.setProjName(hunanHighway.getProjectName());
+                    highwayVo.setSection(hunanHighway.getContractName());
+                    highwayVo.setProvince(hunanHighway.getLocation());
+                    highwayVoList.add(highwayVo);
+                });
+                total=mongoTemplate.count(query,HunanHighway.class);
+                break;
+            case 2:
+                Map<String, HunanHighway> mongoDataMap = new HashMap<>();
+                hunanHighways.forEach(optData -> {
+                    mongoDataMap.put(optData.getId(), optData);
+                });
+                List<HunanHighwayTmp> optDatas = logParseMapper.selectHunan(startDate, endDate, optUid);
+                optDatas.forEach(optData -> {
+                    if (mongoDataMap.containsKey(optData.getDataId())) {
+                        HunanHighway hunanHighway = mongoDataMap.get(optData.getDataId());
+                        HighwayVo highwayVo = new HighwayVo();
+                        highwayVo.setSource("湖南省公路建设信用信息平台");
+                        highwayVo.setType("hunan");
+                        highwayVo.setPkid(hunanHighway.getId());
+                        highwayVo.setIsOpt(hunanHighway.getIsOpt());
+                        highwayVo.setProjName(hunanHighway.getProjectName());
+                        highwayVo.setSection(hunanHighway.getContractName());
+                        highwayVo.setProvince(hunanHighway.getLocation());
+                        highwayVo.setOptDate(optData.getOptDate());
+                        highwayVo.setOptUser(optData.getOptUser());
+                        highwayVoList.add(highwayVo);
+                    }
+                });
+                total=optDatas.size();
+                break;
+        }
         result.put("code",1);
         result.put("msg","请求成功！");
         result.put("data",highwayVoList);

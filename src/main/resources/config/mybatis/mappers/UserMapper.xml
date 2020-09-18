@@ -65,4 +65,12 @@
         SELECT COUNT(*) FROM biaodaa_admin.tb_user
     </select>
 
+    <select id="getRealName" resultType="java.lang.String">
+        SELECT real_name FROM biaodaa_admin.tb_user WHERE uid=#{uid}
+    </select>
+
+    <select id="getParseUser" resultType="com.silita.model.UserVo">
+         SELECT a.real_name as name,a.uid FROM biaodaa_admin.tb_user a, biaodaa_admin.tb_role b,biaodaa_admin.tb_user_role c WHERE b.desc='业绩解析' AND b.rid = c.rid AND a.uid=c.uid ORDER BY uid
+    </select>
+
 </mapper>

@@ -55,6 +55,11 @@ public class CountryHighway {
     //桥面宽度
     private String bridgeWidth;
 
+    //操作日期
+    private String optDate;
+
+    //操作者
+    private String optUser;
 
     //类型：build，design
     private String type;

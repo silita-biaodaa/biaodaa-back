@@ -32,4 +32,10 @@ public class HighwayVo{
 
     //区分表，build,design
     private String type;
+
+    //操作人员
+    private String optUser;
+
+    //操作日期
+    private String optDate;
 }

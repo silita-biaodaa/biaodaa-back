@@ -13,8 +13,11 @@ import java.util.List;
  **/
 public interface CountryHighwayMapper {
 
-    //按列表查询
+    //未编辑按列表查询
     List<CountryHighway> findByPage(@Param("province")String province, @Param("isOpt")int isOpt, @Param("nameKey")String nameKey, @Param("pageNo")int pageNo, @Param("pageSize")int pageSize);
+
+    //已编辑按列表查询
+    List<CountryHighway> findOptByPage(@Param("province")String province, @Param("isOpt")int isOpt, @Param("nameKey")String nameKey, @Param("pageNo")int pageNo, @Param("pageSize")int pageSize,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("optUid")String optUid);
 
     //统计总数
     int countTotal(@Param("province")String province, @Param("isOpt")int isOpt, @Param("nameKey")String nameKey);

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletRequest;
 import java.util.Map;
 
 /**
@@ -28,13 +29,7 @@ public class HighwayController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map<String, Object> list(@RequestBody Map<String, Object> param) {
-        int pageNo=MapUtils.getInteger(param,"pageNo");
-        int pageSize=MapUtils.getInteger(param,"pageSize");
-        int sourceType=MapUtils.getIntValue(param,"sourceType");
-        String nameKey=MapUtils.getString(param,"nameKey");
-        String province=MapUtils.getString(param,"province");
-        int isOpt=MapUtils.getIntValue(param,"isOpt");
-        return highwayService.list(pageNo,pageSize,sourceType,nameKey,province,isOpt);
+        return highwayService.list(param);
     }
 
 
@@ -64,7 +59,7 @@ public class HighwayController extends BaseController {
 
     @ResponseBody
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
-    public Map<String,Object> update(@RequestBody Map<String, Object> param){
+    public Map<String,Object> update(@RequestBody Map<String, Object> param, ServletRequest request){
         String pkid=MapUtils.getString(param,"pkid");
         String type=MapUtils.getString(param,"type");
         String mileageMan=MapUtils.getString(param,"mileageMan");
@@ -72,7 +67,7 @@ public class HighwayController extends BaseController {
         String bridgeLen=MapUtils.getString(param,"bridgeLen");
         String bridgeSpan=MapUtils.getString(param,"bridgeSpan");
         String bridgeWidth=MapUtils.getString(param,"bridgeWidth");
-        return highwayService.update(pkid,type,mileageMan,tunnelLen,bridgeLen,bridgeSpan,bridgeWidth);
+        return highwayService.update(pkid,type,mileageMan,tunnelLen,bridgeLen,bridgeSpan,bridgeWidth,request);
     }
 
     @ResponseBody
@@ -87,5 +82,9 @@ public class HighwayController extends BaseController {
         return highwayService.provinces();
     }
 
-
+    @ResponseBody
+    @RequestMapping(value = "/parsePerson", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+    public Map<String,Object> parsePerson(){
+        return highwayService.parsePerson();
+    }
 }
