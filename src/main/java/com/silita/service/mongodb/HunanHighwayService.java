@@ -46,15 +46,13 @@ public class HunanHighwayService {
     public Map<String,Object> list(int pageNo, int pageSize, String nameKey, int isOpt,String startDate, String endDate, String optUid){
         Map<String,Object> result=new HashMap<>();
         Query query = new Query();
-        Criteria criteria=new Criteria();
+        Pattern pattern = Pattern.compile(String.format("^.*%s.*$",nameKey), Pattern.CASE_INSENSITIVE);
         if(StrUtil.isNotEmpty(nameKey)){
-            Pattern pattern = Pattern.compile(String.format("^.*%s.*$",nameKey), Pattern.CASE_INSENSITIVE);
-            criteria.andOperator(Criteria.where("projectName").regex(pattern));
+            query.addCriteria(Criteria.where("projectName").regex(pattern));
         }
         if(isOpt>=0&&isOpt<=2){
-            criteria.andOperator(Criteria.where("isOpt").is(isOpt));
+            query.addCriteria(Criteria.where("isOpt").is(isOpt));
         }
-        query.addCriteria(criteria);
         query.skip((pageNo-1)*pageSize);
         query.limit(pageSize);
         Sort sort = new Sort(Sort.Direction.ASC,"isOpt");
