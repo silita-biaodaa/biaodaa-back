@@ -48,4 +48,7 @@ public class HunanHighway {
 
     //人工解析里程数
     private String mileageMan;
+
+    //程序解析里程数
+    private  String mileage;
 }

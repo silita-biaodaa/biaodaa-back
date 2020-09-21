@@ -126,7 +126,7 @@ public class HighwayServiceImpl implements IHighwayService {
                     result.put("code", 1);
                     result.put("msg", "获取成功！");
                     highwayEditVo.setIsOpt(hunanHighway.getIsOpt());
-                    highwayEditVo.setMileage(hunanHighway.getMileageMan());
+                    highwayEditVo.setMileage(hunanHighway.getMileage());
                     highwayEditVo.setMileageMan(hunanHighway.getMileageMan());
                     highwayEditVo.setPkid(hunanHighway.getId());
                     highwayEditVo.setProjName(hunanHighway.getProjectName());
@@ -151,7 +151,7 @@ public class HighwayServiceImpl implements IHighwayService {
                     result.put("code", 1);
                     result.put("msg", "获取成功！");
                     highwayEditVo.setIsOpt(hunanHighway.getIsOpt());
-                    highwayEditVo.setMileage(hunanHighway.getMileageMan());
+                    highwayEditVo.setMileage(hunanHighway.getMileage());
                     highwayEditVo.setMileageMan(hunanHighway.getMileageMan());
                     highwayEditVo.setPkid(hunanHighway.getId());
                     highwayEditVo.setProjName(hunanHighway.getProjectName());
