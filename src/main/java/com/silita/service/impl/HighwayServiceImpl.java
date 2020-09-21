@@ -1,6 +1,7 @@
 package com.silita.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.silita.commons.shiro.utils.JWTUtil;
 import com.silita.dao.CountryHighwayMapper;
 import com.silita.dao.IUserMapper;
@@ -127,7 +128,7 @@ public class HighwayServiceImpl implements IHighwayService {
                     result.put("msg", "获取成功！");
                     highwayEditVo.setIsOpt(hunanHighway.getIsOpt());
                     highwayEditVo.setMileage(hunanHighway.getMileage());
-                    highwayEditVo.setMileageMan(hunanHighway.getMileageMan());
+                    highwayEditVo.setMileageMan(StrUtil.isEmpty(hunanHighway.getMileageMan())?hunanHighway.getMileage():hunanHighway.getMileageMan());
                     highwayEditVo.setPkid(hunanHighway.getId());
                     highwayEditVo.setProjName(hunanHighway.getProjectName());
                     highwayEditVo.setSection(hunanHighway.getContractName());
