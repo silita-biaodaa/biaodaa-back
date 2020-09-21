@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silita.dao.LogParseMapper">
+
+    <update id="insert">
+        insert mishu.log_parse set data_id=#{dataId},type=#{type},opt_uid=#{optUid}
+    </update>
+    <select id="countByDataId" resultType="java.lang.Integer">
+        select count(*) from mishu.log_parse a
+        where a.data_id=#{dataId}
+    </select>
+
+    <select id="selectHunan" resultType="com.silita.model.HunanHighwayTmp">
+        select a.data_id as dataId ,b.real_name as optUser,DATE_FORMAT(a.created, '%Y-%m-%d') as optDate from mishu.log_parse a left join biaodaa_admin.tb_user b on b.uid=a.opt_uid where type='hunan'
+        <if test="startDate !=null and startDate !=''">
+            and DATE_FORMAT(a.created, '%Y-%m-%d') &gt;= #{startDate}
+        </if>
+        <if test="endDate !=null and endDate !=''">
+            and DATE_FORMAT(a.created, '%Y-%m-%d') &lt;= #{endDate}
+        </if>
+        <if test="optUid !=null and optUid != ''">
+            and a.opt_uid = #{optUid}
+        </if>
+        order by a.created desc
+    </select>
+</mapper>
