@@ -6,6 +6,7 @@ import com.silita.dao.LogParseMapper;
 import com.silita.model.HighwayVo;
 import com.silita.model.HunanHighway;
 import com.silita.model.HunanHighwayTmp;
+import com.silita.utils.PageUtils;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -109,7 +110,7 @@ public class HunanHighwayService {
         }
         result.put("code",1);
         result.put("msg","请求成功！");
-        result.put("data",highwayVoList);
+        result.put("data", PageUtils.startPage(highwayVoList,pageNo,pageSize));
         result.put("total",total);
         result.put("pages",total/pageSize-1);
         return result;
