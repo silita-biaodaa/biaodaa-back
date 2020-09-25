@@ -6,6 +6,7 @@ import com.silita.dao.LogParseMapper;
 import com.silita.model.HighwayVo;
 import com.silita.model.HunanHighway;
 import com.silita.model.HunanHighwayTmp;
+import org.apache.log4j.Logger;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -29,6 +30,8 @@ import java.util.regex.Pattern;
 @Service
 public class HunanHighwayService {
 
+    private Logger logger= Logger.getLogger(HunanHighwayService.class);
+
     @Resource
     MongoTemplate mongoTemplate;
 
@@ -46,6 +49,7 @@ public class HunanHighwayService {
     public Map<String,Object> list(int pageNo, int pageSize, String nameKey, int isOpt,String startDate, String endDate, String optUid){
         Map<String,Object> result=new HashMap<>();
         Query query = new Query();
+        //先从mongodb将所有已编辑的数据更具项目名查出来
         Pattern pattern = Pattern.compile(String.format("^.*%s.*$",nameKey), Pattern.CASE_INSENSITIVE);
         if(StrUtil.isNotEmpty(nameKey)){
             query.addCriteria(Criteria.where("projectName").regex(pattern));
@@ -53,15 +57,17 @@ public class HunanHighwayService {
         if(isOpt>=0&&isOpt<=2){
             query.addCriteria(Criteria.where("isOpt").is(isOpt));
         }
-        query.skip((pageNo-1)*pageSize);
-        query.limit(pageSize);
-        Sort sort = new Sort(Sort.Direction.ASC,"isOpt");
-        query.with(sort);
-        List<HunanHighway> hunanHighways=mongoTemplate.find(query,HunanHighway.class);
+
+        List<HunanHighway> hunanHighways=new ArrayList<>();
         List<HighwayVo> highwayVoList = new ArrayList<>();
         long total=0L;
         switch(isOpt){
             case 0:
+                query.skip((pageNo-1)*pageSize);
+                query.limit(pageSize);
+                Sort sort = new Sort(Sort.Direction.ASC,"isOpt");
+                query.with(sort);
+                hunanHighways=mongoTemplate.find(query,HunanHighway.class);
                 hunanHighways.forEach(hunanHighway -> {
                     HighwayVo highwayVo = new HighwayVo();
                     highwayVo.setSource("湖南省公路建设信用信息平台");
@@ -76,6 +82,7 @@ public class HunanHighwayService {
                 total=mongoTemplate.count(query,HunanHighway.class);
                 break;
             case 2:
+                hunanHighways=mongoTemplate.find(query,HunanHighway.class);
                 Map<String, HunanHighway> mongoDataMap = new HashMap<>();
                 hunanHighways.forEach(optData -> {
                     mongoDataMap.put(optData.getId(), optData);
@@ -97,7 +104,7 @@ public class HunanHighwayService {
                         highwayVoList.add(highwayVo);
                     }
                 });
-                total=optDatas.size();
+                total=highwayVoList.size();
                 break;
         }
         result.put("code",1);

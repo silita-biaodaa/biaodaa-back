@@ -19,6 +19,9 @@ public interface CountryHighwayMapper {
     //已编辑按列表查询
     List<CountryHighway> findOptByPage(@Param("province")String province, @Param("isOpt")int isOpt, @Param("nameKey")String nameKey, @Param("pageNo")int pageNo, @Param("pageSize")int pageSize,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("optUid")String optUid);
 
+    //查询列表总数
+    long findCount(@Param("province")String province, @Param("isOpt")int isOpt, @Param("nameKey")String nameKey, @Param("pageNo")int pageNo, @Param("pageSize")int pageSize,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("optUid")String optUid);
+
     //统计总数
     int countTotal(@Param("province")String province, @Param("isOpt")int isOpt, @Param("nameKey")String nameKey);
 

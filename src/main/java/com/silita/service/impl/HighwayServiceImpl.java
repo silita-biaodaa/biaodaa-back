@@ -10,6 +10,7 @@ import com.silita.model.*;
 import com.silita.service.IHighwayService;
 import com.silita.service.mongodb.HunanHighwayService;
 import org.apache.commons.collections.MapUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,6 +26,8 @@ import java.util.Map;
  **/
 @Service
 public class HighwayServiceImpl implements IHighwayService {
+
+    private Logger logger=Logger.getLogger(HighwayServiceImpl.class);
 
     @Resource
     CountryHighwayMapper countryHighwayMapper;
@@ -73,7 +76,7 @@ public class HighwayServiceImpl implements IHighwayService {
                     result.put("code", 1);
                     result.put("msg", "请求成功!");
                     result.put("data", highwayVoList);
-                    int total = countryHighwayMapper.countTotal(province, isOpt, nameKey);
+                    long total = countryHighwayMapper.findCount(province, isOpt, nameKey, pageNo, pageSize, startDate, endDate, optUid);
                     result.put("total", total);
                     result.put("pages", (total / pageSize) + 1);
                     break;
