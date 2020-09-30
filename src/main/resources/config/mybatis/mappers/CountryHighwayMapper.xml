@@ -120,6 +120,63 @@
         ) a
     </select>
 
+    <select id="findCount" resultType="java.lang.Long">
+        select count(t.pkid) from(
+        select a.pkid,a.proj_name as projName,a.section,a.province,a.is_opt as isOpt,"design" as type,b.created,b.opt_uid from
+        mishu.cm_highway_design a,mishu.log_parse b where a.is_opt=#{isOpt} and b.data_id=a.pkid
+        <if test="startDate !=null and startDate !=''">
+            and DATE_FORMAT(b.created, '%Y-%m-%d') &gt;= #{startDate}
+        </if>
+        <if test="endDate !=null and endDate !=''">
+            and DATE_FORMAT(b.created, '%Y-%m-%d') &lt;= #{endDate}
+        </if>
+        <choose>
+            <when test="province == '全部'">
+            </when>
+            <when test="province == '其他'">
+                and a.province is null
+            </when>
+            <otherwise>
+                and a.province =#{province}
+            </otherwise>
+        </choose>
+        <if test="nameKey !=null and nameKey != ''">
+            and a.proj_name like '%${nameKey}%'
+        </if>
+        <if test="optUid !=null and optUid != ''">
+            and b.opt_uid = #{optUid}
+        </if>
+        union all
+        select a.pkid,a.proj_name as projName,a.section,a.province,a.is_opt as isOpt,"build" as type,b.created,b.opt_uid from
+        mishu.cm_highway_build a,mishu.log_parse b where a.is_opt=#{isOpt} and b.data_id=a.pkid
+        <if test="startDate !=null and startDate !=''">
+            and DATE_FORMAT(b.created, '%Y-%m-%d') &gt;= #{startDate}
+        </if>
+        <if test="endDate !=null and endDate !=''">
+            and DATE_FORMAT(b.created, '%Y-%m-%d') &lt;= #{endDate}
+        </if>
+        <choose>
+            <when test="province == '全部'">
+            </when>
+            <when test="province == '其他'">
+                and a.province is null
+            </when>
+            <otherwise>
+                and a.province =#{province}
+            </otherwise>
+        </choose>
+        <if test="nameKey !=null and nameKey != ''">
+            and a.proj_name like '%${nameKey}%'
+        </if>
+        <if test="optUid !=null and optUid != ''">
+            and b.opt_uid = #{optUid}
+        </if>
+        ) t
+        <if test="isOpt==2">
+            where exists (select 1 from mishu.log_parse l where t.pkid=l.data_id)
+        </if>
+
+    </select>
     <select id="findOptByPage" resultType="com.silita.model.CountryHighway">
         select t.pkid,t.projName,t.section,t.province,t.isOpt,t.type,DATE_FORMAT(t.created, '%Y-%m-%d') as optDate,u.real_name as optUser from(
         select a.pkid,a.proj_name as projName,a.section,a.province,a.is_opt as isOpt,"design" as type,b.created,b.opt_uid from
@@ -173,58 +230,89 @@
         </if>
         ) t left join biaodaa_admin.tb_user u on t.opt_uid=u.uid  order by t.created desc
     </select>
-    <select id="findCount" resultType="java.lang.Long">
-        select count(t.pkid) from(
-        select a.pkid,a.proj_name as projName,a.section,a.province,a.is_opt as isOpt,"design" as type,b.created,b.opt_uid from
-        mishu.cm_highway_design a,mishu.log_parse b where a.is_opt=2 and b.data_id=a.pkid
-        <if test="startDate !=null and startDate !=''">
-            and DATE_FORMAT(b.created, '%Y-%m-%d') &gt;= #{startDate}
-        </if>
-        <if test="endDate !=null and endDate !=''">
-            and DATE_FORMAT(b.created, '%Y-%m-%d') &lt;= #{endDate}
-        </if>
+
+    <select id="findCountNoOpt" resultType="java.lang.Long">
+        select sum(total) from (
+        select count(1) as total from mishu.cm_highway_build where 1=1
         <choose>
             <when test="province == '全部'">
             </when>
             <when test="province == '其他'">
-                and a.province is null
+                and province is null
             </when>
             <otherwise>
-                and a.province =#{province}
+                and province =#{province}
             </otherwise>
         </choose>
         <if test="nameKey !=null and nameKey != ''">
-            and a.proj_name like '%${nameKey}%'
-        </if>
-        <if test="optUid !=null and optUid != ''">
-            and b.opt_uid = #{optUid}
+            and proj_name like '%${nameKey}%'
         </if>
         union all
-        select a.pkid,a.proj_name as projName,a.section,a.province,a.is_opt as isOpt,"build" as type,b.created,b.opt_uid from
-        mishu.cm_highway_build a,mishu.log_parse b where a.is_opt=2 and b.data_id=a.pkid
-        <if test="startDate !=null and startDate !=''">
-            and DATE_FORMAT(b.created, '%Y-%m-%d') &gt;= #{startDate}
-        </if>
-        <if test="endDate !=null and endDate !=''">
-            and DATE_FORMAT(b.created, '%Y-%m-%d') &lt;= #{endDate}
-        </if>
+        select count(1) as total from mishu.cm_highway_design where 1=1
         <choose>
             <when test="province == '全部'">
             </when>
             <when test="province == '其他'">
-                and a.province is null
+                and province is null
             </when>
             <otherwise>
-                and a.province =#{province}
+                and province =#{province}
             </otherwise>
         </choose>
         <if test="nameKey !=null and nameKey != ''">
-            and a.proj_name like '%${nameKey}%'
+            and proj_name like '%${nameKey}%'
         </if>
-        <if test="optUid !=null and optUid != ''">
-            and b.opt_uid = #{optUid}
+        ) t
+
+    </select>
+
+    <select id="findCountOpt" resultType="java.lang.Long">
+        select count(1) from
+        (select pkid from mishu.cm_highway_design
+        where is_opt=2
+        <choose>
+            <when test="province == '全部'">
+            </when>
+            <when test="province == '其他'">
+                and province is null
+            </when>
+            <otherwise>
+                and province =#{province}
+            </otherwise>
+        </choose>
+        <if test="nameKey !=null and nameKey != ''">
+            and proj_name like '%${nameKey}%'
         </if>
-        ) t  where exists (select 1 from mishu.log_parse l where t.pkid=l.data_id)
+        union all
+        select pkid from mishu.cm_highway_build
+        where is_opt=2
+        <choose>
+            <when test="province == '全部'">
+            </when>
+            <when test="province == '其他'">
+                and province is null
+            </when>
+            <otherwise>
+                and province =#{province}
+            </otherwise>
+        </choose>
+        <if test="nameKey !=null and nameKey != ''">
+            and proj_name like '%${nameKey}%'
+        </if>
+        ) t
+        where exists
+        (select 1 from mishu.log_parse where `type` in ('design','build')
+        <if test="optUid !=null and optUid != ''">and opt_uid = #{optUid}
+        </if>
+        <if test="startDate !=null and startDate !=''">
+            and DATE_FORMAT(created, '%Y-%m-%d') &gt;= #{startDate}
+        </if>
+        <if test="endDate !=null and endDate !=''">
+            and DATE_FORMAT(created, '%Y-%m-%d') &lt;= #{endDate}
+        </if>
+        and t.pkid=data_id
+        )
+
     </select>
 
     <update id="lock">

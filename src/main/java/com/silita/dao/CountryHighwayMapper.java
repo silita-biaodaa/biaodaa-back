@@ -22,6 +22,12 @@ public interface CountryHighwayMapper {
     //查询列表总数
     long findCount(@Param("province")String province, @Param("isOpt")int isOpt, @Param("nameKey")String nameKey, @Param("pageNo")int pageNo, @Param("pageSize")int pageSize,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("optUid")String optUid);
 
+    //未编辑统计
+    long findCountNoOpt(@Param("province")String province, @Param("nameKey")String nameKey);
+
+    //已编辑统计
+    long findCountOpt(@Param("province")String province, @Param("nameKey")String nameKey,@Param("startDate")String startDate,@Param("endDate")String endDate,@Param("optUid")String optUid);
+
     //统计总数
     int countTotal(@Param("province")String province, @Param("isOpt")int isOpt, @Param("nameKey")String nameKey);
 

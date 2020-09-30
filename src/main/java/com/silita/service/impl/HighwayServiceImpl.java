@@ -27,7 +27,7 @@ import java.util.Map;
 @Service
 public class HighwayServiceImpl implements IHighwayService {
 
-    private Logger logger=Logger.getLogger(HighwayServiceImpl.class);
+    private Logger logger = Logger.getLogger(HighwayServiceImpl.class);
 
     @Resource
     CountryHighwayMapper countryHighwayMapper;
@@ -56,6 +56,7 @@ public class HighwayServiceImpl implements IHighwayService {
         Map<String, Object> result = new HashMap<>();
         List<CountryHighway> highways = new ArrayList<>();
         List<HighwayVo> highwayVoList = new ArrayList<>();
+        long total = 0L;
         try {
             switch (sourceType) {
                 case 0:
@@ -63,9 +64,11 @@ public class HighwayServiceImpl implements IHighwayService {
                     if (isOpt == 0) {
                         //未编辑
                         highways = countryHighwayMapper.findByPage(province, isOpt, nameKey, pageNo, pageSize);
+                        total = countryHighwayMapper.findCountNoOpt(province, nameKey);
                     } else {
                         //已编辑
                         highways = countryHighwayMapper.findOptByPage(province, isOpt, nameKey, pageNo, pageSize, startDate, endDate, optUid);
+                        total = countryHighwayMapper.findCountOpt(province, nameKey, startDate, endDate, optUid);
                     }
                     highways.forEach(highway -> {
                         HighwayVo highwayVo = new HighwayVo();
@@ -76,16 +79,17 @@ public class HighwayServiceImpl implements IHighwayService {
                     result.put("code", 1);
                     result.put("msg", "请求成功!");
                     result.put("data", highwayVoList);
-                    long total = countryHighwayMapper.findCount(province, isOpt, nameKey, pageNo, pageSize, startDate, endDate, optUid);
+
                     result.put("total", total);
                     result.put("pages", (total / pageSize) + 1);
                     break;
                 case 1:
                     //湖南公路
-                    result = hunanHighwayServicel.list(pageNo, pageSize, nameKey, isOpt,startDate, endDate, optUid);
+                    result = hunanHighwayServicel.list(pageNo, pageSize, nameKey, isOpt, startDate, endDate, optUid);
                     break;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             result.put("code", 0);
             result.put("msg", "请求异常!");
         }
@@ -131,7 +135,7 @@ public class HighwayServiceImpl implements IHighwayService {
                     result.put("msg", "获取成功！");
                     highwayEditVo.setIsOpt(hunanHighway.getIsOpt());
                     highwayEditVo.setMileage(hunanHighway.getMileage());
-                    highwayEditVo.setMileageMan(StrUtil.isEmpty(hunanHighway.getMileageMan())?hunanHighway.getMileage():hunanHighway.getMileageMan());
+                    highwayEditVo.setMileageMan(StrUtil.isEmpty(hunanHighway.getMileageMan()) ? hunanHighway.getMileage() : hunanHighway.getMileageMan());
                     highwayEditVo.setPkid(hunanHighway.getId());
                     highwayEditVo.setProjName(hunanHighway.getProjectName());
                     highwayEditVo.setSection(hunanHighway.getContractName());
@@ -217,8 +221,8 @@ public class HighwayServiceImpl implements IHighwayService {
                 //全国公路 在建或设计
                 validRows = countryHighwayMapper.update(pkid, type, mileageMan, tunnelLen, bridgeLen, bridgeSpan, bridgeWidth);
                 if (validRows > 0) {
-                    int count=logParseMapper.countByDataId(pkid);
-                    if(count==0){
+                    int count = logParseMapper.countByDataId(pkid);
+                    if (count == 0) {
                         logParseMapper.insert(pkid, type, uid);
                     }
                     result.put("code", 1);
@@ -231,8 +235,8 @@ public class HighwayServiceImpl implements IHighwayService {
                 //湖南公路
                 validRows = hunanHighwayServicel.updateData(pkid, mileageMan, tunnelLen, bridgeLen, bridgeSpan, bridgeWidth);
                 if (validRows > 0) {
-                    int count=logParseMapper.countByDataId(pkid);
-                    if(count==0){
+                    int count = logParseMapper.countByDataId(pkid);
+                    if (count == 0) {
                         logParseMapper.insert(pkid, type, uid);
                     }
                     result.put("code", 1);

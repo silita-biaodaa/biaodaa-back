@@ -81,6 +81,7 @@ public class HunanHighwayService {
                     highwayVoList.add(highwayVo);
                 });
                 total=mongoTemplate.count(query,HunanHighway.class);
+                result.put("data", highwayVoList);
                 break;
             case 2:
                 hunanHighways=mongoTemplate.find(query,HunanHighway.class);
@@ -106,11 +107,11 @@ public class HunanHighwayService {
                     }
                 });
                 total=highwayVoList.size();
+                result.put("data", PageUtils.startPage(highwayVoList,pageNo,pageSize));
                 break;
         }
         result.put("code",1);
         result.put("msg","请求成功！");
-        result.put("data", PageUtils.startPage(highwayVoList,pageNo,pageSize));
         result.put("total",total);
         result.put("pages",total/pageSize-1);
         return result;
