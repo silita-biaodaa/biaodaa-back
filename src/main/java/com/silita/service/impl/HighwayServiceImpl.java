@@ -9,6 +9,7 @@ import com.silita.dao.LogParseMapper;
 import com.silita.model.*;
 import com.silita.service.IHighwayService;
 import com.silita.service.mongodb.HunanHighwayService;
+import com.silita.utils.PageUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -67,8 +68,9 @@ public class HighwayServiceImpl implements IHighwayService {
                         total = countryHighwayMapper.findCountNoOpt(province, nameKey);
                     } else {
                         //已编辑
-                        highways = countryHighwayMapper.findOptByPage(province, isOpt, nameKey, pageNo, pageSize, startDate, endDate, optUid);
-                        total = countryHighwayMapper.findCountOpt(province, nameKey, startDate, endDate, optUid);
+                        List list=countryHighwayMapper.findOptByPage(province, isOpt, nameKey, pageNo, pageSize, startDate, endDate, optUid);
+                        highways = PageUtils.startPage(list,pageNo,pageSize);
+                        total = list.size();
                     }
                     highways.forEach(highway -> {
                         HighwayVo highwayVo = new HighwayVo();
