@@ -233,7 +233,7 @@
 
     <select id="findCountNoOpt" resultType="java.lang.Long">
         select sum(total) from (
-        select count(1) as total from mishu.cm_highway_build where 1=1
+        select count(1) as total from mishu.cm_highway_build where is_opt=0
         <choose>
             <when test="province == '全部'">
             </when>
@@ -248,7 +248,7 @@
             and proj_name like '%${nameKey}%'
         </if>
         union all
-        select count(1) as total from mishu.cm_highway_design where 1=1
+        select count(1) as total from mishu.cm_highway_design where is_opt=0
         <choose>
             <when test="province == '全部'">
             </when>
