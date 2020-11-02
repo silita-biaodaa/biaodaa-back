@@ -260,9 +260,9 @@ public class HighwayServiceImpl implements IHighwayService {
     @Override
     public Map<String, Object> count() {
         Map<String, Object> result = new HashMap<>(3);
-        long finish = countryHighwayMapper.countByIsOpt(2) + hunanHighwayServicel.countByIsOpt(2);
-        long unFinish = countryHighwayMapper.countByIsOpt(0) + hunanHighwayServicel.countByIsOpt(0);
-        long total = countryHighwayMapper.countByIsOpt(-1) + hunanHighwayServicel.countByIsOpt(-1);
+        long finish = countryHighwayMapper.countByIsOpt(2) ;//+ hunanHighwayServicel.countByIsOpt(2);
+        long unFinish = countryHighwayMapper.countByIsOpt(0);// + hunanHighwayServicel.countByIsOpt(0);
+        long total = countryHighwayMapper.countByIsOpt(-1) ;//+ hunanHighwayServicel.countByIsOpt(-1);
         result.put("finish", finish);
         result.put("unFinish", unFinish);
         result.put("total", total);
