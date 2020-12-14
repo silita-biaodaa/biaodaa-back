@@ -6,7 +6,7 @@
     <settings>
         <setting name="callSettersOnNulls" value="true"/>
         <!-- 打印mybatisSQL -->
-        <!--<setting name="logImpl" value="STDOUT_LOGGING" />-->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
     </settings>
     <typeAliases>
         <!--<typeAlias type="com.yunat.channel.controller.vo.OperationVo" alias="OperationVo"/>-->
